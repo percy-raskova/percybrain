@@ -1,5 +1,5 @@
 vim.g.mapleader = " "
-vim.g.maplocalleader = " " 
+vim.g.maplocalleader = " "
 vim.g.languagetool_server_command = '/opt/homebrew/bin/languagetool'
 
 
@@ -33,7 +33,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 vim.api.nvim_create_autocmd("TextYankPost", {
   pattern = "*",
   callback = function()
-    vim.highlight.on_yank { higroup = "IncSearch" , timeout = 250 }
+    vim.hl.on_yank { higroup = "IncSearch" , timeout = 250 }
   end,
 })
 
