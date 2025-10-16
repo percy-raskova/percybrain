@@ -2,7 +2,7 @@ local opt =  vim.opt
 
 -- Indentation
 
-opt.smartindent = true 
+opt.smartindent = true
 opt.wrap = true
 
 
