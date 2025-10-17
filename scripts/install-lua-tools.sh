@@ -34,7 +34,6 @@ Usage: ./scripts/install-lua-tools.sh [OPTIONS]
 Tools installed:
   StyLua              - Fast Lua code formatter (Rust)
   Selene              - Modern Lua linter (Rust)
-  lua-language-server - LSP with diagnostics and type checking
 
 Options:
   --ci        CI mode (non-interactive, optimized for GitHub Actions)
@@ -159,46 +158,9 @@ else
 fi
 echo ""
 
-#
-# Install lua-language-server (LSP)
-#
-echo -e "${BLUE}═══ Installing lua-language-server ═══${NC}"
-
-if command -v lua-language-server &> /dev/null; then
-    LUA_LS_VERSION=$(lua-language-server --version 2>&1 | head -n1 || echo "unknown")
-    echo -e "${GREEN}✓${NC} lua-language-server already installed: $LUA_LS_VERSION"
-else
-    echo "Downloading lua-language-server..."
-
-    LUA_LS_VERSION="3.15.0"
-
-    # Download from our own GitHub release (pre-compiled working binary)
-    LUA_LS_URL="https://github.com/percy-raskova/neovim-iwe/releases/download/tools-v1/lua-language-server-${LUA_LS_VERSION}-linux-${ARCH}.tar.gz"
-
-    LUA_LS_DIR="${HOME}/.local/share/lua-language-server"
-    mkdir -p "$LUA_LS_DIR"
-
-    TEMP_DIR=$(mktemp -d)
-    trap "rm -rf $TEMP_DIR" EXIT
-
-    if curl -L "$LUA_LS_URL" -o "$TEMP_DIR/lua-ls.tar.gz"; then
-        tar -xzf "$TEMP_DIR/lua-ls.tar.gz" -C "$LUA_LS_DIR"
-
-        # Create wrapper script with correct paths
-        cat > "$INSTALL_DIR/lua-language-server" <<'EOFS'
-#!/bin/bash
-LUA_LS_DIR="${HOME}/.local/share/lua-language-server"
-exec -a lua-language-server "${LUA_LS_DIR}/libexec/bin/lua-language-server" --logpath="${XDG_CACHE_HOME:-${HOME}/.cache}/lua-language-server/log" --metapath="${XDG_CACHE_HOME:-${HOME}/.cache}/lua-language-server/meta" "$@"
-EOFS
-        chmod +x "$INSTALL_DIR/lua-language-server"
-
-        echo -e "${GREEN}✓${NC} lua-language-server v${LUA_LS_VERSION} installed successfully"
-    else
-        echo -e "${RED}✗${NC} Failed to download lua-language-server"
-        exit 1
-    fi
-fi
-echo ""
+# lua-language-server is NOT included in CI/CD
+# It's an LSP for local development only (editor features)
+# For CI, we only need StyLua (format) + Selene (lint)
 
 # Verify installations
 echo -e "${BLUE}═══ Verifying Installations ═══${NC}"
@@ -216,13 +178,6 @@ if command -v selene &> /dev/null; then
     echo -e "${GREEN}✓${NC} selene: $(selene --version)"
 else
     echo -e "${RED}✗${NC} selene not found in PATH"
-    ALL_GOOD=false
-fi
-
-if command -v lua-language-server &> /dev/null; then
-    echo -e "${GREEN}✓${NC} lua-language-server: $(lua-language-server --version 2>&1 | head -n1)"
-else
-    echo -e "${RED}✗${NC} lua-language-server not found in PATH"
     ALL_GOOD=false
 fi
 
@@ -245,7 +200,6 @@ echo ""
 echo "Tools ready:"
 echo -e "  ${GREEN}✓${NC} stylua (formatter)"
 echo -e "  ${GREEN}✓${NC} selene (linter)"
-echo -e "  ${GREEN}✓${NC} lua-language-server (diagnostics)"
 echo ""
 echo "Next steps:"
 echo "  1. Run: ${BLUE}./scripts/setup-hooks.sh${NC}"

@@ -45,7 +45,6 @@ jobs:
         run: |
           stylua --version
           selene --version
-          lua-language-server --version
 
       - name: Check formatting with StyLua
         run: |
@@ -59,16 +58,6 @@ jobs:
           selene lua/
           echo "::endgroup::"
 
-      - name: Run Lua diagnostics
-        run: |
-          echo "::group::Lua Language Server Diagnostics"
-          # lua-language-server diagnostics would go here
-          # For now, just verify configuration exists
-          if [ -f .luarc.json ]; then
-            echo "✓ .luarc.json configuration found"
-          fi
-          echo "::endgroup::"
-
       - name: Comment on PR (if failure)
         if: failure() && github.event_name == 'pull_request'
         uses: actions/github-script@v7
@@ -77,8 +66,7 @@ jobs:
             let comment = '## ❌ Lua Quality Checks Failed\\n\\n';
             comment += '**Failed checks:**\\n';
             comment += '- StyLua formatting or\\n';
-            comment += '- Selene linting or\\n';
-            comment += '- Lua diagnostics\\n\\n';
+            comment += '- Selene linting\\n\\n';
             comment += '**Fix locally:**\\n';
             comment += '```bash\\n';
             comment += '# Format code\\n';

@@ -2,8 +2,8 @@
 
 **Status**: ✅ Complete
 **Date**: 2025-10-17
-**Tools**: StyLua v0.20.0, Selene v0.29.0, lua-language-server v3.15.0, PercyBrain Test Suite
-**Note**: Selene and lua-language-server binaries hosted in tools-v1 GitHub release
+**Tools**: StyLua v0.20.0, Selene v0.29.0, PercyBrain Test Suite
+**Note**: Selene binary hosted in tools-v1 GitHub release (lua-language-server NOT needed for CI)
 
 ---
 
@@ -25,13 +25,12 @@ PercyBrain uses modern Rust-based Lua tooling integrated with git hooks and GitH
 ### 1. Install Lua Quality Tools
 
 ```bash
-# Install StyLua, Selene, lua-language-server
+# Install StyLua and Selene
 ./scripts/install-lua-tools.sh
 
 # Verify installation
 stylua --version
 selene --version
-lua-language-server --version
 ```
 
 ### 2. Setup Git Hooks
@@ -484,7 +483,6 @@ cd tests && ./percybrain-test.sh
 # Check tool versions match
 stylua --version  # Should be 0.20.0
 selene --version  # Should be 0.29.0
-lua-language-server --version  # Should be 3.15.0
 ```
 
 ---
