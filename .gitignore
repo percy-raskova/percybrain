@@ -20,6 +20,10 @@ Thumbs.db
 # Personal configuration files
 config/personal_settings.lua
 
+# MCP configuration (managed by chezmoi)
+.mcp.json
+.claude/settings.local.json
+
 # Compiled Lua files
 *.luac
 
