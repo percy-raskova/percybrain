@@ -170,13 +170,10 @@ if command -v lua-language-server &> /dev/null; then
 else
     echo "Downloading lua-language-server..."
 
-    LUA_LS_VERSION="3.7.4"
+    LUA_LS_VERSION="3.15.0"
 
-    if [ "$OS" = "linux" ]; then
-        LUA_LS_URL="https://github.com/LuaLS/lua-language-server/releases/download/${LUA_LS_VERSION}/lua-language-server-${LUA_LS_VERSION}-linux-${ARCH}.tar.gz"
-    else
-        LUA_LS_URL="https://github.com/LuaLS/lua-language-server/releases/download/${LUA_LS_VERSION}/lua-language-server-${LUA_LS_VERSION}-darwin-${ARCH}.tar.gz"
-    fi
+    # Download from our own GitHub release (pre-compiled working binary)
+    LUA_LS_URL="https://github.com/percy-raskova/neovim-iwe/releases/download/tools-v1/lua-language-server-${LUA_LS_VERSION}-linux-${ARCH}.tar.gz"
 
     LUA_LS_DIR="${HOME}/.local/share/lua-language-server"
     mkdir -p "$LUA_LS_DIR"
@@ -190,7 +187,7 @@ else
         # Create wrapper script
         cat > "$INSTALL_DIR/lua-language-server" <<'EOFS'
 #!/bin/bash
-exec "${HOME}/.local/share/lua-language-server/bin/lua-language-server" "$@"
+exec "${HOME}/.local/share/lua-language-server/libexec/bin/lua-language-server" --logpath="${XDG_CACHE_HOME:-${HOME}/.cache}/lua-language-server/log" --metapath="${XDG_CACHE_HOME:-${HOME}/.cache}/lua-language-server/meta" "$@"
 EOFS
         chmod +x "$INSTALL_DIR/lua-language-server"
 
