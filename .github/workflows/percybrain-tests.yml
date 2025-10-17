@@ -32,7 +32,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.local/bin
-          key: lua-tools-${{ runner.os }}-v1
+          key: lua-tools-${{ runner.os }}-stylua-2.3.0-selene-0.29.0
 
       - name: Install Lua quality tools
         if: steps.cache-lua-tools.outputs.cache-hit != 'true'
@@ -42,6 +42,18 @@ jobs:
 
       - name: Add tools to PATH
         run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Verify tool installation
+        run: |
+          echo "=== Tool Verification ==="
+          which stylua || echo "stylua not in PATH"
+          which selene || echo "selene not in PATH"
+          stylua --version || echo "stylua failed"
+          selene --version || echo "selene failed"
+          echo "=== PATH ==="
+          echo "$PATH"
+          echo "=== ~/.local/bin contents ==="
+          ls -lah ~/.local/bin/ || echo "Directory not found"
 
       - name: Run simplified test suite
         id: tests

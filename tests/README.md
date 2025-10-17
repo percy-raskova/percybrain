@@ -1,101 +1,35 @@
 # PercyBrain Test Suite
 
-**Philosophy**: Simple, pragmatic tests that ensure code works — not enterprise compliance theater.
+Simple, pragmatic test suite for OVIWrite/PercyBrain Neovim configuration.
 
-## Quick Start
+## Philosophy
+
+**Not Enterprise Compliance Theater** - This test suite ensures:
+1. Code is syntactically valid (no broken Lua)
+2. Code is formatted consistently (StyLua)
+3. Code follows best practices (Selene linting)
+4. Critical configuration files exist
+5. Core config can load without errors
+
+**What this is NOT:**
+- Performance testing
+- Security auditing
+- Enterprise-grade compliance
+- Corporate-level gatekeeping
+
+## Test Files
+
+- **`simple-test.sh`** - Main test suite (5 essential tests)
+- **`README.md`** - This file
+
+## Running Tests Locally
 
 ```bash
-# Run the simple test suite
-./simple-test.sh
-
-# That's it!
-```
-
-## What Gets Tested
-
-### 1. Lua Syntax Validation
-- **All 75 Lua files** (67 plugins + 8 core config files)
-- Uses `luac` or Neovim headless mode
-- Catches syntax errors that would break Neovim
-
-### 2. Code Formatting (StyLua)
-- Ensures consistent code style across **all plugins**
-- Checks double quotes, indentation, line width
-- Auto-fixable: `stylua lua/`
-
-### 3. Code Quality (Selene)
-- Lints **all Lua files** for common mistakes
-- Allows warnings (they won't block commits)
-- Only errors will fail the test
-
-### 4. Core Config Loading
-- Verifies `init.lua` and core modules load without errors
-- Ensures basic Neovim functionality works
-
-### 5. Critical Files Exist
-- Checks that essential config files are present
-- Catches missing files that would break the system
-
-## What We DON'T Test
-
-❌ **External dependencies** (iwe, sembr, ollama versions)
-❌ **Directory structures** (Zettelkasten folders)
-❌ **Template systems** (template file validation)
-❌ **Running processes** (ollama service checks)
-❌ **API endpoints** (HTTP requests)
-❌ **Keybinding conflicts** (complex validation)
-❌ **LSP integration** (editor features)
-❌ **Documentation** (file existence checks)
-
-**Why?** These are either:
-- User-specific configurations
-- Optional features
-- Runtime dependencies
-- Too fragile for CI environments
-- Over-engineered for a hobbyist project
-
-## CI/CD Integration
-
-### GitHub Actions Workflows
-
-**`lua-quality.yml`** - Formatting & Linting
-- Runs on every Lua file change
-- Uses StyLua + Selene from tools-v1 release
-- Fast: ~30 seconds
-
-**`percybrain-tests.yml`** - Simple Tests
-- Runs `simple-test.sh`
-- Validates syntax + formatting + core config
-- Fast: ~1 minute
-
-Both workflows:
-- ✅ Install StyLua and Selene automatically
-- ✅ Cache tools for faster runs
-- ✅ Comment on PRs with results
-- ✅ Won't block commits for warnings
-
-## Local Development
-
-### Fix Formatting Issues
-```bash
-stylua lua/
-```
-
-### Fix Syntax Errors
-Check the file marked with ✗ in test output
-
-### Run Tests Before Committing
-```bash
-cd tests
+cd tests/
 ./simple-test.sh
 ```
 
-**Git Hooks** (optional):
-- Pre-commit: Formats and lints staged files
-- Pre-push: Runs full test suite
-- Skip with: `SKIP_HOOKS=1 git commit`
-
-## Test Output Example
+### Expected Output
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -113,10 +47,12 @@ cd tests
   ✓ Core configuration loads without errors
 
 ▶ Testing Code Formatting (StyLua)
+  ℹ Running StyLua format check (timeout: 30s)...
   ✓ All code is properly formatted
 
 ▶ Testing Code Quality (Selene)
-  ⊘ 2 linting warnings (not blocking)
+  ℹ Running Selene linter (timeout: 60s)...
+  ✓ No linting issues
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Test Summary
@@ -128,56 +64,202 @@ Tests Failed: 0
 ✅ All tests passed! Your code is good to commit.
 ```
 
-## Design Principles
+## Test Details
 
-1. **Fast** - Tests run in under 2 minutes
-2. **Practical** - Only test what matters for functionality
-3. **Forgiving** - Warnings don't block commits
-4. **Simple** - One script, easy to understand
-5. **Portable** - Works locally and in CI
+### 1. Lua Syntax Validation
+- **Tool**: `luac` (if available) or `nvim --headless`
+- **Purpose**: Catch syntax errors before commit
+- **Files**: All `*.lua` files in `lua/` directory
+- **Pass**: All files parse without errors
+- **Fail**: Any syntax errors detected
 
-## Comparison: Old vs New
+### 2. Critical Files Exist
+- **Purpose**: Ensure core configuration structure intact
+- **Files Checked**:
+  - `init.lua`
+  - `lua/config/init.lua`
+  - `lua/config/options.lua`
+  - `lua/config/keymaps.lua`
+- **Pass**: All files exist
+- **Fail**: Any files missing
 
-| Aspect | Old (percybrain-test.sh) | New (simple-test.sh) |
-|--------|--------------------------|----------------------|
-| Tests | 36 complex checks | 5 essential checks |
-| Time | ~5+ minutes | ~1 minute |
-| Scope | Everything + kitchen sink | Lua code + formatting |
-| CI Reliability | Fragile (external deps) | Robust (self-contained) |
-| Maintenance | High complexity | Low complexity |
-| Philosophy | Enterprise compliance | Pragmatic validation |
+### 3. Core Config Loads
+- **Environment Aware**:
+  - **CI**: Syntax validation only (plugins not installed)
+  - **Local**: Full config load test with Neovim headless
+- **Purpose**: Verify config can initialize
+- **Pass**: Config loads without errors
+- **Fail**: Any load-time errors
+
+### 4. Code Formatting (StyLua)
+- **Tool**: StyLua v2.3.0
+- **Purpose**: Consistent code style
+- **Timeout**: 30 seconds
+- **Pass**: All files formatted correctly
+- **Fail**: Any formatting violations
+- **Fix**: Run `stylua lua/`
+
+### 5. Code Quality (Selene)
+- **Tool**: Selene v0.29.0
+- **Purpose**: Catch common Lua mistakes
+- **Timeout**: 60 seconds
+- **Pass**: No errors (warnings are OK)
+- **Fail**: Any linting errors
+- **Note**: Warnings won't block commits
+
+## Debugging Tests
+
+### Test Hangs or Times Out
+
+```bash
+# Run individual test components manually
+cd /home/percy/.config/nvim
+
+# Test syntax
+find lua/ -name "*.lua" -exec luac -p {} \;
+
+# Test formatting
+stylua --check lua/
+
+# Test linting
+selene lua/
+
+# Test config loading
+nvim --headless -c "lua require('config')" -c "qall"
+```
+
+### Tests Fail in CI but Pass Locally
+
+Common causes:
+1. **Tool version mismatch**: Check CI uses same versions
+2. **Path issues**: Verify tools are in PATH
+3. **Cache issues**: Clear GitHub Actions cache
+4. **Timeout too aggressive**: Increase timeout values
+
+### GitHub Actions Cache Issues
+
+If tests hang due to old cached tools:
+
+1. Update cache key in workflows (already using version-specific keys)
+2. Manually clear cache: Settings → Actions → Caches → Delete
+3. Force reinstall: Remove cache step temporarily
+
+## CI Integration
+
+### GitHub Actions Workflows
+
+- **`percybrain-tests.yml`** - Main test workflow (uses `simple-test.sh`)
+- **`lua-quality.yml`** - Format/lint only workflow
+
+Both workflows:
+- Run on push to any branch (if Lua files changed)
+- Run on pull requests to main/master
+- Cache tools for faster execution (~30s with cache)
+- Timeout after 5 minutes
+- Post PR comments with results
+
+### Testing Workflows Locally
+
+Use [Act](https://github.com/nektos/act) to test GitHub Actions locally:
+
+```bash
+# Install Act (if not already installed)
+# macOS: brew install act
+# Linux: See https://github.com/nektos/act#installation
+
+# Test main workflow
+act push --job test
+
+# Test with verbose output
+act push --job test --verbose
+
+# Test specific workflow file
+act -W .github/workflows/percybrain-tests.yml
+```
+
+### Act Configuration
+
+Create `.actrc` in project root for Act defaults:
+
+```
+-P ubuntu-latest=catthehacker/ubuntu:act-latest
+--container-architecture linux/amd64
+```
 
 ## Troubleshooting
 
-**"StyLua not found"**
+### "StyLua not found"
+
 ```bash
+# Install tools
 ./scripts/install-lua-tools.sh
+
+# Add to PATH (add to ~/.bashrc or ~/.zshrc)
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-**"Syntax error in file"**
-Open the file and check the Lua syntax. Common issues:
-- Missing `end` keyword
-- Unmatched quotes or brackets
-- Typos in function names
+### "Selene not found"
 
-**"Formatting issues detected"**
+Same as StyLua above.
+
+### "luac not found"
+
+Tests will automatically fall back to `nvim --headless` for syntax checking.
+
+### Formatting Issues
+
 ```bash
+# Auto-fix formatting
 stylua lua/
-git add -A
+
+# Check what would change (dry run)
+stylua --check lua/
 ```
 
-**"Core config failed to load"**
-Check `init.lua` or `lua/config/init.lua` for errors
+### Linting Errors
 
-## Legacy Files
+```bash
+# View all linting issues
+selene lua/
 
-**Kept for Reference** (not used in CI):
-- `percybrain-test.sh` - Complex test suite (36 tests)
-- `quick-check.sh` - Quick health check for local development
+# Focus on specific files
+selene lua/plugins/ollama.lua
 
-These can still be run locally if you want more detailed checks, but they're not required for commits or CI.
+# Get help on linting rules
+selene --help
+```
 
----
+## Tool Installation
 
-**Remember**: The goal is to ship working code, not to pass audits for a Fortune 500 company. Keep it simple! 🚀
+```bash
+# Install all tools at once
+./scripts/install-lua-tools.sh
+
+# CI mode (skip PATH verification)
+./scripts/install-lua-tools.sh --ci
+```
+
+Installs:
+- **StyLua v2.3.0** - Rust-based formatter
+- **Selene v0.29.0** - Rust-based linter
+
+## Configuration Files
+
+- **`.stylua.toml`** - StyLua formatting rules
+- **`selene.toml`** - Selene linting rules
+- **`.luarc.json`** - Lua language server config
+
+## Contributing
+
+When adding new tests:
+1. Keep them simple and fast
+2. Add timeouts to prevent hangs
+3. Use temporary files for output capture (not command substitution)
+4. Make CI/local behavior explicit
+5. Document in this README
+
+## Philosophy Reminder
+
+> "The intent isn't for some enterprise grade production suite. We don't need performance testing. We need to make sure that our code base is free of errors that would cause the entire system to not work, and we need to make sure our code is well formatted and adheres to best practices and standards for Lua. The tests should facilitate the app functioning, they shouldn't deny commits because they don't meet the standards of a large corporation."
+
+Keep tests pragmatic, fast, and focused on preventing breakage.

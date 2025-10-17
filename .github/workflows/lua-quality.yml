@@ -28,9 +28,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.local/bin
-          key: lua-tools-${{ runner.os }}-v1
-          restore-keys: |
-            lua-tools-${{ runner.os }}-
+          key: lua-tools-${{ runner.os }}-stylua-2.3.0-selene-0.29.0
 
       - name: Install Lua quality tools
         if: steps.cache-lua-tools.outputs.cache-hit != 'true'

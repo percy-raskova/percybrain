@@ -162,34 +162,36 @@ echo ""
 # It's an LSP for local development only (editor features)
 # For CI, we only need StyLua (format) + Selene (lint)
 
-# Verify installations
-echo -e "${BLUE}═══ Verifying Installations ═══${NC}"
+# Verify installations (skip in CI mode - PATH added later by workflow)
+if [ "$CI_MODE" = false ]; then
+    echo -e "${BLUE}═══ Verifying Installations ═══${NC}"
 
-ALL_GOOD=true
+    ALL_GOOD=true
 
-if command -v stylua &> /dev/null; then
-    echo -e "${GREEN}✓${NC} stylua: $(stylua --version)"
-else
-    echo -e "${RED}✗${NC} stylua not found in PATH"
-    ALL_GOOD=false
-fi
+    if command -v stylua &> /dev/null; then
+        echo -e "${GREEN}✓${NC} stylua: $(stylua --version)"
+    else
+        echo -e "${RED}✗${NC} stylua not found in PATH"
+        ALL_GOOD=false
+    fi
 
-if command -v selene &> /dev/null; then
-    echo -e "${GREEN}✓${NC} selene: $(selene --version)"
-else
-    echo -e "${RED}✗${NC} selene not found in PATH"
-    ALL_GOOD=false
-fi
+    if command -v selene &> /dev/null; then
+        echo -e "${GREEN}✓${NC} selene: $(selene --version)"
+    else
+        echo -e "${RED}✗${NC} selene not found in PATH"
+        ALL_GOOD=false
+    fi
 
-echo ""
-
-if [ "$ALL_GOOD" = false ]; then
-    echo -e "${YELLOW}⚠${NC}  Some tools not found in PATH"
-    echo "Add to your shell config (~/.bashrc, ~/.zshrc):"
-    echo "  export PATH=\"\$HOME/.local/bin:\$PATH\""
     echo ""
-    echo "Then reload your shell: source ~/.bashrc"
-    exit 1
+
+    if [ "$ALL_GOOD" = false ]; then
+        echo -e "${YELLOW}⚠${NC}  Some tools not found in PATH"
+        echo "Add to your shell config (~/.bashrc, ~/.zshrc):"
+        echo "  export PATH=\"\$HOME/.local/bin:\$PATH\""
+        echo ""
+        echo "Then reload your shell: source ~/.bashrc"
+        exit 1
+    fi
 fi
 
 # Success

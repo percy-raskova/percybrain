@@ -119,13 +119,36 @@ test_formatting_compliance() {
         return 0
     fi
 
-    # Check if code is formatted
-    if stylua --check "$NVIM_CONFIG/lua" &> /dev/null; then
+    echo -e "  ${BLUE}ℹ${NC} Running StyLua format check (timeout: 30s)..."
+
+    # Use temporary file for output
+    local temp_output
+    temp_output=$(mktemp)
+    trap "rm -f $temp_output" RETURN
+
+    # Run with timeout to prevent hangs
+    local exit_code=0
+    if timeout 30 stylua --check "$NVIM_CONFIG/lua" > "$temp_output" 2>&1; then
+        exit_code=0
+    else
+        exit_code=$?
+    fi
+
+    # Check if timeout occurred
+    if [ "$exit_code" -eq 124 ]; then
+        echo -e "  ${RED}✗${NC} StyLua timed out after 30 seconds"
+        TESTS_FAILED=$((TESTS_FAILED + 1))
+        return 1
+    fi
+
+    # Check result
+    if [ "$exit_code" -eq 0 ]; then
         echo -e "  ${GREEN}✓${NC} All code is properly formatted"
         TESTS_PASSED=$((TESTS_PASSED + 1))
         return 0
     else
         echo -e "  ${RED}✗${NC} Code formatting issues detected"
+        cat "$temp_output" | head -10
         echo -e "  ${YELLOW}ℹ${NC} Run: stylua lua/ to fix"
         TESTS_FAILED=$((TESTS_FAILED + 1))
         return 1
@@ -142,27 +165,74 @@ test_linting_compliance() {
         return 0
     fi
 
-    # Run Selene linter
-    local lint_output
-    lint_output=$(selene "$NVIM_CONFIG/lua" 2>&1)
+    # Run Selene with timeout to prevent hangs in CI
+    # Use temporary file for output to avoid command substitution hangs
+    local temp_output
+    temp_output=$(mktemp)
+    trap "rm -f $temp_output" RETURN
 
-    if echo "$lint_output" | grep -q "error"; then
-        echo -e "  ${RED}✗${NC} Linting errors detected:"
-        echo "$lint_output" | grep "error" | head -5
+    echo -e "  ${BLUE}ℹ${NC} Running Selene linter (timeout: 60s)..."
+
+    # IMPORTANT: Run Selene from project root, not tests/ directory
+    # This ensures it finds selene.toml configuration file
+    local original_dir
+    original_dir=$(pwd)
+    cd "$NVIM_CONFIG" || return 1
+
+    # Run with timeout and capture output
+    local exit_code=0
+    if timeout 60 selene lua/ > "$temp_output" 2>&1; then
+        exit_code=0
+    else
+        exit_code=$?
+    fi
+
+    # Return to original directory
+    cd "$original_dir" || true
+
+    # Check if timeout occurred (exit code 124)
+    if [ "$exit_code" -eq 124 ]; then
+        echo -e "  ${RED}✗${NC} Selene timed out after 60 seconds"
         TESTS_FAILED=$((TESTS_FAILED + 1))
         return 1
-    elif echo "$lint_output" | grep -q "warning"; then
-        # Warnings are OK, not a failure
-        local warning_count
-        warning_count=$(echo "$lint_output" | grep -c "warning" || echo 0)
+    fi
+
+    # Read output from file
+    local lint_output
+    lint_output=$(cat "$temp_output")
+
+    # Parse Selene output for errors
+    # Selene shows a summary line like "Results: X errors, Y warnings, Z parse errors"
+    local error_count=0
+    if echo "$lint_output" | grep -q "Results:"; then
+        error_count=$(echo "$lint_output" | grep "Results:" | grep -oP '\d+(?= errors)' || echo 0)
+    fi
+
+    # Check for actual errors (not warnings)
+    if [ "$error_count" -gt 0 ]; then
+        echo -e "  ${RED}✗${NC} $error_count linting errors detected:"
+        echo "$lint_output" | head -30
+        TESTS_FAILED=$((TESTS_FAILED + 1))
+        return 1
+    fi
+
+    # Check for warnings (acceptable, won't fail build)
+    local warning_count=0
+    if echo "$lint_output" | grep -q "warning\["; then
+        warning_count=$(echo "$lint_output" | grep -c "warning\[" || echo 0)
+    fi
+
+    if [ "$warning_count" -gt 0 ]; then
         echo -e "  ${YELLOW}⊘${NC} $warning_count linting warnings (not blocking)"
-        TESTS_PASSED=$((TESTS_PASSED + 1))
-        return 0
-    else
-        echo -e "  ${GREEN}✓${NC} No linting issues"
+        echo -e "  ${GREEN}✓${NC} No errors - warnings are acceptable"
         TESTS_PASSED=$((TESTS_PASSED + 1))
         return 0
     fi
+
+    # No errors or warnings
+    echo -e "  ${GREEN}✓${NC} No linting issues"
+    TESTS_PASSED=$((TESTS_PASSED + 1))
+    return 0
 }
 
 test_critical_files_exist() {
