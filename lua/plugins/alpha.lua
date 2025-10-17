@@ -1,4 +1,4 @@
-return 
+return
 {
   "goolord/alpha-nvim",
   event = "VimEnter",
@@ -6,25 +6,20 @@ return
   init = false,
   opts = function()
     local dashboard = require("alpha.themes.dashboard")
-    local logo = [[   
+    local logo = [[
 
-                                                                                                                                         
-    ,o888888o.     `8.`888b           ,8'  8 8888 `8.`888b                 ,8' 8 888888888o.    8 8888 8888888 8888888888 8 8888888888   
- . 8888     `88.    `8.`888b         ,8'   8 8888  `8.`888b               ,8'  8 8888    `88.   8 8888       8 8888       8 8888         
-,8 8888       `8b    `8.`888b       ,8'    8 8888   `8.`888b             ,8'   8 8888     `88   8 8888       8 8888       8 8888         
-88 8888        `8b    `8.`888b     ,8'     8 8888    `8.`888b     .b    ,8'    8 8888     ,88   8 8888       8 8888       8 8888         
-88 8888         88     `8.`888b   ,8'      8 8888     `8.`888b    88b  ,8'     8 8888.   ,88'   8 8888       8 8888       8 888888888888 
-88 8888         88      `8.`888b ,8'       8 8888      `8.`888b .`888b,8'      8 888888888P'    8 8888       8 8888       8 8888         
-88 8888        ,8P       `8.`888b8'        8 8888       `8.`888b8.`8888'       8 8888`8b        8 8888       8 8888       8 8888         
-`8 8888       ,8P         `8.`888'         8 8888        `8.`888`8.`88'        8 8888 `8b.      8 8888       8 8888       8 8888         
- ` 8888     ,88'           `8.`8'          8 8888         `8.`8' `8,`'         8 8888   `8b.    8 8888       8 8888       8 8888         
-    `8888888P'              `8.`           8 8888          `8.`   `8'          8 8888     `88.  8 8888       8 8888       8 888888888888 
-                                                           
-                                                                     
+    ██████╗ ███████╗██████╗  ██████╗██╗   ██╗██████╗ ██████╗  █████╗ ██╗███╗   ██╗
+    ██╔══██╗██╔════╝██╔══██╗██╔════╝╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗██║████╗  ██║
+    ██████╔╝█████╗  ██████╔╝██║      ╚████╔╝ ██████╔╝██████╔╝███████║██║██╔██╗ ██║
+    ██╔═══╝ ██╔══╝  ██╔══██╗██║       ╚██╔╝  ██╔══██╗██╔══██╗██╔══██║██║██║╚██╗██║
+    ██║     ███████╗██║  ██║╚██████╗   ██║   ██████╔╝██║  ██║██║  ██║██║██║ ╚████║
+    ╚═╝     ╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝
 
+       ┌──────────────────────────────────────────────────────────┐
+       │     Your Second Brain, As Fast As Your First 🧠          │
+       └──────────────────────────────────────────────────────────┘
+              thoughts --> connections --> insights --> publish
 
-					<An Integrated Writing Environment (IWE) built using NeoVim's Ecosystem>
-							<@theenaKumaraG, Miragian Studios>
     ]]
     dashboard.section.header.val = vim.split(logo, "\n")
 
@@ -33,12 +28,14 @@ return
 
     -- stylua: ignore
     dashboard.section.buttons.val = {
-      dashboard.button("f", " " .. " Find file",       "<cmd> Telescope find_files <cr>"),
-      dashboard.button("n", " " .. " New file",        "<cmd> ene <BAR> startinsert <cr>"),
-      dashboard.button("r", " " .. " Recent files",    "<cmd> Telescope oldfiles <cr>"),
-      dashboard.button("g", " " .. " Find text",       "<cmd> Telescope live_grep <cr>"),
+      dashboard.button("f", " " .. " Find file",       "<cmd> Telescope find_files <cr>"),
+      dashboard.button("n", "🧠" .. " New note",        "<cmd> lua require('config.zettelkasten').new_note() <cr>"),
+      dashboard.button("d", "📅" .. " Daily note",      "<cmd> lua require('config.zettelkasten').daily_note() <cr>"),
+      dashboard.button("z", "📝" .. " Quick capture",   "<cmd> lua require('config.zettelkasten').inbox_note() <cr>"),
+      dashboard.button("s", "🔍" .. " Search notes",    "<cmd> lua require('config.zettelkasten').search_notes() <cr>"),
+      dashboard.button("r", " " .. " Recent files",    "<cmd> Telescope oldfiles <cr>"),
       dashboard.button("l", "󰒲 " .. " Lazy",            "<cmd> Lazy <cr>"),
-      dashboard.button("q", " " .. " Quit",            "<cmd> qa <cr>"),
+      dashboard.button("q", " " .. " Quit",            "<cmd> qa <cr>"),
     }
     for _, button in ipairs(dashboard.section.buttons.val) do
       button.opts.hl = "AlphaButtons"
@@ -83,4 +80,3 @@ return
     })
   end,
 }
-

@@ -178,5 +178,25 @@ return {
         },
       },
     })
+
+    -- configure IWE markdown server (PercyBrain)
+    -- IWE is installed via cargo: cargo install iwe
+    lspconfig["iwe"].setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+      cmd = { "iwe", "lsp" },
+      filetypes = { "markdown" },
+      root_dir = lspconfig.util.root_pattern(".git", ".iwe"),
+      settings = {
+        iwe = {
+          workspace = vim.fn.expand("~/Zettelkasten"),
+          linkStyle = "wiki",
+          enableBacklinks = true,
+          enableInlayHints = true,
+          enableCompletion = true,
+          enableDiagnostics = true,
+        },
+      },
+    })
   end,
 }
