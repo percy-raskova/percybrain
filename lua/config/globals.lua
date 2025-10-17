@@ -2,7 +2,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.languagetool_server_command = '/opt/homebrew/bin/languagetool'
 
--- CI/CD workflows: lua-quality.yml (all tools v1 - working paths), percybrain-tests.yml
+-- CI/CD workflows: lua-quality.yml (StyLua + Selene only!), percybrain-tests.yml
 
 
 
