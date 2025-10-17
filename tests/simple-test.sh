@@ -24,7 +24,7 @@ echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 
 # Detect if running in CI or local environment
-if [ -n "$GITHUB_ACTIONS" ]; then
+if [ -n "${GITHUB_ACTIONS:-}" ]; then
     # In GitHub Actions, we're in the tests/ directory
     NVIM_CONFIG="$(cd .. && pwd)"
 else
@@ -90,7 +90,7 @@ test_core_config_loads() {
 
     # In CI, we can't fully load config (requires plugin installation)
     # Just verify the Lua files can be parsed
-    if [ -n "$GITHUB_ACTIONS" ]; then
+    if [ -n "${GITHUB_ACTIONS:-}" ]; then
         # CI: Only check if files parse without syntax errors (already done in syntax test)
         echo -e "  ${GREEN}✓${NC} Core config syntax valid (full load skipped in CI)"
         TESTS_PASSED=$((TESTS_PASSED + 1))

@@ -109,7 +109,7 @@ if command -v stylua &> /dev/null; then
 else
     echo "Downloading StyLua..."
 
-    STYLUA_VERSION="0.20.0"
+    STYLUA_VERSION="2.3.0"
 
     if [ "$OS" = "linux" ]; then
         STYLUA_URL="https://github.com/JohnnyMorganz/StyLua/releases/download/v${STYLUA_VERSION}/stylua-linux-${ARCH}.zip"
