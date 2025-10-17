@@ -2,6 +2,8 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.languagetool_server_command = '/opt/homebrew/bin/languagetool'
 
+-- CI/CD workflows active: lua-quality.yml, percybrain-tests.yml
+
 
 
 -- THIS SECTION IS FOR AUTOCOMMANDS
