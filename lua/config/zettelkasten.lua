@@ -1,5 +1,5 @@
--- Zettelkasten Configuration for ZettelWrite
--- Personal knowledge management system
+-- PercyBrain Configuration
+-- Personal knowledge management system powered by Neovim
 
 local M = {}
 
@@ -171,11 +171,11 @@ end
 
 -- Set up user commands
 function M.setup_commands()
-  vim.api.nvim_create_user_command('ZettelNew', M.new_note, {})
-  vim.api.nvim_create_user_command('ZettelDaily', M.daily_note, {})
-  vim.api.nvim_create_user_command('ZettelInbox', M.inbox_note, {})
-  vim.api.nvim_create_user_command('ZettelPublish', M.publish, {})
-  vim.api.nvim_create_user_command('ZettelPreview', function()
+  vim.api.nvim_create_user_command('PercyNew', M.new_note, {})
+  vim.api.nvim_create_user_command('PercyDaily', M.daily_note, {})
+  vim.api.nvim_create_user_command('PercyInbox', M.inbox_note, {})
+  vim.api.nvim_create_user_command('PercyPublish', M.publish, {})
+  vim.api.nvim_create_user_command('PercyPreview', function()
     local blog_dir = vim.fn.fnamemodify(M.config.export_path, ':h:h')
     vim.fn.system('cd ' .. blog_dir .. ' && hugo server -D &')
     print("🌐 Preview server started at http://localhost:1313")

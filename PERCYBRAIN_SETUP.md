@@ -1,4 +1,4 @@
-# ZettelWrite: Neovim Zettelkasten System
+# PercyBrain: Neovim Zettelkasten System
 
 Your Neovim-based Obsidian replacement for knowledge management, integrated terminal, and static site publishing.
 
@@ -88,8 +88,8 @@ This connects to [[another-note]] and [[2025-10-17-ideas]].
 
 #### Publish to Static Site
 ```
-:ZettelPublish   " Export to Hugo/Jekyll/etc.
-:ZettelPreview   " Start local preview server
+:PercyPublish   " Export to Hugo/Jekyll/etc.
+:PercyPreview   " Start local preview server
 ```
 
 ---
@@ -99,14 +99,14 @@ This connects to [[another-note]] and [[2025-10-17-ideas]].
 ### Zettelkasten Operations
 | Key | Command | Description |
 |-----|---------|-------------|
-| `<leader>zn` | `:ZettelNew` | Create new permanent note |
-| `<leader>zd` | `:ZettelDaily` | Open today's daily note |
-| `<leader>zi` | `:ZettelInbox` | Quick capture to inbox |
+| `<leader>zn` | `:PercyNew` | Create new permanent note |
+| `<leader>zd` | `:PercyDaily` | Open today's daily note |
+| `<leader>zi` | `:PercyInbox` | Quick capture to inbox |
 | `<leader>zf` | Find notes | Fuzzy find by filename |
 | `<leader>zg` | Search notes | Live grep through content |
 | `<leader>zb` | Backlinks | Find links to current note |
 | `<leader>zw` | Zen mode | Distraction-free writing |
-| `<leader>zp` | `:ZettelPublish` | Export to static site |
+| `<leader>zp` | `:PercyPublish` | Export to static site |
 
 ### Writing Tools (Inherited from OVIWrite)
 | Key | Command | Description |
@@ -183,7 +183,7 @@ tags: [#concept, #project/myproject, #source/book]
 
 **Find orphan notes** (notes with no links):
 ```vim
-:ZettelOrphans  " TODO: Implement this
+:PercyOrphans  " TODO: Implement this
 ```
 
 ---
@@ -211,8 +211,8 @@ M.config = {
 
 **Publish**:
 ```vim
-:ZettelPublish   " Copies notes to ~/blog/content/
-:ZettelPreview   " Starts Hugo server at localhost:1313
+:PercyPublish   " Copies notes to ~/blog/content/
+:PercyPreview   " Starts Hugo server at localhost:1313
 ```
 
 ### Option 2: Quartz (Obsidian-like)
@@ -422,10 +422,10 @@ return {
 # Remove drafts, fix links
 
 # 3. Publish
-:ZettelPublish
+:PercyPublish
 
 # 4. Preview locally
-:ZettelPreview
+:PercyPreview
 # Visit http://localhost:1313
 
 # 5. Deploy to web
@@ -502,7 +502,7 @@ They share the same markdown files perfectly!
 3. ✅ **Set up static site** (optional):
    - Choose Hugo/Quartz/Jekyll
    - Configure export path
-   - Test: `:ZettelPublish`
+   - Test: `:PercyPublish`
 
 ### Customization
 
