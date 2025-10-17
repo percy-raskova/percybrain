@@ -2,7 +2,7 @@
 
 **Status**: ✅ Complete
 **Date**: 2025-10-17
-**Tools**: StyLua, Selene, lua-language-server, PercyBrain Test Suite
+**Tools**: StyLua v0.20.0, Selene v0.29.0, lua-language-server v3.7.4, PercyBrain Test Suite
 
 ---
 
@@ -482,7 +482,7 @@ cd tests && ./percybrain-test.sh
 
 # Check tool versions match
 stylua --version  # Should be 0.20.0
-selene --version  # Should be 0.27.1
+selene --version  # Should be 0.29.0
 ```
 
 ---
