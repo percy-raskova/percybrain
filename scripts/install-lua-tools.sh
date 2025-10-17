@@ -184,10 +184,11 @@ else
     if curl -L "$LUA_LS_URL" -o "$TEMP_DIR/lua-ls.tar.gz"; then
         tar -xzf "$TEMP_DIR/lua-ls.tar.gz" -C "$LUA_LS_DIR"
 
-        # Create wrapper script
+        # Create wrapper script with correct paths
         cat > "$INSTALL_DIR/lua-language-server" <<'EOFS'
 #!/bin/bash
-exec "${HOME}/.local/share/lua-language-server/libexec/bin/lua-language-server" --logpath="${XDG_CACHE_HOME:-${HOME}/.cache}/lua-language-server/log" --metapath="${XDG_CACHE_HOME:-${HOME}/.cache}/lua-language-server/meta" "$@"
+LUA_LS_DIR="${HOME}/.local/share/lua-language-server"
+exec -a lua-language-server "${LUA_LS_DIR}/libexec/bin/lua-language-server" --logpath="${XDG_CACHE_HOME:-${HOME}/.cache}/lua-language-server/log" --metapath="${XDG_CACHE_HOME:-${HOME}/.cache}/lua-language-server/meta" "$@"
 EOFS
         chmod +x "$INSTALL_DIR/lua-language-server"
 
