@@ -1,3 +1,3 @@
 return {
-	'HiPhish/quicklisp.nvim'
+  "HiPhish/quicklisp.nvim",
 }

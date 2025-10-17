@@ -1,3 +1,3 @@
 return {
-  "dbmrq/vim-dialect" 
+  "dbmrq/vim-dialect",
 }

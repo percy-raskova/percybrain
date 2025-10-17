@@ -1,3 +1,3 @@
 return {
-  "akinsho/org-bullets.nvim"
+  "akinsho/org-bullets.nvim",
 }

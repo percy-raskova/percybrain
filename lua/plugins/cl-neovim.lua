@@ -1,4 +1,3 @@
 return {
-	'adolenc/cl-neovim'
-
+  "adolenc/cl-neovim",
 }

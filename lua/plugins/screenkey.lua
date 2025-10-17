@@ -1,6 +1,5 @@
-return
-{
-    "NStefan002/screenkey.nvim",
-    cmd = "Screenkey",
-    config = true,
+return {
+  "NStefan002/screenkey.nvim",
+  cmd = "Screenkey",
+  config = true,
 }

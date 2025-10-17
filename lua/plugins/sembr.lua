@@ -10,8 +10,8 @@ return {
     -- Configuration
     M.config = {
       model = "bert-small", -- Options: bert-small, bert-base, bert-large
-      auto_format = false,  -- Auto-format on save (disabled by default)
-      enable_mcp = false,   -- Use MCP server mode (future enhancement)
+      auto_format = false, -- Auto-format on save (disabled by default)
+      enable_mcp = false, -- Use MCP server mode (future enhancement)
     }
 
     -- Format current buffer with SemBr
@@ -99,29 +99,36 @@ return {
 
     -- User commands
     vim.api.nvim_create_user_command("SemBrFormat", M.format_buffer, {
-      desc = "Format buffer with semantic line breaks"
+      desc = "Format buffer with semantic line breaks",
     })
 
     vim.api.nvim_create_user_command("SemBrFormatSelection", M.format_selection, {
       range = true,
-      desc = "Format visual selection with semantic line breaks"
+      desc = "Format visual selection with semantic line breaks",
     })
 
     vim.api.nvim_create_user_command("SemBrToggle", M.toggle_auto_format, {
-      desc = "Toggle auto-format on save"
+      desc = "Toggle auto-format on save",
     })
 
     -- Keymaps for PercyBrain
     local opts = { noremap = true, silent = true }
 
-    vim.keymap.set('n', '<leader>zs', M.format_buffer,
-      vim.tbl_extend('force', opts, { desc = "SemBr: Format buffer" }))
+    vim.keymap.set("n", "<leader>zs", M.format_buffer, vim.tbl_extend("force", opts, { desc = "SemBr: Format buffer" }))
 
-    vim.keymap.set('v', '<leader>zs', M.format_selection,
-      vim.tbl_extend('force', opts, { desc = "SemBr: Format selection" }))
+    vim.keymap.set(
+      "v",
+      "<leader>zs",
+      M.format_selection,
+      vim.tbl_extend("force", opts, { desc = "SemBr: Format selection" })
+    )
 
-    vim.keymap.set('n', '<leader>zt', M.toggle_auto_format,
-      vim.tbl_extend('force', opts, { desc = "SemBr: Toggle auto-format" }))
+    vim.keymap.set(
+      "n",
+      "<leader>zt",
+      M.toggle_auto_format,
+      vim.tbl_extend("force", opts, { desc = "SemBr: Toggle auto-format" })
+    )
 
     -- Auto-format on save (if enabled)
     vim.api.nvim_create_autocmd("BufWritePre", {

@@ -11,43 +11,36 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('config.globals')
-require('config.keymaps')
-require('config.options')
-require('config.zettelkasten').setup()  -- Zettelkasten system
+require("config.globals")
+require("config.keymaps")
+require("config.options")
+require("config.zettelkasten").setup() -- Zettelkasten system
 
 -- This is for an experimental plugin
 --
 
-
-
-
-
 local opts = {
-	defaults = {
-		lazy = true, 
-	},
-	install = {
-		colorscheme = { "catppuccin" }
-	},
-	rtp ={
-		disabled_plugins = {
-			"gzip",
-			"matchit",
-			"matchparen",
-			"netrePlugin",
-			"tarPlugin",
-			"tohtml",
-			"tutor",
-			"zipPlugin",
-		}
-	},
-	change_detection = {
-		notify = true,
-	},
+  defaults = {
+    lazy = true,
+  },
+  install = {
+    colorscheme = { "catppuccin" },
+  },
+  rtp = {
+    disabled_plugins = {
+      "gzip",
+      "matchit",
+      "matchparen",
+      "netrePlugin",
+      "tarPlugin",
+      "tohtml",
+      "tutor",
+      "zipPlugin",
+    },
+  },
+  change_detection = {
+    notify = true,
+  },
 }
 
-
-require("lazy").setup('plugins', opts)
-
-
+require("lazy").setup("plugins", opts)

@@ -1,10 +1,8 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-vim.g.languagetool_server_command = '/opt/homebrew/bin/languagetool'
+vim.g.languagetool_server_command = "/opt/homebrew/bin/languagetool"
 
 -- CI/CD workflows: lua-quality.yml (StyLua + Selene only!), percybrain-tests.yml
-
-
 
 -- THIS SECTION IS FOR AUTOCOMMANDS
 --
@@ -16,10 +14,10 @@ vim.api.nvim_create_augroup("vimwiki_autocommands", { clear = true })
 -- Function to save and convert to HTML
 local function save_and_convert_to_html()
   -- Save the buffer
-  vim.cmd('write')
+  vim.cmd("write")
   -- Trigger VimWiki2HTML
-  vim.cmd('Vimwiki2HTML')
- -- Run sed command to update CSS reference
+  vim.cmd("Vimwiki2HTML")
+  -- Run sed command to update CSS reference
   vim.fn.system('sed -i "" -e "s/style\\.css/main\\.css/g" ~/vimwiki_html/*.html')
 end
 
@@ -27,7 +25,7 @@ end
 vim.api.nvim_create_autocmd("BufWritePost", {
   group = "vimwiki_autocommands",
   pattern = "*.wiki",
-  callback = save_and_convert_to_html
+  callback = save_and_convert_to_html,
 })
 
 -- This one highlights yanked text for 250ms
@@ -35,12 +33,9 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 vim.api.nvim_create_autocmd("TextYankPost", {
   pattern = "*",
   callback = function()
-    vim.hl.on_yank { higroup = "IncSearch" , timeout = 250 }
+    vim.hl.on_yank({ higroup = "IncSearch", timeout = 250 })
   end,
 })
-
-
-
 
 -- This one sets specific options for Fountain Type file
 
@@ -53,7 +48,7 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.spelllang = "en_us"
     vim.opt_local.textwidth = 80
   end,
-  group = vim.api.nvim_create_augroup("fountain_settings", { clear = true })
+  group = vim.api.nvim_create_augroup("fountain_settings", { clear = true }),
 })
 
 --
@@ -98,10 +93,8 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.cmd("SoftPencil")
       end,
     })
-
-
   end,
-  group = vim.api.nvim_create_augroup("LaTeX_settings", { clear = true })
+  group = vim.api.nvim_create_augroup("LaTeX_settings", { clear = true }),
 })
 
 -- This one inserts a basic template into a new Wiki file
@@ -110,10 +103,10 @@ vim.api.nvim_create_autocmd("BufNewFile", {
   pattern = "*.wiki",
   callback = function()
     -- Check if the file is empty
-    if vim.fn.line('$') == 1 and vim.fn.getline(1) == '' then
+    if vim.fn.line("$") == 1 and vim.fn.getline(1) == "" then
       -- Insert the template
       local lines = {
-        os.date("%Y-%m-%d"),  -- Current date and time
+        os.date("%Y-%m-%d"), -- Current date and time
         "",
         "[[index]]",
         "",
@@ -121,20 +114,20 @@ vim.api.nvim_create_autocmd("BufNewFile", {
         "",
       }
       vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
-      
+
       -- Save the file
       vim.cmd("write")
-      
+
       -- Move cursor to the end of the file
       vim.cmd("normal G")
     end
   end,
-  group = vim.api.nvim_create_augroup("wiki_template", { clear = true })
+  group = vim.api.nvim_create_augroup("wiki_template", { clear = true }),
 })
 
 -- This one ensures that SoftPencil is on for every filetype of *.wiki
 --
-    -- this one ensure SoftPencil is on
+-- this one ensure SoftPencil is on
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "*.wiki",
   callback = function()
@@ -160,7 +153,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
-
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "*.wiki",
   callback = function()
@@ -175,11 +167,8 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
-
-
-
 vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "*.tex", 
+  pattern = "*.tex",
   callback = function()
     vim.cmd("NoiceDisable")
   end,
@@ -204,7 +193,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
-
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "*.org",
   callback = function()
@@ -212,12 +200,9 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
-
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "*.org",
   callback = function()
     vim.cmd("SoftPencil")
   end,
 })
-
-

@@ -1,3 +1,3 @@
 return {
-	"vigoux/LanguageTool.nvim"
+  "vigoux/LanguageTool.nvim",
 }

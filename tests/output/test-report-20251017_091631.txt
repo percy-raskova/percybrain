@@ -1,0 +1,53 @@
+PercyBrain Test Report
+======================
+Date: Fri Oct 17 09:16:34 AM EDT 2025
+Hostname: debian
+User: percy
+
+Summary:
+--------
+Total Tests: 36
+Passed: 36
+Failed: 0
+Skipped: 0
+
+Success Rate: 100.0%
+
+Detailed Results:
+-----------------
+PASS: init.lua exists
+PASS: config/init.lua exists
+PASS: zettelkasten.lua exists
+PASS: ollama.lua exists
+PASS: sembr.lua exists
+PASS: lspconfig.lua exists
+PASS: Neovim installed
+PASS: IWE LSP installed
+PASS: SemBr installed
+PASS: Ollama installed
+PASS: Zettelkasten directory exists
+PASS: inbox subdirectory exists
+PASS: daily subdirectory exists
+PASS: templates subdirectory exists
+PASS: Template: permanent.md
+PASS: Template: literature.md
+PASS: Template: project.md
+PASS: Template: meeting.md
+PASS: Template: fleeting.md
+PASS: Template variables present
+PASS: Zettelkasten module loads
+PASS: SemBr module loads
+PASS: Ollama plugin file valid
+PASS: Ollama service running
+PASS: llama3.2 model installed
+PASS: Ollama API responding
+PASS: No keybinding conflicts
+PASS: Key prefixes properly separated
+PASS: IWE LSP configured
+PASS: IWE workspace configured
+PASS: CLAUDE.md exists
+PASS: PERCYBRAIN_DESIGN.md exists
+PASS: PERCYBRAIN_ANALYSIS.md exists
+PASS: PERCYBRAIN_PHASE1_COMPLETE.md exists
+PASS: PERCYBRAIN_USER_GUIDE.md exists
+PASS: User guide up to date

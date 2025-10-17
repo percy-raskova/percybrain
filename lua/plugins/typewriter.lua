@@ -1,10 +1,10 @@
 return {
-  'joshuadanpeterson/typewriter',
+  "joshuadanpeterson/typewriter",
   dependencies = {
-    'nvim-treesitter/nvim-treesitter',
+    "nvim-treesitter/nvim-treesitter",
   },
   config = function()
-    require('typewriter').setup()
+    require("typewriter").setup()
   end,
-  opts = {}
+  opts = {},
 }

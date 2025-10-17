@@ -95,10 +95,7 @@ function M.apply_template(template_content, title)
   local date = os.date("%Y-%m-%d %H:%M")
 
   -- Replace template variables
-  local content = template_content
-    :gsub("{{title}}", title)
-    :gsub("{{date}}", date)
-    :gsub("{{timestamp}}", timestamp)
+  local content = template_content:gsub("{{title}}", title):gsub("{{date}}", date):gsub("{{timestamp}}", timestamp)
 
   return content
 end
@@ -108,20 +105,20 @@ function M.setup_keymaps()
   local opts = { noremap = true, silent = true }
 
   -- Quick capture (z = Zettelkasten)
-  vim.keymap.set('n', '<leader>zn', M.new_note, opts)
-  vim.keymap.set('n', '<leader>zd', M.daily_note, opts)
-  vim.keymap.set('n', '<leader>zi', M.inbox_note, opts)
+  vim.keymap.set("n", "<leader>zn", M.new_note, opts)
+  vim.keymap.set("n", "<leader>zd", M.daily_note, opts)
+  vim.keymap.set("n", "<leader>zi", M.inbox_note, opts)
 
   -- Search & navigation
-  vim.keymap.set('n', '<leader>zf', M.find_notes, opts)
-  vim.keymap.set('n', '<leader>zg', M.search_notes, opts)
-  vim.keymap.set('n', '<leader>zb', M.backlinks, opts)
+  vim.keymap.set("n", "<leader>zf", M.find_notes, opts)
+  vim.keymap.set("n", "<leader>zg", M.search_notes, opts)
+  vim.keymap.set("n", "<leader>zb", M.backlinks, opts)
 
   -- Publishing
-  vim.keymap.set('n', '<leader>zp', M.publish, opts)
+  vim.keymap.set("n", "<leader>zp", M.publish, opts)
 
   -- Focus modes (f = focus)
-  vim.keymap.set('n', '<leader>fz', '<cmd>ZenMode<cr>', opts)
+  vim.keymap.set("n", "<leader>fz", "<cmd>ZenMode<cr>", opts)
 end
 
 -- Create new note with template
@@ -220,28 +217,28 @@ end
 
 -- Find notes with telescope
 function M.find_notes()
-  require('telescope.builtin').find_files({
+  require("telescope.builtin").find_files({
     cwd = M.config.home,
-    prompt_title = '🗂️  Find Note',
+    prompt_title = "🗂️  Find Note",
   })
 end
 
 -- Search notes content
 function M.search_notes()
-  require('telescope.builtin').live_grep({
+  require("telescope.builtin").live_grep({
     cwd = M.config.home,
-    prompt_title = '🔍 Search Notes',
+    prompt_title = "🔍 Search Notes",
   })
 end
 
 -- Find backlinks to current file
 function M.backlinks()
-  local current_file = vim.fn.expand('%:t:r')  -- Filename without extension
+  local current_file = vim.fn.expand("%:t:r") -- Filename without extension
 
-  require('telescope.builtin').live_grep({
+  require("telescope.builtin").live_grep({
     cwd = M.config.home,
-    prompt_title = '🔗 Backlinks to ' .. current_file,
-    default_text = '[[' .. current_file,
+    prompt_title = "🔗 Backlinks to " .. current_file,
+    default_text = "[[" .. current_file,
   })
 end
 
@@ -250,13 +247,12 @@ function M.publish()
   print("📤 Publishing to static site...")
 
   -- Copy notes to export path
-  local cmd = string.format('rsync -av --exclude="inbox" %s/ %s/',
-    M.config.home, M.config.export_path)
+  local cmd = string.format('rsync -av --exclude="inbox" %s/ %s/', M.config.home, M.config.export_path)
   vim.fn.system(cmd)
 
   -- Build static site (adjust for your generator)
-  local blog_dir = vim.fn.fnamemodify(M.config.export_path, ':h:h')
-  vim.fn.system('cd ' .. blog_dir .. ' && hugo')
+  local blog_dir = vim.fn.fnamemodify(M.config.export_path, ":h:h")
+  vim.fn.system("cd " .. blog_dir .. " && hugo")
 
   print("✅ Published successfully!")
 end
@@ -427,17 +423,17 @@ end
 
 -- Set up user commands
 function M.setup_commands()
-  vim.api.nvim_create_user_command('PercyNew', M.new_note, {})
-  vim.api.nvim_create_user_command('PercyDaily', M.daily_note, {})
-  vim.api.nvim_create_user_command('PercyInbox', M.inbox_note, {})
-  vim.api.nvim_create_user_command('PercyPublish', M.publish, {})
-  vim.api.nvim_create_user_command('PercyPreview', function()
-    local blog_dir = vim.fn.fnamemodify(M.config.export_path, ':h:h')
-    vim.fn.system('cd ' .. blog_dir .. ' && hugo server -D &')
+  vim.api.nvim_create_user_command("PercyNew", M.new_note, {})
+  vim.api.nvim_create_user_command("PercyDaily", M.daily_note, {})
+  vim.api.nvim_create_user_command("PercyInbox", M.inbox_note, {})
+  vim.api.nvim_create_user_command("PercyPublish", M.publish, {})
+  vim.api.nvim_create_user_command("PercyPreview", function()
+    local blog_dir = vim.fn.fnamemodify(M.config.export_path, ":h:h")
+    vim.fn.system("cd " .. blog_dir .. " && hugo server -D &")
     print("🌐 Preview server started at http://localhost:1313")
   end, {})
-  vim.api.nvim_create_user_command('PercyOrphans', M.find_orphans, { desc = "Find orphan notes (no links)" })
-  vim.api.nvim_create_user_command('PercyHubs', M.find_hubs, { desc = "Find hub notes (most connected)" })
+  vim.api.nvim_create_user_command("PercyOrphans", M.find_orphans, { desc = "Find orphan notes (no links)" })
+  vim.api.nvim_create_user_command("PercyHubs", M.find_hubs, { desc = "Find hub notes (most connected)" })
 end
 
 return M

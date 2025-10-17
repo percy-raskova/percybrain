@@ -1,4 +1,3 @@
 return {
-	"kblin/vim-fountain"
+  "kblin/vim-fountain",
 }
-

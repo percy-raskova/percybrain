@@ -117,7 +117,7 @@ return {
       on_attach = on_attach,
     })
     --
--- configure texlab server
+    -- configure texlab server
     lspconfig["texlab"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
@@ -128,9 +128,6 @@ return {
       capabilities = capabilities,
       on_attach = on_attach,
     })
-
-
-
 
     -- configure prisma orm server
     lspconfig["prismals"].setup({

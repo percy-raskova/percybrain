@@ -46,7 +46,7 @@ return {
       M.start_ollama() -- Ensure Ollama is running
 
       local curl_cmd = string.format(
-        "curl -s -X POST %s/api/generate -d '{\"model\": \"%s\", \"prompt\": \"%s\", \"stream\": false, \"options\": {\"temperature\": %.1f}}'",
+        'curl -s -X POST %s/api/generate -d \'{"model": "%s", "prompt": "%s", "stream": false, "options": {"temperature": %.1f}}\'',
         M.config.ollama_url,
         M.config.model,
         prompt:gsub('"', '\\"'):gsub("\n", "\\n"),
@@ -158,10 +158,8 @@ return {
 
       vim.notify("📝 Summarizing content...", vim.log.levels.INFO)
 
-      local prompt = string.format(
-        "Provide a concise summary of the following text, highlighting the main points:\n\n%s",
-        text
-      )
+      local prompt =
+        string.format("Provide a concise summary of the following text, highlighting the main points:\n\n%s", text)
 
       M.call_ollama(prompt, function(response)
         M.show_result("AI Summary", response)
@@ -347,7 +345,12 @@ Context:
 
     vim.keymap.set("n", "<leader>aq", M.answer_question, vim.tbl_extend("force", opts, { desc = "AI: Ask Question" }))
 
-    vim.keymap.set("n", "<leader>ax", M.generate_ideas, vim.tbl_extend("force", opts, { desc = "AI: Generate Ideas (eXplore)" }))
+    vim.keymap.set(
+      "n",
+      "<leader>ax",
+      M.generate_ideas,
+      vim.tbl_extend("force", opts, { desc = "AI: Generate Ideas (eXplore)" })
+    )
 
     vim.notify("🧠 PercyBrain AI loaded - <leader>aa for AI menu", vim.log.levels.INFO)
   end,

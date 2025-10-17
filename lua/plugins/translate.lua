@@ -1,3 +1,3 @@
 return {
-  "uga-rosa/translate.nvim"
+  "uga-rosa/translate.nvim",
 }

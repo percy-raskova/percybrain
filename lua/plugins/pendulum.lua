@@ -1,6 +1,6 @@
-return  {
-    "ptdewey/pendulum-nvim",
-    config = function()
-        require("pendulum").setup()
-   end,
+return {
+  "ptdewey/pendulum-nvim",
+  config = function()
+    require("pendulum").setup()
+  end,
 }

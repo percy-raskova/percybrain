@@ -1,3 +1,3 @@
 return {
-  "xuhdev/vim-latex-live-preview" 
+  "xuhdev/vim-latex-live-preview",
 }
