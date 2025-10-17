@@ -74,31 +74,25 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const comment = `## ❌ Lua Quality Checks Failed
-
-**Failed checks:**
-- StyLua formatting or
-- Selene linting or
-- Lua diagnostics
-
-**Fix locally:**
-\`\`\`bash
-# Format code
-stylua lua/
-
-# Check linting
-selene lua/
-
-# Then commit
-git add -A
-git commit --amend --no-edit
-\`\`\`
-
-**Or install tools:**
-\`\`\`bash
-./scripts/install-lua-tools.sh
-\`\`\`
-            `;
+            let comment = '## ❌ Lua Quality Checks Failed\\n\\n';
+            comment += '**Failed checks:**\\n';
+            comment += '- StyLua formatting or\\n';
+            comment += '- Selene linting or\\n';
+            comment += '- Lua diagnostics\\n\\n';
+            comment += '**Fix locally:**\\n';
+            comment += '```bash\\n';
+            comment += '# Format code\\n';
+            comment += 'stylua lua/\\n\\n';
+            comment += '# Check linting\\n';
+            comment += 'selene lua/\\n\\n';
+            comment += '# Then commit\\n';
+            comment += 'git add -A\\n';
+            comment += 'git commit --amend --no-edit\\n';
+            comment += '```\\n\\n';
+            comment += '**Or install tools:**\\n';
+            comment += '```bash\\n';
+            comment += './scripts/install-lua-tools.sh\\n';
+            comment += '```\\n';
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
