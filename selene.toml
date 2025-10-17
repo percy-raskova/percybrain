@@ -1,8 +1,9 @@
 # Selene Configuration for PercyBrain
 # Modern Lua linter - https://github.com/Kampfkarren/selene
 
-# Standard library to use
-std = "vim"
+# Standard library to use (lua51 for LuaJIT compatibility)
+# vim globals are allowed via [config] section below
+std = "lua51"
 
 # Additional globals allowed
 [config]
