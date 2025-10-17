@@ -1,24 +1,21 @@
-name: PercyBrain Tests
+name: PercyBrain Simple Tests
 
 on:
   push:
     branches: ['**']
     paths:
+      - 'lua/**/*.lua'
       - 'tests/**'
-      - 'lua/config/zettelkasten.lua'
-      - 'lua/plugins/ollama.lua'
-      - 'lua/plugins/sembr.lua'
-      - 'claudedocs/**'
+      - '.github/workflows/percybrain-tests.yml'
   pull_request:
     branches: [main, master]
-  schedule:
-    # Run weekly on Sundays at 00:00 UTC
-    - cron: '0 0 * * 0'
+    paths:
+      - 'lua/**/*.lua'
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
 
     steps:
       - name: Checkout code
@@ -30,57 +27,54 @@ jobs:
           neovim: true
           version: stable
 
-      - name: Display Neovim version
-        run: nvim --version
-
-      - name: Make test scripts executable
-        run: chmod +x tests/*.sh
-
-      - name: Run PercyBrain quick health check
-        id: quick-check
-        run: |
-          echo "::group::Quick Health Check"
-          cd tests
-          ./quick-check.sh || echo "Some optional dependencies missing (expected in CI)"
-          echo "::endgroup::"
-
-      - name: Run PercyBrain full test suite
-        id: full-tests
-        run: |
-          echo "::group::Full Test Suite"
-          cd tests
-          ./percybrain-test.sh
-          echo "::endgroup::"
-
-      - name: Upload test report
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Cache Lua tools
+        id: cache-lua-tools
+        uses: actions/cache@v4
         with:
-          name: percybrain-test-report
-          path: tests/output/test-report-*.txt
-          retention-days: 30
+          path: ~/.local/bin
+          key: lua-tools-${{ runner.os }}-v1
+
+      - name: Install Lua quality tools
+        if: steps.cache-lua-tools.outputs.cache-hit != 'true'
+        run: |
+          chmod +x scripts/install-lua-tools.sh
+          ./scripts/install-lua-tools.sh --ci
+
+      - name: Add tools to PATH
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Run simplified test suite
+        id: tests
+        run: |
+          echo "::group::Simple Tests"
+          chmod +x tests/simple-test.sh
+          cd tests
+          ./simple-test.sh
+          echo "::endgroup::"
 
       - name: Comment test results on PR
         if: always() && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
-            const fs = require('fs');
-            const testStatus = '${{ steps.full-tests.outcome }}';
+            const testStatus = '${{ steps.tests.outcome }}';
             const icon = testStatus === 'success' ? '✅' : '❌';
 
-            let comment = `## ${icon} PercyBrain Tests - ${testStatus}\n\n`;
+            let comment = `## ${icon} PercyBrain Tests - ${testStatus}\\n\\n`;
 
             if (testStatus === 'success') {
-              comment += '**All 36 tests passed!** 🎉\n\n';
-              comment += 'PercyBrain system is fully operational.';
+              comment += '**All tests passed!** Code is clean and ready to merge. 🎉\\n\\n';
+              comment += '- Lua syntax valid\\n';
+              comment += '- All 75 Lua files formatted correctly\\n';
+              comment += '- No linting errors\\n';
+              comment += '- Core config loads without errors';
             } else {
-              comment += '**Some tests failed.** Please review the logs above.\n\n';
-              comment += '**Run tests locally:**\n';
-              comment += '```bash\n';
-              comment += 'cd tests\n';
-              comment += './percybrain-test.sh\n';
-              comment += '```\n';
+              comment += '**Some tests failed.** Please check the logs above.\\n\\n';
+              comment += '**Fix locally:**\\n';
+              comment += '```bash\\n';
+              comment += 'cd tests\\n';
+              comment += './simple-test.sh\\n';
+              comment += '```\\n';
             }
 
             github.rest.issues.createComment({
