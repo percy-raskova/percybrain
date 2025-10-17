@@ -2,7 +2,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.languagetool_server_command = '/opt/homebrew/bin/languagetool'
 
--- CI/CD workflows active: lua-quality.yml, percybrain-tests.yml
+-- CI/CD workflows active: lua-quality.yml (Selene v0.29.0), percybrain-tests.yml
 
 
 
