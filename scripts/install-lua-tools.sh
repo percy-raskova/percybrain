@@ -146,19 +146,11 @@ else
 
     SELENE_VERSION="0.29.0"
 
-    if [ "$OS" = "linux" ]; then
-        SELENE_URL="https://github.com/Kampfkarren/selene/releases/download/${SELENE_VERSION}/selene-${SELENE_VERSION}-linux-${ARCH}.zip"
-    else
-        SELENE_URL="https://github.com/Kampfkarren/selene/releases/download/${SELENE_VERSION}/selene-${SELENE_VERSION}-macos-${ARCH}.zip"
-    fi
+    # Download from our own GitHub release (pre-compiled working binary)
+    SELENE_URL="https://github.com/percy-raskova/neovim-iwe/releases/download/tools-v1/selene"
 
-    TEMP_DIR=$(mktemp -d)
-    trap "rm -rf $TEMP_DIR" EXIT
-
-    if curl -L "$SELENE_URL" -o "$TEMP_DIR/selene.zip"; then
-        unzip -q "$TEMP_DIR/selene.zip" -d "$TEMP_DIR"
-        chmod +x "$TEMP_DIR/selene"
-        mv "$TEMP_DIR/selene" "$INSTALL_DIR/selene"
+    if curl -L "$SELENE_URL" -o "$INSTALL_DIR/selene"; then
+        chmod +x "$INSTALL_DIR/selene"
         echo -e "${GREEN}✓${NC} Selene v${SELENE_VERSION} installed successfully"
     else
         echo -e "${RED}✗${NC} Failed to download Selene"
