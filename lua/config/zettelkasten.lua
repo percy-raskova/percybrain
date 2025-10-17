@@ -37,11 +37,77 @@ function M.setup()
   M.setup_commands()
 end
 
+-- Template system
+function M.load_template(template_name)
+  local template_path = M.config.templates .. "/" .. template_name .. ".md"
+
+  if vim.fn.filereadable(template_path) == 1 then
+    local lines = vim.fn.readfile(template_path)
+    return table.concat(lines, "\n")
+  else
+    return nil
+  end
+end
+
+function M.select_template(callback)
+  local templates = vim.fn.globpath(M.config.templates, "*.md", false, true)
+
+  if #templates == 0 then
+    vim.notify("⚠️  No templates found in " .. M.config.templates, vim.log.levels.WARN)
+    return callback(nil)
+  end
+
+  -- Extract template names
+  local template_names = {}
+  for _, path in ipairs(templates) do
+    local name = vim.fn.fnamemodify(path, ":t:r")
+    table.insert(template_names, name)
+  end
+
+  -- Use Telescope picker
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+  local action_state = require("telescope.actions.state")
+
+  pickers
+    .new({}, {
+      prompt_title = "📝 Select Template",
+      finder = finders.new_table({
+        results = template_names,
+      }),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(prompt_bufnr)
+        actions.select_default:replace(function()
+          local selection = action_state.get_selected_entry()
+          actions.close(prompt_bufnr)
+          callback(selection[1])
+        end)
+        return true
+      end,
+    })
+    :find()
+end
+
+function M.apply_template(template_content, title)
+  local timestamp = os.date("%Y%m%d%H%M")
+  local date = os.date("%Y-%m-%d %H:%M")
+
+  -- Replace template variables
+  local content = template_content
+    :gsub("{{title}}", title)
+    :gsub("{{date}}", date)
+    :gsub("{{timestamp}}", timestamp)
+
+  return content
+end
+
 -- Keymaps for Zettelkasten workflow
 function M.setup_keymaps()
   local opts = { noremap = true, silent = true }
 
-  -- Quick capture
+  -- Quick capture (z = Zettelkasten)
   vim.keymap.set('n', '<leader>zn', M.new_note, opts)
   vim.keymap.set('n', '<leader>zd', M.daily_note, opts)
   vim.keymap.set('n', '<leader>zi', M.inbox_note, opts)
@@ -51,35 +117,61 @@ function M.setup_keymaps()
   vim.keymap.set('n', '<leader>zg', M.search_notes, opts)
   vim.keymap.set('n', '<leader>zb', M.backlinks, opts)
 
-  -- Writing modes
-  vim.keymap.set('n', '<leader>zw', '<cmd>ZenMode<cr>', opts)
+  -- Publishing
   vim.keymap.set('n', '<leader>zp', M.publish, opts)
+
+  -- Focus modes (f = focus)
+  vim.keymap.set('n', '<leader>fz', '<cmd>ZenMode<cr>', opts)
 end
 
 -- Create new note with template
 function M.new_note()
   local title = vim.fn.input("Note title: ")
-  if title == "" then return end
+  if title == "" then
+    return
+  end
 
-  local timestamp = os.date("%Y%m%d%H%M")
-  local filename = string.format("%s-%s.md", timestamp, title:gsub(" ", "-"):lower())
-  local filepath = M.config.home .. "/" .. filename
+  -- Try to use template system
+  M.select_template(function(template_name)
+    local timestamp = os.date("%Y%m%d%H%M")
+    local filename = string.format("%s-%s.md", timestamp, title:gsub(" ", "-"):lower())
+    local filepath = M.config.home .. "/" .. filename
 
-  -- Create note with frontmatter
-  local lines = {
-    "---",
-    "title: " .. title,
-    "date: " .. os.date("%Y-%m-%d %H:%M"),
-    "tags: []",
-    "---",
-    "",
-    "# " .. title,
-    "",
-    "",
-  }
+    local content
+    if template_name then
+      -- Load and apply template
+      local template_content = M.load_template(template_name)
+      if template_content then
+        content = M.apply_template(template_content, title)
+      end
+    end
 
-  vim.fn.writefile(lines, filepath)
-  vim.cmd("edit " .. filepath)
+    -- Fallback to default frontmatter if no template
+    if not content then
+      local lines = {
+        "---",
+        "title: " .. title,
+        "date: " .. os.date("%Y-%m-%d %H:%M"),
+        "tags: []",
+        "---",
+        "",
+        "# " .. title,
+        "",
+        "",
+      }
+      content = table.concat(lines, "\n")
+    end
+
+    -- Write file
+    local file = io.open(filepath, "w")
+    if file then
+      file:write(content)
+      file:close()
+      vim.cmd("edit " .. filepath)
+    else
+      vim.notify("❌ Failed to create note", vim.log.levels.ERROR)
+    end
+  end)
 end
 
 -- Create/open daily note
@@ -169,6 +261,170 @@ function M.publish()
   print("✅ Published successfully!")
 end
 
+-- Knowledge graph analysis
+function M.analyze_links()
+  local notes = {}
+  local link_pattern = "%[%[([^%]]+)%]%]" -- Match [[wiki links]]
+
+  -- Scan all markdown files
+  local files = vim.fn.globpath(M.config.home, "**/*.md", false, true)
+
+  for _, filepath in ipairs(files) do
+    local filename = vim.fn.fnamemodify(filepath, ":t:r")
+    local content = table.concat(vim.fn.readfile(filepath), "\n")
+
+    -- Count outgoing links
+    local outgoing = {}
+    for link in content:gmatch(link_pattern) do
+      table.insert(outgoing, link)
+    end
+
+    -- Count incoming links (backlinks)
+    local incoming = 0
+    for _, other_file in ipairs(files) do
+      if other_file ~= filepath then
+        local other_content = table.concat(vim.fn.readfile(other_file), "\n")
+        if other_content:match("%[%[" .. filename .. "%]%]") then
+          incoming = incoming + 1
+        end
+      end
+    end
+
+    notes[filename] = {
+      path = filepath,
+      outgoing = #outgoing,
+      incoming = incoming,
+      total = #outgoing + incoming,
+    }
+  end
+
+  return notes
+end
+
+function M.find_orphans()
+  vim.notify("🔍 Analyzing knowledge graph...", vim.log.levels.INFO)
+
+  local notes = M.analyze_links()
+  local orphans = {}
+
+  for name, data in pairs(notes) do
+    if data.total == 0 then
+      table.insert(orphans, {
+        name = name,
+        path = data.path,
+      })
+    end
+  end
+
+  if #orphans == 0 then
+    vim.notify("✅ No orphan notes found!", vim.log.levels.INFO)
+    return
+  end
+
+  -- Display in Telescope
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+
+  pickers
+    .new({}, {
+      prompt_title = "🏝️  Orphan Notes (" .. #orphans .. " found)",
+      finder = finders.new_table({
+        results = orphans,
+        entry_maker = function(entry)
+          return {
+            value = entry.path,
+            display = "📄 " .. entry.name,
+            ordinal = entry.name,
+          }
+        end,
+      }),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(prompt_bufnr)
+        actions.select_default:replace(function()
+          local selection = actions.get_selected_entry(prompt_bufnr)
+          actions.close(prompt_bufnr)
+          vim.cmd("edit " .. selection.value)
+        end)
+        return true
+      end,
+    })
+    :find()
+end
+
+function M.find_hubs()
+  vim.notify("🔍 Analyzing knowledge graph...", vim.log.levels.INFO)
+
+  local notes = M.analyze_links()
+  local hubs = {}
+
+  for name, data in pairs(notes) do
+    table.insert(hubs, {
+      name = name,
+      path = data.path,
+      connections = data.total,
+      incoming = data.incoming,
+      outgoing = data.outgoing,
+    })
+  end
+
+  -- Sort by total connections
+  table.sort(hubs, function(a, b)
+    return a.connections > b.connections
+  end)
+
+  -- Take top 10
+  local top_hubs = {}
+  for i = 1, math.min(10, #hubs) do
+    if hubs[i].connections > 0 then
+      table.insert(top_hubs, hubs[i])
+    end
+  end
+
+  if #top_hubs == 0 then
+    vim.notify("⚠️  No connected notes found", vim.log.levels.WARN)
+    return
+  end
+
+  -- Display in Telescope
+  local pickers = require("telescope.pickers")
+  local finders = require("telescope.finders")
+  local conf = require("telescope.config").values
+  local actions = require("telescope.actions")
+
+  pickers
+    .new({}, {
+      prompt_title = "🌟 Hub Notes (Top 10 Most Connected)",
+      finder = finders.new_table({
+        results = top_hubs,
+        entry_maker = function(entry)
+          return {
+            value = entry.path,
+            display = string.format(
+              "🔗 %s (↓%d ↑%d = %d)",
+              entry.name,
+              entry.incoming,
+              entry.outgoing,
+              entry.connections
+            ),
+            ordinal = entry.name,
+          }
+        end,
+      }),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(prompt_bufnr)
+        actions.select_default:replace(function()
+          local selection = actions.get_selected_entry(prompt_bufnr)
+          actions.close(prompt_bufnr)
+          vim.cmd("edit " .. selection.value)
+        end)
+        return true
+      end,
+    })
+    :find()
+end
+
 -- Set up user commands
 function M.setup_commands()
   vim.api.nvim_create_user_command('PercyNew', M.new_note, {})
@@ -180,6 +436,8 @@ function M.setup_commands()
     vim.fn.system('cd ' .. blog_dir .. ' && hugo server -D &')
     print("🌐 Preview server started at http://localhost:1313")
   end, {})
+  vim.api.nvim_create_user_command('PercyOrphans', M.find_orphans, { desc = "Find orphan notes (no links)" })
+  vim.api.nvim_create_user_command('PercyHubs', M.find_hubs, { desc = "Find hub notes (most connected)" })
 end
 
 return M

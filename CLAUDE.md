@@ -62,6 +62,73 @@ init.lua                        # Entry point: NeoVide config + requires('config
 - **obsidianNvim.lua**: Obsidian vault editing support
 - **org-bullets.lua / headlines.lua**: Visual enhancements for org/markdown headings
 
+### PercyBrain Knowledge Management System
+**PercyBrain** is a comprehensive Zettelkasten system that transforms OVIWrite into a complete Obsidian replacement with terminal integration.
+
+#### Core Components
+- **lua/config/zettelkasten.lua**: Core PercyBrain module providing note capture, search, and publishing
+- **IWE LSP** (lua/plugins/lsp/lspconfig.lua): Intelligent markdown server for wiki-style linking
+  - Link completion and navigation (`gd` to follow links)
+  - Backlinks tracking (`<leader>zr`)
+  - Knowledge graph generation
+  - Rename refactoring across vault (`<leader>rn`)
+- **SemBr** (lua/plugins/sembr.lua): ML-based semantic line breaks for better git diffs
+  - BERT transformer-based (not rule-based)
+  - `<leader>zs` to format buffer/selection
+  - `<leader>zt` to toggle auto-format on save
+- **Static Site Publishing**: Automated Hugo/Quartz/Jekyll export from within Neovim
+
+#### Two-Part Workflow
+1. **Quick Capture**: Fleeting notes → Inbox → Processing
+   - `<leader>zi`: Quick inbox capture
+   - `<leader>zn`: New permanent note with timestamp ID
+   - `<leader>zd`: Daily journal entry
+2. **Organize & Publish**: Link notes → Build knowledge graph → Export
+   - `<leader>zf`: Find notes (fuzzy search)
+   - `<leader>zg`: Search note content (live grep)
+   - `<leader>zb`: Find backlinks to current note
+   - `<leader>zp`: Publish to static site
+
+#### PercyBrain Commands
+| Command | Action |
+|---------|--------|
+| `:PercyNew` | Create new note with template picker |
+| `:PercyDaily` | Open today's daily note |
+| `:PercyInbox` | Quick capture to inbox |
+| `:PercyPublish` | Export to static site |
+| `:PercyPreview` | Start local Hugo server |
+| `:PercyOrphans` | Find orphan notes (no links) |
+| `:PercyHubs` | Find hub notes (most connected) |
+| `:PercyAI` | AI command menu |
+| `:PercyExplain` | AI: Explain text |
+| `:PercySummarize` | AI: Summarize note |
+| `:PercyLinks` | AI: Suggest related links |
+| `:PercyImprove` | AI: Improve writing |
+| `:PercyAsk` | AI: Answer question |
+| `:PercyIdeas` | AI: Generate ideas |
+| `:SemBrFormat` | Format with semantic line breaks |
+| `:SemBrToggle` | Toggle auto-format on save |
+
+#### Installation Requirements
+- **IWE LSP**: `cargo install iwe` (Rust-based markdown server) ✅ Installed
+- **SemBr**: `uv tool install sembr` (Python ML tool) ✅ Installed
+- **Ollama**: `curl -fsSL https://ollama.com/install.sh | sh && ollama pull llama3.2` ✅ Installed
+  - Local LLM support for AI features
+  - Model: llama3.2:latest (2.0 GB)
+
+#### Configuration
+- **Workspace**: `~/Zettelkasten/` (configured in lua/config/zettelkasten.lua)
+- **Structure**:
+  - `inbox/` - Fleeting notes
+  - `daily/` - Daily journal entries
+  - `templates/` - Note templates
+  - `.iwe/` - IWE LSP configuration and index
+
+#### Documentation
+- **PERCYBRAIN_DESIGN.md**: Complete system architecture (1,129 lines)
+- **PERCYBRAIN_SETUP.md**: User setup guide and workflows
+- **PERCYBRAIN_README.md**: Feature comparison and quick start
+
 ### Distraction-Free Writing
 - **zen-mode.lua**: Centered, clean writing interface
 - **goyo.lua**: Minimalist writing mode
@@ -159,12 +226,61 @@ nvim ~/.config/nvim/lazy-lock.json
 ### Writing Mode Shortcuts
 | Key Combo | Action | Plugin |
 |-----------|--------|--------|
-| `<leader>z` | ZenMode | Distraction-free writing |
+| `<leader>fz` | ZenMode | Distraction-free writing (f = focus) |
 | `<leader>o` | Goyo | Minimal writing mode |
 | `<leader>sp` | SoftPencil | Enable soft line wrapping |
 | `<leader>n` | Enable numbers | Show line numbers + cursorline |
 | `<leader>rn` | Disable numbers | Hide all line numbers |
 | `<leader>wn` | New writer file | Create from template |
+
+### PercyBrain Zettelkasten Shortcuts
+
+#### Core Note Management (z = Zettelkasten)
+| Key Combo | Action | Description |
+|-----------|--------|-------------|
+| `<leader>zn` | `:PercyNew` | Create new note with template picker |
+| `<leader>zd` | `:PercyDaily` | Open today's daily note |
+| `<leader>zi` | `:PercyInbox` | Quick capture to inbox |
+| `<leader>zf` | Find notes | Fuzzy find by filename |
+| `<leader>zg` | Search notes | Live grep through content |
+| `<leader>zb` | Backlinks | Find links to current note |
+| `<leader>zp` | `:PercyPublish` | Export to static site |
+
+#### AI Assistant (a = AI)
+| Key Combo | Command | Description |
+|-----------|---------|-------------|
+| `<leader>aa` | `:PercyAI` | AI command menu (Telescope picker) |
+| `<leader>ae` | `:PercyExplain` | AI: Explain text |
+| `<leader>as` | `:PercySummarize` | AI: Summarize note |
+| `<leader>al` | `:PercyLinks` | AI: Suggest related links |
+| `<leader>aw` | `:PercyImprove` | AI: Improve writing |
+| `<leader>aq` | `:PercyAsk` | AI: Answer question |
+| `<leader>ax` | `:PercyIdeas` | AI: Generate ideas (eXplore) |
+
+#### Focus Modes (f = focus)
+| Key Combo | Action | Description |
+|-----------|--------|-------------|
+| `<leader>fz` | `:ZenMode` | Zen mode (distraction-free writing) |
+
+#### Semantic Line Breaks (SemBr)
+| Key Combo | Action | Description |
+|-----------|--------|-------------|
+| `<leader>zs` | `:SemBrFormat` | Format with ML-based semantic breaks |
+| `<leader>zt` | `:SemBrToggle` | Toggle auto-format on save |
+
+#### Knowledge Graph Analysis
+| Command | Action | Description |
+|---------|--------|-------------|
+| `:PercyOrphans` | Find orphans | Notes with no links in/out |
+| `:PercyHubs` | Find hubs | Top 10 most-connected notes |
+
+#### LSP Navigation (IWE)
+| Key Combo | Action | Description |
+|-----------|--------|-------------|
+| `<leader>zr` | LSP references | Find all backlinks (IWE LSP) |
+| `gd` | Go to definition | Follow wiki link |
+| `K` | Hover | Show link preview |
+| `<leader>rn` | Rename | Rename across vault |
 
 ### Search & Find (FzfLua)
 | Key Combo | Action |
