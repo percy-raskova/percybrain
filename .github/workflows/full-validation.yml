@@ -1,0 +1,170 @@
+name: Full Validation
+
+on:
+  pull_request:
+    branches: [main, master]
+  schedule:
+    # Every Sunday at midnight UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+    # Allow manual trigger
+
+jobs:
+  full-test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        nvim-version: ['stable', 'nightly']
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Neovim ${{ matrix.nvim-version }}
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: ${{ matrix.nvim-version }}
+
+      - name: Cache lazy.nvim plugins
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.local/share/nvim/lazy
+            ~/.cache/nvim
+          key: ${{ runner.os }}-${{ matrix.nvim-version }}-lazy-${{ hashFiles('lazy-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.nvim-version }}-lazy-
+
+      - name: Make scripts executable (Unix)
+        if: runner.os != 'Windows'
+        run: chmod +x scripts/*.sh
+
+      - name: Make scripts executable (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          # Git Bash should be available on Windows runners
+          bash -c "chmod +x scripts/*.sh"
+
+      - name: Display Neovim version
+        run: nvim --version
+
+      - name: Run Layer 1 validation (static)
+        id: layer1
+        run: |
+          echo "::group::Layer 1: Static Validation"
+          bash scripts/validate-layer1.sh
+          echo "::endgroup::"
+
+      - name: Run Layer 2 validation (structural)
+        id: layer2
+        run: |
+          echo "::group::Layer 2: Structural Validation"
+          nvim --headless -l scripts/validate-layer2.lua
+          echo "::endgroup::"
+
+      - name: Run Layer 3 validation (startup test)
+        id: layer3-startup
+        run: |
+          echo "::group::Layer 3: Startup Test"
+          bash scripts/validate-startup.sh
+          echo "::endgroup::"
+
+      - name: Run Layer 3 validation (health check)
+        id: layer3-health
+        run: |
+          echo "::group::Layer 3: Health Check"
+          bash scripts/validate-health.sh
+          echo "::endgroup::"
+
+      - name: Run Layer 3 validation (plugin loading)
+        id: layer3-plugins
+        run: |
+          echo "::group::Layer 3: Plugin Loading Test"
+          nvim --headless -l scripts/validate-plugin-loading.lua
+          echo "::endgroup::"
+
+      - name: Run Layer 4 validation (documentation)
+        id: layer4
+        run: |
+          echo "::group::Layer 4: Documentation Sync"
+          nvim --headless -l scripts/validate-documentation.lua
+          echo "::endgroup::"
+
+      - name: Generate validation summary
+        if: always()
+        run: |
+          echo "# Validation Summary" > /tmp/summary.md
+          echo "" >> /tmp/summary.md
+          echo "**OS**: ${{ matrix.os }}" >> /tmp/summary.md
+          echo "**Neovim**: ${{ matrix.nvim-version }}" >> /tmp/summary.md
+          echo "**Job Status**: ${{ job.status }}" >> /tmp/summary.md
+          echo "" >> /tmp/summary.md
+          echo "## Layer Results" >> /tmp/summary.md
+          echo "- Layer 1 (Static): ${{ steps.layer1.outcome }}" >> /tmp/summary.md
+          echo "- Layer 2 (Structural): ${{ steps.layer2.outcome }}" >> /tmp/summary.md
+          echo "- Layer 3 (Startup): ${{ steps.layer3-startup.outcome }}" >> /tmp/summary.md
+          echo "- Layer 3 (Health): ${{ steps.layer3-health.outcome }}" >> /tmp/summary.md
+          echo "- Layer 3 (Plugins): ${{ steps.layer3-plugins.outcome }}" >> /tmp/summary.md
+          echo "- Layer 4 (Documentation): ${{ steps.layer4.outcome }}" >> /tmp/summary.md
+
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            try {
+              const summary = fs.readFileSync('/tmp/summary.md', 'utf8');
+              const icon = '${{ job.status }}' === 'success' ? '✅' : '❌';
+              const title = `${icon} Full Validation - ${{ matrix.os }} / ${{ matrix.nvim-version }}`;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `## ${title}\n\n${summary}`
+              });
+            } catch (error) {
+              console.log('Could not read summary file:', error);
+            }
+
+      - name: Upload artifacts (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report-${{ matrix.os }}-${{ matrix.nvim-version }}
+          path: |
+            /tmp/validation-*.txt
+            /tmp/*.log
+            /tmp/health-report.txt
+            /tmp/startup-log.txt
+          retention-days: 14
+
+      - name: Upload health report (always)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: health-report-${{ matrix.os }}-${{ matrix.nvim-version }}
+          path: /tmp/health-report.txt
+          retention-days: 7
+
+  # Aggregate results job
+  aggregate-results:
+    needs: full-test
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Check overall status
+        run: |
+          if [ "${{ needs.full-test.result }}" == "failure" ]; then
+            echo "❌ Full validation failed on one or more platforms"
+            exit 1
+          else
+            echo "✅ Full validation passed on all platforms"
+          fi
