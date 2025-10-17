@@ -1,4 +1,3 @@
 return {
-
-	{ "uga-rosa/cmp-dictionary" }, 
+  "uga-rosa/cmp-dictionary" 
 }

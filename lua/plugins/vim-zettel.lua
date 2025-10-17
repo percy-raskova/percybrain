@@ -1,4 +1,4 @@
 return {
-	{ "michal-h21/vim-zettel"},
+  "michal-h21/vim-zettel"
 }
 

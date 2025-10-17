@@ -1,3 +1,3 @@
 return {
-  { "smithbm2316/centerpad.nvim" },
+  "smithbm2316/centerpad.nvim",
 }

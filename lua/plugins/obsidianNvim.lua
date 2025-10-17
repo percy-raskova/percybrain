@@ -1,3 +1,3 @@
 return {
-{"epwalsh/obsidian.nvim"}
-  }
+  "epwalsh/obsidian.nvim",
+}

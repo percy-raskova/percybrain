@@ -1,3 +1,3 @@
 return {
-  { "Pocco81/HighStr.nvim"},
+  "Pocco81/HighStr.nvim"
 }

@@ -1,4 +1,4 @@
 return {
-	{ "junegunn/limelight.vim" },
+  "junegunn/limelight.vim",
 }
 
