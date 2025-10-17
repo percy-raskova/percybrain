@@ -1,0 +1,108 @@
+name: Lua Quality Checks
+
+on:
+  push:
+    branches: ['**']
+    paths:
+      - 'lua/**/*.lua'
+      - '.stylua.toml'
+      - 'selene.toml'
+      - '.luarc.json'
+      - '.github/workflows/lua-quality.yml'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'lua/**/*.lua'
+
+jobs:
+  format-and-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache Lua tools
+        id: cache-lua-tools
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/bin
+          key: lua-tools-${{ runner.os }}-v1
+          restore-keys: |
+            lua-tools-${{ runner.os }}-
+
+      - name: Install Lua quality tools
+        if: steps.cache-lua-tools.outputs.cache-hit != 'true'
+        run: |
+          chmod +x scripts/install-lua-tools.sh
+          ./scripts/install-lua-tools.sh --ci
+
+      - name: Add tools to PATH
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Verify tool installation
+        run: |
+          stylua --version
+          selene --version
+          lua-language-server --version
+
+      - name: Check formatting with StyLua
+        run: |
+          echo "::group::StyLua Formatting Check"
+          stylua --check lua/
+          echo "::endgroup::"
+
+      - name: Lint with Selene
+        run: |
+          echo "::group::Selene Linting"
+          selene lua/
+          echo "::endgroup::"
+
+      - name: Run Lua diagnostics
+        run: |
+          echo "::group::Lua Language Server Diagnostics"
+          # lua-language-server diagnostics would go here
+          # For now, just verify configuration exists
+          if [ -f .luarc.json ]; then
+            echo "✓ .luarc.json configuration found"
+          fi
+          echo "::endgroup::"
+
+      - name: Comment on PR (if failure)
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `## ❌ Lua Quality Checks Failed
+
+**Failed checks:**
+- StyLua formatting or
+- Selene linting or
+- Lua diagnostics
+
+**Fix locally:**
+\`\`\`bash
+# Format code
+stylua lua/
+
+# Check linting
+selene lua/
+
+# Then commit
+git add -A
+git commit --amend --no-edit
+\`\`\`
+
+**Or install tools:**
+\`\`\`bash
+./scripts/install-lua-tools.sh
+\`\`\`
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

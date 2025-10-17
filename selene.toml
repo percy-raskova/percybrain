@@ -1,0 +1,31 @@
+# Selene Configuration for PercyBrain
+# Modern Lua linter - https://github.com/Kampfkarren/selene
+
+# Standard library to use
+std = "vim"
+
+# Additional globals allowed
+[config]
+# Neovim/Vim globals
+vim = "allow_any_key"
+
+# Common plugin manager globals
+[rules]
+# Warn about unused variables
+unused_variable = "warn"
+
+# Warn about undefined globals
+undefined_variable = "warn"
+
+# Warn about shadowing variables
+shadowing = "warn"
+
+# Error on empty code blocks
+empty_if = "deny"
+empty_loop = "deny"
+
+# Warn on incorrect type usage
+incorrect_standard_library_use = "deny"
+
+# Allow vim global (already configured above)
+global_usage = "allow"
