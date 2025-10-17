@@ -1,3 +1,3 @@
 return {
-  {"dense-analysis/ale"},
+  "dense-analysis/ale",
 }

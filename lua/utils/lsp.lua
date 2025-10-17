@@ -1,4 +1,4 @@
-local mapkey = require("util.keymapper").mapkey
+local mapkey = require("utils.keymapper").mapkey
 
 local M = {}
 

@@ -1,3 +1,3 @@
 return {
-	{ 'jceb/vim-orgmode' },
+  'jceb/vim-orgmode',
 }

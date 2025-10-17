@@ -1,3 +1,3 @@
 return {
-  { "arnamak/stay-centered.nvim" },
+  "arnamak/stay-centered.nvim" 
 }

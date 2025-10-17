@@ -1,3 +1,3 @@
 return {
-  { "rhysd/vim-grammarous" },
+  "rhysd/vim-grammarous" 
 }

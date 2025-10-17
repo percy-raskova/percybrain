@@ -1,3 +1,3 @@
 return {
-  { "reedes/vim-pencil" },
+  "reedes/vim-pencil" 
 }
