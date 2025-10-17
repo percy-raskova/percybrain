@@ -23,7 +23,14 @@ echo -e "${BLUE}  Purpose: Ensure code works, not corporate compliance${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""
 
-NVIM_CONFIG="${NVIM_CONFIG:-$HOME/.config/nvim}"
+# Detect if running in CI or local environment
+if [ -n "$GITHUB_ACTIONS" ]; then
+    # In GitHub Actions, we're in the tests/ directory
+    NVIM_CONFIG="$(cd .. && pwd)"
+else
+    # Local environment
+    NVIM_CONFIG="${NVIM_CONFIG:-$HOME/.config/nvim}"
+fi
 
 #=============================================================================
 # Test Functions
