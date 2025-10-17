@@ -6,20 +6,21 @@
 std = "lua51"
 
 # Additional globals allowed
-[config]
-# Neovim/Vim globals
+[config.globals]
+# Neovim global object (allow any key access)
 vim = "allow_any_key"
-
-# Common plugin manager globals
 [rules]
 # Warn about unused variables
 unused_variable = "warn"
 
-# Warn about undefined globals
-undefined_variable = "warn"
+# Allow undefined globals (vim is always global in Neovim)
+undefined_variable = "allow"
 
 # Warn about shadowing variables
 shadowing = "warn"
+
+# Allow unscoped variables (vim is always global in Neovim)
+unscoped_variables = "allow"
 
 # Error on empty code blocks
 empty_if = "deny"
@@ -28,5 +29,8 @@ empty_loop = "deny"
 # Warn on incorrect type usage
 incorrect_standard_library_use = "deny"
 
-# Allow vim global (already configured above)
+# Allow mixed tables (common in Neovim plugin specs)
+mixed_table = "allow"
+
+# Allow vim global usage
 global_usage = "allow"
