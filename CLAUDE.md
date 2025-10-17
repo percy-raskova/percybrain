@@ -4,11 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**OVIWrite** is a Neovim-based Integrated Writing Environment (IWE) designed for writers, not programmers. Built on lazy.nvim plugin manager, it transforms Neovim into a full-featured writing tool supporting long-form prose (LaTeX), screenwriting (Fountain), note-taking (Markdown, Org-mode), and personal knowledge management (vim-wiki, Zettelkasten).
+**PercyBrain** (formerly OVIWrite) is a Neovim-based Integrated Writing Environment (IWE) designed for writers, not programmers. Built on lazy.nvim plugin manager, it transforms Neovim into a comprehensive Zettelkasten knowledge management system with AI-assisted writing capabilities.
 
-**Key Philosophy**: Plain text over rich text, modal editing efficiency, extensibility for writers' workflows.
+**Primary Use Cases** (in priority order):
+1. **Knowledge Management/Zettelkasten** (PRIMARY) - Interconnected note-taking with IWE LSP, backlinks, and knowledge graphs
+2. **AI-Assisted Writing** - Local LLM integration (Ollama) for draft generation from notes
+3. **Long-form Prose** - LaTeX, Markdown with semantic line breaks, grammar checking
+4. **Static Site Publishing** - Hugo integration for publishing notes as websites
 
-**Target Audience**: Writers willing to learn Vim motions for speed-of-thought writing, editing, and world-building capabilities.
+**Key Philosophy**: Plain text over rich text, modal editing efficiency, extensibility for writers' workflows, local-first AI assistance.
+
+**Target Audience**: Writers and knowledge workers willing to learn Vim motions for speed-of-thought note-taking, writing, and knowledge management.
 
 ## Architecture
 
@@ -20,16 +26,40 @@ init.lua                        # Entry point: NeoVide config + requires('config
 │   ├── init.lua               # Bootstrap: lazy.nvim setup + loads globals/keymaps/options
 │   ├── globals.lua            # Global variables and settings
 │   ├── keymaps.lua            # Leader key mappings (<space> is <leader>)
-│   └── options.lua            # Vim options (spell, search, appearance, behavior)
+│   ├── options.lua            # Vim options (spell, search, appearance, behavior)
+│   └── zettelkasten.lua       # PercyBrain Zettelkasten core module
 └── lua/plugins/
-    ├── init.lua               # Minimal plugin loader (neoconf, neodev)
-    ├── [plugin-name].lua      # Individual plugin configurations (lazy-loaded)
-    └── lsp/                   # LSP configurations (mason, lspconfig, none-ls)
+    ├── init.lua               # Plugin loader with explicit workflow imports (CRITICAL)
+    ├── zettelkasten/          # 6 plugins: IWE LSP, vim-wiki, vim-zettel, obsidian, etc.
+    ├── ai-sembr/              # 3 plugins: AI Draft Generator, SemBr, ollama
+    ├── prose-writing/         # 14 plugins across 4 subdirs (distraction-free, editing, formatting, grammar)
+    ├── academic/              # 4 plugins: vimtex, vim-latex-preview, etc.
+    ├── publishing/            # 3 plugins: Hugo, markdown-preview, etc.
+    ├── org-mode/              # 3 plugins: nvim-orgmode, org-bullets, headlines
+    ├── lsp/                   # 3 plugins: mason, lspconfig, none-ls
+    ├── completion/            # 5 plugins: nvim-cmp and sources
+    ├── ui/                    # 7 plugins: alpha, whichkey, lualine, etc.
+    ├── navigation/            # 8 plugins: telescope, fzf-lua, nvim-tree, etc.
+    ├── utilities/             # 15 plugins: lazygit, translate, img-clip, etc.
+    ├── treesitter/            # 2 plugins: nvim-treesitter and context
+    ├── lisp/                  # 2 plugins: conjure, parinfer
+    └── experimental/          # 4 plugins: pendulum, styledoc, vim-dialect, w3m
 ```
 
-**Loading Sequence**: `init.lua` → `require('config')` → `lua/config/init.lua` → lazy.nvim setup → loads all `lua/plugins/*.lua`
+**Loading Sequence**: `init.lua` → `require('config')` → `lua/config/init.lua` → lazy.nvim setup → `lua/plugins/init.lua` → explicit imports from 14 workflow directories
 
-**Plugin Architecture**: Each plugin is a separate Lua file in `lua/plugins/` returning a table with lazy.nvim spec. Plugins are lazy-loaded by default (see `config/init.lua` defaults).
+**Plugin Architecture**: 68 plugins organized into 14 workflow-based directories (+ 15 dependencies = 83 total). Each plugin is a separate Lua file returning a lazy.nvim spec. Plugins are lazy-loaded by default.
+
+**⚠️ CRITICAL: lazy.nvim Subdirectory Loading Pattern**
+When `lua/plugins/init.lua` returns a table, lazy.nvim **stops auto-scanning subdirectories**. You MUST use explicit imports:
+```lua
+return {
+  { import = "plugins.zettelkasten" },
+  { import = "plugins.ai-sembr" },
+  -- ... all 14 workflow directories
+}
+```
+Without explicit imports, only the plugins directly listed in `init.lua` will load, causing a blank screen on startup.
 
 ### Core Configuration Files
 
@@ -47,14 +77,23 @@ init.lua                        # Entry point: NeoVide config + requires('config
 ### Long-form Writing
 - **vimtex.lua**: LaTeX support for novels, academic writing, reports
 - **vim-pencil.lua**: Line wrapping and soft breaks for prose
-- **fountain.lua**: Screenwriting in Fountain format
-- **nvim-orgmode.lua / vimorg.lua**: Org-mode support for structured writing
+- **nvim-orgmode.lua**: Org-mode support for structured writing
+- **nvim-surround.lua**: Surround text objects with quotes, brackets, tags (`ys`, `ds`, `cs`)
+- **vim-repeat.lua**: Enhanced dot-repeat for plugin operations
+- **vim-textobj-sentence.lua**: Sentence text objects for prose editing (`as`, `is`)
+- **undotree.lua**: Visual undo history tree (`<leader>u`)
 
 ### Spell/Grammar
-- **LanguageTool.lua**: Advanced grammar and style checking
-- **vim-grammarous.lua**: Grammar checker integration
-- **vale.lua**: Prose linting
+- **ltex-ls** (via lspconfig.lua): LanguageTool LSP with 5000+ grammar rules, real-time checking
+- **vale.lua**: Prose linting for style guides
 - Built-in spell check (enabled by default in options.lua)
+
+### AI-Assisted Writing
+- **ai-draft.lua**: AI Draft Generator - collects notes on a topic and synthesizes into prose
+  - Command: `<leader>ad` - Generate draft from Zettelkasten notes
+  - Uses local Ollama LLM (llama3.2) for privacy
+  - 158-line implementation with note collection and synthesis
+- **ollama.lua**: Local LLM integration for AI assistance
 
 ### Note-taking & Knowledge Management
 - **vim-wiki.lua**: Personal wiki system
@@ -62,8 +101,8 @@ init.lua                        # Entry point: NeoVide config + requires('config
 - **obsidianNvim.lua**: Obsidian vault editing support
 - **org-bullets.lua / headlines.lua**: Visual enhancements for org/markdown headings
 
-### PercyBrain Knowledge Management System
-**PercyBrain** is a comprehensive Zettelkasten system that transforms OVIWrite into a complete Obsidian replacement with terminal integration.
+### PercyBrain Knowledge Management System (PRIMARY USE CASE)
+**PercyBrain** is a comprehensive Zettelkasten system that transforms Neovim into a complete Obsidian replacement with terminal integration. This is the **primary focus** of the project.
 
 #### Core Components
 - **lua/config/zettelkasten.lua**: Core PercyBrain module providing note capture, search, and publishing
@@ -133,14 +172,20 @@ init.lua                        # Entry point: NeoVide config + requires('config
 - **zen-mode.lua**: Centered, clean writing interface
 - **goyo.lua**: Minimalist writing mode
 - **limelight.lua**: Dim paragraphs except current one
-- **twilight.lua**: Additional focus mode
 - **centerpad.lua**: Center text in buffer
 - **typewriter.lua**: Typewriter scrolling mode
 - **stay-centered.lua**: Keep cursor centered
 
+### Static Site Publishing
+- **hugo.lua**: Hugo static site generator integration
+  - Commands: `:HugoNew`, `:HugoServer`, `:HugoPublish`, `:HugoBuild`
+  - 40-line pragmatic implementation for publishing notes as websites
+  - Local preview with live reload
+  - Build and deploy from within Neovim
+
 ### Utilities
 - **telescope.lua**: Fuzzy finder for files, buffers, help docs
-- **fzf-lua.lua / fzf-vim.lua**: Fast file/text search
+- **fzf-lua.lua**: Fast file/text search (primary fuzzy finder)
 - **nvim-tree.lua**: File explorer
 - **lazygit.lua**: Git version control integration
 - **translate.lua**: Built-in translator (English, French, Tamil, Sinhala)
@@ -232,6 +277,8 @@ nvim ~/.config/nvim/lazy-lock.json
 | `<leader>n` | Enable numbers | Show line numbers + cursorline |
 | `<leader>rn` | Disable numbers | Hide all line numbers |
 | `<leader>wn` | New writer file | Create from template |
+| `<leader>u` | UndoTree | Visual undo history tree |
+| `<leader>ad` | AI Draft | Generate draft from Zettelkasten notes |
 
 ### PercyBrain Zettelkasten Shortcuts
 
@@ -302,6 +349,14 @@ nvim ~/.config/nvim/lazy-lock.json
 | `<leader>ft` | FloatermToggle | Floating terminal |
 | `<leader>te` | ToggleTerm | Terminal toggle |
 
+### Hugo Publishing Shortcuts
+| Command | Action |
+|---------|--------|
+| `:HugoNew` | Create new Hugo post |
+| `:HugoServer` | Start local Hugo preview server |
+| `:HugoBuild` | Build static site |
+| `:HugoPublish` | Build and deploy site |
+
 ### Startup Screen Shortcuts
 From Alpha splash screen:
 - `f` - Find files
@@ -309,14 +364,21 @@ From Alpha splash screen:
 - `r` - Recent files
 - `g` - Grep (find word)
 - `l` - Lazy package manager
-- `q` - Quit OVIWrite
+- `q` - Quit PercyBrain
 
 ## Plugin Development Guidelines
 
 ### Adding New Plugins
 
-1. Create new file: `lua/plugins/plugin-name.lua`
-2. Return lazy.nvim spec table:
+1. **Choose appropriate workflow directory**:
+   - Zettelkasten features → `lua/plugins/zettelkasten/`
+   - AI/writing assistance → `lua/plugins/ai-sembr/`
+   - Prose editing tools → `lua/plugins/prose-writing/editing/`
+   - Grammar/spell → `lua/plugins/prose-writing/grammar/`
+   - Publishing → `lua/plugins/publishing/`
+   - Experimental → `lua/plugins/experimental/`
+
+2. **Create plugin file**: `lua/plugins/[workflow-dir]/plugin-name.lua`
 ```lua
 return {
   "author/plugin-repo",
@@ -327,7 +389,13 @@ return {
   end,
 }
 ```
-3. Plugin loads automatically (lazy.nvim scans `lua/plugins/`)
+
+3. **Plugin loads automatically** from existing workflow directory
+
+4. **For NEW workflow directories**: Must add explicit import to `lua/plugins/init.lua`:
+```lua
+{ import = "plugins.new-workflow-dir" }
+```
 
 ### Plugin Spec Structure
 ```lua
@@ -400,11 +468,39 @@ After editing configs:
 ```
 
 ### Common Issues
+- **Blank screen on startup**: Check `lua/plugins/init.lua` has explicit imports for all workflow directories
+- **Plugins not loading**: Verify workflow directory has explicit `{ import = "plugins.dir" }` in `init.lua`
 - **Spell check not working**: Check `opt.spell = true` in options.lua
 - **Lazy loading breaks plugin**: Set `lazy = false` or adjust trigger event
 - **Keymaps not working**: Check for conflicts in keymaps.lua or plugin key specs
 - **LaTeX not compiling**: Ensure LaTeX distribution installed (texlive, miktex)
 - **Missing icons**: Install a Nerd Font and set terminal font
+- **IWE LSP not working**: Verify `cargo install iwe` completed, check `:LspInfo` in markdown buffer
+- **AI features failing**: Verify Ollama installed and running: `ollama list`, `ollama pull llama3.2`
+
+### Blank Screen Bug (Critical)
+If Neovim starts with a blank screen showing no plugins:
+
+**Cause**: `lua/plugins/init.lua` doesn't have explicit imports for workflow subdirectories. When `init.lua` returns a table, lazy.nvim stops auto-scanning subdirectories.
+
+**Diagnosis**:
+```bash
+nvim --headless -c "lua print(#require('lazy').plugins())" -c "qall"
+# Should show 80+, not 3
+```
+
+**Fix**: Ensure `lua/plugins/init.lua` contains explicit imports:
+```lua
+return {
+  { "folke/neoconf.nvim", cmd = "Neoconf" },
+  { "folke/neodev.nvim", opts = {} },
+
+  -- ALL workflow directories must be explicitly imported
+  { import = "plugins.zettelkasten" },
+  { import = "plugins.ai-sembr" },
+  -- ... all 14 directories
+}
+```
 
 ## Dependencies
 
@@ -414,12 +510,51 @@ After editing configs:
 - Nerd Font (for icons)
 
 ### Recommended for Full Functionality
-- LaTeX distribution (TexLive, MikTeX)
-- Pandoc (document conversion)
-- LanguageTool (grammar checking)
-- Node.js (for some LSP servers)
-- ripgrep (for telescope/fzf searching)
+- **LaTeX distribution** (TexLive, MikTeX) - for vimtex
+- **Pandoc** - document conversion
+- **Node.js** - for some LSP servers
+- **ripgrep** - for telescope/fzf searching
+- **IWE LSP** - `cargo install iwe` - Markdown LSP for wiki-linking
+- **SemBr** - `uv tool install sembr` - ML-based semantic line breaks
+- **Ollama** - `curl -fsSL https://ollama.com/install.sh | sh` - Local LLM runtime
+  - Model: `ollama pull llama3.2` - 2.0 GB download
+- **Hugo** - `snap install hugo` or from https://gohugo.io/ - Static site generator
 
 ## Testing Platforms
 ✅ Tested: Linux (Debian/Ubuntu), macOS (>10.0), Android (Termux)
 ❌ Limited testing: Windows, iPad
+
+## Project Evolution
+
+### Recent Refactoring (October 2025)
+The project underwent a major reorganization from a flat 67-plugin structure to 14 workflow-based directories:
+
+**What Changed**:
+- 68 plugins reorganized into logical workflow categories
+- Flat `lua/plugins/*.lua` → Hierarchical `lua/plugins/[workflow]/[plugin].lua`
+- 8 new plugins added with full implementations
+- 7 redundant plugins removed
+- Focus shifted from "writing environment" to "Zettelkasten-first knowledge management system"
+
+**Plugins Added**:
+1. **IWE LSP** (markdown-oxide) - Wiki-style linking with LSP features
+2. **AI Draft Generator** - Synthesize notes into prose using local LLM
+3. **Hugo integration** - Static site publishing from Neovim
+4. **ltex-ls** - LanguageTool grammar checking via LSP
+5. **nvim-surround** - Surround operations for text objects
+6. **vim-repeat** - Enhanced dot-repeat for plugins
+7. **vim-textobj-sentence** - Sentence text objects for prose
+8. **undotree** - Visual undo history tree
+
+**Plugins Removed** (redundant/deprecated):
+1. **fountain.lua** - Screenwriting (explicitly removed per user preference)
+2. **twilight.lua** - Redundant with limelight for focus mode
+3. **vim-grammarous.lua** - Replaced by ltex-ls LSP implementation
+4. **LanguageTool.lua** - Replaced by ltex-ls LSP implementation
+5. **gen.lua** - Redundant with ollama.lua for AI features
+6. **fzf-vim.lua** - Redundant with fzf-lua
+7. **vimorg.lua** - Deprecated in favor of nvim-orgmode
+
+**Philosophy Shift**:
+- **Before**: "Writing environment for multiple formats (LaTeX, Fountain, Org)"
+- **After**: "Zettelkasten knowledge management system (PRIMARY) with writing support (SECONDARY)"

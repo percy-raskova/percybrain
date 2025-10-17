@@ -1,0 +1,233 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Trigger on semantic version tags (v1.2.3)
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release (e.g., v1.2.3)'
+        required: true
+        type: string
+
+jobs:
+  validate-and-release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # Setup & Validation
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for changelog generation
+
+      - name: Setup Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: stable
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ inputs.tag }}"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+          fi
+
+          VERSION="${TAG#v}"  # Remove 'v' prefix (v1.2.3 → 1.2.3)
+
+          # Validate semantic version format
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "❌ Invalid version format: $VERSION"
+            echo "Expected format: v1.2.3 (major.minor.patch)"
+            exit 1
+          fi
+
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "✅ Releasing version: $VERSION"
+
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # Run Test Suite (Ensure Quality Before Release)
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+      - name: Cache Lua tools
+        id: cache-lua-tools
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/bin
+          key: lua-tools-${{ runner.os }}-stylua-2.3.0-selene-0.29.0
+
+      - name: Install Lua quality tools
+        if: steps.cache-lua-tools.outputs.cache-hit != 'true'
+        run: |
+          chmod +x scripts/install-lua-tools.sh
+          ./scripts/install-lua-tools.sh --ci
+
+      - name: Add tools to PATH
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Run test suite before release
+        run: |
+          echo "::group::Pre-Release Validation"
+          chmod +x tests/simple-test.sh
+          cd tests
+          ./simple-test.sh
+          echo "::endgroup::"
+
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # Generate Release Artifacts
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+      - name: Generate version.lua
+        run: |
+          echo "::group::Generate version.lua"
+          chmod +x scripts/generate-version.sh
+          ./scripts/generate-version.sh "${{ steps.version.outputs.version }}"
+
+          echo "Generated version.lua:"
+          cat lua/oviwrite/version.lua
+          echo "::endgroup::"
+
+      - name: Generate CHANGELOG
+        id: changelog
+        run: |
+          echo "::group::Generate CHANGELOG"
+          chmod +x scripts/generate-changelog.sh
+          ./scripts/generate-changelog.sh "${{ steps.version.outputs.tag }}"
+
+          echo "Generated CHANGELOG excerpt:"
+          head -50 CHANGELOG-release.md
+          echo "::endgroup::"
+
+          # Save changelog for GitHub release
+          echo "changelog_file=CHANGELOG-release.md" >> $GITHUB_OUTPUT
+
+      - name: Create installation instructions
+        run: |
+          cat > INSTALL-${{ steps.version.outputs.version }}.md << 'EOF'
+          # PercyBrain Installation Guide (v${{ steps.version.outputs.version }})
+
+          ## Quick Install (Recommended)
+
+          ### Using lazy.nvim (Recommended)
+
+          Add to your Neovim configuration:
+
+          ```lua
+          {
+            "yourusername/percybrain",
+            tag = "${{ steps.version.outputs.tag }}",  -- Pin to this release
+            config = function()
+              require("config").setup()
+            end,
+          }
+          ```
+
+          Then run `:Lazy sync` in Neovim.
+
+          ### Manual Installation
+
+          ```bash
+          git clone https://github.com/yourusername/percybrain.git ~/.config/nvim
+          cd ~/.config/nvim
+          git checkout ${{ steps.version.outputs.tag }}
+          ```
+
+          ## What's New in v${{ steps.version.outputs.version }}
+
+          See [CHANGELOG.md](./CHANGELOG.md) for full release notes.
+
+          ## Requirements
+
+          - Neovim >= 0.8.0
+          - Git >= 2.19.0
+          - Nerd Font (for icons)
+
+          ## Optional Dependencies
+
+          - LaTeX distribution (TexLive, MikTeX) for LaTeX support
+          - Node.js for some LSP servers
+          - ripgrep for telescope/fzf searching
+          - Ollama + llama3.2 for PercyBrain AI features
+
+          ## First Launch
+
+          1. Open Neovim: `nvim`
+          2. Plugins will auto-install via lazy.nvim
+          3. Wait for completion
+          4. Restart Neovim
+          5. Run `:checkhealth` to verify setup
+
+          ## Getting Started
+
+          - Press `<space>w` to see available commands (WhichKey)
+          - Press `f` from splash screen to find files
+          - Read [CLAUDE.md](./CLAUDE.md) for full documentation
+
+          ## Troubleshooting
+
+          Run `:checkhealth` and `:Lazy health` to diagnose issues.
+
+          For more help, see the [GitHub Issues](https://github.com/yourusername/percybrain/issues).
+          EOF
+
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # Create GitHub Release
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Release ${{ steps.version.outputs.tag }}
+          body_path: ${{ steps.changelog.outputs.changelog_file }}
+          draft: false
+          prerelease: false
+          files: |
+            INSTALL-${{ steps.version.outputs.version }}.md
+            lua/oviwrite/version.lua
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts-${{ steps.version.outputs.version }}
+          path: |
+            lua/oviwrite/version.lua
+            CHANGELOG-release.md
+            INSTALL-${{ steps.version.outputs.version }}.md
+          retention-days: 90
+
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # Post-Release Actions
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+      - name: Post-release summary
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ Release ${{ steps.version.outputs.tag }} published successfully!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "📦 Release artifacts:"
+          echo "  - version.lua generated"
+          echo "  - CHANGELOG.md updated"
+          echo "  - GitHub Release created"
+          echo "  - Installation guide generated"
+          echo ""
+          echo "🔗 View release:"
+          echo "  https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.tag }}"
+          echo ""
+          echo "📝 Next steps:"
+          echo "  1. Announce release to users"
+          echo "  2. Update project documentation if needed"
+          echo "  3. Close related GitHub issues/milestones"
+          echo ""

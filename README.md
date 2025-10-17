@@ -170,9 +170,18 @@ nvim
 
 ## Documentation
 
-- **[Setup Guide](PERCYBRAIN_SETUP.md)**: Complete installation and configuration
-- **[Design Document](PERCYBRAIN_DESIGN.md)**: Technical architecture and API specs
-- **[OVIWrite Base](CLAUDE.md)**: Inherited writing-focused features
+### 📚 Start Here
+- **[PROJECT_INDEX.md](PROJECT_INDEX.md)**: Master navigation hub for all documentation ⭐
+- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)**: Essential commands and shortcuts
+
+### 📖 User Guides
+- **[PERCYBRAIN_SETUP.md](PERCYBRAIN_SETUP.md)**: Complete installation and configuration
+- **[claudedocs/PERCYBRAIN_USER_GUIDE.md](claudedocs/PERCYBRAIN_USER_GUIDE.md)**: Comprehensive user guide
+
+### 🔧 Technical
+- **[CLAUDE.md](CLAUDE.md)**: Technical guide for developers and AI assistants
+- **[PERCYBRAIN_DESIGN.md](PERCYBRAIN_DESIGN.md)**: System architecture and design decisions
+- **[CONTRIBUTING.md](CONTRIBUTING.md)**: Contribution guidelines and workflow
 
 ---
 

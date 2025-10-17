@@ -15,6 +15,8 @@ require("config.globals")
 require("config.keymaps")
 require("config.options")
 require("config.zettelkasten").setup() -- Zettelkasten system
+require("config.window-manager").setup() -- Window management system
+require("percybrain.dashboard").setup() -- AI metrics auto-analysis
 
 -- This is for an experimental plugin
 --

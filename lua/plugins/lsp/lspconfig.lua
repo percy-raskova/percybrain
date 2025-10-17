@@ -111,10 +111,19 @@ return {
       end,
     })
     --
-    -- configure LaTeX server
-    lspconfig["ltex-ls"].setup({
+    -- configure LanguageTool grammar checker (ltex-ls)
+    lspconfig["ltex"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
+      filetypes = { "markdown", "text", "tex", "org" },
+      settings = {
+        ltex = {
+          language = "en-US",
+          additionalRules = {
+            enablePickyRules = true,
+          },
+        },
+      },
     })
     --
     -- configure texlab server
@@ -176,24 +185,35 @@ return {
       },
     })
 
-    -- configure IWE markdown server (PercyBrain)
+    -- configure IWE markdown server (PercyBrain Zettelkasten)
     -- IWE is installed via cargo: cargo install iwe
-    lspconfig["iwe"].setup({
+    lspconfig["markdown_oxide"].setup({
       capabilities = capabilities,
-      on_attach = on_attach,
-      cmd = { "iwe", "lsp" },
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+
+        -- IWE-specific keymaps for Zettelkasten workflow
+        local iwe_opts = { noremap = true, silent = true, buffer = bufnr }
+
+        -- Navigate links with gd (already mapped in on_attach)
+        -- Find backlinks with <leader>zr (references)
+        iwe_opts.desc = "Find backlinks (references)"
+        keymap.set("n", "<leader>zr", vim.lsp.buf.references, iwe_opts)
+
+        -- Extract/inline sections with code actions
+        iwe_opts.desc = "Extract/Inline section"
+        keymap.set({ "n", "v" }, "<leader>za", vim.lsp.buf.code_action, iwe_opts)
+
+        -- Document symbols (table of contents)
+        iwe_opts.desc = "Document outline (TOC)"
+        keymap.set("n", "<leader>zo", vim.lsp.buf.document_symbol, iwe_opts)
+
+        -- Workspace symbols (global search)
+        iwe_opts.desc = "Global note search"
+        keymap.set("n", "<leader>zf", vim.lsp.buf.workspace_symbol, iwe_opts)
+      end,
       filetypes = { "markdown" },
       root_dir = lspconfig.util.root_pattern(".git", ".iwe"),
-      settings = {
-        iwe = {
-          workspace = vim.fn.expand("~/Zettelkasten"),
-          linkStyle = "wiki",
-          enableBacklinks = true,
-          enableInlayHints = true,
-          enableCompletion = true,
-          enableDiagnostics = true,
-        },
-      },
     })
   end,
 }
