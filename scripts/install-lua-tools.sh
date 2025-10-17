@@ -144,7 +144,7 @@ if command -v selene &> /dev/null; then
 else
     echo "Downloading Selene..."
 
-    SELENE_VERSION="0.27.1"
+    SELENE_VERSION="0.29.0"
 
     if [ "$OS" = "linux" ]; then
         SELENE_URL="https://github.com/Kampfkarren/selene/releases/download/${SELENE_VERSION}/selene-${SELENE_VERSION}-linux-${ARCH}.zip"
