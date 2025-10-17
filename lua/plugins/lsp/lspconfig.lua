@@ -56,7 +56,7 @@ return {
       keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
 
       opts.desc = "Restart LSP"
-      keymapsset("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
+      keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
     end
 
     -- used to enable autocompletion (assign to every lsp server config)
@@ -122,7 +122,7 @@ return {
       capabilities = capabilities,
       on_attach = on_attach,
     })
-    -
+
     -- configure Grammarly server
     lspconfig["grammarly-languageserver"].setup({
       capabilities = capabilities,
