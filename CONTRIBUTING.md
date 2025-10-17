@@ -83,7 +83,9 @@ git push origin feature/my-new-plugin
 
 ## Validation System
 
-OVIWrite uses a **4-layer validation pyramid** to ensure code quality:
+OVIWrite uses a **4-layer validation pyramid** to ensure code quality.
+
+**📖 For detailed documentation**: See [`scripts/README.md`](scripts/README.md) for complete reference including troubleshooting, extending the system, and script internals.
 
 ### Layer 1: Static Validation (~5 seconds)
 
