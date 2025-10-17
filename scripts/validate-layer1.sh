@@ -46,8 +46,8 @@ if [ "$ONLY_DUPLICATES" = false ] && [ "$ONLY_DEPRECATED" = false ]; then
     else
       echo -e "  ${RED}✗${NC} $file"
       nvim --headless -c "luafile $file" -c "quit" 2>&1 | grep -i error || true
-      ((SYNTAX_ERRORS++))
-      ((ERROR_COUNT++))
+      ((SYNTAX_ERRORS++)) || true
+      ((ERROR_COUNT++)) || true
     fi
   done < <(find lua/ -name "*.lua" 2>/dev/null || true)
 
@@ -73,7 +73,7 @@ if [ "$ONLY_DEPRECATED" = false ]; then
     NORMALIZED_NAMES=$(echo "$PLUGIN_FILES" | \
       sed 's|lua/plugins/||; s|\.lua$||' | \
       tr '[:upper:]' '[:lower:]' | \
-      tr -d '-_' | \
+      tr -d '_-' | \
       sort)
 
     # Find duplicates
@@ -89,7 +89,7 @@ if [ "$ONLY_DEPRECATED" = false ]; then
         echo -e "  ${RED}Collision:${NC} $normalized"
         # Find original filenames that created this collision
         echo "$PLUGIN_FILES" | while read -r file; do
-          basename=$(basename "$file" .lua | tr '[:upper:]' '[:lower:]' | tr -d '-_')
+          basename=$(basename "$file" .lua | tr '[:upper:]' '[:lower:]' | tr -d '_-')
           if [ "$basename" = "$normalized" ]; then
             echo -e "    - $(basename "$file")"
           fi
@@ -98,7 +98,7 @@ if [ "$ONLY_DEPRECATED" = false ]; then
       done
 
       echo -e "${YELLOW}💡 Fix: Keep only one version of each plugin configuration${NC}"
-      ((ERROR_COUNT++))
+      ((ERROR_COUNT++)) || true
     fi
   fi
 fi
@@ -132,14 +132,14 @@ EOF
 
     # Search for pattern in Lua files
     if grep -rn -E "$pattern" lua/ 2>/dev/null | grep -v "deprecated-patterns.txt"; then
-      ((DEPRECATED_FOUND++))
+      ((DEPRECATED_FOUND++)) || true
 
       if [ "$severity" = "ERROR" ]; then
         echo -e "${RED}❌ [ERROR] Deprecated API found:${NC}"
-        ((ERROR_COUNT++))
+        ((ERROR_COUNT++)) || true
       else
         echo -e "${YELLOW}⚠️  [WARNING] Deprecated API found:${NC}"
-        ((WARNING_COUNT++))
+        ((WARNING_COUNT++)) || true
       fi
 
       echo -e "   ${BLUE}Pattern:${NC} $pattern"
@@ -172,8 +172,8 @@ if [ "$ONLY_DUPLICATES" = false ] && [ "$ONLY_DEPRECATED" = false ]; then
     done
     echo -e "${YELLOW}💡 Fix: Rename to descriptive filename or move to lua/utils/${NC}"
     echo ""
-    ((ORG_ERRORS++))
-    ((ERROR_COUNT++))
+    ((ORG_ERRORS++)) || true
+    ((ERROR_COUNT++)) || true
   fi
 
   # Rule 2: Check for non-plugin specs in lua/plugins/*.lua
@@ -188,8 +188,8 @@ if [ "$ONLY_DUPLICATES" = false ] && [ "$ONLY_DEPRECATED" = false ]; then
       echo -e "${RED}❌ Potential utility module in plugins/:${NC} $file"
       echo -e "${YELLOW}💡 Fix: Move to lua/utils/ or lua/lib/${NC}"
       echo ""
-      ((ORG_ERRORS++))
-      ((ERROR_COUNT++))
+      ((ORG_ERRORS++)) || true
+      ((ERROR_COUNT++)) || true
     fi
   done < <(find lua/plugins -maxdepth 1 -name "*.lua" 2>/dev/null || true)
 
