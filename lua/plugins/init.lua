@@ -24,4 +24,5 @@ return {
   { import = "plugins.treesitter" },
   { import = "plugins.lisp" },
   { import = "plugins.experimental" },
+  { import = "plugins.diagnostics" }, -- NEW: Error aggregation (trouble.nvim)
 }

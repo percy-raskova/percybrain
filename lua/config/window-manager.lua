@@ -212,6 +212,12 @@ M.setup = function()
   local keymap = vim.keymap.set
   local opts = { noremap = true, silent = true }
 
+  -- Quick toggle between windows (ADHD optimization)
+  keymap("n", "<leader>ww", function()
+    vim.cmd("wincmd w")
+    vim.notify("🪟 Switched window", vim.log.levels.INFO)
+  end, vim.tbl_extend("force", opts, { desc = "Quick window toggle" }))
+
   -- Navigation (lowercase hjkl)
   keymap("n", "<leader>wh", function()
     M.navigate("h")
