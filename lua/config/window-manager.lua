@@ -112,11 +112,7 @@ M.delete_buffer = function()
 
   -- Check if buffer is modified
   if vim.api.nvim_buf_get_option(bufnr, "modified") then
-    local choice = vim.fn.confirm(
-      "Buffer has unsaved changes. Delete anyway?",
-      "&Yes\n&No\n&Save and Delete",
-      2
-    )
+    local choice = vim.fn.confirm("Buffer has unsaved changes. Delete anyway?", "&Yes\n&No\n&Save and Delete", 2)
     if choice == 1 then
       vim.cmd("bdelete!")
     elseif choice == 3 then
@@ -217,16 +213,32 @@ M.setup = function()
   local opts = { noremap = true, silent = true }
 
   -- Navigation (lowercase hjkl)
-  keymap("n", "<leader>wh", function() M.navigate("h") end, vim.tbl_extend("force", opts, { desc = "Window left" }))
-  keymap("n", "<leader>wj", function() M.navigate("j") end, vim.tbl_extend("force", opts, { desc = "Window down" }))
-  keymap("n", "<leader>wk", function() M.navigate("k") end, vim.tbl_extend("force", opts, { desc = "Window up" }))
-  keymap("n", "<leader>wl", function() M.navigate("l") end, vim.tbl_extend("force", opts, { desc = "Window right" }))
+  keymap("n", "<leader>wh", function()
+    M.navigate("h")
+  end, vim.tbl_extend("force", opts, { desc = "Window left" }))
+  keymap("n", "<leader>wj", function()
+    M.navigate("j")
+  end, vim.tbl_extend("force", opts, { desc = "Window down" }))
+  keymap("n", "<leader>wk", function()
+    M.navigate("k")
+  end, vim.tbl_extend("force", opts, { desc = "Window up" }))
+  keymap("n", "<leader>wl", function()
+    M.navigate("l")
+  end, vim.tbl_extend("force", opts, { desc = "Window right" }))
 
   -- Moving windows (uppercase HJKL)
-  keymap("n", "<leader>wH", function() M.move_window("H") end, vim.tbl_extend("force", opts, { desc = "Move window left" }))
-  keymap("n", "<leader>wJ", function() M.move_window("J") end, vim.tbl_extend("force", opts, { desc = "Move window down" }))
-  keymap("n", "<leader>wK", function() M.move_window("K") end, vim.tbl_extend("force", opts, { desc = "Move window up" }))
-  keymap("n", "<leader>wL", function() M.move_window("L") end, vim.tbl_extend("force", opts, { desc = "Move window right" }))
+  keymap("n", "<leader>wH", function()
+    M.move_window("H")
+  end, vim.tbl_extend("force", opts, { desc = "Move window left" }))
+  keymap("n", "<leader>wJ", function()
+    M.move_window("J")
+  end, vim.tbl_extend("force", opts, { desc = "Move window down" }))
+  keymap("n", "<leader>wK", function()
+    M.move_window("K")
+  end, vim.tbl_extend("force", opts, { desc = "Move window up" }))
+  keymap("n", "<leader>wL", function()
+    M.move_window("L")
+  end, vim.tbl_extend("force", opts, { desc = "Move window right" }))
 
   -- Splitting
   keymap("n", "<leader>ws", M.split_horizontal, vim.tbl_extend("force", opts, { desc = "Split horizontal" }))

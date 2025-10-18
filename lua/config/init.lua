@@ -14,9 +14,11 @@ vim.opt.rtp:prepend(lazypath)
 require("config.globals")
 require("config.keymaps")
 require("config.options")
+require("config.privacy") -- Privacy protection (clear registers, etc.)
 require("config.zettelkasten").setup() -- Zettelkasten system
 require("config.window-manager").setup() -- Window management system
 require("percybrain.dashboard").setup() -- AI metrics auto-analysis
+require("percybrain.error-logger") -- Error logging system
 
 -- This is for an experimental plugin
 --

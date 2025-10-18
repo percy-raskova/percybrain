@@ -1,8 +1,9 @@
 return {
   "EdenEast/nightfox.nvim",
-  lazy = false,
+  lazy = true,  -- Don't load automatically
   priority = 999,
   config = function()
-    vim.cmd("colorscheme nightfox")
+    -- Disabled: Using PercyBrain Blood Moon theme instead
+    -- vim.cmd("colorscheme nightfox")
   end,
 }

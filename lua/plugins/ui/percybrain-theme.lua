@@ -13,36 +13,36 @@ return {
     -- Inspired by Kitty theme but refined for optimal Neovim readability
     local colors = {
       -- Base colors
-      bg = "#1a0000",           -- Deep blood red/black (from Kitty)
-      bg_dark = "#0d0000",      -- Darker variant for borders/status
+      bg = "#1a0000", -- Deep blood red/black (from Kitty)
+      bg_dark = "#0d0000", -- Darker variant for borders/status
       bg_highlight = "#2a0a0a", -- Subtle highlight (refined from Kitty)
 
-      fg = "#e8e8e8",           -- Light gray text (from Kitty)
-      fg_dark = "#b0b0b0",      -- Dimmed text
-      fg_gutter = "#5a2020",    -- Line numbers (refined)
+      fg = "#e8e8e8", -- Light gray text (from Kitty)
+      fg_dark = "#b0b0b0", -- Dimmed text
+      fg_gutter = "#5a2020", -- Line numbers (refined)
 
       -- Accent colors
-      gold = "#ffd700",         -- Primary accent (from Kitty)
-      gold_dim = "#ccaa00",     -- Dimmed gold
-      crimson = "#dc143c",      -- Secondary accent (from Kitty)
-      crimson_dim = "#a01028",  -- Dimmed crimson
+      gold = "#ffd700", -- Primary accent (from Kitty)
+      gold_dim = "#ccaa00", -- Dimmed gold
+      crimson = "#dc143c", -- Secondary accent (from Kitty)
+      crimson_dim = "#a01028", -- Dimmed crimson
 
       -- Semantic colors (refined for better contrast)
-      red = "#ff4444",          -- Errors, deletions
-      orange = "#ff8844",       -- Warnings
-      yellow = "#ffcc44",       -- Modified, hints
-      green = "#44ff88",        -- Success, additions
-      cyan = "#44ccff",         -- Info, special
-      blue = "#4488ff",         -- Functions, keywords
-      purple = "#cc88ff",       -- Constants, strings
-      magenta = "#ff44cc",      -- Types, properties
+      red = "#ff4444", -- Errors, deletions
+      orange = "#ff8844", -- Warnings
+      yellow = "#ffcc44", -- Modified, hints
+      green = "#44ff88", -- Success, additions
+      cyan = "#44ccff", -- Info, special
+      blue = "#4488ff", -- Functions, keywords
+      purple = "#cc88ff", -- Constants, strings
+      magenta = "#ff44cc", -- Types, properties
 
       -- UI elements
-      border = "#dc143c",       -- Window borders (crimson from Kitty)
+      border = "#dc143c", -- Window borders (crimson from Kitty)
       border_inactive = "#404040", -- Inactive borders (from Kitty)
-      selection = "#ffd700",    -- Visual mode (gold from Kitty)
-      search = "#ff8844",       -- Search highlights
-      cursor = "#dc143c",       -- Cursor color (crimson from Kitty)
+      selection = "#ffd700", -- Visual mode (gold from Kitty)
+      search = "#ff8844", -- Search highlights
+      cursor = "#dc143c", -- Cursor color (crimson from Kitty)
 
       -- Git colors
       git_add = "#44ff88",

@@ -63,7 +63,7 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.breakindent = true
 
     -- -- Change colorscheme to catppuccin-mocha
-    vim.cmd("colorscheme catppuccin-mocha")
+    -- vim.cmd("colorscheme catppuccin-mocha")  -- Disabled: Using PercyBrain Blood Moon theme
     -- --
     -- -- Go to last editing position
     -- vim.api.nvim_create_autocmd("BufReadPost", {
@@ -140,7 +140,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "*.wiki",
   callback = function()
-    vim.cmd("colorscheme catppuccin-mocha")
+    -- vim.cmd("colorscheme catppuccin-mocha")  -- Disabled: Using PercyBrain Blood Moon theme
   end,
 })
 
@@ -181,7 +181,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 vim.api.nvim_create_autocmd("bufenter", {
   pattern = "*.org",
   callback = function()
-    vim.cmd("colorscheme catppuccin-mocha")
+    -- vim.cmd("colorscheme catppuccin-mocha")  -- Disabled: Using PercyBrain Blood Moon theme
   end,
 })
 

@@ -97,9 +97,15 @@ end
 local function generate_topology(notes)
   local lines = {}
 
-  table.insert(lines, "╔════════════════════════════════════════════════════════════════════╗")
+  table.insert(
+    lines,
+    "╔════════════════════════════════════════════════════════════════════╗"
+  )
   table.insert(lines, "║                    NETWORK TOPOLOGY                                ║")
-  table.insert(lines, "╚════════════════════════════════════════════════════════════════════╝")
+  table.insert(
+    lines,
+    "╚════════════════════════════════════════════════════════════════════╝"
+  )
   table.insert(lines, "")
 
   -- Sort notes: hubs first, then regular, then orphans
@@ -130,9 +136,15 @@ local function generate_graph(notes)
   local lines = {}
 
   table.insert(lines, "")
-  table.insert(lines, "╔════════════════════════════════════════════════════════════════════╗")
+  table.insert(
+    lines,
+    "╔════════════════════════════════════════════════════════════════════╗"
+  )
   table.insert(lines, "║                 CYBERNETIC NETWORK GRAPH                          ║")
-  table.insert(lines, "╚════════════════════════════════════════════════════════════════════╝")
+  table.insert(
+    lines,
+    "╚════════════════════════════════════════════════════════════════════╝"
+  )
   table.insert(lines, "")
 
   -- Create simple ASCII graph representation

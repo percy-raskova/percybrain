@@ -11,7 +11,7 @@ keymap.set("n", "<leader>c", ":close<CR>", { noremap = true, silent = true })
 keymap.set("n", "<leader>l", ":Lazy load all<CR>", { noremap = true, silent = true })
 keymap.set("n", "<leader>L", ":Lazy <CR>", { noremap = true, silent = true })
 keymap.set("n", "<leader>v", ":vsplit<CR>", { noremap = true, silent = true })
-keymap.set("n", "<leader>w", ":WhichKey<CR>", { noremap = true, silent = true })
+keymap.set("n", "<leader>W", ":WhichKey<CR>", { noremap = true, silent = true })  -- Changed from <leader>w to avoid window manager conflict
 keymap.set("n", "<leader>a", ":Alpha<CR>", { noremap = true, silent = true })
 keymap.set("n", "<leader>sp", ":SoftPencil<CR>", { noremap = true, silent = true })
 keymap.set("n", "<leader>g", ":LazyGit<CR>", { noremap = true, silent = true })
@@ -25,7 +25,7 @@ keymap.set("n", "<leader>ft", ":FloatermToggle<CR>", { noremap = true, silent = 
 keymap.set("n", "<leader>te", ":ToggleTerm<CR>", { noremap = true, silent = true })
 keymap.set("n", "<leader>n", ":set number relativenumber cursorline<CR>", { noremap = true, silent = true })
 keymap.set("n", "<leader>rn", ":set nonumber norelativenumber<CR>", { noremap = true, silent = true })
-keymap.set("n", "<leader>wn", ":NewWriterFile<CR>", { noremap = true, silent = true })
+keymap.set("n", "<leader>nw", ":NewWriterFile<CR>", { noremap = true, silent = true })  -- Changed from <leader>wn to avoid window manager conflict
 keymap.set("n", "<leader>fzl", ":FzfLua files<CR>", { noremap = true, silent = true })
 keymap.set("n", "<leader>fzg", ":FzfLua live_grep<CR>", { noremap = true, silent = true })
 keymap.set("n", "<leader>fzm", ":FzfLua marks<CR>", { noremap = true, silent = true })

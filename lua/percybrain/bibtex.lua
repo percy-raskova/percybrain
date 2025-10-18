@@ -131,9 +131,15 @@ end
 M.preview_entry = function(entry)
   local lines = {}
 
-  table.insert(lines, "╔═══════════════════════════════════════════════════════════════════════╗")
+  table.insert(
+    lines,
+    "╔═══════════════════════════════════════════════════════════════════════╗"
+  )
   table.insert(lines, "║                    BIBTEX ENTRY PREVIEW                               ║")
-  table.insert(lines, "╚═══════════════════════════════════════════════════════════════════════╝")
+  table.insert(
+    lines,
+    "╚═══════════════════════════════════════════════════════════════════════╝"
+  )
   table.insert(lines, "")
   table.insert(lines, "Cite Key: @" .. entry.key)
   table.insert(lines, "Type:     " .. entry.type)

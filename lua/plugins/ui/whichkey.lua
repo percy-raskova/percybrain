@@ -14,7 +14,9 @@ return {
     wk.add({
       { "<leader>f", group = "Find/File" },
       { "<leader>t", group = "Translate/Terminal" },
-      { "<leader>w", group = "Writer" },
+      { "<leader>w", group = "Window Management" },  -- Updated: Now for window management
+      { "<leader>z", group = "Zettelkasten" },  -- Added: For Zettelkasten/PercyBrain
+      { "<leader>a", group = "AI/Assistant" },  -- Added: For AI features
     })
   end,
 }
