@@ -178,6 +178,7 @@ Documentation organized by purpose using the [Diataxis framework](https://diatax
 Start here if you're new:
 
 - **[Getting Started](docs/tutorials/GETTING_STARTED.md)**: Your first 30 minutes with PercyBrain ⭐
+- **[Zettelkasten Tutorial](docs/tutorials/ZETTELKASTEN_TUTORIAL.md)**: Build your first 20 interconnected notes in 7 days
 - **[Academic Writing Tutorial](docs/tutorials/ACADEMIC_WRITING_TUTORIAL.md)**: Write your first academic paper with LaTeX and citations
 - **[PERCYBRAIN_SETUP.md](PERCYBRAIN_SETUP.md)**: Complete installation and configuration
 
@@ -185,7 +186,7 @@ Start here if you're new:
 
 Practical workflows and problem-solving:
 
-- **[Zettelkasten Workflow](docs/how-to/ZETTELKASTEN_WORKFLOW.md)**: Daily/weekly/monthly habits
+- **[Zettelkasten Daily Practice](docs/how-to/ZETTELKASTEN_DAILY_PRACTICE.md)**: Quick reference for ongoing habits
 - **[AI Usage Guide](docs/how-to/AI_USAGE_GUIDE.md)**: Ollama setup and AI commands
 - **[Mise Usage](docs/how-to/MISE_USAGE.md)**: Task runner and tool management
 - **[Migration from Obsidian](docs/how-to/MIGRATION_FROM_OBSIDIAN.md)**: Switch from Obsidian to PercyBrain

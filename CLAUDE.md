@@ -9,12 +9,13 @@ Documentation follows [Diataxis framework](https://diataxis.fr/) (tutorial/how-t
 **🎓 Tutorials** (learning-oriented):
 
 - `docs/tutorials/GETTING_STARTED.md` → Zero to first linked note (30 min)
+- `docs/tutorials/ZETTELKASTEN_TUTORIAL.md` → Build first 20 notes in 7 days
 - `docs/tutorials/ACADEMIC_WRITING_TUTORIAL.md` → First academic paper with LaTeX/citations (60-90 min)
 - `PERCYBRAIN_SETUP.md` → Complete installation guide
 
 **📖 How-To Guides** (task-oriented):
 
-- `docs/how-to/ZETTELKASTEN_WORKFLOW.md` → Daily/weekly/monthly habits
+- `docs/how-to/ZETTELKASTEN_DAILY_PRACTICE.md` → Quick reference for ongoing habits
 - `docs/how-to/AI_USAGE_GUIDE.md` → Ollama setup + AI commands
 - `docs/how-to/MISE_USAGE.md` → Task runner and tool management
 - `docs/how-to/MIGRATION_FROM_OBSIDIAN.md` → Switch from Obsidian
