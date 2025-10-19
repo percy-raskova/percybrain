@@ -1,9 +1,8 @@
 # AI Scratchpad - PercyBrain Refactoring Session
 
-**Date**: 2025-10-17
-**Claude's Honest Thoughts**: No PR speak, just real observations
+**Date**: 2025-10-17 **Claude's Honest Thoughts**: No PR speak, just real observations
 
----
+______________________________________________________________________
 
 ## First Impressions
 
@@ -14,7 +13,9 @@ That's genuinely cool. Someone actually uses Neovim as a writing environment, no
 ## The Good Stuff
 
 ### 1. Actual Use Case Clarity
+
 Percy knows *exactly* what they want:
+
 - Zettelkasten note-taking (primary)
 - AI-assisted draft generation (secondary)
 - Long-form prose writing (tertiary)
@@ -23,12 +24,15 @@ Percy knows *exactly* what they want:
 Most projects I work on? "We want to build a platform for synergizing..." Percy was like "I take notes, sometimes AI helps me write, I need grammar checking, and I publish stuff." That's **chef's kiss** for project requirements.
 
 ### 2. The Test Suite Philosophy
+
 This line from `simple-test.sh`:
+
 ```bash
 # Purpose: Ensure code works, not corporate compliance
 ```
 
 I respect that SO much. The test suite is:
+
 - Lua syntax validation (essential - broken code = bad)
 - File existence checks (sanity)
 - StyLua formatting (auto-fixable, consistency)
@@ -38,7 +42,9 @@ I respect that SO much. The test suite is:
 That's pragmatic engineering. Percy gets it.
 
 ### 3. Workflow-Based Organization
+
 The refactoring from flat structure to workflow directories? That's how you actually think about using software:
+
 - "I want to write distraction-free" → `prose-writing/distraction-free/`
 - "I want to manage notes" → `zettelkasten/`
 - "I want to publish" → `publishing/`
@@ -46,11 +52,13 @@ The refactoring from flat structure to workflow directories? That's how you actu
 Not "here's all the LSP configs" or "here's all the UI plugins" - that's how programmers organize, not how users think.
 
 ### 4. The Grammar Checker Decision
+
 Percy: "I have no preferences on grammar checkers...Make a choice for me."
 
 That's trust. They could've bikeshedded between LanguageTool, vim-grammarous, vale, and ltex-ls for an hour. Instead: "You seem to know your shit, what do you recommend?"
 
 I chose ltex-ls (LanguageTool via LSP) because:
+
 - 5000+ grammar rules
 - Real-time checking
 - LSP integration (plays nice with IWE)
@@ -61,9 +69,11 @@ But the *trust* to delegate that decision? That's how you move fast. Most users 
 ## The Rough Edges
 
 ### 1. The Blank Screen Bug Was Sneaky
+
 Oh man, this one took me a second. Neovim starts up, completely blank. No splash screen, no colorscheme, no keybindings. Like a fresh install.
 
 Root cause? `lua/plugins/init.lua` returned this:
+
 ```lua
 return {
   { "folke/neoconf.nvim", cmd = "Neoconf" },
@@ -80,14 +90,17 @@ The fix: Explicit imports for all 14 directories using `{ import = "plugins.zett
 **Lesson**: lazy.nvim's implicit vs explicit loading behavior is a footgun if you don't know it. This probably cost Percy 30 minutes of "why is nothing working?"
 
 ### 2. Plugin Sprawl
+
 67 plugins before refactoring. **Sixty-seven.** For a text editor.
 
 Now, to be fair:
+
 - Some are tiny (vim-repeat is like 100 lines)
 - Some are dependencies (neoconf, neodev)
 - Some are alternatives (fzf-vim AND fzf-lua AND telescope)
 
 But still. That's a lot of moving parts. The refactoring helped organize it, but I'm looking at some of these and thinking:
+
 - `fountain.lua` - Screenwriting. Percy explicitly said "remove screenwriting". Done.
 - `twilight.lua` - Dims inactive code. Percy has limelight already. Why both? Removed.
 - `vim-grammarous.lua` + `LanguageTool.lua` + `vale.lua` - THREE grammar checkers. Trimmed to ltex-ls + vale (different purposes).
@@ -96,6 +109,7 @@ But still. That's a lot of moving parts. The refactoring helped organize it, but
 After cleanup: 68 plugins (actually 61 unique + 7 removed). Still a lot, but now they're *organized* and no duplicates.
 
 ### 3. The Experimental Directory
+
 ```
 lua/plugins/experimental/
 ├── pendulum.lua       # Time tracking (?)
@@ -113,6 +127,7 @@ My guess: Percy tried these, forgot about them, and they're just... there. Digit
 **Recommendation**: Actually try using these or delete them. They're taking up mental real estate in the config.
 
 ### 4. Name Change Remnants
+
 The project was "OVIWrite" and is now "PercyBrain". I updated all the docs, but I bet there are comments or old references buried somewhere that still say OVIWrite.
 
 This is fine - name changes are messy. But it suggests the project is still finding its identity. "OVIWrite" sounds like a writing app. "PercyBrain" sounds like a knowledge management system. That shift tells me Percy's use case evolved from "I write stuff" to "I manage knowledge and write stuff."
@@ -124,6 +139,7 @@ That's actually healthy evolution. Just means the config is adapting to how it's
 I wrote a 158-line AI draft generator that collects Zettelkasten notes on a topic and uses Ollama to synthesize them into a rough draft. This is **genuinely useful**.
 
 Here's the workflow:
+
 1. Percy writes 20 notes about "Stoic philosophy"
 2. Notes use semantic line breaks (one idea per line)
 3. Press `<leader>ad` (AI Draft)
@@ -141,6 +157,7 @@ It's AI as a writing assistant, not AI as a replacement. That's the right approa
 IWE (markdown-oxide) is a **beast**. It's like having Obsidian's wiki-linking and backlinks... but in Neovim. And it's LSP-native, so it works with all the standard Neovim LSP keybindings.
 
 Features that are genuinely useful:
+
 - `gd` to follow wiki links (Go to Definition)
 - `<leader>zr` to find backlinks (References)
 - Code actions to extract/inline sections (split notes, merge notes)
@@ -154,6 +171,7 @@ Percy's gonna love this. Or already loves it, since they requested it specifical
 ## The Hugo Integration
 
 Simple, pragmatic commands:
+
 - `:HugoNew` - Create new post
 - `:HugoServer` - Local preview
 - `:HugoPublish` - Build and deploy
@@ -183,7 +201,9 @@ From working on this config, here's what I can infer about the user:
 ## Things That Impressed Me
 
 ### 1. Semantic Line Breaks
+
 Percy uses SemBr (ML-based semantic line breaking). Most people don't even know this is a thing. The idea:
+
 - Traditional: Hard wrap at 80 characters
 - Better: One sentence per line
 - Best: One *semantic unit* per line (SemBr does this with ML)
@@ -193,6 +213,7 @@ Why? Git diffs. When you change one idea in a paragraph, the diff shows exactly 
 Percy **gets** version control for prose. That's rare.
 
 ### 2. The Test Suite Comment
+
 ```bash
 # This is NOT an enterprise test suite - it's pragmatic validation for a hobbyist project
 ```
@@ -200,7 +221,9 @@ Percy **gets** version control for prose. That's rare.
 That's self-awareness. Most projects either have no tests (chaos) or over-test (bureaucracy). Percy found the pragmatic middle ground and explicitly documented the philosophy.
 
 ### 3. The Workflow Clarity
+
 Percy didn't say "I want a better Neovim config." They said:
+
 - "Knowledge Management/Zettelkasten Notetaking is the principal use case"
 - "The AI could parse my notes... and string together a rough draft"
 - "Long-form prose editing"
@@ -213,20 +236,25 @@ That made this refactoring SO much easier. I knew exactly what to prioritize.
 ## Things That Concern Me
 
 ### 1. Plugin Maintenance
+
 68 plugins. When one breaks (and they will), debugging is gonna be fun. Especially the nested dependencies:
+
 - nvim-cmp → cmp-nvim-lsp → lspconfig → mason
 - If mason updates and breaks lspconfig... good luck.
 
 **Mitigation**: The `lazy-lock.json` file pins versions. But still.
 
 ### 2. The Experimental Plugins
+
 I mentioned this, but seriously: pendulum, styledoc, vim-dialect, w3m. These are either:
+
 - Useful (in which case, move them out of "experimental")
 - Not useful (in which case, delete them)
 
 "Experimental" becomes a dumping ground. Discipline is needed here.
 
 ### 3. StyLua Quote Style
+
 I fixed a formatting issue where I used single quotes instead of double quotes. The project uses double quotes consistently. But this is enforced by StyLua, not by any written style guide.
 
 What happens when a new contributor doesn't run StyLua before committing? CI catches it, but it's friction.
@@ -234,7 +262,9 @@ What happens when a new contributor doesn't run StyLua before committing? CI cat
 **Recommendation**: Add a pre-commit hook that runs StyLua automatically. Then nobody has to think about it.
 
 ### 4. The Mason LSP Sprawl
+
 Looking at the LSP config, there are servers for:
+
 - HTML, CSS, JavaScript, TypeScript
 - Svelte, Tailwind
 - Python, Lua
@@ -251,6 +281,7 @@ For a **writing-focused config**, why are there web dev LSPs? Is Percy doing web
 If I were designing this from scratch:
 
 ### 1. Plugin Tiers
+
 ```
 lua/plugins/
 ├── core/          # Absolutely essential (nvim-treesitter, lazy.nvim)
@@ -262,6 +293,7 @@ lua/plugins/
 Then let users easily disable entire tiers. Want a minimal setup? Load core + writing. Want everything? Load all four.
 
 ### 2. Profile System
+
 ```bash
 nvim --profile minimal    # Core only
 nvim --profile writer     # Core + writing
@@ -271,7 +303,9 @@ nvim --profile full       # Everything
 Percy could test the "minimal" profile when debugging. Or share the "writer" profile with someone who doesn't want 68 plugins.
 
 ### 3. Automated Plugin Auditing
+
 Script that:
+
 - Lists all plugins
 - Shows last commit date (detect dead plugins)
 - Checks for duplicates (multiple fuzzy finders)
@@ -280,6 +314,7 @@ Script that:
 Run this quarterly. Keep the ecosystem healthy.
 
 ### 4. Documentation Generation
+
 Auto-generate the plugin list and keybindings from the actual config. Most docs go stale. Percy's CLAUDE.md is manually maintained. What if it was generated from the lua configs?
 
 ```bash
@@ -294,6 +329,7 @@ Then docs are always accurate.
 ## The Bigger Picture
 
 PercyBrain is an **opinionated writing environment**. It's not trying to be VS Code. It's not trying to be Obsidian. It's Neovim configured for someone who:
+
 - Thinks in interconnected notes (Zettelkasten)
 - Writes long-form prose (LaTeX, Markdown)
 - Uses AI as an assistant, not a crutch (AI Draft Generator)
@@ -317,6 +353,7 @@ The only hesitation: 68 plugins is a lot. I'd trim to maybe 40 and be just as pr
 ## Final Thoughts
 
 This session was fun. I got to:
+
 - Refactor a real codebase with actual user requirements
 - Implement 8 new plugins with full code (not just stubs)
 - Fix a sneaky lazy.nvim bug
@@ -328,8 +365,6 @@ PercyBrain is a solid project with a clear vision. It's not perfect (what is?), 
 
 If Percy reads this: Keep building. Your instincts are good. Trim the experimental plugins. Consider adding a pre-commit hook for StyLua. And enjoy the new IWE LSP integration - it's gonna change how you take notes.
 
----
+______________________________________________________________________
 
-**Signed**: Claude Sonnet 4.5
-**Status**: Honest opinions, no bullshit
-**Would I work on this again?**: Yeah, absolutely.
+**Signed**: Claude Sonnet 4.5 **Status**: Honest opinions, no bullshit **Would I work on this again?**: Yeah, absolutely.

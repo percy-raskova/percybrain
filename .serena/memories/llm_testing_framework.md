@@ -1,31 +1,37 @@
 # PercyBrain Local LLM Testing Framework
 
 ## Overview
+
 Designed and implemented comprehensive unit tests for the Ollama Local LLM integration in PercyBrain using the Plenary testing framework.
 
 ## Files Created
+
 1. `/tests/PERCYBRAIN_LLM_TEST_DESIGN.md` - Complete design document
 2. `/tests/plenary/unit/ai-sembr/ollama_spec.lua` - Full test implementation
 
 ## Test Coverage
 
 ### Service Management
+
 - Ollama service detection (pgrep)
 - Service startup when not running
 - Timeout handling
 
 ### API Communication
+
 - Request formatting with proper JSON
 - Special character escaping (quotes, newlines)
 - Response parsing and callback execution
 - Error handling (connection refused, timeouts)
 
 ### Context Extraction
+
 - Buffer context around cursor (configurable lines)
 - Visual selection handling
 - Boundary conditions (start/end of buffer)
 
 ### AI Commands Tested
+
 1. **explain()** - Text explanation with context
 2. **summarize()** - Content summarization
 3. **suggest_links()** - Zettelkasten link suggestions
@@ -34,12 +40,14 @@ Designed and implemented comprehensive unit tests for the Ollama Local LLM integ
 6. **generate_ideas()** - Creative brainstorming
 
 ### Model Configuration
+
 - Model selection (llama3.2:latest, codellama:latest)
 - Temperature settings (0.0-1.0)
 - Custom Ollama URLs
 - Context window management
 
 ### UI Components
+
 - Floating window creation
 - Markdown rendering
 - Keymap bindings (q, Escape to close)
@@ -47,6 +55,7 @@ Designed and implemented comprehensive unit tests for the Ollama Local LLM integ
 ## Mock Strategy
 
 ### Vim API Mocking
+
 ```lua
 _G.vim = {
   api = { nvim_get_current_buf, nvim_buf_get_lines, ... },
@@ -56,11 +65,13 @@ _G.vim = {
 ```
 
 ### Async Operation Mocking
+
 - jobstart simulation with callbacks
 - on_stdout/on_stderr handlers
 - Deferred function execution
 
 ### Service Detection Mocking
+
 ```lua
 io.popen = function(cmd)
   -- Mock pgrep results
@@ -91,6 +102,7 @@ nvim --headless -u tests/minimal_init.lua \
 5. **Prompt validation** - Ensures correct LLM prompt construction
 
 ## Test Results
+
 - 10 test suites
 - 30+ individual tests
 - Covers all major functionality

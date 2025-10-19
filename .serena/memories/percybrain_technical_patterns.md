@@ -1,11 +1,11 @@
 # PercyBrain Technical Patterns and Architecture
 
-**Last Updated**: 2025-10-17
-**Context**: UI/UX Implementation Session
+**Last Updated**: 2025-10-17 **Context**: UI/UX Implementation Session
 
 ## Module Organization Pattern
 
 ### Directory Structure
+
 ```
 lua/
 ├── config/              # Core system configuration
@@ -29,6 +29,7 @@ lua/
 ```
 
 ### Naming Conventions
+
 - **Modules**: `module-name.lua` (kebab-case)
 - **Functions**: `function_name()` (snake_case)
 - **Variables**: `local_var` (snake_case)
@@ -37,6 +38,7 @@ lua/
 ## Lazy Loading Strategy
 
 ### Immediate Load (lazy = false)
+
 ```lua
 return {
   "plugin/repo",
@@ -47,9 +49,11 @@ return {
   end,
 }
 ```
+
 **Use for**: Themes, core UI elements, frequently used features
 
 ### Command-based Load
+
 ```lua
 return {
   "plugin/repo",
@@ -59,9 +63,11 @@ return {
   end,
 }
 ```
+
 **Use for**: Occasional-use tools, marketplace, browsers
 
 ### Key-based Load
+
 ```lua
 return {
   "plugin/repo",
@@ -73,9 +79,11 @@ return {
   end,
 }
 ```
+
 **Use for**: Features bound to specific keybindings
 
 ### Event-based Load
+
 ```lua
 return {
   "plugin/repo",
@@ -85,11 +93,13 @@ return {
   end,
 }
 ```
+
 **Use for**: Auto-triggered features, background services
 
 ## Module Setup Pattern
 
 ### Standard Module Structure
+
 ```lua
 local M = {}
 
@@ -119,6 +129,7 @@ return M
 ```
 
 ### Usage in init.lua
+
 ```lua
 require("module-name").setup() -- If has setup()
 -- OR
@@ -128,30 +139,34 @@ local module = require("module-name") -- If no setup needed
 ## Notification Pattern
 
 ### Standard Format
+
 ```lua
 vim.notify("emoji Message text", vim.log.levels.LEVEL)
 ```
 
 ### Log Levels
+
 - `vim.log.levels.INFO` - General information (🎉 🚀 ✅ 📊)
-- `vim.log.levels.WARN` - Warnings (⚠️  ⚡)
+- `vim.log.levels.WARN` - Warnings (⚠️ ⚡)
 - `vim.log.levels.ERROR` - Errors (❌ 🚨)
 
 ### Emoji Conventions
+
 - 🪟 Window operations
 - 🌙 Theme/appearance
 - 📊 Dashboards/metrics
 - 🤖 AI/automation
 - 📝 Notes/writing
 - 🔍 Search/find
-- 🛍️  Marketplace/plugins
+- 🛍️ Marketplace/plugins
 - ✅ Success
 - ❌ Error
-- ⚠️  Warning
+- ⚠️ Warning
 
 ## Color Theme Integration
 
 ### Override Pattern (tokyonight base)
+
 ```lua
 return {
   "folke/tokyonight.nvim",
@@ -170,7 +185,7 @@ return {
         c.bg = colors.bg
         c.fg = colors.fg
       end,
-      
+
       on_highlights = function(hl, c)
         -- Override specific highlights
         hl.Normal = { fg = colors.fg, bg = colors.bg }
@@ -184,7 +199,9 @@ return {
 ```
 
 ### Plugin-Specific Highlights
+
 Always include these for consistency:
+
 - Telescope (search UI)
 - NvimTree (file explorer)
 - WhichKey (keybinding help)
@@ -195,6 +212,7 @@ Always include these for consistency:
 ## Floating Window Pattern
 
 ### Standard Configuration
+
 ```lua
 local buf = vim.api.nvim_create_buf(false, true)
 vim.api.nvim_buf_set_lines(buf, 0, -1, false, content_lines)
@@ -225,6 +243,7 @@ vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", "<cmd>close<cr>", { noremap = tru
 ```
 
 ### Best Practices
+
 - Always use `bufhidden = "wipe"` for cleanup
 - Set `modifiable = false` for read-only displays
 - Use `math.min()` to prevent oversized windows
@@ -234,6 +253,7 @@ vim.api.nvim_buf_set_keymap(buf, "n", "<Esc>", "<cmd>close<cr>", { noremap = tru
 ## AI Integration Pattern
 
 ### Ollama API Call
+
 ```lua
 local function call_ollama(prompt)
   local ollama_cmd = string.format(
@@ -242,9 +262,9 @@ local function call_ollama(prompt)
     config.ollama_model,
     vim.fn.json_encode(prompt)
   )
-  
+
   local response = vim.fn.system(ollama_cmd)
-  
+
   if vim.v.shell_error == 0 and response ~= "" then
     return response
   else
@@ -254,6 +274,7 @@ end
 ```
 
 ### Background Execution
+
 ```lua
 -- Non-blocking AI call
 vim.defer_fn(function()
@@ -265,6 +286,7 @@ end, 100) -- 100ms delay
 ```
 
 ### Performance Optimization
+
 - Keep prompts under 1000 characters for speed
 - Cache results for 5 minutes (300 seconds)
 - Use non-blocking execution with `vim.defer_fn()`
@@ -273,12 +295,13 @@ end, 100) -- 100ms delay
 ## File System Operations
 
 ### Safe File Writing
+
 ```lua
 local function write_file(filepath, content)
   -- Ensure directory exists
   local dir = vim.fn.fnamemodify(filepath, ":h")
   vim.fn.mkdir(dir, "p")
-  
+
   -- Write file
   local file = io.open(filepath, "w")
   if file then
@@ -293,13 +316,14 @@ end
 ```
 
 ### File Reading Pattern
+
 ```lua
 local function read_file(filepath)
   local file = io.open(filepath, "r")
   if not file then
     return nil
   end
-  
+
   local content = file:read("*all")
   file:close()
   return content
@@ -307,6 +331,7 @@ end
 ```
 
 ### Directory Scanning
+
 ```lua
 local function scan_directory(path, pattern)
   local find_cmd = string.format('find "%s" -name "%s" -type f', path, pattern)
@@ -318,6 +343,7 @@ end
 ## Keybinding Patterns
 
 ### Leader Key Namespaces
+
 - `<leader>w` - Window management
 - `<leader>z` - Zettelkasten operations
 - `<leader>l` - Lynx/browser operations
@@ -326,6 +352,7 @@ end
 - `<leader>a` - AI assistant operations
 
 ### Keymap Registration
+
 ```lua
 local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
@@ -336,6 +363,7 @@ end, vim.tbl_extend("force", opts, { desc = "Description for WhichKey" }))
 ```
 
 ### Buffer-local Keymaps
+
 ```lua
 vim.api.nvim_buf_set_keymap(
   buf,
@@ -349,6 +377,7 @@ vim.api.nvim_buf_set_keymap(
 ## Auto-command Patterns
 
 ### Simple Auto-command
+
 ```lua
 vim.api.nvim_create_autocmd("Event", {
   pattern = "*.md",
@@ -359,13 +388,14 @@ vim.api.nvim_create_autocmd("Event", {
 ```
 
 ### Complex Auto-command
+
 ```lua
 vim.api.nvim_create_autocmd("BufWritePost", {
   pattern = { "*.md" },
   callback = function()
     local bufnr = vim.api.nvim_get_current_buf()
     local filepath = vim.api.nvim_buf_get_name(bufnr)
-    
+
     -- Conditional logic
     if filepath:match("Zettelkasten") then
       -- Action for Zettelkasten notes
@@ -377,6 +407,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 ## MCP Server Configuration
 
 ### Standard Pattern (.mcp.json)
+
 ```json
 {
   "mcpServers": {
@@ -392,6 +423,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 ```
 
 ### Node.js Servers
+
 ```json
 {
   "command": "/home/percy/.nvm/versions/node/v22.17.1/bin/npx",
@@ -404,6 +436,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 ```
 
 ### Python Servers (uvx)
+
 ```json
 {
   "command": "uvx",
@@ -415,18 +448,21 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 ## Performance Considerations
 
 ### Startup Optimization
+
 1. Lazy-load everything possible
 2. Use `lazy = false` sparingly (themes only)
 3. Defer non-critical initialization with `vim.defer_fn()`
 4. Avoid heavy computations in config functions
 
 ### Runtime Optimization
+
 1. Cache expensive operations (file scans, AI calls)
 2. Use background execution for slow operations
 3. Limit result sets (max_nodes, head_limit)
 4. Use efficient Lua patterns over shell commands when possible
 
 ### Memory Management
+
 1. Set `bufhidden = "wipe"` for temporary buffers
 2. Clear caches after timeout periods
 3. Use local functions to avoid global namespace pollution
@@ -435,6 +471,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 ## Error Handling Patterns
 
 ### Graceful Degradation
+
 ```lua
 local success, result = pcall(function()
   return require("optional-module")
@@ -447,6 +484,7 @@ end
 ```
 
 ### Shell Command Error Handling
+
 ```lua
 local output = vim.fn.system(command)
 
@@ -461,6 +499,7 @@ return output
 ## Testing Patterns
 
 ### Headless Module Test
+
 ```bash
 nvim --headless \
   -c "lua print('Test: ' .. type(require('module')))" \
@@ -468,6 +507,7 @@ nvim --headless \
 ```
 
 ### Load Test
+
 ```bash
 nvim --headless \
   -c "lua require('config.init')" \
@@ -478,6 +518,7 @@ nvim --headless \
 ## Documentation Standards
 
 ### File Headers
+
 ```lua
 -- Plugin: Name
 -- Purpose: Brief description
@@ -487,6 +528,7 @@ nvim --headless \
 ```
 
 ### Function Documentation
+
 ```lua
 -- Brief description of what function does
 -- @param param_name type Description of parameter
@@ -497,7 +539,9 @@ end
 ```
 
 ### Module Documentation
+
 Include at top of module:
+
 - Purpose and scope
 - Configuration options
 - Public API functions

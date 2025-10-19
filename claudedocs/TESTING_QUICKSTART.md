@@ -12,6 +12,7 @@ cd /path/to/OVIWrite
 ```
 
 This installs:
+
 - Pre-commit hook (validates before each commit)
 - Pre-push hook (validates before each push)
 - Makes all scripts executable
@@ -92,43 +93,55 @@ git push --no-verify
 OVIWrite uses a **4-layer validation pyramid**:
 
 ### Layer 1: Static (Fast, ~5s)
+
 ✅ What it checks:
+
 - Lua syntax errors
 - Duplicate plugin files
 - Deprecated API usage
 - File organization
 
 ✅ When it runs:
+
 - Pre-commit git hook
 - CI on every push
 
 ### Layer 2: Structural (~10s)
+
 ✅ What it checks:
+
 - Plugin spec structure
 - lazy.nvim field validation
 - Keymap conflicts
 - Circular dependencies
 
 ✅ When it runs:
+
 - Pre-commit git hook
 - CI on every push
 
 ### Layer 3: Dynamic (~60s)
+
 ✅ What it checks:
+
 - Neovim startup without errors
 - `:checkhealth` passes
 - Plugin loading
 
 ✅ When it runs:
+
 - Pre-push git hook
 - CI on PR to main
 
 ### Layer 4: Documentation (~30s)
+
 ✅ What it checks:
+
 - Plugin list matches CLAUDE.md
 - Keyboard shortcuts current
 
 ✅ When it runs:
+
 - CI only (warnings, doesn't block)
 
 ## Common Validation Errors
@@ -155,7 +168,7 @@ rm lua/plugins/nvimtree.lua
 # New: vim.hl.on_yank
 ```
 
-### Error: "Plugin spec must return table with [1] = string"
+### Error: "Plugin spec must return table with \[1\] = string"
 
 ```lua
 -- ❌ Wrong: Module structure
@@ -186,16 +199,11 @@ nvim --headless -c "lua require('config')" -c "quit"
 
 ### Quick Validation (Every Push)
 
-Runs: Layer 1-2
-Time: ~30 seconds
-Triggers: Every push, every PR
+Runs: Layer 1-2 Time: ~30 seconds Triggers: Every push, every PR
 
 ### Full Validation (PR to Main)
 
-Runs: Layer 1-4
-Time: ~3 minutes per job
-Matrix: Linux/macOS/Windows × Neovim stable/nightly
-Triggers: PR to main branch, weekly schedule
+Runs: Layer 1-4 Time: ~3 minutes per job Matrix: Linux/macOS/Windows × Neovim stable/nightly Triggers: PR to main branch, weekly schedule
 
 ## Troubleshooting
 
@@ -270,6 +278,6 @@ chmod +x scripts/*.sh scripts/*.lua
 └─────────────────────────────────────────────────────────────┘
 ```
 
----
+______________________________________________________________________
 
 **That's it!** You're ready to contribute to OVIWrite with confidence. 🎉

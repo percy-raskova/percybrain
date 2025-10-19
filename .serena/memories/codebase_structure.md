@@ -114,51 +114,62 @@
 ## Key Files and Their Purposes
 
 ### Entry Point
+
 - **init.lua**: NeoVide GUI configuration, requires `config` module
 
 ### Core Configuration (lua/config/)
+
 - **init.lua**: Bootstraps lazy.nvim, loads globals/keymaps/options, sets up plugin system
 - **globals.lua**: Global variables, theme settings
 - **keymaps.lua**: All keyboard shortcuts (leader = space)
 - **options.lua**: Vim options (spell=true, wrap=true, etc.)
 
 ### Plugin System (lua/plugins/)
+
 - **init.lua**: Loads neoconf and neodev plugins
-- **[plugin-name].lua**: Individual plugin configs (one per file)
+- **\[plugin-name\].lua**: Individual plugin configs (one per file)
 - **lsp/**: LSP-specific configurations (mason, lspconfig, none-ls)
 
 ### Utilities (lua/utils/)
+
 - **lsp.lua**: LSP helper functions
 - **writer_templates.lua**: Writer file templates
 - **keymapper.lua**: Keymap helper utilities
 
 ### Validation System (scripts/)
+
 **4-Layer Pyramid**:
+
 1. **Layer 1** (~5s): Static validation (syntax, duplicates, deprecated APIs)
 2. **Layer 2** (~10s): Structural validation (plugin specs, keymaps)
 3. **Layer 3** (~60s): Dynamic validation (startup, health, plugin loading)
 4. **Layer 4** (~30s): Documentation sync (warnings only)
 
 ### Documentation
+
 - **CLAUDE.md**: Primary documentation for Claude Code
 - **CONTRIBUTING.md**: Contribution guidelines and validation system docs
 - **README.md**: User-facing project README
 
 ## Plugin Count
+
 - **60+ plugins** total (as of last count)
 - Categories: Long-form, Spell/Grammar, Note-taking, Distraction-free, Utilities, Color schemes, Infrastructure
 
 ## Important Patterns
 
 ### Plugin Loading
+
 - lazy.nvim scans `lua/plugins/*.lua` automatically
 - Each file must return `{ "author/repo", ... }` spec
 - Lazy loading by default (event triggers)
 
 ### Configuration Loading
+
 - `init.lua` → `config/init.lua` → loads config modules → lazy.nvim setup
 
 ### File Organization Rules
+
 - ✅ One plugin per file in `lua/plugins/`
 - ✅ Only 2 allowed `init.lua`: `lua/plugins/init.lua` and `lua/config/init.lua`
 - ❌ No module structures in `lua/plugins/` (must return plugin spec)

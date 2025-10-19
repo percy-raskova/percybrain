@@ -1,24 +1,20 @@
 # PercyBrain AI Dashboard - Unit Testing Suite Design
 
-**Date**: 2025-10-18
-**Component**: `lua/percybrain/dashboard.lua` (372 lines)
-**Pattern**: Complex Module (similar to ollama_spec.lua, sembr/integration_spec.lua)
-**Target**: 6/6 PercyBrain testing standards compliance
+**Date**: 2025-10-18 **Component**: `lua/percybrain/dashboard.lua` (372 lines) **Pattern**: Complex Module (similar to ollama_spec.lua, sembr/integration_spec.lua) **Target**: 6/6 PercyBrain testing standards compliance
 
 ## Executive Summary
 
 Design for comprehensive unit test suite covering the PercyBrain AI Meta-Metrics Dashboard, a complex knowledge network analysis tool featuring:
+
 - Real-time metrics collection (growth, tags, link density)
 - AI-powered suggestions via Ollama
 - Floating window dashboard UI
 - Auto-analysis on note save
 - Intelligent caching (5-minute TTL)
 
-**Expected Test Coverage**: 85-95% (30-35/40 tests)
-**Estimated Lines**: ~550-650 lines
-**Time to Implement**: 45-60 minutes
+**Expected Test Coverage**: 85-95% (30-35/40 tests) **Estimated Lines**: ~550-650 lines **Time to Implement**: 45-60 minutes
 
----
+______________________________________________________________________
 
 ## 1. System Architecture Analysis
 
@@ -53,30 +49,32 @@ percybrain.dashboard (M)
 
 ### 1.2 Critical Dependencies
 
-| Dependency | Purpose | Mock Required |
-|------------|---------|---------------|
-| `vim.fn.systemlist()` | Find markdown files | ✅ Yes (simulate file system) |
-| `io.open()` | Read note content | ✅ Yes (mock file content) |
-| `vim.fn.system()` | Ollama API calls | ✅ Yes (simulate AI responses) |
-| `os.time()` / `os.date()` | Timestamps and caching | ✅ Yes (freeze time for tests) |
-| `vim.api.nvim_create_buf()` | UI buffer creation | ✅ Yes (track buffer creation) |
-| `vim.api.nvim_open_win()` | Floating window | ✅ Yes (verify window options) |
-| `vim.notify()` | User feedback | ✅ Yes (capture notifications) |
+| Dependency                  | Purpose                | Mock Required                  |
+| --------------------------- | ---------------------- | ------------------------------ |
+| `vim.fn.systemlist()`       | Find markdown files    | ✅ Yes (simulate file system)  |
+| `io.open()`                 | Read note content      | ✅ Yes (mock file content)     |
+| `vim.fn.system()`           | Ollama API calls       | ✅ Yes (simulate AI responses) |
+| `os.time()` / `os.date()`   | Timestamps and caching | ✅ Yes (freeze time for tests) |
+| `vim.api.nvim_create_buf()` | UI buffer creation     | ✅ Yes (track buffer creation) |
+| `vim.api.nvim_open_win()`   | Floating window        | ✅ Yes (verify window options) |
+| `vim.notify()`              | User feedback          | ✅ Yes (capture notifications) |
 
----
+______________________________________________________________________
 
 ## 2. Testing Strategy
 
 ### 2.1 Pattern: Complex Module
 
 Following established patterns from:
+
 - **ollama_spec.lua** (110 tests, 91% pass) - AI integration
 - **sembr/integration_spec.lua** (12 tests, 100% pass) - Complex mocking
 - **window-manager_spec.lua** (27 tests, 100% pass) - UI layer
 
 **Key Characteristics**:
+
 - Comprehensive before_each/after_each state management
-- Metatable-based vim.* mocking for complex APIs
+- Metatable-based vim.\* mocking for complex APIs
 - Local helper functions (contains, count, etc.)
 - AAA pattern with explicit comments
 - Test isolation via mock restoration
@@ -101,7 +99,7 @@ end)
 
 **Total**: 40 tests across 8 describe blocks
 
----
+______________________________________________________________________
 
 ## 3. Test Specification
 
@@ -145,7 +143,7 @@ end)
 
 **Test Pattern**: Simple validation, minimal mocking
 
----
+______________________________________________________________________
 
 ### 3.2 Configuration Management Tests (4 tests)
 
@@ -206,7 +204,7 @@ end)
 
 **Test Pattern**: Time-based mocking, cache invalidation logic
 
----
+______________________________________________________________________
 
 ### 3.3 Growth Analysis Tests (5 tests)
 
@@ -311,7 +309,7 @@ end)
 
 **Test Pattern**: File system mocking, time-based calculations
 
----
+______________________________________________________________________
 
 ### 3.4 Tag Analysis Tests (6 tests)
 
@@ -444,7 +442,7 @@ end)
 
 **Test Pattern**: File content mocking, regex extraction validation
 
----
+______________________________________________________________________
 
 ### 3.5 Link Density Analysis Tests (7 tests)
 
@@ -604,7 +602,7 @@ end)
 
 **Test Pattern**: Link regex validation, mathematical calculations
 
----
+______________________________________________________________________
 
 ### 3.6 AI Suggestions Tests (5 tests)
 
@@ -697,7 +695,7 @@ end)
 
 **Test Pattern**: External API mocking, error handling
 
----
+______________________________________________________________________
 
 ### 3.7 Metrics Aggregation Tests (4 tests)
 
@@ -774,7 +772,7 @@ end)
 
 **Test Pattern**: Integration testing, cache behavior
 
----
+______________________________________________________________________
 
 ### 3.8 Dashboard UI Tests (6 tests)
 
@@ -860,7 +858,7 @@ end)
 
 **Test Pattern**: UI component testing, buffer/window validation
 
----
+______________________________________________________________________
 
 ### 3.9 Auto-Analysis Tests (4 tests)
 
@@ -935,7 +933,7 @@ end)
 
 **Test Pattern**: Autocmd registration, deferred execution
 
----
+______________________________________________________________________
 
 ## 4. Mock Factory Design
 
@@ -1042,7 +1040,7 @@ function mocks.dashboard(opts)
 end
 ```
 
----
+______________________________________________________________________
 
 ## 5. Implementation Roadmap
 
@@ -1076,30 +1074,33 @@ end
 14. Fix any failing tests
 15. Document results
 
----
+______________________________________________________________________
 
 ## 6. Success Criteria
 
 **6/6 Testing Standards**:
+
 - ✅ Helper/mock imports at top
 - ✅ before_each/after_each pattern
 - ✅ AAA comments on all tests
-- ✅ No _G. pollution
+- ✅ No \_G. pollution
 - ✅ Local helper functions (contains, etc.)
 - ✅ Comprehensive mocking
 
 **Quality Metrics**:
+
 - **Test Coverage**: 85-95% (30-35/40 tests passing)
 - **Code Quality**: Luacheck clean (0 errors)
 - **Documentation**: Inline AAA comments
 - **Maintainability**: Reusable mock factory
 
 **Expected Failures**:
+
 - 2-5 tests may fail due to edge cases in file I/O
 - 1-2 tests may fail on time-based calculations (timezone issues)
 - Overall pass rate target: 85%+
 
----
+______________________________________________________________________
 
 ## 7. Advanced Patterns
 
@@ -1158,13 +1159,14 @@ assert.equals(77, window_config.width)
 assert.equals("double", window_config.border)
 ```
 
----
+______________________________________________________________________
 
 ## 8. Integration with Existing Suite
 
 **Test Location**: `tests/plenary/unit/percybrain/dashboard_spec.lua`
 
 **Execution**:
+
 ```bash
 # Individual test
 nvim --headless -u tests/minimal_init.lua \
@@ -1176,27 +1178,29 @@ nvim --headless -u tests/minimal_init.lua \
 ```
 
 **Documentation**:
+
 - Add to `COMPLETE_TEST_COVERAGE_REPORT.md`
 - Update `PLENARY_TESTING_DESIGN.md` with dashboard patterns
 - Create `claudedocs/DASHBOARD_TEST_IMPLEMENTATION.md` (completion report)
 
----
+______________________________________________________________________
 
 ## 9. Risk Assessment
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| File I/O mocking complexity | High | Medium | Use comprehensive mock factory |
-| Time-based test flakiness | Medium | Low | Freeze time with mock controller |
-| Ollama API unavailability | Low | Low | Mock all external API calls |
-| UI buffer/window API changes | Low | Medium | Test behavior, not implementation |
-| Cache invalidation edge cases | Medium | Medium | Explicit time advancement in tests |
+| Risk                          | Probability | Impact | Mitigation                         |
+| ----------------------------- | ----------- | ------ | ---------------------------------- |
+| File I/O mocking complexity   | High        | Medium | Use comprehensive mock factory     |
+| Time-based test flakiness     | Medium      | Low    | Freeze time with mock controller   |
+| Ollama API unavailability     | Low         | Low    | Mock all external API calls        |
+| UI buffer/window API changes  | Low         | Medium | Test behavior, not implementation  |
+| Cache invalidation edge cases | Medium      | Medium | Explicit time advancement in tests |
 
----
+______________________________________________________________________
 
 ## 10. Future Enhancements
 
 **Potential Additions**:
+
 1. **Performance Tests**: Measure analysis speed for large vaults (1000+ notes)
 2. **Integration Tests**: Full end-to-end dashboard display cycle
 3. **Visual Regression**: Screenshot-based UI validation
@@ -1204,12 +1208,13 @@ nvim --headless -u tests/minimal_init.lua \
 5. **Keybinding Tests**: Validate 'q', 'r', 'g' keymaps in dashboard
 
 **Mock Factory Reusability**:
+
 - `mocks.dashboard()` can be reused for:
   - `network-graph_spec.lua` (future)
   - Any Zettelkasten analysis features
   - Ollama integration tests
 
----
+______________________________________________________________________
 
 ## Appendix A: Complete Test File Structure
 
@@ -1230,26 +1235,29 @@ tests/plenary/unit/percybrain/
     └── Auto-Analysis (50 lines)
 ```
 
----
+______________________________________________________________________
 
 ## Appendix B: References
 
 **Established Patterns**:
+
 - `tests/plenary/unit/ai-sembr/ollama_spec.lua` (110 tests, AI integration)
 - `tests/plenary/unit/sembr/integration_spec.lua` (12 tests, complex mocking)
 - `tests/plenary/unit/window-manager_spec.lua` (27 tests, UI testing)
 
 **Documentation**:
+
 - `tests/PLENARY_TESTING_DESIGN.md` (753 lines, standards specification)
 - `tests/REFACTORING_GUIDE.md` (531 lines, practical patterns)
 - `claudedocs/TEST_REFACTORING_COMPLETE.md` (485 lines, campaign report)
 
 **Tools**:
+
 - Plenary.nvim BDD framework
 - luassert assertions
 - PercyBrain mock factory (`tests/helpers/mocks.lua`)
 
----
+______________________________________________________________________
 
 **End of Design Document**
 

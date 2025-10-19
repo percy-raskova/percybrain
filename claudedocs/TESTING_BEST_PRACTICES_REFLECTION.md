@@ -1,22 +1,22 @@
 # PercyBrain Testing Best Practices - Reflection and Validation
 
-**Generated**: 2025-10-18
-**Context**: Ollama test troubleshooting and testing pattern validation
-**Status**: ⚠️ **Needs Improvement** - Current approach deviates from project standards
+**Generated**: 2025-10-18 **Context**: Ollama test troubleshooting and testing pattern validation **Status**: ⚠️ **Needs Improvement** - Current approach deviates from project standards
 
----
+______________________________________________________________________
 
 ## Executive Summary
 
 ### Current State Assessment
 
 **What We Did Wrong** ❌:
+
 1. Created **inline vim mocks** in Ollama test file instead of using project's established mock factories
 2. Manually preserved `vim.inspect` and `vim.cmd` when helper system should handle this
 3. Bypassed helper infrastructure (`tests/helpers/mocks.lua` with `M.ollama()` already available!)
 4. Violated DRY principle by duplicating mock logic across test files
 
 **Impact**:
+
 - Added 40+ lines of duplicated mock code
 - Increased maintenance burden
 - Deviated from project testing patterns
@@ -36,13 +36,14 @@ tests/
 └── PLENARY_TESTING_DESIGN.md  # Testing standards document
 ```
 
----
+______________________________________________________________________
 
 ## Detailed Analysis
 
 ### 1. Mock Pattern Violations
 
 #### ❌ What We Did (Anti-Pattern)
+
 ```lua
 -- tests/plenary/unit/ai-sembr/ollama_spec.lua (lines 8-134)
 before_each(function()
@@ -67,6 +68,7 @@ end)
 ```
 
 **Problems**:
+
 1. Inline mocking instead of using mock factory
 2. Duplicates logic across tests
 3. Hard to maintain (30+ lines per test)
@@ -74,6 +76,7 @@ end)
 5. Fragile - breaks easily with Vim API changes
 
 #### ✅ What We Should Do (Best Practice)
+
 ```lua
 -- Use the existing helper infrastructure
 local helpers = require('tests.helpers')
@@ -106,17 +109,19 @@ end)
 ```
 
 **Benefits**:
+
 1. ✅ Uses established mock factory pattern
 2. ✅ DRY - reusable across all tests
 3. ✅ 5 lines instead of 130 lines
 4. ✅ Maintainable - change once, applies everywhere
 5. ✅ Follows project standards
 
----
+______________________________________________________________________
 
 ### 2. Vim.inspect Compatibility Handling
 
 #### ❌ What We Did (Anti-Pattern)
+
 ```lua
 -- Manually preserved vim.inspect in each test
 local preserved_inspect = original_vim.inspect
@@ -133,6 +138,7 @@ _G.vim = {
 ```
 
 **Problems**:
+
 1. Duplicates vim.inspect handling logic
 2. Fragile - easy to forget in new tests
 3. Doesn't belong in individual test files
@@ -157,8 +163,7 @@ if type(vim.inspect) ~= 'function' then
 end
 ```
 
-**The Fix**:
-Tests should NOT create new `_G.vim` mocks that overwrite this. Instead:
+**The Fix**: Tests should NOT create new `_G.vim` mocks that overwrite this. Instead:
 
 ```lua
 -- Option 1: Don't mock vim at all (use real Vim API)
@@ -172,36 +177,37 @@ _G.vim = vim.tbl_deep_extend("force", preserved_vim, {
 })
 ```
 
----
+______________________________________________________________________
 
 ### 3. Helper Infrastructure Usage
 
 #### Available Helpers (from `tests/helpers/init.lua`)
 
-| Helper | Purpose | Example Usage |
-|--------|---------|---------------|
-| `M.mock_notify()` | Capture vim.notify calls | `local mock = M.mock_notify()` |
-| `M.wait_for(condition)` | Wait for async operations | `M.wait_for(function() return done end)` |
-| `M.async_test(fn)` | Run async tests | `M.async_test(function() ... end)` |
-| `M.create_test_buffer()` | Create test buffers | `local buf = M.create_test_buffer({content = lines})` |
+| Helper                   | Purpose                   | Example Usage                                         |
+| ------------------------ | ------------------------- | ----------------------------------------------------- |
+| `M.mock_notify()`        | Capture vim.notify calls  | `local mock = M.mock_notify()`                        |
+| `M.wait_for(condition)`  | Wait for async operations | `M.wait_for(function() return done end)`              |
+| `M.async_test(fn)`       | Run async tests           | `M.async_test(function() ... end)`                    |
+| `M.create_test_buffer()` | Create test buffers       | `local buf = M.create_test_buffer({content = lines})` |
 
 #### Available Mocks (from `tests/helpers/mocks.lua`)
 
-| Mock | Purpose | Example Usage |
-|------|---------|---------------|
-| `M.ollama()` | Mock Ollama LLM | `local ollama = mocks.ollama()` |
-| `M.vault(path)` | Mock Zettelkasten vault | `local vault = mocks.vault(); vault:setup()` |
-| `M.notifications()` | Capture notifications | `local n = mocks.notifications(); n.capture()` |
-| `M.window_manager()` | Mock window manager | `local wm = mocks.window_manager()` |
-| `M.timer()` | Control time in tests | `local t = mocks.timer(); t.advance(1000)` |
+| Mock                 | Purpose                 | Example Usage                                  |
+| -------------------- | ----------------------- | ---------------------------------------------- |
+| `M.ollama()`         | Mock Ollama LLM         | `local ollama = mocks.ollama()`                |
+| `M.vault(path)`      | Mock Zettelkasten vault | `local vault = mocks.vault(); vault:setup()`   |
+| `M.notifications()`  | Capture notifications   | `local n = mocks.notifications(); n.capture()` |
+| `M.window_manager()` | Mock window manager     | `local wm = mocks.window_manager()`            |
+| `M.timer()`          | Control time in tests   | `local t = mocks.timer(); t.advance(1000)`     |
 
----
+______________________________________________________________________
 
 ### 4. Test Organization Standards
 
 #### From PLENARY_TESTING_DESIGN.md
 
 **Required Structure**:
+
 ```lua
 -- Required imports at top
 local helpers = require('tests.helpers')
@@ -239,36 +245,38 @@ end)
 ```
 
 **Patterns We Violated**:
+
 1. ❌ No helper imports
 2. ❌ Inline mocking instead of factory usage
 3. ❌ Manual vim mock instead of partial mocking
 4. ❌ Not following AAA pattern (Arrange-Act-Assert)
 
----
+______________________________________________________________________
 
 ## Best Practices Checklist
 
 ### ✅ What We Did Right
+
 1. Used Plenary's `describe`/`it` BDD structure
 2. Implemented `before_each`/`after_each` setup/teardown
 3. Restored original state after tests
 4. Attempted to handle Neovim 0.11+ compatibility
 
 ### ❌ What We Did Wrong
+
 1. Created inline mocks instead of using helpers/mocks.lua
 2. Duplicated vim.inspect handling (already in minimal_init.lua)
 3. Bypassed established mock factory pattern (M.ollama() exists!)
 4. Added 130+ lines of unnecessary mock code
 5. Didn't consult project's testing design documentation first
 
----
+______________________________________________________________________
 
 ## Recommended Fixes
 
 ### Priority 1: Refactor Ollama Test (CRITICAL)
 
-**Current**: 245 lines with inline mocking
-**Target**: 80 lines using helper infrastructure
+**Current**: 245 lines with inline mocking **Target**: 80 lines using helper infrastructure
 
 ```lua
 -- tests/plenary/unit/ai-sembr/ollama_spec.lua (REFACTORED)
@@ -350,6 +358,7 @@ end)
 ```
 
 **Improvements**:
+
 - ✅ 80 lines instead of 245 lines (67% reduction)
 - ✅ Uses established mock factories
 - ✅ Uses helper utilities (wait_for, notifications)
@@ -357,13 +366,13 @@ end)
 - ✅ No inline vim mocking
 - ✅ Maintainable and DRY
 
----
+______________________________________________________________________
 
 ### Priority 2: Document Mock Usage Patterns
 
 Create `tests/MOCK_USAGE_GUIDE.md`:
 
-```markdown
+````markdown
 # PercyBrain Mock Usage Guide
 
 ## Quick Reference
@@ -374,9 +383,10 @@ Create `tests/MOCK_USAGE_GUIDE.md`:
 before_each(function()
   _G.vim = { api = { nvim_get_current_buf = function() return 1 end } }
 end)
-```
+````
 
 ✅ **RIGHT**:
+
 ```lua
 local mocks = require('tests.helpers.mocks')
 local mock_dependency = mocks.factory_name()
@@ -396,6 +406,7 @@ local mock_dependency = mocks.factory_name()
 2. **Async Testing**: `helpers.async_test(function() ... end)`
 3. **Capture Notifications**: `helpers.mock_notify()`
 4. **Create Test Buffer**: `helpers.create_test_buffer({content = lines})`
+
 ```
 
 ---
@@ -575,3 +586,4 @@ While the current fix unblocks the tests, it violates project standards and crea
 **Reflection Complete**
 **Status**: Best practices documented, deviations identified, path forward clear
 **Next Step**: Refactor Ollama test using helper infrastructure
+```

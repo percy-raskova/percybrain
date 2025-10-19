@@ -1,8 +1,6 @@
 # PercyBrain Workflow Refactoring Session - COMPLETE
 
-**Date**: 2025-10-17
-**Duration**: ~2 hours
-**Status**: Successfully completed all objectives
+**Date**: 2025-10-17 **Duration**: ~2 hours **Status**: Successfully completed all objectives
 
 ## Session Summary
 
@@ -11,12 +9,14 @@ Completed comprehensive workflow-based refactoring of PercyBrain (Neovim configu
 ## Major Accomplishments
 
 ### 1. Plugin Ecosystem Refactoring
+
 - Reorganized 67 plugins into 14 workflow-based directories
 - Removed 7 redundant plugins (fountain, twilight, vimorg, fzf-vim, gen, vim-grammarous, LanguageTool)
 - Added 8 new plugins with full implementations
 - Final plugin count: 68 organized plugins + dependencies = 83 total loaded
 
 ### 2. New Plugin Implementations (Full Code)
+
 1. **IWE LSP** (`zettelkasten/iwe-lsp.lua`) - Markdown knowledge management via markdown-oxide
 2. **AI Draft Generator** (`ai-sembr/ai-draft.lua`) - 158-line implementation for notes-to-prose conversion
 3. **Hugo Integration** (`publishing/hugo.lua`) - Static site publishing with commands
@@ -27,6 +27,7 @@ Completed comprehensive workflow-based refactoring of PercyBrain (Neovim configu
 8. **undotree** - Visual undo history browser
 
 ### 3. LSP Configuration Updates
+
 - Fixed ltex configuration: `"ltex-ls"` → `"ltex"` (correct server name)
 - Fixed IWE configuration: `"iwe"` → `"markdown_oxide"` (correct plugin name)
 - Added Zettelkasten-specific keybindings:
@@ -36,13 +37,13 @@ Completed comprehensive workflow-based refactoring of PercyBrain (Neovim configu
   - `<leader>zf` - Global note search (workspace symbols)
 
 ### 4. Critical Bug Fix: Blank Screen Issue
-**Problem**: Neovim started with blank screen, no plugins loaded
-**Root Cause**: `lua/plugins/init.lua` returned only 2 plugins, preventing lazy.nvim from scanning subdirectories
-**Solution**: Implemented explicit import system for all 14 workflow directories
-**Result**: 3 plugins → 83 plugins loaded successfully
+
+**Problem**: Neovim started with blank screen, no plugins loaded **Root Cause**: `lua/plugins/init.lua` returned only 2 plugins, preventing lazy.nvim from scanning subdirectories **Solution**: Implemented explicit import system for all 14 workflow directories **Result**: 3 plugins → 83 plugins loaded successfully
 
 ### 5. Code Quality Verification
+
 All tests passing:
+
 - ✅ Lua syntax validation
 - ✅ Critical files exist
 - ✅ Core configuration loads
@@ -52,20 +53,21 @@ All tests passing:
 ## Technical Decisions Made
 
 ### Grammar Checker Selection
-**Choice**: ltex-ls (LanguageTool via LSP)
-**Rationale**: 
+
+**Choice**: ltex-ls (LanguageTool via LSP) **Rationale**:
+
 - LSP integration (native Neovim support)
 - Real-time checking (inline diagnostics)
 - Most powerful (5000+ rules)
 - Best integration with IWE LSP
 - Active maintenance (Mason package)
 
-**Removed**: LanguageTool.lua (non-LSP), vim-grammarous.lua (older/less powerful)
-**Kept**: vale.lua (complementary - style linting)
+**Removed**: LanguageTool.lua (non-LSP), vim-grammarous.lua (older/less powerful) **Kept**: vale.lua (complementary - style linting)
 
 ### Lazy.nvim Import Pattern
-**Issue**: Subdirectory plugins not loading after refactoring
-**Solution**: Explicit import declarations in `lua/plugins/init.lua`:
+
+**Issue**: Subdirectory plugins not loading after refactoring **Solution**: Explicit import declarations in `lua/plugins/init.lua`:
+
 ```lua
 { import = "plugins.zettelkasten" },
 { import = "plugins.ai-sembr" },
@@ -115,18 +117,23 @@ lua/plugins/
 ## Key Learnings
 
 ### 1. Lazy.nvim Subdirectory Loading
+
 When returning a table from `plugins/init.lua`, lazy.nvim stops automatic subdirectory scanning. Must use explicit `{ import = "plugins.subdir" }` declarations for each subdirectory.
 
 ### 2. StyLua Quote Style Consistency
+
 Project uses double quotes for strings. When adding new code, ensure consistency or run `stylua lua/` before commit.
 
 ### 3. LSP Server Name Conventions
+
 - LanguageTool LSP: `"ltex"` not `"ltex-ls"`
 - Markdown Oxide: `"markdown_oxide"` not `"iwe"`
 - Always verify server names in lspconfig documentation
 
 ### 4. Test Suite Philosophy
+
 PercyBrain's test suite is pragmatic for hobbyist project:
+
 - Lua syntax validation (essential)
 - Core config loading (essential)
 - StyLua formatting (auto-fixable)
@@ -134,16 +141,18 @@ PercyBrain's test suite is pragmatic for hobbyist project:
 - NOT enterprise-grade comprehensive testing
 
 ### 5. Plugin Organization Best Practices
+
 Workflow-based organization (by use case) > technical organization (by type):
+
 - Better: `prose-writing/grammar/`, `zettelkasten/`
-- Worse: `grammar/`, `knowledge-management/`
-Aligns with user mental model and primary workflows.
+- Worse: `grammar/`, `knowledge-management/` Aligns with user mental model and primary workflows.
 
 ## Workflow Architecture
 
 ### Primary Use Case: Zettelkasten (Knowledge Management)
-**Plugins**: vim-wiki, vim-zettel, obsidian.nvim, telescope, IWE LSP, img-clip
-**Workflow**: 
+
+**Plugins**: vim-wiki, vim-zettel, obsidian.nvim, telescope, IWE LSP, img-clip **Workflow**:
+
 1. Quick capture (vim-wiki commands)
 2. Wiki linking (IWE LSP `gd` navigation)
 3. Backlinks (IWE LSP `<leader>zr`)
@@ -151,23 +160,26 @@ Aligns with user mental model and primary workflows.
 5. Knowledge graph (obsidian.nvim + IWE)
 
 ### Secondary Use Case: AI-Assisted Writing
-**Plugins**: ollama.lua, sembr.lua, ai-draft.lua
-**Workflow**:
+
+**Plugins**: ollama.lua, sembr.lua, ai-draft.lua **Workflow**:
+
 1. Write notes with semantic line breaks (sembr)
 2. Generate draft from notes (`<leader>ad` → ai-draft.lua)
 3. AI commands for improvement (ollama.lua)
 
 ### Tertiary Use Case: Long-Form Prose Writing
-**Plugins**: goyo, zen-mode, limelight, centerpad, vim-pencil, ltex-ls, vale
-**Workflow**:
+
+**Plugins**: goyo, zen-mode, limelight, centerpad, vim-pencil, ltex-ls, vale **Workflow**:
+
 1. Distraction-free mode (`<leader>fz` zen-mode)
 2. Write prose (vim-pencil soft wrapping)
 3. Grammar checking (ltex-ls real-time diagnostics)
 4. Style linting (vale.lua)
 
 ### Supporting Use Case: Static Site Publishing
-**Plugins**: hugo.lua, markdown-preview.lua
-**Workflow**:
+
+**Plugins**: hugo.lua, markdown-preview.lua **Workflow**:
+
 1. Preview markdown locally
 2. Generate Hugo site (`:HugoServer`)
 3. Publish (`:HugoPublish`)
@@ -185,12 +197,14 @@ Aligns with user mental model and primary workflows.
 ## Implementation Patterns Used
 
 ### 1. Semantic Versioning Automation
+
 - Manual git tags (user control)
 - Automated artifact generation (CI/CD)
 - Zero-maintenance changelog (auto-generated from commits)
 - Queryable version.lua API
 
 ### 2. AI Draft Generator Pattern
+
 ```lua
 -- 158-line implementation
 function M.collect_notes(pattern)
@@ -207,18 +221,21 @@ end
 ```
 
 ### 3. Hugo Integration Pattern
+
 Commands for static site workflow:
+
 - `:HugoNew` - Create new post with prompting
 - `:HugoServer` - Start local preview
 - `:HugoBuild` - Build static site
 - `:HugoPublish` - Build + git commit + push
 
 ### 4. IWE LSP Integration Pattern
+
 ```lua
 lspconfig["markdown_oxide"].setup({
   on_attach = function(client, bufnr)
     on_attach(client, bufnr) -- Standard LSP keymaps
-    
+
     -- IWE-specific Zettelkasten keymaps
     keymap.set('n', '<leader>zr', vim.lsp.buf.references)
     keymap.set({ 'n', 'v' }, '<leader>za', vim.lsp.buf.code_action)
@@ -250,11 +267,13 @@ lspconfig["markdown_oxide"].setup({
 ## External Dependencies
 
 **Already Installed** (per system check):
+
 - ✅ IWE: `cargo install iwe` (Rust-based markdown server)
 - ✅ Ollama: `ollama pull llama3.2` (for AI features)
 - ✅ SemBr: `uv tool install sembr` (ML semantic line breaks)
 
 **To Install** (optional):
+
 - Hugo: For static site publishing (https://gohugo.io/)
 
 ## Session Success Metrics

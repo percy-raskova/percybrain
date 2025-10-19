@@ -3,6 +3,7 @@
 ## Development Workflow Commands
 
 ### Basic Neovim Operations
+
 ```bash
 # Start Neovim
 nvim
@@ -15,6 +16,7 @@ nvim --version
 ```
 
 ### Plugin Management (from within Neovim)
+
 ```vim
 :Lazy                   " Open lazy.nvim UI
 :Lazy sync              " Update all plugins
@@ -27,12 +29,14 @@ nvim --version
 ```
 
 ### Health and Diagnostics
+
 ```vim
 :checkhealth            " Diagnose Neovim setup issues
 :Lazy health            " Check lazy.nvim plugin health
 ```
 
 ### Configuration Reload
+
 ```vim
 " After editing configs
 :source ~/.config/nvim/init.lua
@@ -43,18 +47,21 @@ nvim --version
 ## Validation System
 
 ### Standard Validation (Layer 1-2, ~15 seconds)
+
 ```bash
 # Run before committing
 ./scripts/validate.sh
 ```
 
 ### Full Validation (Layer 1-4, ~90 seconds)
+
 ```bash
 # Run before pushing
 ./scripts/validate.sh --full
 ```
 
 ### Specific Validation Checks
+
 ```bash
 # Check for duplicate plugins
 ./scripts/validate.sh --check duplicates
@@ -79,6 +86,7 @@ nvim --version
 ```
 
 ### Development Environment Setup
+
 ```bash
 # First-time setup (install git hooks, test scripts)
 ./scripts/setup-dev-env.sh
@@ -90,6 +98,7 @@ nvim --version
 ## Git Workflow
 
 ### Standard Git Operations
+
 ```bash
 # Check status and branch
 git status
@@ -107,6 +116,7 @@ git push origin feature/my-new-plugin
 ```
 
 ### Skip Validation (Use Sparingly)
+
 ```bash
 # Skip pre-commit hook
 SKIP_VALIDATION=1 git commit -m "WIP: experimental feature"
@@ -119,6 +129,7 @@ git push --no-verify
 ```
 
 ### LazyGit (Visual Git Interface)
+
 ```vim
 " From within Neovim
 <leader>g               " Open LazyGit UI
@@ -127,6 +138,7 @@ git push --no-verify
 ## Testing and Debugging
 
 ### Test Plugin in Neovim
+
 ```bash
 # Start Neovim
 nvim
@@ -142,12 +154,14 @@ nvim
 ```
 
 ### Test Specific File
+
 ```bash
 # Test Lua syntax
 nvim --headless -c "luafile lua/plugins/my-plugin.lua" -c "quit"
 ```
 
 ### Clear Cache and Retest
+
 ```bash
 # Remove lazy.nvim cache
 rm -rf ~/.local/share/nvim/lazy
@@ -159,6 +173,7 @@ rm -rf ~/.local/share/nvim/lazy
 ## Keyboard Shortcuts (from within Neovim)
 
 ### Core Operations
+
 - `<leader>e` - Toggle file tree (NvimTree)
 - `<leader>x` - Focus file tree
 - `<leader>s` - Save file
@@ -169,17 +184,20 @@ rm -rf ~/.local/share/nvim/lazy
 - `<leader>g` - LazyGit
 
 ### Writing Modes
+
 - `<leader>z` - ZenMode (distraction-free)
 - `<leader>o` - Goyo (minimalist writing)
 - `<leader>sp` - SoftPencil (soft line wrapping)
 
 ### Search
+
 - `<leader>fzl` - Find files (FzfLua)
 - `<leader>fzg` - Live grep (search text)
 
 ## Common Development Tasks
 
 ### Add New Plugin
+
 ```bash
 # 1. Create plugin file
 nvim lua/plugins/my-plugin.lua
@@ -196,6 +214,7 @@ nvim
 ```
 
 ### Update Existing Plugin
+
 ```bash
 # 1. Edit plugin file
 nvim lua/plugins/existing-plugin.lua
@@ -208,6 +227,7 @@ nvim lua/plugins/existing-plugin.lua
 ```
 
 ### Fix Validation Errors
+
 ```bash
 # Find duplicates
 ./scripts/validate.sh --check duplicates
@@ -222,6 +242,7 @@ nvim lua/plugins/existing-plugin.lua
 ## System-Specific Commands (Linux)
 
 Standard Linux utilities work as expected:
+
 - `ls`, `cd`, `pwd`, `mkdir`, `rm`, `mv`, `cp`
 - `grep`, `find`, `cat`, `less`, `head`, `tail`
 - `git` - Version control

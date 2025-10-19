@@ -1,16 +1,12 @@
 # OVIWrite Testing & CI/CD Migration Plan
 
-**Version**: 1.0
-**Date**: 2025-10-16
-**Status**: Ready for Implementation
+**Version**: 1.0 **Date**: 2025-10-16 **Status**: Ready for Implementation
 
 ## Executive Summary
 
 This document outlines the phased migration plan to implement comprehensive testing and CI/CD infrastructure for OVIWrite. The plan prioritizes safety, maintainability, and minimal disruption to current development.
 
-**Timeline**: 4 weeks (1 week per phase)
-**Effort**: Medium complexity (~15-20K tokens implementation)
-**Risk**: Low (validation is additive, doesn't modify existing code)
+**Timeline**: 4 weeks (1 week per phase) **Effort**: Medium complexity (~15-20K tokens implementation) **Risk**: Low (validation is additive, doesn't modify existing code)
 
 ## Prerequisites
 
@@ -35,6 +31,7 @@ Before starting Phase 1:
 - [ ] Create `scripts/deprecated-patterns.txt` with known API deprecations
 
 **Acceptance Criteria**:
+
 - All 7 scripts present and executable
 - Scripts run without immediate errors
 
@@ -48,6 +45,7 @@ Before starting Phase 1:
 - [ ] Test file organization rules
 
 **Test Commands**:
+
 ```bash
 ./scripts/validate-layer1.sh
 ./scripts/validate-layer1.sh --only-duplicates
@@ -55,6 +53,7 @@ Before starting Phase 1:
 ```
 
 **Expected Results**:
+
 - Detects known duplicate: `nvim-orgmode.lua` + `nvimorgmode.lua` (already fixed)
 - Scans all `.lua` files without crashing
 - Reports any deprecated API usage with file:line context
@@ -69,11 +68,13 @@ Before starting Phase 1:
 - [ ] Test dependency validation
 
 **Test Commands**:
+
 ```bash
 nvim --headless -l scripts/validate-layer2.lua
 ```
 
 **Expected Results**:
+
 - Validates all plugin specs in `lua/plugins/*.lua`
 - Reports invalid structures with clear error messages
 - Exits with appropriate exit codes (0 = pass, 1 = fail)
@@ -111,6 +112,7 @@ nvim --headless -l scripts/validate-layer2.lua
 ```
 
 **Deliverables**:
+
 - Baseline report documenting current validation state
 - List of issues to fix vs. acceptable warnings
 - Updated `deprecated-patterns.txt` with discovered patterns
@@ -123,6 +125,7 @@ nvim --headless -l scripts/validate-layer2.lua
 - [ ] Verify cache configuration works
 
 **Test Process**:
+
 ```bash
 git checkout -b test/validation-ci
 git add .github/workflows/quick-validation.yml
@@ -132,6 +135,7 @@ git push origin test/validation-ci
 ```
 
 **Acceptance Criteria**:
+
 - Workflow runs on push
 - Layer 1-2 validation executes
 - Results visible in GitHub Actions UI
@@ -151,7 +155,7 @@ git push origin test/validation-ci
 - CI workflow completes successfully
 - Baseline report approved by maintainers
 
----
+______________________________________________________________________
 
 ## Phase 2: Local Development Workflow (Week 2)
 
@@ -170,6 +174,7 @@ git push origin test/validation-ci
 - [ ] Initial validation test
 
 **Test Process**:
+
 ```bash
 # On a fresh clone
 git clone https://github.com/MiragianCycle/OVIWrite.git test-clone
@@ -178,6 +183,7 @@ cd test-clone
 ```
 
 **Acceptance Criteria**:
+
 - Script runs without errors
 - Git hooks installed and working
 - Clear output showing what was done
@@ -193,6 +199,7 @@ cd test-clone
 - [ ] Clear error messages with skip instructions
 
 **Test Process**:
+
 ```bash
 # Test pre-commit
 echo "syntax error" >> lua/plugins/test.lua
@@ -206,6 +213,7 @@ SKIP_VALIDATION=1 git commit -m "test: should succeed"
 ```
 
 **Acceptance Criteria**:
+
 - Pre-commit blocks bad commits
 - Pre-push runs full validation
 - Skip mechanism works
@@ -222,6 +230,7 @@ SKIP_VALIDATION=1 git commit -m "test: should succeed"
 - [ ] Clear progress indicators
 
 **Test Process**:
+
 ```bash
 ./scripts/validate.sh --help
 ./scripts/validate.sh              # Quick (Layer 1-2)
@@ -231,16 +240,18 @@ SKIP_VALIDATION=1 git commit -m "test: should succeed"
 ```
 
 **Acceptance Criteria**:
+
 - All flags work correctly
 - Output is clear and informative
 - Exit codes are correct (0 = pass, 1 = fail)
-- Performance meets targets (<5s for quick, <3min for full)
+- Performance meets targets (\<5s for quick, \<3min for full)
 
 #### 2.4: Write CONTRIBUTING.md (Day 4)
 
 **Document**: `CONTRIBUTING.md`
 
 Sections:
+
 - [ ] Quick start guide
 - [ ] Development workflow
 - [ ] Validation system explanation
@@ -250,6 +261,7 @@ Sections:
 - [ ] Pull request process
 
 **Acceptance Criteria**:
+
 - New contributor can follow guide successfully
 - All common scenarios documented
 - Troubleshooting covers known issues
@@ -260,6 +272,7 @@ Sections:
 Create test scenarios simulating real contributions:
 
 **Test Scenario 1: Add New Plugin**
+
 ```bash
 git checkout -b test/add-plugin
 # Create lua/plugins/test-plugin.lua with valid spec
@@ -269,6 +282,7 @@ git commit -m "feat: add test plugin"
 ```
 
 **Test Scenario 2: Invalid Plugin Spec**
+
 ```bash
 git checkout -b test/invalid-spec
 # Create plugin file returning wrong structure
@@ -277,6 +291,7 @@ git commit -m "feat: invalid plugin"
 ```
 
 **Test Scenario 3: Duplicate Plugin**
+
 ```bash
 git checkout -b test/duplicate
 # Create nvim-tree.lua (duplicate of nvimtree.lua)
@@ -285,6 +300,7 @@ git commit -m "feat: duplicate plugin"
 ```
 
 **Acceptance Criteria**:
+
 - All test scenarios behave as expected
 - Error messages guide user to fix
 - Skip mechanism works when needed
@@ -300,12 +316,12 @@ git commit -m "feat: duplicate plugin"
 
 ### Phase 2 Success Criteria
 
-- New contributors can set up environment in <5 minutes
-- Validation provides fast feedback (<5s for common edits)
+- New contributors can set up environment in \<5 minutes
+- Validation provides fast feedback (\<5s for common edits)
 - Git hooks catch issues before CI
 - Documentation is clear and comprehensive
 
----
+______________________________________________________________________
 
 ## Phase 3: CI/CD Enhancement (Week 3)
 
@@ -316,11 +332,13 @@ git commit -m "feat: duplicate plugin"
 #### 3.1: Implement Layer 3 Scripts (Day 1-2)
 
 **Scripts**:
+
 - `scripts/validate-startup.sh` - Neovim startup test
 - `scripts/validate-health.sh` - Health check automation
 - `scripts/validate-plugin-loading.lua` - Individual plugin loading
 
 **Test Process**:
+
 ```bash
 ./scripts/validate-startup.sh
 ./scripts/validate-health.sh
@@ -328,6 +346,7 @@ nvim --headless -l scripts/validate-plugin-loading.lua
 ```
 
 **Acceptance Criteria**:
+
 - Startup test detects configuration errors
 - Health check parses output correctly
 - Plugin loading identifies broken plugins
@@ -338,6 +357,7 @@ nvim --headless -l scripts/validate-plugin-loading.lua
 **File**: `.github/workflows/full-validation.yml`
 
 Features:
+
 - [ ] Matrix testing (Linux, macOS, Windows)
 - [ ] Matrix testing (Neovim stable, nightly)
 - [ ] All 4 validation layers
@@ -346,6 +366,7 @@ Features:
 - [ ] Artifact upload on failure
 
 **Test Process**:
+
 ```bash
 git checkout -b test/full-validation
 git push origin test/full-validation
@@ -354,26 +375,30 @@ git push origin test/full-validation
 ```
 
 **Acceptance Criteria**:
+
 - Workflow runs on PR to main
 - Tests all OS + Neovim combinations (6 total)
-- Completes in <5 minutes per matrix job
+- Completes in \<5 minutes per matrix job
 - Comments on PR with results
 - Artifacts available for debugging
 
 #### 3.3: Optimize CI Performance (Day 4)
 
 Optimizations:
+
 - [ ] Plugin caching (restore previous lazy.nvim state)
 - [ ] Parallel job execution (matrix strategy)
 - [ ] Conditional job execution (only run full on main PRs)
 - [ ] Artifact retention policies (7 days for quick, 14 for full)
 
 **Benchmark Targets**:
-- Quick validation: <1 minute
-- Full validation per matrix job: <3 minutes
-- Total CI time (all jobs): <5 minutes with parallelization
+
+- Quick validation: \<1 minute
+- Full validation per matrix job: \<3 minutes
+- Total CI time (all jobs): \<5 minutes with parallelization
 
 **Acceptance Criteria**:
+
 - Cache hit rate >80% on subsequent runs
 - Performance meets benchmark targets
 - No unnecessary job executions
@@ -384,12 +409,14 @@ Optimizations:
 **Feature**: Automated PR comments with validation results
 
 Implements:
+
 - [ ] Summary comment with pass/fail per layer
 - [ ] Matrix results table (OS x Neovim version)
 - [ ] Link to full logs and artifacts
 - [ ] Actionable next steps on failure
 
 **Example Comment**:
+
 ```markdown
 ## ✅ Validation Results - ubuntu-latest / stable
 
@@ -409,6 +436,7 @@ Implements:
 ```
 
 **Acceptance Criteria**:
+
 - Comments appear on all PRs
 - Results are accurate and actionable
 - Links work correctly
@@ -424,11 +452,11 @@ Implements:
 ### Phase 3 Success Criteria
 
 - Matrix testing covers all target platforms
-- CI completes in <5 minutes total
+- CI completes in \<5 minutes total
 - Failures are clearly communicated
 - Contributors understand how to fix issues
 
----
+______________________________________________________________________
 
 ## Phase 4: Documentation Sync (Week 4)
 
@@ -441,6 +469,7 @@ Implements:
 **Script**: `scripts/validate-documentation.lua`
 
 Features:
+
 - [ ] Extract installed plugins from `lua/plugins/*.lua`
 - [ ] Parse CLAUDE.md for documented plugins
 - [ ] Compare lists and calculate accuracy score
@@ -448,11 +477,13 @@ Features:
 - [ ] Report removed plugins (documented but not installed)
 
 **Test Process**:
+
 ```bash
 nvim --headless -l scripts/validate-documentation.lua
 ```
 
 **Expected Output**:
+
 ```
 📚 Layer 4: Documentation Sync Validation
 ========================================
@@ -476,6 +507,7 @@ Documentation Sync Results:
 ```
 
 **Acceptance Criteria**:
+
 - Accurately detects installed plugins
 - Parses CLAUDE.md correctly
 - Calculates meaningful accuracy score
@@ -486,6 +518,7 @@ Documentation Sync Results:
 **Script**: `scripts/extract-keymaps.lua`
 
 Features:
+
 - [ ] Parse `lua/config/keymaps.lua` for `vim.keymap.set()` calls
 - [ ] Extract mode, key, description
 - [ ] Generate markdown table
@@ -493,12 +526,14 @@ Features:
 - [ ] Sort by key for consistency
 
 **Test Process**:
+
 ```bash
 nvim --headless -l scripts/extract-keymaps.lua
 # Should output markdown table
 ```
 
 **Acceptance Criteria**:
+
 - Extracts all leader keymaps
 - Includes descriptions from `desc` field
 - Generates valid markdown table
@@ -509,38 +544,45 @@ nvim --headless -l scripts/extract-keymaps.lua
 **One-time synchronization**:
 
 1. **Run plugin list validation**
+
 ```bash
 ./scripts/validate.sh --check docs
 ```
 
 2. **Identify discrepancies**
+
 - Missing plugins from CLAUDE.md
 - Removed plugins still documented
 - Miscategorized plugins
 
 3. **Update CLAUDE.md**
+
 - Add missing plugins to appropriate sections
 - Remove outdated plugins
 - Verify plugin descriptions are current
 - Update categories if needed
 
 4. **Run keymap extraction**
+
 ```bash
 ./scripts/extract-keymaps.lua > /tmp/keymaps.md
 ```
 
 5. **Update keyboard shortcuts section**
+
 - Copy generated table to CLAUDE.md
 - Verify all shortcuts are correct
 - Add any missing shortcuts not detected
 
 6. **Verify accuracy**
+
 ```bash
 ./scripts/validate.sh --check docs
 # Should show 90%+ accuracy
 ```
 
 **Acceptance Criteria**:
+
 - CLAUDE.md plugin list is 100% accurate
 - Keyboard shortcuts section is current
 - All plugin descriptions are helpful
@@ -549,12 +591,14 @@ nvim --headless -l scripts/extract-keymaps.lua
 #### 4.4: Enable Documentation Validation in CI (Day 4)
 
 **Integration**:
+
 - [ ] Add Layer 4 validation to full-validation.yml
 - [ ] Configure as warning-only (doesn't block merge)
 - [ ] Add doc drift report to PR comments
 - [ ] Document in CONTRIBUTING.md how to update docs
 
 **CI Workflow Update**:
+
 ```yaml
 - name: Run Layer 4 validation (documentation)
   id: layer4
@@ -565,6 +609,7 @@ nvim --headless -l scripts/extract-keymaps.lua
 ```
 
 **Acceptance Criteria**:
+
 - Layer 4 runs in CI (warnings only)
 - PR comments include doc drift warnings
 - Doesn't block merges
@@ -611,6 +656,7 @@ echo "Validating updates..."
 ```
 
 **Acceptance Criteria**:
+
 - Helper guides user through doc update process
 - Generates all necessary content
 - Makes documentation maintenance easy
@@ -631,7 +677,7 @@ echo "Validating updates..."
 - Drift is detected automatically
 - Process is low-friction
 
----
+______________________________________________________________________
 
 ## Phase 5: Refinement & Long-term Maintenance
 
@@ -642,12 +688,14 @@ echo "Validating updates..."
 #### 5.1: Collect Contributor Feedback
 
 **Methods**:
+
 - GitHub Issues template for validation problems
 - Survey in CONTRIBUTING.md
 - Monitor PR comments for frustration points
 - Track how often validation is skipped
 
 **Action Items**:
+
 - Improve error messages based on confusion
 - Add FAQ section to CONTRIBUTING.md
 - Optimize slow validation checks
@@ -656,6 +704,7 @@ echo "Validating updates..."
 #### 5.2: Maintain Deprecated Patterns
 
 **Process**:
+
 1. Monitor Neovim releases for API changes
 2. Update `deprecated-patterns.txt` with new deprecations
 3. Test patterns against codebase
@@ -666,12 +715,14 @@ echo "Validating updates..."
 #### 5.3: Monitor CI Performance
 
 **Metrics to track**:
+
 - Average CI run time per layer
 - Cache hit rate (target: >80%)
-- False positive rate (target: <5%)
+- False positive rate (target: \<5%)
 - Validation skip frequency
 
 **Optimization opportunities**:
+
 - Parallelize more operations
 - Improve caching strategies
 - Reduce unnecessary file scanning
@@ -680,6 +731,7 @@ echo "Validating updates..."
 #### 5.4: Expand Validation Coverage
 
 **Future enhancements** (based on issues discovered):
+
 - Colorscheme conflict detection
 - LSP configuration validation
 - Plugin version compatibility checking
@@ -689,6 +741,7 @@ echo "Validating updates..."
 #### 5.5: Documentation Maintenance
 
 **Quarterly tasks**:
+
 - Review CONTRIBUTING.md for outdated information
 - Update TESTING_STRATEGY.md with lessons learned
 - Refresh validation script examples
@@ -697,12 +750,12 @@ echo "Validating updates..."
 ### Phase 5 Success Metrics
 
 - Contributor satisfaction with validation system
-- Low false positive rate (<5%)
+- Low false positive rate (\<5%)
 - Fast validation times maintained
 - Documentation accuracy >95%
-- Validation rarely skipped (<10% of commits)
+- Validation rarely skipped (\<10% of commits)
 
----
+______________________________________________________________________
 
 ## Rollback Plan
 
@@ -742,34 +795,39 @@ on:
 - Contributors consistently skip validation
 - Maintainers cannot keep up with validation issues
 
----
+______________________________________________________________________
 
 ## Success Metrics
 
 ### Quantitative Metrics
 
 **Phase 1**:
+
 - [x] Validation scripts run without crashes: 100%
 - [x] Known issues detected: 100%
 - [x] CI workflow success rate: >95%
 
 **Phase 2**:
-- [ ] Setup time for new contributors: <5 minutes
-- [ ] Local validation time: <5 seconds (Layer 1-2)
+
+- [ ] Setup time for new contributors: \<5 minutes
+- [ ] Local validation time: \<5 seconds (Layer 1-2)
 - [ ] Git hook adoption rate: 100% (automatic)
 
 **Phase 3**:
-- [ ] CI run time per job: <3 minutes
-- [ ] Total CI time: <5 minutes (parallelized)
-- [ ] False positive rate: <5%
+
+- [ ] CI run time per job: \<3 minutes
+- [ ] Total CI time: \<5 minutes (parallelized)
+- [ ] False positive rate: \<5%
 
 **Phase 4**:
+
 - [ ] Documentation accuracy: >95%
-- [ ] Doc drift detection: <24 hours
+- [ ] Doc drift detection: \<24 hours
 - [ ] Doc update friction: Low (helper script usage >50%)
 
 **Phase 5 (Ongoing)**:
-- [ ] Validation skip frequency: <10%
+
+- [ ] Validation skip frequency: \<10%
 - [ ] Contributor satisfaction: >80% positive
 - [ ] Issue prevention rate: 100% of targeted issues
 
@@ -780,7 +838,7 @@ on:
 - New contributors successfully navigate validation system
 - Documentation stays current without manual tracking
 
----
+______________________________________________________________________
 
 ## Risk Assessment
 
@@ -808,13 +866,14 @@ on:
 - Skip mechanisms for edge cases
 - Phased rollout with testing
 
----
+______________________________________________________________________
 
 ## Conclusion
 
 This migration plan provides a structured, low-risk approach to implementing comprehensive testing and CI/CD for OVIWrite. Each phase builds on the previous, allowing for incremental adoption and continuous feedback.
 
 **Next Steps**:
+
 1. Review and approve this migration plan
 2. Create tracking issues for each phase
 3. Begin Phase 1 implementation

@@ -1,11 +1,11 @@
 # Semantic Versioning Automation - Implementation
 
-**Date**: 2025-10-17
-**Status**: ✅ Complete and tested
+**Date**: 2025-10-17 **Status**: ✅ Complete and tested
 
 ## Overview
 
 Implemented automated semantic versioning system for PercyBrain with:
+
 - Manual git tag control (solo-dev friendly)
 - Auto-generated changelogs from commits
 - GitHub Actions release automation
@@ -14,17 +14,21 @@ Implemented automated semantic versioning system for PercyBrain with:
 ## Key Files
 
 ### Workflows
+
 - `.github/workflows/release.yml` - Release automation (triggers on tag push)
 
 ### Scripts
+
 - `scripts/generate-version.sh` - Creates lua/oviwrite/version.lua
 - `scripts/generate-changelog.sh` - Generates CHANGELOG from git log
 
 ### Documentation
+
 - `docs/RELEASING.md` - Complete release process guide (491 lines)
 - `docs/SEMVER_AUTOMATION_SUMMARY.md` - Implementation summary
 
 ### Configuration
+
 - `.gitignore` - Excludes generated files (version.lua, CHANGELOG-release.md)
 
 ## Release Workflow
@@ -46,11 +50,10 @@ git push origin v1.2.3
 
 ## Semantic Versioning Rules
 
-**MAJOR**: Breaking changes (API changes, removed features)
-**MINOR**: New features (backward compatible)
-**PATCH**: Bug fixes (non-breaking)
+**MAJOR**: Breaking changes (API changes, removed features) **MINOR**: New features (backward compatible) **PATCH**: Bug fixes (non-breaking)
 
 Decision tree:
+
 - Breaking? → MAJOR
 - New features? → MINOR
 - Bug fixes? → PATCH
@@ -74,6 +77,7 @@ version.get_info()             -- "PercyBrain v1.2.3 (released 2025-10-17)"
 ## Testing Results
 
 ✅ Local testing passed:
+
 - Version generator: `./scripts/generate-version.sh 0.1.0` → Success
 - Changelog generator: `./scripts/generate-changelog.sh v0.1.0` → Success
 - Generated 255 commit changelog from full git history

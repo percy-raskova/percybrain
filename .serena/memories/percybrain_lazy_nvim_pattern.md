@@ -6,12 +6,14 @@
 
 When `lua/plugins/init.lua` returns a table with plugin specs, lazy.nvim **stops automatic subdirectory scanning**. This broke PercyBrain after reorganizing 68 plugins into 14 workflow subdirectories.
 
-**Symptom**: 
+**Symptom**:
+
 - Neovim starts with blank screen
 - Only 3 plugins load instead of 83
 - No Alpha splash screen, no colorscheme, no keybindings
 
 **Root Cause**:
+
 ```lua
 -- THIS BREAKS SUBDIRECTORY SCANNING:
 return {
@@ -85,13 +87,13 @@ lua/plugins/
 ## Alternative Pattern (Not Recommended)
 
 Empty init.lua + flat structure:
+
 ```lua
 -- lua/plugins/init.lua
 return {} -- Lazy.nvim auto-scans plugins/*.lua
 ```
 
-**Works for**: Flat directory structure (`plugins/*.lua`)
-**Breaks for**: Nested subdirectories (`plugins/category/*.lua`)
+**Works for**: Flat directory structure (`plugins/*.lua`) **Breaks for**: Nested subdirectories (`plugins/category/*.lua`)
 
 ## Lazy.nvim Behavior Reference
 
@@ -112,6 +114,7 @@ nvim --headless -c "lua print(#require('lazy').plugins())" -c "qall"
 ## Testing Pattern
 
 After modifying init.lua:
+
 1. Test plugin count: `nvim --headless -c "lua print(#require('lazy').plugins())" -c "qall"`
 2. Open Neovim normally: Check splash screen loads
 3. Run `:Lazy` to verify all plugins discovered
@@ -119,11 +122,6 @@ After modifying init.lua:
 
 ## Common Mistakes
 
-❌ **Returning only some plugins** - Breaks auto-scan
-❌ **Missing import for subdirectory** - Plugins in that dir won't load
-❌ **Wrong path syntax** - Use `"plugins.dir"` not `"plugins/dir"`
-❌ **Empty table without imports** - Works only for flat structure
+❌ **Returning only some plugins** - Breaks auto-scan ❌ **Missing import for subdirectory** - Plugins in that dir won't load ❌ **Wrong path syntax** - Use `"plugins.dir"` not `"plugins/dir"` ❌ **Empty table without imports** - Works only for flat structure
 
-✅ **Explicit imports for all subdirs** - Always works
-✅ **Consistent naming** - Match directory names exactly
-✅ **Test after changes** - Verify plugin count immediately
+✅ **Explicit imports for all subdirs** - Always works ✅ **Consistent naming** - Match directory names exactly ✅ **Test after changes** - Verify plugin count immediately

@@ -1,12 +1,8 @@
 # PercyBrain CI/CD Setup Guide
 
-**Status**: ✅ Complete and Operational
-**Date**: 2025-10-17
-**Tools**: StyLua v0.20.0, Selene v0.29.0, PercyBrain Test Suite
-**Note**: Selene binary hosted in tools-v1 GitHub release (lua-language-server NOT needed for CI)
-**CI Status**: All workflows passing ✅
+**Status**: ✅ Complete and Operational **Date**: 2025-10-17 **Tools**: StyLua v0.20.0, Selene v0.29.0, PercyBrain Test Suite **Note**: Selene binary hosted in tools-v1 GitHub release (lua-language-server NOT needed for CI) **CI Status**: All workflows passing ✅
 
----
+______________________________________________________________________
 
 ## Overview
 
@@ -19,7 +15,7 @@ PercyBrain uses modern Rust-based Lua tooling integrated with git hooks and GitH
 - **Developer-Friendly**: Clear error messages, easy to skip when needed
 - **CI/CD Integrated**: Same tools locally and in GitHub Actions
 
----
+______________________________________________________________________
 
 ## Quick Start
 
@@ -48,21 +44,21 @@ selene --version
 ### 3. Configure Your Editor
 
 Tools will auto-detect these configuration files:
+
 - `.stylua.toml` - Formatter configuration
 - `selene.toml` - Linter configuration
 - `.luarc.json` - LSP configuration
 
----
+______________________________________________________________________
 
 ## Tools
 
 ### StyLua (Formatter)
 
-**Purpose**: Consistent Lua code formatting (like Black for Python)
-**Language**: Rust
-**Speed**: Very fast (~10ms for typical files)
+**Purpose**: Consistent Lua code formatting (like Black for Python) **Language**: Rust **Speed**: Very fast (~10ms for typical files)
 
 **Usage**:
+
 ```bash
 # Check formatting
 stylua --check lua/
@@ -75,6 +71,7 @@ stylua lua/config/init.lua
 ```
 
 **Configuration**: `.stylua.toml`
+
 ```toml
 column_width = 120
 indent_type = "Spaces"
@@ -84,11 +81,10 @@ quote_style = "AutoPreferDouble"
 
 ### Selene (Linter)
 
-**Purpose**: Static analysis and linting (like Pylint/Ruff for Python)
-**Language**: Rust
-**Speed**: Very fast, comprehensive analysis
+**Purpose**: Static analysis and linting (like Pylint/Ruff for Python) **Language**: Rust **Speed**: Very fast, comprehensive analysis
 
 **Usage**:
+
 ```bash
 # Lint all Lua files
 selene lua/
@@ -101,6 +97,7 @@ selene --config selene.toml lua/
 ```
 
 **Configuration**: `selene.toml`
+
 ```toml
 std = "vim"
 
@@ -112,6 +109,7 @@ empty_if = "deny"
 ```
 
 **Common Warnings**:
+
 - Unused variables
 - Undefined globals
 - Variable shadowing
@@ -120,11 +118,10 @@ empty_if = "deny"
 
 ### lua-language-server (Diagnostics)
 
-**Purpose**: LSP with type checking and diagnostics
-**Language**: C++/Lua
-**Integration**: Neovim LSP, command-line diagnostics
+**Purpose**: LSP with type checking and diagnostics **Language**: C++/Lua **Integration**: Neovim LSP, command-line diagnostics
 
 **Usage**:
+
 ```bash
 # Check version
 lua-language-server --version
@@ -133,6 +130,7 @@ lua-language-server --version
 ```
 
 **Configuration**: `.luarc.json`
+
 ```json
 {
   "runtime": {
@@ -147,23 +145,25 @@ lua-language-server --version
 }
 ```
 
----
+______________________________________________________________________
 
 ## Git Hooks
 
 ### Pre-Commit Hook
 
-**Triggers**: On `git commit`
-**Checks**:
+**Triggers**: On `git commit` **Checks**:
+
 1. StyLua formatting on staged Lua files
 2. Selene linting on staged Lua files
 
 **Behavior**:
+
 - Only checks staged files (fast!)
 - Provides fix commands if issues found
 - Can be skipped with `SKIP_HOOKS=1`
 
 **Example Output**:
+
 ```
 🔍 Running pre-commit validation...
 
@@ -181,6 +181,7 @@ Checking 3 Lua file(s)...
 ```
 
 **Skip Hook**:
+
 ```bash
 # Skip for this commit only
 SKIP_HOOKS=1 git commit -m "WIP: experimental changes"
@@ -188,18 +189,20 @@ SKIP_HOOKS=1 git commit -m "WIP: experimental changes"
 
 ### Pre-Push Hook
 
-**Triggers**: On `git push`
-**Checks**:
+**Triggers**: On `git push` **Checks**:
+
 1. Lua diagnostics (lua-language-server)
 2. Format all Lua files (not just staged)
 3. Run PercyBrain test suite
 
 **Behavior**:
+
 - More comprehensive than pre-commit
 - Ensures entire codebase is healthy
 - Catches issues before pushing to remote
 
 **Example Output**:
+
 ```
 🚀 Running pre-push validation...
 
@@ -218,29 +221,33 @@ SKIP_HOOKS=1 git commit -m "WIP: experimental changes"
 ```
 
 **Skip Hook**:
+
 ```bash
 # Skip for this push only
 SKIP_HOOKS=1 git push origin feature-branch
 ```
 
----
+______________________________________________________________________
 
 ## GitHub Actions Workflows
 
 ### 1. Lua Quality Checks (`lua-quality.yml`)
 
 **Triggers**:
+
 - Push to any branch with Lua file changes
 - Pull requests to main/master
 - Changes to configuration files
 
 **Jobs**:
+
 1. Install and cache Lua tools
 2. StyLua formatting check
 3. Selene linting
 4. Lua diagnostics verification
 
 **Configuration**:
+
 ```yaml
 on:
   push:
@@ -258,17 +265,20 @@ on:
 ### 2. PercyBrain Tests (`percybrain-tests.yml`)
 
 **Triggers**:
+
 - Push to any branch with relevant changes
 - Pull requests to main/master
 - Weekly schedule (Sundays at 00:00 UTC)
 
 **Jobs**:
+
 1. Setup Neovim
 2. Run quick health check
 3. Run full test suite (36 tests)
 4. Upload test reports
 
 **Test Coverage**:
+
 - Core configuration files (6 tests)
 - External dependencies (4 tests)
 - Zettelkasten structure (4 tests)
@@ -283,7 +293,7 @@ on:
 
 **PR Comments**: Automatically comments with test results and instructions
 
----
+______________________________________________________________________
 
 ## Workflow Examples
 
@@ -359,7 +369,7 @@ $ git commit -m "fix: resolve formatting and linting issues"
 $ git push origin hotfix
 ```
 
----
+______________________________________________________________________
 
 ## CI/CD Architecture
 
@@ -383,24 +393,26 @@ Merge to main
 
 ### Quality Gates
 
-| Gate | Tool | Scope | Speed | Bypass |
-|------|------|-------|-------|--------|
-| Pre-commit | StyLua + Selene | Staged files | <1s | `SKIP_HOOKS=1` |
-| Pre-push | Full validation | All files | 5-10s | `SKIP_HOOKS=1` |
-| GitHub Actions | All tools | All files | 2-5min | Admin override |
+| Gate           | Tool            | Scope        | Speed  | Bypass         |
+| -------------- | --------------- | ------------ | ------ | -------------- |
+| Pre-commit     | StyLua + Selene | Staged files | \<1s   | `SKIP_HOOKS=1` |
+| Pre-push       | Full validation | All files    | 5-10s  | `SKIP_HOOKS=1` |
+| GitHub Actions | All tools       | All files    | 2-5min | Admin override |
 
 ### Caching Strategy
 
 **Local**:
+
 - Tool binaries cached in `~/.local/bin`
 - No caching needed for config files
 
 **CI (GitHub Actions)**:
+
 - Tool binaries cached with `actions/cache`
 - Cache key: `lua-tools-${{ runner.os }}-v1`
 - Invalidated when tool versions change
 
----
+______________________________________________________________________
 
 ## Troubleshooting
 
@@ -409,6 +421,7 @@ Merge to main
 **Problem**: `stylua: command not found`
 
 **Solution**:
+
 ```bash
 # Install tools
 ./scripts/install-lua-tools.sh
@@ -426,6 +439,7 @@ source ~/.bashrc
 **Problem**: StyLua and manual formatting disagree
 
 **Solution**: Always use StyLua's formatting
+
 ```bash
 # Let StyLua format everything
 stylua lua/
@@ -440,6 +454,7 @@ git commit -m "style: apply StyLua formatting"
 **Problem**: Selene warns about valid Neovim globals
 
 **Solution**: Configure `selene.toml`
+
 ```toml
 # Add to [config] section
 vim = "allow_any_key"
@@ -457,6 +472,7 @@ vim = "allow_any_key"
 **Problem**: Hooks don't execute on commit/push
 
 **Solution**:
+
 ```bash
 # Reinstall hooks
 ./scripts/setup-hooks.sh
@@ -475,6 +491,7 @@ chmod +x .git/hooks/pre-commit .git/hooks/pre-push
 **Problem**: CI passes locally but fails in GitHub Actions
 
 **Solution**:
+
 ```bash
 # Run same checks as CI locally
 stylua --check lua/
@@ -486,7 +503,7 @@ stylua --version  # Should be 0.20.0
 selene --version  # Should be 0.29.0
 ```
 
----
+______________________________________________________________________
 
 ## Configuration Files Reference
 
@@ -568,7 +585,7 @@ Full LSP configuration:
 }
 ```
 
----
+______________________________________________________________________
 
 ## Maintenance
 
@@ -611,7 +628,7 @@ git commit -m "ci: update workflow configuration"
 git push
 ```
 
----
+______________________________________________________________________
 
 ## Best Practices
 
@@ -633,11 +650,12 @@ git push
 - Mix formatting styles
 - Skip CI checks in production branches
 
----
+______________________________________________________________________
 
 ## Success Metrics
 
 **Current Status**:
+
 - ✅ 100% of Lua files formatted with StyLua
 - ✅ 0 Selene linting errors
 - ✅ 36/36 PercyBrain tests passing
@@ -646,13 +664,14 @@ git push
 - ✅ Zero tool installation issues
 
 **Quality Targets**:
+
 - Maintain 100% formatting compliance
 - Keep linting errors at 0
 - Maintain 100% test pass rate
-- Hook execution time < 3 seconds
-- CI execution time < 5 minutes
+- Hook execution time \< 3 seconds
+- CI execution time \< 5 minutes
 
----
+______________________________________________________________________
 
 ## Quick Reference
 
@@ -681,8 +700,6 @@ SKIP_HOOKS=1 git push
 .git/hooks/pre-push
 ```
 
----
+______________________________________________________________________
 
-**Document Version**: 1.0
-**Last Updated**: 2025-10-17
-**Status**: ✅ Production Ready
+**Document Version**: 1.0 **Last Updated**: 2025-10-17 **Status**: ✅ Production Ready

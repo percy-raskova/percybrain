@@ -7,12 +7,14 @@ Analyzed 67 plugins in PercyBrain. Found 4-6 redundant plugins to remove and 4 e
 ## Key Findings
 
 ### Redundant Plugins (Remove)
+
 1. **twilight.nvim** - Duplicate of limelight.vim
 2. **vim-orgmode** - Deprecated, replaced by nvim-orgmode
 3. **fzf-vim** - Superseded by fzf-lua
 4. **gen.nvim** - Redundant with custom ollama.lua
 
 ### Missing Essential Plugins (Add)
+
 1. **nvim-surround** - Surround operations for quotes, brackets
 2. **vim-repeat** - Dot repeat for plugin actions
 3. **vim-textobj-sentence** - Sentence text objects for prose
@@ -21,18 +23,21 @@ Analyzed 67 plugins in PercyBrain. Found 4-6 redundant plugins to remove and 4 e
 ## Plugin Categories
 
 ### Distraction-Free (4 plugins)
+
 - goyo.vim ✅
 - zen-mode.nvim ✅
 - limelight.vim ✅
 - twilight.nvim ❌ Remove (duplicate)
 
 ### Fuzzy Finding (4 plugins)
+
 - telescope.nvim ✅ Primary
 - fzf-lua ✅ Alternative
 - fzf (binary) ✅
 - fzf-vim ❌ Remove (deprecated)
 
 ### Knowledge Management (5 plugins)
+
 - Custom ollama.lua ✅ Excellent
 - obsidian.nvim ✅
 - vim-wiki ✅
@@ -40,6 +45,7 @@ Analyzed 67 plugins in PercyBrain. Found 4-6 redundant plugins to remove and 4 e
 - gen.nvim ❌ Remove (redundant)
 
 ### Org-mode (3 plugins)
+
 - nvim-orgmode ✅ Modern
 - org-bullets.nvim ✅
 - vim-orgmode ❌ Remove (deprecated)
@@ -53,13 +59,12 @@ Analyzed 67 plugins in PercyBrain. Found 4-6 redundant plugins to remove and 4 e
 
 ## Cleanup Action
 
-**Immediate**: Remove 4 redundant plugins (-6% size)
-**Add**: 4 essential writing plugins
-**Net Result**: Same plugin count, higher quality
+**Immediate**: Remove 4 redundant plugins (-6% size) **Add**: 4 essential writing plugins **Net Result**: Same plugin count, higher quality
 
 ## Implementation
 
 See `docs/PLUGIN_ANALYSIS.md` for:
+
 - Detailed analysis (33KB document)
 - Category breakdown
 - Compatibility assessment
@@ -67,7 +72,6 @@ See `docs/PLUGIN_ANALYSIS.md` for:
 
 ## Impact
 
-**Before**: 67 plugins, quality 75/100
-**After**: 67 plugins, quality 85/100
+**Before**: 67 plugins, quality 75/100 **After**: 67 plugins, quality 85/100
 
 No functionality lost, improved writing workflows.

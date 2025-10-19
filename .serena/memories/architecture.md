@@ -1,6 +1,7 @@
 # OVIWrite Architecture
 
 ## File Structure
+
 ```
 ~/.config/nvim/
 ├── init.lua                        # Entry point: NeoVide config + requires('config')
@@ -25,6 +26,7 @@
 ```
 
 ## Loading Sequence
+
 1. `init.lua` → Sets NeoVide GUI config
 2. `require('config')` → Calls `lua/config/init.lua`
 3. `lua/config/init.lua`:
@@ -35,6 +37,7 @@
 5. Plugins lazy-load based on triggers (event, cmd, keys, ft)
 
 ## Plugin Architecture
+
 - **One plugin per file**: `lua/plugins/plugin-name.lua`
 - **lazy.nvim spec format**: Each file returns `{ "author/repo", ... }` table
 - **Lazy loading by default**: Plugins load on trigger (VeryLazy, BufReadPre, cmd, keys, ft)
@@ -43,7 +46,9 @@
 ## Core Configuration Files
 
 ### lua/config/options.lua
+
 Writer-focused defaults:
+
 - `opt.spell = true` - Spell checking ON by default
 - `opt.spelllang = 'en'` - English spell check
 - `opt.wrap = true` - Line wrapping for prose
@@ -53,13 +58,15 @@ Writer-focused defaults:
 - `opt.clipboard:append("unnamedplus")` - System clipboard integration
 
 ### lua/config/keymaps.lua
-Leader key: `<space>` (spacebar)
-Core shortcuts: File tree, save, quit, splits, terminal, LazyGit, writing modes
+
+Leader key: `<space>` (spacebar) Core shortcuts: File tree, save, quit, splits, terminal, LazyGit, writing modes
 
 ### lua/config/globals.lua
+
 Global variables and theme settings
 
 ## Plugin Categories
+
 - **Long-form writing**: vimtex, vim-pencil, fountain, nvim-orgmode
 - **Spell/Grammar**: LanguageTool, vim-grammarous, vale
 - **Note-taking**: vim-wiki, vim-zettel, obsidianNvim
@@ -68,7 +75,9 @@ Global variables and theme settings
 - **Color schemes**: catppuccin, gruvbox, nightfox
 
 ## NeoVide Support
+
 GUI-specific settings in `init.lua`:
+
 - Custom font: Hack Nerd Font Mono 18pt
 - Transparency and blur effects
 - macOS-style keyboard shortcuts (Cmd+S, Cmd+C, Cmd+V)

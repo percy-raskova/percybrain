@@ -1,6 +1,6 @@
 # Testing Framework Investigation Report
-*Date: 2025-10-18*
-*Context: Response to "fire up C7 and do an investigation"*
+
+*Date: 2025-10-18* *Context: Response to "fire up C7 and do an investigation"*
 
 ## Executive Summary
 
@@ -15,12 +15,14 @@
 ### 1. Lua Testing Frameworks Discovered
 
 #### **Busted** (Lua Standard)
+
 - **Status**: Most popular Lua testing framework
 - **Pros**: Industry standard, extensive features, CI/CD integration
 - **Cons**: External dependency, not Neovim-specific
 - **Installation**: `luarocks install busted`
 
 #### **Plenary.nvim** (Neovim-Native) ⭐ WINNER
+
 - **Status**: Already installed via Telescope dependency
 - **Pros**:
   - Zero new dependencies (already in your project!)
@@ -33,6 +35,7 @@
 ### 2. Implementation Proof of Concept
 
 Created `/home/percy/.config/nvim/tests/plenary/core_spec.lua`:
+
 ```lua
 describe("PercyBrain Core", function()
   it("loads exactly 81 plugins", function()
@@ -51,25 +54,27 @@ end)
 
 ### 3. Comparison: Shell vs Plenary
 
-| Aspect | Shell Script | Plenary.nvim |
-|--------|-------------|--------------|
-| **Dependencies** | None | Already installed |
-| **Neovim Integration** | External (spawn processes) | Native (in-process) |
-| **Test Speed** | Slower (new process each) | Fast (single process) |
-| **Debugging** | Limited | Full Lua debugging |
-| **Assertions** | Basic | Rich assertion library |
-| **Mocking** | Difficult | Built-in support |
-| **Coverage** | External tools | Native support |
-| **CI/CD** | Works | Better integration |
+| Aspect                 | Shell Script               | Plenary.nvim           |
+| ---------------------- | -------------------------- | ---------------------- |
+| **Dependencies**       | None                       | Already installed      |
+| **Neovim Integration** | External (spawn processes) | Native (in-process)    |
+| **Test Speed**         | Slower (new process each)  | Fast (single process)  |
+| **Debugging**          | Limited                    | Full Lua debugging     |
+| **Assertions**         | Basic                      | Rich assertion library |
+| **Mocking**            | Difficult                  | Built-in support       |
+| **Coverage**           | External tools             | Native support         |
+| **CI/CD**              | Works                      | Better integration     |
 
 ### 4. Migration Strategy
 
 #### Phase 1: Parallel Testing (Current)
+
 - Keep shell scripts for integration/system tests
 - Use Plenary for unit tests
 - Both coexist peacefully
 
 #### Phase 2: Gradual Migration
+
 ```bash
 # Tests to migrate to Plenary
 tests/simple-test.sh → tests/plenary/syntax_spec.lua
@@ -82,6 +87,7 @@ tests/integration-tests.sh → tests/plenary/integration_spec.lua
 ```
 
 #### Phase 3: Unified Test Suite
+
 ```lua
 -- tests/plenary/suite_spec.lua
 require('plenary.test_harness').test_directory(
@@ -135,11 +141,13 @@ nvim -c "PlenaryBustedDirectory tests/plenary/ {minimal_init = 'tests/minimal.lu
 **Original Statement**: "If tooling exists, and it works, use it."
 
 **Shell Approach**:
+
 - ❌ Creating custom tooling
 - ❌ Reinventing the wheel
 - ❌ Missing native features
 
 **Plenary Approach**:
+
 - ✅ Using existing tooling
 - ✅ Zero new dependencies
 - ✅ Native Neovim integration
@@ -147,22 +155,24 @@ nvim -c "PlenaryBustedDirectory tests/plenary/ {minimal_init = 'tests/minimal.lu
 
 ## Performance Metrics
 
-| Metric | Shell Tests | Plenary Tests |
-|--------|------------|---------------|
-| **Execution Time** | ~3.2 seconds | ~0.8 seconds |
-| **Memory Usage** | 3 Neovim processes | 1 Neovim process |
-| **Startup Overhead** | 3 × 75ms | 1 × 75ms |
-| **Test Isolation** | Process-based | Function-based |
+| Metric               | Shell Tests        | Plenary Tests    |
+| -------------------- | ------------------ | ---------------- |
+| **Execution Time**   | ~3.2 seconds       | ~0.8 seconds     |
+| **Memory Usage**     | 3 Neovim processes | 1 Neovim process |
+| **Startup Overhead** | 3 × 75ms           | 1 × 75ms         |
+| **Test Isolation**   | Process-based      | Function-based   |
 
 ## Recommendations
 
 ### Immediate Actions
+
 1. ✅ **DONE**: Create Plenary test structure
 2. ✅ **DONE**: Write core test suite
 3. ✅ **DONE**: Create runner script
 4. ⏳ **TODO**: Migrate critical tests from shell to Plenary
 
 ### Architecture Decisions
+
 1. **Keep Both Systems**: Shell for system tests, Plenary for unit tests
 2. **CI/CD**: Use Plenary for speed, shell for environment validation
 3. **Documentation**: Update TESTING.md with Plenary examples
@@ -197,6 +207,7 @@ end)
 The investigation revealed that we already had the perfect testing framework installed. Plenary.nvim, which came as a Telescope dependency, provides everything we need for comprehensive Lua testing. This perfectly exemplifies the Percyism: "If tooling exists, and it works, use it."
 
 By using Plenary instead of custom shell scripts, we:
+
 - Reduce test execution time by 75%
 - Gain native Neovim integration
 - Access professional testing features
@@ -205,6 +216,6 @@ By using Plenary instead of custom shell scripts, we:
 
 **Final Verdict**: Plenary.nvim is the correct choice. The tooling exists, it works, we're using it.
 
----
+______________________________________________________________________
 
 *"The best dependency is the one you already have." - Percy (probably)*

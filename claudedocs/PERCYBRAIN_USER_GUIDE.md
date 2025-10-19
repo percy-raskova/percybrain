@@ -1,25 +1,23 @@
 # PercyBrain User Guide
 
-**Version**: 1.0 (Phase 1 Complete)
-**Last Updated**: 2025-10-17
-**Status**: Production Ready
+**Version**: 1.0 (Phase 1 Complete) **Last Updated**: 2025-10-17 **Status**: Production Ready
 
----
+______________________________________________________________________
 
 ## Table of Contents
 
-1. [Introduction](#introduction)
-2. [Quick Start](#quick-start)
-3. [Core Workflows](#core-workflows)
-4. [Keyboard Shortcuts Reference](#keyboard-shortcuts-reference)
-5. [AI Assistant Features](#ai-assistant-features)
-6. [Template System](#template-system)
-7. [Knowledge Graph Analysis](#knowledge-graph-analysis)
-8. [Publishing Workflow](#publishing-workflow)
-9. [Tips & Best Practices](#tips--best-practices)
+01. [Introduction](#introduction)
+02. [Quick Start](#quick-start)
+03. [Core Workflows](#core-workflows)
+04. [Keyboard Shortcuts Reference](#keyboard-shortcuts-reference)
+05. [AI Assistant Features](#ai-assistant-features)
+06. [Template System](#template-system)
+07. [Knowledge Graph Analysis](#knowledge-graph-analysis)
+08. [Publishing Workflow](#publishing-workflow)
+09. [Tips & Best Practices](#tips--best-practices)
 10. [Troubleshooting](#troubleshooting)
 
----
+______________________________________________________________________
 
 ## Introduction
 
@@ -36,14 +34,14 @@ PercyBrain is an AI-powered Zettelkasten knowledge management system built direc
 
 ### System Components
 
-| Component | Purpose | Technology |
-|-----------|---------|------------|
-| **Core System** | Note management, search, publishing | Lua (zettelkasten.lua) |
-| **IWE LSP** | Wiki-style linking, backlinks, navigation | Rust (iwe v0.0.54) |
-| **SemBr** | Semantic line break formatting | Python ML (sembr v0.2.3) |
-| **Ollama AI** | Local LLM for text intelligence | llama3.2:latest (2.0 GB) |
+| Component       | Purpose                                   | Technology               |
+| --------------- | ----------------------------------------- | ------------------------ |
+| **Core System** | Note management, search, publishing       | Lua (zettelkasten.lua)   |
+| **IWE LSP**     | Wiki-style linking, backlinks, navigation | Rust (iwe v0.0.54)       |
+| **SemBr**       | Semantic line break formatting            | Python ML (sembr v0.2.3) |
+| **Ollama AI**   | Local LLM for text intelligence           | llama3.2:latest (2.0 GB) |
 
----
+______________________________________________________________________
 
 ## Quick Start
 
@@ -52,75 +50,92 @@ PercyBrain is an AI-powered Zettelkasten knowledge management system built direc
 **Prerequisites**: Neovim, IWE LSP, SemBr, and Ollama must be installed.
 
 **1. Verify Installation**
+
 ```vim
 :checkhealth
 ```
+
 Look for:
+
 - ✅ IWE LSP at `/home/percy/.cargo/bin/iwe`
 - ✅ SemBr at `/home/percy/.local/bin/sembr`
 - ✅ Ollama service running
 
 **2. Create Your First Note**
+
 ```vim
 <leader>zn
 ```
+
 - Enter note title
 - Select template from picker (try "permanent")
 - Start writing!
 
 **3. Try AI Features**
+
 ```vim
 <leader>aa
 ```
+
 Opens AI command menu - try "Explain" on some text.
 
 **4. Format with Semantic Breaks**
+
 ```vim
 <leader>zs
 ```
+
 Formats current buffer with ML-based line breaks.
 
 ### Daily Workflow
 
 **Morning Routine**:
+
 1. `<leader>zd` - Open today's daily note
 2. Write your thoughts
 3. `<leader>aa` → "Generate Ideas" - Get AI suggestions
 
 **Note-Taking Session**:
+
 1. `<leader>zi` - Quick capture to inbox
 2. Write fleeting thoughts
 3. Later: `<leader>zn` - Convert to permanent note with template
 
 **Research/Reading**:
+
 1. `<leader>zn` - New literature note
 2. Select "literature" template
 3. Fill in source, quotes, thoughts
 4. `<leader>ae` - AI explain difficult concepts
 
----
+______________________________________________________________________
 
 ## Core Workflows
 
 ### Workflow 1: Capture → Process → Connect
 
 **Phase 1: Capture** (Fleeting Notes)
+
 ```vim
 <leader>zi    " Quick inbox capture
 ```
+
 - Write raw thoughts immediately
 - No structure required
 - Context: where did this come from?
 
 **Phase 2: Process** (Permanent Notes)
+
 ```vim
 <leader>zn    " Create permanent note
 ```
+
 - Select "permanent" template
 - Atomic idea: one concept per note
 - Add connections: `[[link-to-related-note]]`
 
 **Phase 3: Connect** (Link Building)
+
 ```vim
 <leader>al    " AI: Suggest related links
 <leader>zg    " Search for related content
@@ -130,12 +145,14 @@ Formats current buffer with ML-based line breaks.
 ### Workflow 2: Research → Literature Notes
 
 **1. Start Literature Note**
+
 ```vim
 <leader>zn
 " Select 'literature' template
 ```
 
 **2. Fill in Structure**
+
 ```markdown
 ## Bibliographic Information
 - **Author**: Jane Doe
@@ -158,6 +175,7 @@ This relates to my work on [[personal-knowledge-management]]
 ```
 
 **3. AI Enhancement**
+
 ```vim
 <leader>as    " AI: Summarize your notes
 <leader>ae    " AI: Explain difficult quotes
@@ -166,12 +184,14 @@ This relates to my work on [[personal-knowledge-management]]
 ### Workflow 3: Project Management
 
 **1. Create Project Note**
+
 ```vim
 <leader>zn
 " Select 'project' template
 ```
 
 **2. Track Progress**
+
 ```markdown
 ## Goals & Objectives
 - [ ] Complete Phase 1 implementation
@@ -191,6 +211,7 @@ This relates to my work on [[personal-knowledge-management]]
 ```
 
 **3. Review & Improve**
+
 ```vim
 <leader>aw    " AI: Improve writing clarity
 <leader>ax    " AI: Generate new ideas
@@ -199,12 +220,14 @@ This relates to my work on [[personal-knowledge-management]]
 ### Workflow 4: Meeting Notes
 
 **1. Create Meeting Note**
+
 ```vim
 <leader>zn
 " Select 'meeting' template
 ```
 
 **2. During Meeting**
+
 ```markdown
 ## Meeting Details
 - **Date**: 2025-10-17 14:00
@@ -223,62 +246,63 @@ This relates to my work on [[personal-knowledge-management]]
 ```
 
 **3. Post-Meeting Processing**
+
 ```vim
 <leader>as    " AI: Summarize meeting
 <leader>al    " AI: Suggest related links to other notes
 ```
 
----
+______________________________________________________________________
 
 ## Keyboard Shortcuts Reference
 
 ### Core Note Management (z = Zettelkasten)
 
-| Shortcut | Command | Description |
-|----------|---------|-------------|
-| `<leader>zn` | `:PercyNew` | Create new note with template picker |
-| `<leader>zd` | `:PercyDaily` | Open today's daily note |
-| `<leader>zi` | `:PercyInbox` | Quick capture to inbox |
-| `<leader>zf` | Find notes | Fuzzy search by filename |
-| `<leader>zg` | Search notes | Live grep through content |
-| `<leader>zb` | Backlinks | Find links to current note |
-| `<leader>zp` | `:PercyPublish` | Export to static site |
+| Shortcut     | Command         | Description                          |
+| ------------ | --------------- | ------------------------------------ |
+| `<leader>zn` | `:PercyNew`     | Create new note with template picker |
+| `<leader>zd` | `:PercyDaily`   | Open today's daily note              |
+| `<leader>zi` | `:PercyInbox`   | Quick capture to inbox               |
+| `<leader>zf` | Find notes      | Fuzzy search by filename             |
+| `<leader>zg` | Search notes    | Live grep through content            |
+| `<leader>zb` | Backlinks       | Find links to current note           |
+| `<leader>zp` | `:PercyPublish` | Export to static site                |
 
 ### AI Assistant (a = AI)
 
-| Shortcut | Command | Description |
-|----------|---------|-------------|
-| `<leader>aa` | `:PercyAI` | AI command menu (Telescope picker) |
-| `<leader>ae` | `:PercyExplain` | AI: Explain selected text or context |
-| `<leader>as` | `:PercySummarize` | AI: Summarize note or selection |
-| `<leader>al` | `:PercyLinks` | AI: Suggest related concepts to link |
-| `<leader>aw` | `:PercyImprove` | AI: Improve writing clarity |
-| `<leader>aq` | `:PercyAsk` | AI: Answer question about note |
-| `<leader>ax` | `:PercyIdeas` | AI: Generate ideas from content |
+| Shortcut     | Command           | Description                          |
+| ------------ | ----------------- | ------------------------------------ |
+| `<leader>aa` | `:PercyAI`        | AI command menu (Telescope picker)   |
+| `<leader>ae` | `:PercyExplain`   | AI: Explain selected text or context |
+| `<leader>as` | `:PercySummarize` | AI: Summarize note or selection      |
+| `<leader>al` | `:PercyLinks`     | AI: Suggest related concepts to link |
+| `<leader>aw` | `:PercyImprove`   | AI: Improve writing clarity          |
+| `<leader>aq` | `:PercyAsk`       | AI: Answer question about note       |
+| `<leader>ax` | `:PercyIdeas`     | AI: Generate ideas from content      |
 
 ### Focus Modes (f = focus)
 
-| Shortcut | Command | Description |
-|----------|---------|-------------|
+| Shortcut     | Command    | Description                         |
+| ------------ | ---------- | ----------------------------------- |
 | `<leader>fz` | `:ZenMode` | Zen mode (distraction-free writing) |
 
 ### Semantic Line Breaks (SemBr)
 
-| Shortcut | Command | Description |
-|----------|---------|-------------|
+| Shortcut     | Command        | Description                          |
+| ------------ | -------------- | ------------------------------------ |
 | `<leader>zs` | `:SemBrFormat` | Format with ML-based semantic breaks |
-| `<leader>zt` | `:SemBrToggle` | Toggle auto-format on save |
+| `<leader>zt` | `:SemBrToggle` | Toggle auto-format on save           |
 
 ### LSP Navigation (IWE)
 
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| `gd` | Go to definition | Follow wiki link |
-| `K` | Hover | Show link preview |
-| `<leader>zr` | LSP references | Find all backlinks |
-| `<leader>rn` | Rename | Rename symbol across vault |
+| Shortcut     | Action           | Description                |
+| ------------ | ---------------- | -------------------------- |
+| `gd`         | Go to definition | Follow wiki link           |
+| `K`          | Hover            | Show link preview          |
+| `<leader>zr` | LSP references   | Find all backlinks         |
+| `<leader>rn` | Rename           | Rename symbol across vault |
 
----
+______________________________________________________________________
 
 ## AI Assistant Features
 
@@ -291,11 +315,13 @@ PercyBrain uses **Ollama with llama3.2:latest** (2.0 GB model) running locally o
 #### 1. Explain (`<leader>ae`)
 
 **Use cases**:
+
 - Understand complex concepts
 - Break down technical jargon
 - Clarify confusing paragraphs
 
 **How to use**:
+
 1. Select text (visual mode) OR place cursor in paragraph
 2. Press `<leader>ae`
 3. Wait 5-15 seconds
@@ -303,6 +329,7 @@ PercyBrain uses **Ollama with llama3.2:latest** (2.0 GB model) running locally o
 5. Press `q` or `Esc` to close
 
 **Example**:
+
 ```
 Input: "The categorical imperative posits universal maxims"
 AI Explains: "This is Kant's principle that moral rules should
@@ -314,16 +341,19 @@ all people in all situations..."
 #### 2. Summarize (`<leader>as`)
 
 **Use cases**:
+
 - Condense long notes
 - Create abstracts
 - Extract key points from research
 
 **How to use**:
+
 1. Open note or select text
 2. Press `<leader>as`
 3. Get concise summary in floating window
 
 **Example**:
+
 ```
 Input: 3-page literature note
 AI Summary: "Author argues knowledge management requires three
@@ -334,17 +364,20 @@ components: capture (inbox), process (structure), connect
 #### 3. Suggest Links (`<leader>al`)
 
 **Use cases**:
+
 - Discover note connections
 - Build knowledge graph
 - Find related concepts
 
 **How to use**:
+
 1. In any note, press `<leader>al`
 2. AI analyzes content
 3. Suggests 5-7 related concepts
 4. Create `[[wiki-links]]` manually
 
 **Example**:
+
 ```
 Input: Note about "Zettelkasten method"
 AI Suggests:
@@ -359,17 +392,20 @@ AI Suggests:
 #### 4. Improve Writing (`<leader>aw`)
 
 **Use cases**:
+
 - Enhance clarity
 - Fix awkward phrasing
 - Improve flow
 
 **How to use**:
+
 1. Select text to improve
 2. Press `<leader>aw`
 3. Review AI's improved version
 4. Manually apply changes you like
 
 **Example**:
+
 ```
 Before: "The thing about notes is they're really good when you
 connect them and stuff because that's how you make knowledge"
@@ -382,17 +418,20 @@ isolated information."
 #### 5. Ask Question (`<leader>aq`)
 
 **Use cases**:
+
 - Query note content
 - Clarify concepts
 - Test understanding
 
 **How to use**:
+
 1. Open relevant note
 2. Press `<leader>aq`
 3. Type question
 4. Get answer based on note context
 
 **Example**:
+
 ```
 Note: Project planning document
 Question: "What are the main risks?"
@@ -405,16 +444,19 @@ requirements)."
 #### 6. Generate Ideas (`<leader>ax`)
 
 **Use cases**:
+
 - Brainstorm new angles
 - Explore related topics
 - Overcome writer's block
 
 **How to use**:
+
 1. In any note, press `<leader>ax`
 2. AI generates 5 creative ideas
 3. Use ideas as starting points for new notes
 
 **Example**:
+
 ```
 Input: Note about "Knowledge management"
 AI Ideas:
@@ -431,21 +473,24 @@ AI Ideas:
 ### AI Performance Tips
 
 **Optimize response time**:
+
 - Shorter input → faster response (5-10 seconds)
 - Longer input → slower response (15-30 seconds)
 - First call after Ollama start: ~5 seconds extra
 
 **Improve AI quality**:
+
 - Provide context: select full paragraphs, not fragments
 - Specific questions: "What are the three main arguments?" > "Explain this"
 - Iterate: use AI results as input for follow-up queries
 
 **Troubleshooting**:
+
 - **"Ollama not running"**: AI will auto-start service (wait 2 seconds)
 - **Slow responses**: Normal for large context (50+ lines)
 - **Poor quality**: Try rephrasing or providing more context
 
----
+______________________________________________________________________
 
 ## Template System
 
@@ -458,6 +503,7 @@ PercyBrain includes 5 default templates in `~/Zettelkasten/templates/`:
 **Use for**: Atomic ideas, core concepts, main arguments
 
 **Structure**:
+
 ```markdown
 ---
 title: {{title}}
@@ -489,6 +535,7 @@ tags: [permanent]
 ```
 
 **Best practices**:
+
 - One idea per note (atomic principle)
 - State idea clearly upfront
 - Link liberally to related notes
@@ -499,6 +546,7 @@ tags: [permanent]
 **Use for**: Reading notes, research, source material
 
 **Structure**:
+
 ```markdown
 ---
 title: {{title}}
@@ -534,6 +582,7 @@ tags: [literature, reading]
 ```
 
 **Best practices**:
+
 - Capture complete citation info immediately
 - Use quotes sparingly (paraphrase most content)
 - Add personal thoughts while reading
@@ -544,6 +593,7 @@ tags: [literature, reading]
 **Use for**: Project tracking, goal management, timelines
 
 **Structure**:
+
 ```markdown
 ---
 title: {{title}}
@@ -586,6 +636,7 @@ status: active
 ```
 
 **Best practices**:
+
 - Update status regularly (weekly minimum)
 - Use checkboxes for trackable items
 - Link to related project and literature notes
@@ -596,6 +647,7 @@ status: active
 **Use for**: Meeting records, discussions, action items
 
 **Structure**:
+
 ```markdown
 ---
 title: {{title}}
@@ -644,6 +696,7 @@ attendees: []
 ```
 
 **Best practices**:
+
 - Fill during meeting (real-time)
 - Assign owners to action items
 - Link to related project notes
@@ -654,6 +707,7 @@ attendees: []
 **Use for**: Quick captures, raw thoughts, inbox processing
 
 **Structure**:
+
 ```markdown
 ---
 title: {{title}}
@@ -685,6 +739,7 @@ tags: [fleeting, inbox]
 ```
 
 **Best practices**:
+
 - Write immediately, structure later
 - Capture context while fresh
 - Process inbox regularly (daily/weekly)
@@ -694,20 +749,22 @@ tags: [fleeting, inbox]
 
 All templates support variable substitution:
 
-| Variable | Replaced With | Example |
-|----------|---------------|---------|
-| `{{title}}` | Note title you entered | "Zettelkasten Method" |
-| `{{date}}` | Current date/time | "2025-10-17 14:30" |
-| `{{timestamp}}` | Timestamp ID | "202510171430" |
+| Variable        | Replaced With          | Example               |
+| --------------- | ---------------------- | --------------------- |
+| `{{title}}`     | Note title you entered | "Zettelkasten Method" |
+| `{{date}}`      | Current date/time      | "2025-10-17 14:30"    |
+| `{{timestamp}}` | Timestamp ID           | "202510171430"        |
 
 ### Creating Custom Templates
 
 **1. Create template file**:
+
 ```bash
 $ nvim ~/Zettelkasten/templates/my-template.md
 ```
 
 **2. Use template variables**:
+
 ```markdown
 ---
 title: {{title}}
@@ -723,6 +780,7 @@ type: custom
 **3. Template automatically appears** in picker (`<leader>zn`)
 
 **Custom template ideas**:
+
 - Book reviews
 - Code snippets
 - Recipe notes
@@ -730,13 +788,14 @@ type: custom
 - Decision journals
 - Learning notes
 
----
+______________________________________________________________________
 
 ## Knowledge Graph Analysis
 
 ### Understanding Your Knowledge Graph
 
 Your notes form a **network** where:
+
 - **Nodes** = Individual notes
 - **Edges** = Wiki-style links `[[note-name]]`
 - **Strength** = Number of connections (in + out)
@@ -744,27 +803,30 @@ Your notes form a **network** where:
 ### Graph Health Metrics
 
 **Healthy knowledge base characteristics**:
-- Few orphans (< 10% of notes)
+
+- Few orphans (\< 10% of notes)
 - Multiple hubs (5-10 highly connected notes)
 - Balanced graph (not one mega-hub)
 - Regular linking (average 3-5 links per note)
 
 ### Finding Orphan Notes
 
-**What are orphans?**
-Notes with **zero connections** (no incoming or outgoing links)
+**What are orphans?** Notes with **zero connections** (no incoming or outgoing links)
 
 **Why they matter**:
+
 - Isolated knowledge = harder to recall
 - Orphans suggest incomplete processing
 - Finding orphans = opportunities to connect
 
 **Command**:
+
 ```vim
 :PercyOrphans
 ```
 
 **Telescope picker shows**:
+
 ```
 📄 202510171430-fleeting-idea
 📄 202510161200-random-thought
@@ -772,6 +834,7 @@ Notes with **zero connections** (no incoming or outgoing links)
 ```
 
 **What to do**:
+
 1. Open orphan note
 2. Read content
 3. Ask: "What does this relate to?"
@@ -779,6 +842,7 @@ Notes with **zero connections** (no incoming or outgoing links)
 5. Consider: Worth keeping? Delete if not.
 
 **Workflow**:
+
 ```vim
 :PercyOrphans              " Find orphans
 <Enter> on note            " Open it
@@ -789,20 +853,22 @@ Notes with **zero connections** (no incoming or outgoing links)
 
 ### Finding Hub Notes
 
-**What are hubs?**
-Notes with **highest connection count** (incoming + outgoing)
+**What are hubs?** Notes with **highest connection count** (incoming + outgoing)
 
 **Why they matter**:
+
 - Hubs = central concepts in your thinking
 - Entry points for topic exploration
 - Candidates for further development
 
 **Command**:
+
 ```vim
 :PercyHubs
 ```
 
 **Telescope picker shows**:
+
 ```
 🔗 zettelkasten-method (↓8 ↑12 = 20)
 🔗 knowledge-management (↓5 ↑7 = 12)
@@ -812,12 +878,14 @@ Notes with **highest connection count** (incoming + outgoing)
 **Display format**: `NoteName (↓incoming ↑outgoing = total)`
 
 **What to do**:
+
 1. Review top hubs
 2. Ensure hub content is well-developed
 3. Consider: Should hub be split into smaller notes?
 4. Use hubs as starting points for topic exploration
 
 **Analysis questions**:
+
 - Are your top hubs what you expected?
 - Do hubs match your actual interests/work?
 - Are some hubs over-centralized? (single mega-hub)
@@ -826,12 +894,14 @@ Notes with **highest connection count** (incoming + outgoing)
 ### Graph Maintenance Routine
 
 **Weekly**: Check orphans
+
 ```vim
 :PercyOrphans
 " Process 5-10 orphans: link or delete
 ```
 
 **Monthly**: Analyze hubs
+
 ```vim
 :PercyHubs
 " Review top 10 hubs
@@ -840,12 +910,13 @@ Notes with **highest connection count** (incoming + outgoing)
 ```
 
 **Quarterly**: Full graph review
+
 - Export graph statistics
 - Identify emerging themes
 - Reorganize major areas
 - Archive completed projects
 
----
+______________________________________________________________________
 
 ## Publishing Workflow
 
@@ -856,19 +927,21 @@ PercyBrain can export your Zettelkasten to a static website (Hugo, Quartz, Jekyl
 ### Basic Publishing
 
 **Command**:
+
 ```vim
 <leader>zp
 " Or :PercyPublish
 ```
 
 **What happens**:
+
 1. Copies notes from `~/Zettelkasten/` to `~/blog/content/zettelkasten/`
 2. Excludes inbox folder
 3. Runs Hugo build: `hugo` command
 4. Generates static site in `~/blog/public/`
 
-**Configuration**:
-Located in `lua/config/zettelkasten.lua`:
+**Configuration**: Located in `lua/config/zettelkasten.lua`:
+
 ```lua
 M.config = {
   home = vim.fn.expand("~/Zettelkasten"),
@@ -879,11 +952,13 @@ M.config = {
 ### Preview Before Publishing
 
 **Command**:
+
 ```vim
 :PercyPreview
 ```
 
 **Result**:
+
 - Starts Hugo dev server
 - Opens at `http://localhost:1313`
 - Hot-reload enabled
@@ -892,6 +967,7 @@ M.config = {
 ### Publishing Checklist
 
 **Before publishing**:
+
 - [ ] Run `:PercyOrphans` - link important isolated notes
 - [ ] Check frontmatter - ensure tags are meaningful
 - [ ] Review note titles - make them web-friendly
@@ -899,6 +975,7 @@ M.config = {
 - [ ] Preview locally - check formatting
 
 **After publishing**:
+
 - [ ] Verify live site loads
 - [ ] Test navigation links
 - [ ] Check mobile responsiveness
@@ -908,32 +985,37 @@ M.config = {
 ### Advanced Publishing
 
 **Selective publishing** (coming in Phase 2):
+
 - Publish only tagged notes: `tags: [public]`
 - Exclude draft notes: `draft: true`
 - Transform wiki links to web links
 
 **Multi-SSG support** (coming in Phase 2):
+
 - Hugo (current default)
 - Quartz (Obsidian-style)
 - Jekyll (GitHub Pages)
 
----
+______________________________________________________________________
 
 ## Tips & Best Practices
 
 ### Writing Tips
 
 **Atomic Notes**:
+
 - One idea per note
 - Can be understood in isolation
 - Self-contained but connected
 
 **Linking Strategy**:
+
 - Link generously (5+ links per note)
 - Link when writing, not later
 - Don't fear over-linking
 
 **Title Conventions**:
+
 - Descriptive, not clever
 - Searchable keywords
 - Avoid dates in titles (use timestamps)
@@ -941,6 +1023,7 @@ M.config = {
 ### Workflow Tips
 
 **Daily Routine**:
+
 ```
 Morning:
 <leader>zd  → Daily note
@@ -953,6 +1036,7 @@ Run :PercyOrphans
 ```
 
 **Weekly Review**:
+
 ```
 Monday:
 - Review last week's daily notes
@@ -961,6 +1045,7 @@ Monday:
 ```
 
 **Monthly Maintenance**:
+
 ```
 First weekend:
 - Archive completed projects
@@ -972,12 +1057,14 @@ First weekend:
 ### Search Strategies
 
 **Find by filename**:
+
 ```vim
 <leader>zf
 " Type partial filename
 ```
 
 **Search content**:
+
 ```vim
 <leader>zg
 " Type search term
@@ -985,6 +1072,7 @@ First weekend:
 ```
 
 **Find backlinks**:
+
 ```vim
 " Open note
 <leader>zb
@@ -992,6 +1080,7 @@ First weekend:
 ```
 
 **Use LSP navigation**:
+
 ```vim
 " Place cursor on [[wiki-link]]
 gd         " Follow link
@@ -1002,21 +1091,24 @@ gd         " Follow link
 ### AI Usage Patterns
 
 **Exploratory phase**:
+
 - `<leader>ae` - Understand new concepts
 - `<leader>al` - Discover connections
 - `<leader>ax` - Generate ideas
 
 **Writing phase**:
+
 - `<leader>aw` - Improve clarity
 - `<leader>as` - Create summaries
 - `<leader>aq` - Test understanding
 
 **Processing phase**:
+
 - `<leader>ae` - Explain complex literature
 - `<leader>as` - Distill key points
 - `<leader>al` - Build connections
 
----
+______________________________________________________________________
 
 ## Troubleshooting
 
@@ -1027,24 +1119,29 @@ gd         " Follow link
 **Symptoms**: `<leader>aa` does nothing, or "Ollama not running" message
 
 **Solutions**:
+
 1. Check Ollama service:
+
    ```bash
    $ ollama list
    # Should show llama3.2:latest
    ```
 
 2. Manually start Ollama:
+
    ```bash
    $ ollama serve
    # Keep terminal open
    ```
 
 3. Verify model installed:
+
    ```bash
    $ ollama pull llama3.2
    ```
 
 4. Check keybinding:
+
    ```vim
    :verbose map <leader>aa
    # Should show ollama.lua mapping
@@ -1055,19 +1152,23 @@ gd         " Follow link
 **Symptoms**: `:PercyNew` shows "No templates found"
 
 **Solutions**:
+
 1. Check templates directory:
+
    ```bash
    $ ls ~/Zettelkasten/templates/
    # Should show 5 .md files
    ```
 
 2. Verify path in config:
+
    ```vim
    :lua print(require('config.zettelkasten').config.templates)
    # Should print: /home/percy/Zettelkasten/templates
    ```
 
 3. Recreate templates:
+
    ```bash
    $ mkdir -p ~/Zettelkasten/templates
    # Copy templates from claudedocs/
@@ -1078,24 +1179,29 @@ gd         " Follow link
 **Symptoms**: `gd` doesn't follow links, no completion
 
 **Solutions**:
+
 1. Check IWE LSP running:
+
    ```vim
    :LspInfo
    # Should show iwe client attached
    ```
 
 2. Verify IWE installed:
+
    ```bash
    $ iwe --version
    # Should show v0.0.54 or newer
    ```
 
 3. Restart LSP:
+
    ```vim
    :LspRestart
    ```
 
 4. Check workspace:
+
    ```vim
    :lua print(vim.lsp.get_active_clients()[1].config.settings.iwe.workspace)
    # Should show ~/Zettelkasten
@@ -1106,19 +1212,23 @@ gd         " Follow link
 **Symptoms**: `<leader>zs` does nothing
 
 **Solutions**:
+
 1. Check SemBr installed:
+
    ```bash
    $ sembr --version
    # Should show v0.2.3 or newer
    ```
 
 2. Verify Python environment:
+
    ```bash
    $ which sembr
    # Should show path in ~/.local/bin/
    ```
 
 3. Check keybinding:
+
    ```vim
    :verbose map <leader>zs
    # Should show sembr.lua mapping
@@ -1129,17 +1239,21 @@ gd         " Follow link
 **Symptoms**: `:PercyPublish` shows errors
 
 **Solutions**:
+
 1. Check export path exists:
+
    ```bash
    $ ls ~/blog/content/zettelkasten
    ```
 
 2. Verify Hugo installed:
+
    ```bash
    $ hugo version
    ```
 
 3. Check blog directory structure:
+
    ```bash
    $ cd ~/blog
    $ ls config.toml  # Hugo config should exist
@@ -1149,20 +1263,20 @@ gd         " Follow link
 
 #### AI responses too slow
 
-**Normal**: 5-30 seconds depending on context size
-**Too slow**: >60 seconds
+**Normal**: 5-30 seconds depending on context size **Too slow**: >60 seconds
 
 **Solutions**:
+
 - Reduce context: select smaller text portions
 - Restart Ollama: `ollama serve` in terminal
 - Check system resources: AI needs RAM (~4GB)
 
 #### Graph analysis slow
 
-**Normal**: <5 seconds for <500 notes
-**Too slow**: >10 seconds
+**Normal**: \<5 seconds for \<500 notes **Too slow**: >10 seconds
 
 **Solutions**:
+
 - Reduce note count: archive old notes
 - Simplify note content: large files slow scanning
 - Future: will add caching (Phase 2)
@@ -1170,6 +1284,7 @@ gd         " Follow link
 ### Getting Help
 
 **Diagnostic commands**:
+
 ```vim
 :checkhealth            " Full system check
 :LspInfo               " LSP server status
@@ -1178,17 +1293,19 @@ gd         " Follow link
 ```
 
 **Log locations**:
+
 - Neovim: `~/.local/state/nvim/log`
 - IWE LSP: Check `:LspLog`
 - Ollama: Check terminal where `ollama serve` runs
 
 **Documentation files**:
+
 - `PERCYBRAIN_DESIGN.md` - System architecture
 - `PERCYBRAIN_ANALYSIS.md` - Feature status
 - `PERCYBRAIN_PHASE1_COMPLETE.md` - Implementation report
 - `KEYBINDING_REORGANIZATION.md` - Shortcut reference
 
----
+______________________________________________________________________
 
 ## Appendix: File Structure
 
@@ -1233,7 +1350,7 @@ gd         " Follow link
     └── ...
 ```
 
----
+______________________________________________________________________
 
 **End of User Guide**
 

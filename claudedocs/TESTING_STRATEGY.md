@@ -1,20 +1,19 @@
 # OVIWrite Testing & CI/CD Strategy
 
-**Version**: 1.0
-**Date**: 2025-10-16
-**Status**: Design Complete, Implementation Pending
+**Version**: 1.0 **Date**: 2025-10-16 **Status**: Design Complete, Implementation Pending
 
 ## Executive Summary
 
-Comprehensive 4-layer testing strategy preventing plugin conflicts, deprecated APIs, configuration errors, and documentation drift. Fast local validation (<5s), thorough CI checks (<3min), accessible to writer-contributors.
+Comprehensive 4-layer testing strategy preventing plugin conflicts, deprecated APIs, configuration errors, and documentation drift. Fast local validation (\<5s), thorough CI checks (\<3min), accessible to writer-contributors.
 
 **Key Metrics**:
+
 - **Prevention**: 100% of recent issues (duplicates, deprecated APIs, misplaced files) caught automatically
-- **Speed**: Layer 1-2 validation in <5 seconds locally
+- **Speed**: Layer 1-2 validation in \<5 seconds locally
 - **Coverage**: Startup validation, health checks, plugin loading, documentation sync
 - **Maintainability**: Standard tools (Neovim, shell, GitHub Actions), minimal custom code
 
----
+______________________________________________________________________
 
 ## 1. Testing Architecture
 
@@ -46,14 +45,14 @@ Layer 1: Static Validation           [Local + CI]
 
 ### 1.2 Validation Scope Matrix
 
-| Layer | Runs On | Speed | Exit Code | Prevents |
-|-------|---------|-------|-----------|----------|
-| **Layer 1** | Every commit (pre-commit hook) | <5s | Blocks commit | Syntax errors, duplicates, deprecated APIs, file misplacement |
-| **Layer 2** | Every commit + CI | <10s | Blocks commit | Invalid plugin specs, circular deps, keymap conflicts |
-| **Layer 3** | CI only (push/PR) | ~60s | Blocks merge | Startup failures, plugin load errors, health check failures |
-| **Layer 4** | CI + manual review | ~30s | Warning only | Documentation drift, stale shortcuts, missing plugins |
+| Layer       | Runs On                        | Speed | Exit Code     | Prevents                                                      |
+| ----------- | ------------------------------ | ----- | ------------- | ------------------------------------------------------------- |
+| **Layer 1** | Every commit (pre-commit hook) | \<5s  | Blocks commit | Syntax errors, duplicates, deprecated APIs, file misplacement |
+| **Layer 2** | Every commit + CI              | \<10s | Blocks commit | Invalid plugin specs, circular deps, keymap conflicts         |
+| **Layer 3** | CI only (push/PR)              | ~60s  | Blocks merge  | Startup failures, plugin load errors, health check failures   |
+| **Layer 4** | CI + manual review             | ~30s  | Warning only  | Documentation drift, stale shortcuts, missing plugins         |
 
----
+______________________________________________________________________
 
 ## 2. Implementation Details
 
@@ -61,11 +60,12 @@ Layer 1: Static Validation           [Local + CI]
 
 #### Script: `scripts/validate-layer1.sh`
 
-**Purpose**: Catch 80% of issues in <5 seconds
+**Purpose**: Catch 80% of issues in \<5 seconds
 
 **Checks**:
 
 1. **Lua Syntax Validation**
+
 ```bash
 for file in $(git diff --cached --name-only --diff-filter=ACM | grep '\.lua$'); do
   nvim --headless -c "luafile $file" -c "quit" 2>&1 | grep -i error && exit 1
@@ -73,6 +73,7 @@ done
 ```
 
 2. **Duplicate Plugin Detection**
+
 ```bash
 # Problem: nvim-orgmode.lua + nvimorgmode.lua both loaded
 # Solution: Normalize plugin names, detect collisions
@@ -87,6 +88,7 @@ find lua/plugins -name "*.lua" -not -name "init.lua" | \
 **Exit**: Code 1 if duplicates found, prints collision pairs
 
 3. **Deprecated API Scanning** (patterns file: `scripts/deprecated-patterns.txt`)
+
 ```
 # Pattern file format: PATTERN|REPLACEMENT|SEVERITY
 vim\.highlight\.on_yank|vim.hl.on_yank|ERROR
@@ -101,6 +103,7 @@ done < scripts/deprecated-patterns.txt
 ```
 
 4. **File Organization Rules**
+
 ```bash
 # No init.lua files except lua/plugins/init.lua and lua/config/init.lua
 find lua/plugins -name "init.lua" -not -path "lua/plugins/init.lua" && exit 1
@@ -328,7 +331,7 @@ end
 -- Optional: Compare to CLAUDE.md and offer to update
 ```
 
----
+______________________________________________________________________
 
 ## 3. GitHub Actions Workflows
 
@@ -469,7 +472,7 @@ jobs:
           path: /tmp/*.txt
 ```
 
----
+______________________________________________________________________
 
 ## 4. Git Hooks & Local Development
 
@@ -658,7 +661,7 @@ echo ""
 echo "✅ Validation complete!"
 ```
 
----
+______________________________________________________________________
 
 ## 5. Migration Plan
 
@@ -674,6 +677,7 @@ echo "✅ Validation complete!"
 - [ ] Test on current codebase, document known issues in baseline report
 
 **Deliverables**:
+
 - 2 validation scripts working locally
 - GitHub Actions workflow running on push
 - Baseline report documenting current validation status
@@ -689,6 +693,7 @@ echo "✅ Validation complete!"
 - [ ] Test workflow with sample contributions (dummy PRs)
 
 **Deliverables**:
+
 - Git hooks auto-installed on setup
 - Clear developer documentation
 - Tested workflow with skip options
@@ -705,6 +710,7 @@ echo "✅ Validation complete!"
 - [ ] Add PR comment bot with validation results
 
 **Deliverables**:
+
 - Matrix testing across Linux/macOS/Windows
 - Health check automation
 - PR comments with validation summary
@@ -720,6 +726,7 @@ echo "✅ Validation complete!"
 - [ ] Create helper script: `scripts/update-docs.sh` (assisted doc updates)
 
 **Deliverables**:
+
 - Documentation validation detecting 90%+ drift
 - Helper tools for maintaining docs
 - CLAUDE.md fully synchronized
@@ -734,16 +741,16 @@ echo "✅ Validation complete!"
 - [ ] Optimize CI caching for faster runs
 - [ ] Add more specific validations (e.g., colorscheme conflicts, LSP config validation)
 
----
+______________________________________________________________________
 
 ## 6. Success Metrics
 
 ### Quantitative Metrics
 
 - **Issue Prevention**: 100% of recent issues (duplicates, deprecated APIs, file misplacement) caught
-- **Local Speed**: Layer 1-2 validation completes in <5 seconds
-- **CI Speed**: Full validation completes in <3 minutes
-- **False Positive Rate**: <5% (validation errors that are actually correct code)
+- **Local Speed**: Layer 1-2 validation completes in \<5 seconds
+- **CI Speed**: Full validation completes in \<3 minutes
+- **False Positive Rate**: \<5% (validation errors that are actually correct code)
 - **Documentation Accuracy**: ≥90% sync between code and CLAUDE.md
 
 ### Qualitative Metrics
@@ -757,9 +764,9 @@ echo "✅ Validation complete!"
 - **Before Merge**: 0 duplicate plugin incidents in PRs
 - **Before Merge**: 0 deprecated API usage in new code
 - **Before Merge**: 0 startup failures in PRs
-- **Post-Merge**: <1 regression per quarter escaping validation
+- **Post-Merge**: \<1 regression per quarter escaping validation
 
----
+______________________________________________________________________
 
 ## 7. Developer Documentation
 
@@ -786,28 +793,34 @@ SKIP_VALIDATION=1 git commit -m "WIP: experimental feature"
 ### 7.2 Common Validation Errors
 
 **Error**: `Duplicate plugin files detected: nvim-orgmode.lua, nvimorgmode.lua`
+
 - **Cause**: Two files with similar names (after normalization) in `lua/plugins/`
 - **Fix**: Remove one file, ensure only one plugin configuration per plugin
 
 **Error**: `Plugin spec must return table with [1] = string (repo URL)`
+
 - **Cause**: Plugin file returns wrong structure (module vs lazy.nvim spec)
 - **Fix**: Check file returns `{ "author/repo", config = ... }` format
 
 **Error**: `Deprecated API: vim.highlight.on_yank`
+
 - **Cause**: Using old Neovim API
 - **Fix**: Replace with `vim.hl.on_yank` (see `scripts/deprecated-patterns.txt`)
 
 **Error**: `File organization: init.lua not allowed in lua/plugins/subdir/`
+
 - **Cause**: Utility module in plugins directory
 - **Fix**: Move to `lua/utils/` or `lua/lib/`, or rename to proper plugin spec
 
 **Warning**: `Plugin missing from CLAUDE.md: [name]`
+
 - **Cause**: Documentation drift (non-blocking)
 - **Fix**: Add plugin to appropriate section in CLAUDE.md, or run `scripts/update-docs.sh`
 
 ### 7.3 Debugging Validation Failures
 
 **CI fails but local validation passes**:
+
 ```bash
 # Reproduce CI environment locally
 ./scripts/validate-startup.sh  # CI-only startup test
@@ -815,6 +828,7 @@ SKIP_VALIDATION=1 git commit -m "WIP: experimental feature"
 ```
 
 **Pre-commit hook blocks commit**:
+
 ```bash
 # See detailed error output
 ./scripts/validate-layer1.sh
@@ -824,12 +838,13 @@ SKIP_VALIDATION=1 git commit -m "message"
 ```
 
 **False positive (validation error is incorrect)**:
+
 1. Verify the code is actually correct
 2. File issue in OVIWrite repo with details
 3. Add exception to validation script if appropriate
 4. Use `SKIP_VALIDATION=1` as temporary workaround
 
----
+______________________________________________________________________
 
 ## 8. Maintenance Guide (for Project Maintainers)
 
@@ -838,11 +853,13 @@ SKIP_VALIDATION=1 git commit -m "message"
 **Example**: Detect new deprecated API pattern
 
 1. Add pattern to `scripts/deprecated-patterns.txt`:
+
 ```
 new_deprecated_api|new_replacement_api|ERROR
 ```
 
 2. Test against codebase:
+
 ```bash
 grep -rn "new_deprecated_api" lua/
 ```
@@ -878,54 +895,57 @@ grep -rn "new_deprecated_api" lua/
 - **CI**: Check GitHub Actions cache hit rate, adjust cache keys if needed
 - **Startup test**: Run in parallel for multiple Neovim versions if possible
 
-**Target**: Keep Layer 1-2 <5s, full CI run <3min
+**Target**: Keep Layer 1-2 \<5s, full CI run \<3min
 
----
+______________________________________________________________________
 
 ## 9. Appendix: Tool Reference
 
 ### 9.1 Script Inventory
 
-| Script | Purpose | Runs On | Speed | Exit Code |
-|--------|---------|---------|-------|-----------|
-| `validate-layer1.sh` | Static validation (syntax, duplicates, APIs, files) | Local + CI | <5s | 1 on error |
-| `validate-layer2.lua` | Plugin spec validation | Local + CI | <10s | 1 on error |
-| `validate-startup.sh` | Neovim startup test | CI + manual | ~30s | 1 on error |
-| `validate-health.sh` | Health check automation | CI + manual | ~30s | 1 on error |
-| `validate-plugin-loading.lua` | Individual plugin load test | CI | ~30s | 1 on error |
-| `validate-documentation.lua` | Doc sync check | CI + manual | ~10s | 0 (warns) |
-| `extract-keymaps.lua` | Generate keymap docs | Manual | <5s | 0 |
-| `validate.sh` | Master validation script | Local | varies | 1 on error |
-| `setup-dev-env.sh` | Install hooks + setup | Once | ~10s | 1 on error |
+| Script                        | Purpose                                             | Runs On     | Speed  | Exit Code  |
+| ----------------------------- | --------------------------------------------------- | ----------- | ------ | ---------- |
+| `validate-layer1.sh`          | Static validation (syntax, duplicates, APIs, files) | Local + CI  | \<5s   | 1 on error |
+| `validate-layer2.lua`         | Plugin spec validation                              | Local + CI  | \<10s  | 1 on error |
+| `validate-startup.sh`         | Neovim startup test                                 | CI + manual | ~30s   | 1 on error |
+| `validate-health.sh`          | Health check automation                             | CI + manual | ~30s   | 1 on error |
+| `validate-plugin-loading.lua` | Individual plugin load test                         | CI          | ~30s   | 1 on error |
+| `validate-documentation.lua`  | Doc sync check                                      | CI + manual | ~10s   | 0 (warns)  |
+| `extract-keymaps.lua`         | Generate keymap docs                                | Manual      | \<5s   | 0          |
+| `validate.sh`                 | Master validation script                            | Local       | varies | 1 on error |
+| `setup-dev-env.sh`            | Install hooks + setup                               | Once        | ~10s   | 1 on error |
 
 ### 9.2 Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `scripts/deprecated-patterns.txt` | Pattern database for API deprecation scanning |
-| `.github/workflows/quick-validation.yml` | CI: Layer 1-2 on every push |
-| `.github/workflows/full-validation.yml` | CI: All layers on PR to main, weekly |
-| `.git/hooks/pre-commit` | Git hook: Layer 1-2 before commit |
-| `.git/hooks/pre-push` | Git hook: Layer 1-3 before push |
-| `CONTRIBUTING.md` | Developer workflow guide |
+| File                                     | Purpose                                       |
+| ---------------------------------------- | --------------------------------------------- |
+| `scripts/deprecated-patterns.txt`        | Pattern database for API deprecation scanning |
+| `.github/workflows/quick-validation.yml` | CI: Layer 1-2 on every push                   |
+| `.github/workflows/full-validation.yml`  | CI: All layers on PR to main, weekly          |
+| `.git/hooks/pre-commit`                  | Git hook: Layer 1-2 before commit             |
+| `.git/hooks/pre-push`                    | Git hook: Layer 1-3 before push               |
+| `CONTRIBUTING.md`                        | Developer workflow guide                      |
 
 ### 9.3 Dependencies
 
 **Required**:
+
 - Neovim >= 0.8.0
 - Git >= 2.19.0
 - Bash (for shell scripts)
 
 **Optional** (for enhanced validation):
+
 - `luacheck` (Lua linting)
 - `stylua` (Lua formatting)
 - `ripgrep` (faster grep)
 
 **CI-specific**:
+
 - GitHub Actions (free tier sufficient)
 - rhysd/action-setup-vim (Neovim installation action)
 
----
+______________________________________________________________________
 
 ## 10. Future Enhancements
 
@@ -945,10 +965,10 @@ grep -rn "new_deprecated_api" lua/
 - **Renovate**: Alternative to Dependabot with more Neovim-specific config
 - **GitHub Discussions**: Auto-post validation results to discussions for community review
 
----
+______________________________________________________________________
 
 ## Conclusion
 
-This testing strategy provides comprehensive, fast, maintainable validation for OVIWrite. The layered approach ensures quick feedback locally (<5s) while catching all issues before merge. The phased migration plan allows incremental adoption without blocking current development.
+This testing strategy provides comprehensive, fast, maintainable validation for OVIWrite. The layered approach ensures quick feedback locally (\<5s) while catching all issues before merge. The phased migration plan allows incremental adoption without blocking current development.
 
 **Next Steps**: Begin Phase 1 implementation (Foundation week), starting with `validate-layer1.sh` and basic GitHub Actions workflow.

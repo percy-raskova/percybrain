@@ -1,6 +1,7 @@
 # OVIWrite Code Style and Conventions
 
 ## Lua Style Guide
+
 - **Indentation**: 2 spaces (no tabs)
 - **Line length**: ~100 characters (flexible for plugin specs)
 - **Naming conventions**:
@@ -11,6 +12,7 @@
 ## Plugin Configuration Standards
 
 ### Required Structure
+
 ```lua
 return {
   "author/repo",             -- [1] REQUIRED: Plugin URL (must be string)
@@ -34,7 +36,9 @@ return {
 ```
 
 ### Plugin Spec Rules
+
 ✅ **Correct**:
+
 ```lua
 return {
   "author/repo",  -- [1] must be string
@@ -43,6 +47,7 @@ return {
 ```
 
 ❌ **Wrong** (module structure):
+
 ```lua
 local M = {}
 M.setup = function() ... end
@@ -50,6 +55,7 @@ return M
 ```
 
 ### Lazy Loading Triggers
+
 - `event = "VeryLazy"` - Load after startup
 - `event = "BufReadPre"` - Load before reading buffer
 - `cmd = "Command"` - Load when command executed
@@ -60,6 +66,7 @@ return M
 ## File Organization Rules
 
 ### Allowed Structure
+
 ```
 lua/
 ├── config/             # Core configuration
@@ -76,6 +83,7 @@ lua/
 ```
 
 ### Rules
+
 - ✅ One plugin per file in `lua/plugins/*.lua`
 - ✅ Plugin files must return lazy.nvim spec: `{ "author/repo", ... }`
 - ✅ Utility modules go in `lua/utils/`, NOT `lua/plugins/`
@@ -84,6 +92,7 @@ lua/
 - ❌ No module structures in `lua/plugins/` (return spec, not module)
 
 ## Keymap Standards
+
 ```lua
 -- In lua/config/keymaps.lua
 vim.keymap.set("n", "<leader>x", "<cmd>Command<cr>", {
@@ -94,6 +103,7 @@ vim.keymap.set("n", "<leader>x", "<cmd>Command<cr>", {
 ```
 
 ## Commit Message Convention
+
 Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
@@ -106,6 +116,7 @@ chore: update dependencies
 ```
 
 **Types**:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation only
@@ -114,5 +125,6 @@ chore: update dependencies
 - `chore`: Maintenance tasks
 
 ## Deprecated API Patterns to Avoid
+
 - ❌ `vim.highlight.on_yank` → ✅ `vim.hl.on_yank`
 - Check `scripts/deprecated-patterns.txt` for full list
