@@ -45,6 +45,7 @@ Documentation follows [Diataxis framework](https://diataxis.fr/) (tutorial/how-t
 
 **🔧 Technical** (architecture/design):
 
+- `PROJECT_INDEX.json` → Comprehensive project structure index (606 lines, machine-readable)
 - `PERCYBRAIN_DESIGN.md` → System architecture (1,129 lines)
 - `CLAUDE.md` → This file (AI assistant context)
 
@@ -154,3 +155,5 @@ return {
 ______________________________________________________________________
 
 **Detailed info**: Repo root docs + Serena memories (`read_memory("name")`) **Session notes**: `claudedocs/` completion reports
+
+- Only call a headless NeoVim command if you work in a timeout or have some way to terminate the function. Otherwise it will never terminate and you'll get stuck.

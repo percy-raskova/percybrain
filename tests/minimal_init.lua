@@ -104,6 +104,13 @@ vim.opt.hidden = true
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
+-- Load PercyBrain configuration for contract/regression tests
+-- This ensures tests validate against actual config, not Vim defaults
+local config_ok, config_err = pcall(require, "config.options")
+if not config_ok then
+  vim.notify("Warning: Could not load config.options for testing: " .. tostring(config_err), vim.log.levels.WARN)
+end
+
 -- Load test helpers globally (optional, wrapped in pcall)
 local helpers_ok, helpers = pcall(require, "tests.helpers")
 if helpers_ok then

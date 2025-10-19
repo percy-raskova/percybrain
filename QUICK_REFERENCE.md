@@ -207,7 +207,7 @@ ______________________________________________________________________
 
 | Document                                     | Purpose                  |
 | -------------------------------------------- | ------------------------ |
-| [PROJECT_INDEX.md](PROJECT_INDEX.md)         | Master navigation hub ⭐ |
+| [PROJECT_INDEX.json](PROJECT_INDEX.json)     | Master navigation hub ⭐ |
 | [CLAUDE.md](CLAUDE.md)                       | Technical guide (23K) ⭐ |
 | [PERCYBRAIN_DESIGN.md](PERCYBRAIN_DESIGN.md) | Architecture (38K)       |
 | [PERCYBRAIN_SETUP.md](PERCYBRAIN_SETUP.md)   | Setup guide (12K)        |
@@ -222,7 +222,7 @@ ______________________________________________________________________
 3. **Run tests before commit**: `./tests/simple-test.sh`
 4. **Format automatically**: Add pre-commit hook for StyLua
 5. **Read CLAUDE.md**: It's the definitive technical guide
-6. **Check PROJECT_INDEX.md**: Master navigation for all docs
+6. **Check PROJECT_INDEX.json**: Master navigation for all docs
 
 ______________________________________________________________________
 
@@ -250,4 +250,4 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-**Last Updated**: 2025-10-17 **For Full Details**: See [PROJECT_INDEX.md](PROJECT_INDEX.md)
+**Last Updated**: 2025-10-19 **For Full Details**: See [PROJECT_INDEX.json](PROJECT_INDEX.json)
