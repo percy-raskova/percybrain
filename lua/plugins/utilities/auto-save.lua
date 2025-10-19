@@ -27,7 +27,8 @@ return {
         local utils = require("auto-save.utils.data")
 
         -- Don't save if:
-        if fn.getbufvar(buf, "&modifiable") == 1  -- Buffer is modifiable
+        if
+          fn.getbufvar(buf, "&modifiable") == 1 -- Buffer is modifiable
           and utils.not_in(fn.getbufvar(buf, "&filetype"), {
             -- Don't auto-save these filetypes
             "harpoon",

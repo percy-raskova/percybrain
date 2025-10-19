@@ -1,14 +1,27 @@
 -- Unit Tests: Global Variables and Settings
 -- Tests for global configuration that affects entire environment
 
-local helpers = require('tests.helpers')
-local mocks = require('tests.helpers.mocks')
+-- Helper function for table contains check
+local function contains(tbl, value)
+  if type(tbl) == "table" then
+    for _, v in ipairs(tbl) do
+      if v == value then
+        return true
+      end
+    end
+  end
+  return false
+end
 
 describe("Globals Configuration", function()
   before_each(function()
     -- Arrange: Ensure globals module is loaded fresh
-    package.loaded['config.globals'] = nil
-    require('config.globals')
+    package.loaded["config.globals"] = nil
+    require("config.globals")
+  end)
+
+  after_each(function()
+    -- No cleanup needed - globals remain configured
   end)
 
   describe("Leader Keys", function()
@@ -33,11 +46,18 @@ describe("Globals Configuration", function()
     it("disables built-in plugins for performance", function()
       -- Arrange
       local disabled_plugins = {
-        'loaded_gzip', 'loaded_zip', 'loaded_zipPlugin',
-        'loaded_tar', 'loaded_tarPlugin',
-        'loaded_getscript', 'loaded_getscriptPlugin',
-        'loaded_vimball', 'loaded_vimballPlugin',
-        '2html_plugin', 'loaded_matchit', 'loaded_matchparen',
+        "loaded_gzip",
+        "loaded_zip",
+        "loaded_zipPlugin",
+        "loaded_tar",
+        "loaded_tarPlugin",
+        "loaded_getscript",
+        "loaded_getscriptPlugin",
+        "loaded_vimball",
+        "loaded_vimballPlugin",
+        "2html_plugin",
+        "loaded_matchit",
+        "loaded_matchparen",
       }
 
       -- Act: Count disabled plugins
@@ -49,8 +69,7 @@ describe("Globals Configuration", function()
       end
 
       -- Assert: At least some should be disabled for performance
-      assert.is_true(disabled_count >= 2,
-        "Should disable some built-in plugins for performance")
+      assert.is_true(disabled_count >= 2, "Should disable some built-in plugins for performance")
     end)
   end)
 
@@ -70,7 +89,7 @@ describe("Globals Configuration", function()
   describe("Python Configuration", function()
     it("sets python host programs if needed", function()
       -- Arrange: Python providers for plugins that need them
-      if vim.fn.has('python3') == 1 then
+      if vim.fn.has("python3") == 1 then
         local python3_host = vim.g.python3_host_prog
 
         -- Act & Assert: It's ok if not set (uses system python3)
@@ -84,11 +103,11 @@ describe("Globals Configuration", function()
     it("can disable python providers for performance", function()
       -- Arrange
       local providers = {
-        'loaded_python_provider',    -- Python 2 (deprecated)
-        'loaded_python3_provider',   -- Python 3
-        'loaded_ruby_provider',      -- Ruby
-        'loaded_perl_provider',      -- Perl
-        'loaded_node_provider',      -- Node.js
+        "loaded_python_provider", -- Python 2 (deprecated)
+        "loaded_python3_provider", -- Python 3
+        "loaded_ruby_provider", -- Ruby
+        "loaded_perl_provider", -- Perl
+        "loaded_node_provider", -- Node.js
       }
 
       -- Act & Assert: It's valid to disable unused providers
@@ -105,11 +124,11 @@ describe("Globals Configuration", function()
     it("configures markdown settings", function()
       -- Arrange: Markdown is primary format for PercyBrain
       local markdown_vars = {
-        'markdown_fenced_languages',
-        'markdown_syntax_conceal',
-        'markdown_folding',
-        'vim_markdown_folding_disabled',
-        'vim_markdown_conceal',
+        "markdown_fenced_languages",
+        "markdown_syntax_conceal",
+        "markdown_folding",
+        "vim_markdown_folding_disabled",
+        "vim_markdown_conceal",
       }
 
       -- Act & Assert: These are optional but good to have
@@ -124,9 +143,9 @@ describe("Globals Configuration", function()
     it("configures LaTeX settings if needed", function()
       -- Arrange
       local tex_vars = {
-        'tex_flavor',
-        'vimtex_view_method',
-        'vimtex_compiler_method',
+        "tex_flavor",
+        "vimtex_view_method",
+        "vimtex_compiler_method",
       }
 
       -- Act & Assert: Optional LaTeX configuration
@@ -139,8 +158,10 @@ describe("Globals Configuration", function()
 
       -- tex_flavor is commonly set to 'latex'
       if vim.g.tex_flavor then
-        assert.contains({'latex', 'plain', 'context'},
-          vim.g.tex_flavor, "Invalid tex flavor")
+        assert.is_true(
+          contains({ "latex", "plain", "context" }, vim.g.tex_flavor),
+          "Invalid tex flavor: " .. tostring(vim.g.tex_flavor)
+        )
       end
     end)
   end)
@@ -149,12 +170,12 @@ describe("Globals Configuration", function()
     it("sets knowledge management paths", function()
       -- Arrange: PercyBrain might set vault paths
       local percy_vars = {
-        'percybrain_vault',
-        'percybrain_templates',
-        'percybrain_daily',
-        'percybrain_inbox',
-        'zettelkasten_dir',
-        'wiki_root',
+        "percybrain_vault",
+        "percybrain_templates",
+        "percybrain_daily",
+        "percybrain_inbox",
+        "zettelkasten_dir",
+        "wiki_root",
       }
 
       -- Act & Assert: These are optional but check if set correctly
@@ -162,8 +183,10 @@ describe("Globals Configuration", function()
         local value = vim.g[var]
         if value ~= nil then
           assert.is_string(value, var .. " should be a path string")
-          assert.is_true(value:match("^[~/]") ~= nil or value:match("^%a:") ~= nil,
-            var .. " should be an absolute or home-relative path")
+          assert.is_true(
+            value:match("^[~/]") ~= nil or value:match("^%a:") ~= nil,
+            var .. " should be an absolute or home-relative path"
+          )
         end
       end
     end)
@@ -171,10 +194,10 @@ describe("Globals Configuration", function()
     it("sets AI integration globals", function()
       -- Arrange: Ollama and AI settings
       local ai_vars = {
-        'ollama_model',
-        'ollama_host',
-        'ai_temperature',
-        'ai_max_tokens',
+        "ollama_model",
+        "ollama_host",
+        "ai_temperature",
+        "ai_max_tokens",
       }
 
       -- Act & Assert
@@ -195,8 +218,12 @@ describe("Globals Configuration", function()
     it("doesn't expose sensitive data", function()
       -- Arrange
       local sensitive_patterns = {
-        "api_key", "api_token", "secret",
-        "password", "token", "auth_",
+        "api_key",
+        "api_token",
+        "secret",
+        "password",
+        "token",
+        "auth_",
       }
 
       -- Act & Assert: Check that no API keys or tokens are in globals
@@ -205,8 +232,10 @@ describe("Globals Configuration", function()
           if key:lower():match(pattern) then
             local value = vim.g[key]
             if type(value) == "string" then
-              assert.is_true(value == "" or value == "REDACTED" or value:match("^%*+$") ~= nil,
-                "Global " .. key .. " might contain sensitive data")
+              assert.is_true(
+                value == "" or value == "REDACTED" or value:match("^%*+$") ~= nil,
+                "Global " .. key .. " might contain sensitive data"
+              )
             end
           end
         end
@@ -233,14 +262,13 @@ describe("Globals Configuration", function()
       local start = vim.fn.reltime()
 
       -- Act
-      package.loaded['config.globals'] = nil
-      require('config.globals')
+      package.loaded["config.globals"] = nil
+      require("config.globals")
 
       local elapsed = vim.fn.reltimefloat(vim.fn.reltime(start))
 
       -- Assert: Globals should load almost instantly
-      assert.is_true(elapsed < 0.005,
-        string.format("Globals loading too slow: %.3fs", elapsed))
+      assert.is_true(elapsed < 0.005, string.format("Globals loading too slow: %.3fs", elapsed))
     end)
   end)
 
@@ -271,8 +299,8 @@ describe("Globals Configuration", function()
       end
 
       -- Act
-      package.loaded['config.globals'] = nil
-      require('config.globals')
+      package.loaded["config.globals"] = nil
+      require("config.globals")
 
       local after_count = 0
       for _ in pairs(vim.g) do
@@ -281,15 +309,16 @@ describe("Globals Configuration", function()
 
       -- Assert: Should only add a reasonable number of globals
       local added = after_count - before_count
-      assert.is_true(added < 50,
-        string.format("Too many globals added: %d", added))
+      assert.is_true(added < 50, string.format("Too many globals added: %d", added))
     end)
 
     it("uses consistent naming conventions", function()
       -- Arrange
       local our_patterns = {
-        "^percybrain_", "^percy_",
-        "^loaded_", "^did_",
+        "^percybrain_",
+        "^percy_",
+        "^loaded_",
+        "^did_",
       }
 
       -- Act: Count globals following patterns
@@ -309,8 +338,7 @@ describe("Globals Configuration", function()
       -- Assert: Most globals should follow patterns (allow for vim defaults)
       if total_count > 20 then
         local ratio = consistent_count / total_count
-        assert.is_true(ratio > 0.3,
-          string.format("Low naming consistency: %.1f%%", ratio * 100))
+        assert.is_true(ratio > 0.3, string.format("Low naming consistency: %.1f%%", ratio * 100))
       end
     end)
   end)

@@ -7,19 +7,21 @@ The Neovim MCP server requires Neovim to be running with a socket listener. Here
 ### Quick Start (What Works)
 
 **Option 1: Start Neovim with --listen flag (RECOMMENDED)**
+
 ```bash
 nvim --listen /tmp/nvim
 ```
 
 **Option 2: Start in tmux/screen session**
+
 ```bash
 tmux new -s nvim-mcp "nvim --listen /tmp/nvim"
 # Or detached:
 tmux new -d -s nvim-mcp "nvim --listen /tmp/nvim"
 ```
 
-**Option 3: Use existing Neovim and create socket**
-Inside Neovim, run:
+**Option 3: Use existing Neovim and create socket** Inside Neovim, run:
+
 ```vim
 :call serverstart("/tmp/nvim")
 ```
@@ -27,6 +29,7 @@ Inside Neovim, run:
 ### MCP Configuration (.mcp.json)
 
 Your configuration is correct:
+
 ```json
 "MCP Neovim Server": {
   "command": "/home/percy/.nvm/versions/node/v22.17.1/bin/npx",
@@ -43,6 +46,7 @@ Your configuration is correct:
 ### Troubleshooting Checklist
 
 #### 1. Check if Neovim is listening
+
 ```bash
 # Check for socket file
 ls -la /tmp/nvim
@@ -57,20 +61,24 @@ nvim --server /tmp/nvim --remote-expr "v:version"
 #### 2. Common Issues & Fixes
 
 **Issue: "Not connected" error**
+
 - **Cause**: Neovim not running with --listen
 - **Fix**: Start Neovim with `nvim --listen /tmp/nvim`
 
 **Issue: "Connection closed" error**
+
 - **Cause**: Socket doesn't exist or wrong path
 - **Fix**: Ensure socket path matches in both Neovim and .mcp.json
 
 **Issue: Works then stops**
+
 - **Cause**: Neovim was closed
 - **Fix**: Keep Neovim running in background (use tmux/screen)
 
 ### Persistent Setup
 
 Add to your shell config (~/.bashrc or ~/.zshrc):
+
 ```bash
 # Always start Neovim with socket
 alias nvim='nvim --listen /tmp/nvim'
@@ -90,6 +98,7 @@ nvim-mcp() {
 ### Available MCP Commands
 
 Once connected, Claude can:
+
 - `vim_buffer` - Read current buffer
 - `vim_command` - Execute Vim commands
 - `vim_status` - Get cursor position, mode, etc.
@@ -102,6 +111,7 @@ Once connected, Claude can:
 ### Testing the Connection
 
 In Claude, test with:
+
 ```
 mcp__MCP_Neovim_Server__vim_status
 ```

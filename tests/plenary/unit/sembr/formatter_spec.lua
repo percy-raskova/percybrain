@@ -2,9 +2,6 @@
 -- Tests semantic line break formatting logic
 -- Note: These test the integration, not the actual sembr binary
 
-local helpers = require('tests.helpers')
-local mocks = require('tests.helpers.mocks')
-
 -- Helper function for table contains check
 local function contains(tbl, value)
   if type(tbl) == "table" then
@@ -31,7 +28,7 @@ describe("SemBr Formatter Integration", function()
       create_autocmd = vim.api.nvim_create_autocmd,
       create_augroup = vim.api.nvim_create_augroup,
       clear_autocmds = vim.api.nvim_clear_autocmds,
-      keymap_set = vim.keymap.set
+      keymap_set = vim.keymap.set,
     }
   end)
 
@@ -54,8 +51,8 @@ describe("SemBr Formatter Integration", function()
     it("creates SemBrFormat command when sembr is available", function()
       -- Arrange: Mock sembr availability
       vim.fn.executable = function(cmd)
-        if cmd == 'sembr' then
-          return 1  -- sembr is available
+        if cmd == "sembr" then
+          return 1 -- sembr is available
         end
         return 0
       end
@@ -65,28 +62,28 @@ describe("SemBr Formatter Integration", function()
       vim.api.nvim_create_user_command = function(name, handler, opts)
         commands_created[name] = {
           handler = handler,
-          opts = opts
+          opts = opts,
         }
       end
 
       -- Act: Simulate the command creation logic
-      if vim.fn.executable('sembr') == 1 then
-        vim.api.nvim_create_user_command('SemBrFormat', function() end, {
+      if vim.fn.executable("sembr") == 1 then
+        vim.api.nvim_create_user_command("SemBrFormat", function() end, {
           range = true,
-          desc = "Format with semantic line breaks"
+          desc = "Format with semantic line breaks",
         })
       end
 
       -- Assert: Command was created with correct options
-      assert.is_not_nil(commands_created['SemBrFormat'])
-      assert.is_true(commands_created['SemBrFormat'].opts.range)
+      assert.is_not_nil(commands_created["SemBrFormat"])
+      assert.is_true(commands_created["SemBrFormat"].opts.range)
     end)
 
     it("creates fallback command when sembr is not available", function()
       -- Arrange: Mock sembr unavailability
       vim.fn.executable = function(cmd)
-        if cmd == 'sembr' then
-          return 0  -- sembr not available
+        if cmd == "sembr" then
+          return 0 -- sembr not available
         end
         return 0
       end
@@ -98,7 +95,7 @@ describe("SemBr Formatter Integration", function()
       end
 
       -- Act: Check that appropriate warning is shown
-      if vim.fn.executable('sembr') == 0 then
+      if vim.fn.executable("sembr") == 0 then
         vim.notify("⚠️  SemBr binary not found - install with: uv tool install sembr", vim.log.levels.WARN)
       end
 
@@ -120,7 +117,7 @@ describe("SemBr Formatter Integration", function()
       local format_cmd = function(opts)
         opts = opts or { line1 = 1, line2 = 1 }
         if opts.line1 == opts.line2 then
-          vim.cmd('%!sembr')
+          vim.cmd("%!sembr")
         end
       end
 
@@ -128,8 +125,7 @@ describe("SemBr Formatter Integration", function()
       format_cmd({ line1 = 1, line2 = 1 })
 
       -- Assert: Full buffer format command was executed
-      assert.is_true(contains(commands_executed, '%!sembr'),
-        "Should execute full buffer format command")
+      assert.is_true(contains(commands_executed, "%!sembr"), "Should execute full buffer format command")
     end)
 
     it("formats selection when range specified", function()
@@ -145,7 +141,7 @@ describe("SemBr Formatter Integration", function()
         local end_line = opts.line2
 
         if start_line ~= end_line then
-          vim.cmd(string.format('%d,%d!sembr', start_line, end_line))
+          vim.cmd(string.format("%d,%d!sembr", start_line, end_line))
         end
       end
 
@@ -155,7 +151,7 @@ describe("SemBr Formatter Integration", function()
       -- Assert: Range formatting command was executed
       local found_range = false
       for _, cmd in ipairs(commands_executed) do
-        if cmd:match('5,10!sembr') then
+        if cmd:match("5,10!sembr") then
           found_range = true
         end
       end
@@ -174,7 +170,7 @@ describe("SemBr Formatter Integration", function()
         table.insert(autocmds_created, {
           event = event,
           pattern = opts.pattern,
-          group = opts.group
+          group = opts.group,
         })
       end
 
@@ -191,8 +187,8 @@ describe("SemBr Formatter Integration", function()
             group = vim.api.nvim_create_augroup("SemBrAutoFormat", { clear = true }),
             pattern = "*.md",
             callback = function()
-              vim.cmd('silent %!sembr')
-            end
+              vim.cmd("silent %!sembr")
+            end,
           })
         end
       end
@@ -227,7 +223,7 @@ describe("SemBr Formatter Integration", function()
 
         if not auto_format_enabled then
           vim.api.nvim_clear_autocmds({
-            group = "SemBrAutoFormat"
+            group = "SemBrAutoFormat",
           })
         end
       end
@@ -236,8 +232,7 @@ describe("SemBr Formatter Integration", function()
       toggle_cmd()
 
       -- Assert: Autocmds were cleared and state disabled
-      assert.is_true(contains(autocmds_cleared, "SemBrAutoFormat"),
-        "Should clear SemBrAutoFormat autocmds")
+      assert.is_true(contains(autocmds_cleared, "SemBrAutoFormat"), "Should clear SemBrAutoFormat autocmds")
       assert.is_false(auto_format_enabled, "Should disable auto-format state")
     end)
   end)
@@ -250,25 +245,23 @@ describe("SemBr Formatter Integration", function()
         table.insert(keymaps, {
           mode = mode,
           lhs = lhs,
-          desc = opts and opts.desc
+          desc = opts and opts.desc,
         })
       end
 
       -- Act: Simulate keymap creation
-      vim.keymap.set({ 'n', 'v' }, '<leader>zs', '<cmd>SemBrFormat<cr>',
-        { desc = "Format with semantic line breaks" })
-      vim.keymap.set('n', '<leader>zt', '<cmd>SemBrToggle<cr>',
-        { desc = "Toggle SemBr auto-format" })
+      vim.keymap.set({ "n", "v" }, "<leader>zs", "<cmd>SemBrFormat<cr>", { desc = "Format with semantic line breaks" })
+      vim.keymap.set("n", "<leader>zt", "<cmd>SemBrToggle<cr>", { desc = "Toggle SemBr auto-format" })
 
       -- Assert: Both keymaps were created
       local found_format = false
       local found_toggle = false
 
       for _, km in ipairs(keymaps) do
-        if km.lhs == '<leader>zs' then
+        if km.lhs == "<leader>zs" then
           found_format = true
         end
-        if km.lhs == '<leader>zt' then
+        if km.lhs == "<leader>zt" then
           found_toggle = true
         end
       end

@@ -1,16 +1,17 @@
 -- Unit Tests: Keymaps Configuration
 -- Tests for leader key mappings and neurodiversity-optimized shortcuts
 
-local helpers = require('tests.helpers')
-local mocks = require('tests.helpers.mocks')
-
 describe("Keymaps Configuration", function()
   before_each(function()
     -- Ensure globals and keymaps modules are loaded fresh
-    package.loaded['config.globals'] = nil
-    package.loaded['config.keymaps'] = nil
-    require('config.globals')
-    require('config.keymaps')
+    package.loaded["config.globals"] = nil
+    package.loaded["config.keymaps"] = nil
+    require("config.globals")
+    require("config.keymaps")
+  end)
+
+  after_each(function()
+    -- No cleanup needed - keymaps remain configured
   end)
 
   describe("Leader Key Configuration", function()
@@ -60,8 +61,7 @@ describe("Keymaps Configuration", function()
       -- Act: Check mappings exist via leader validation
 
       -- Assert: May not exist in minimal test env, just check leader is set
-      for _, map in ipairs(split_maps) do
-        local mapping = vim.fn.maparg(map[2], map[1])
+      for _ in ipairs(split_maps) do
         assert.equals(" ", vim.g.mapleader)
       end
     end)
@@ -89,15 +89,15 @@ describe("Keymaps Configuration", function()
     it("provides lazy.nvim access", function()
       -- Arrange
       local lazy_maps = {
-        "<leader>l",  -- Lazy load all
-        "<leader>L",  -- Lazy menu
+        "<leader>l", -- Lazy load all
+        "<leader>L", -- Lazy menu
       }
 
       -- Act: No action needed, checking configuration
 
       -- Assert: Leader set correctly, actual mapping may be lazy-loaded
       assert.equals(" ", vim.g.mapleader)
-      for _, key in ipairs(lazy_maps) do
+      for _ in ipairs(lazy_maps) do
         assert.is_string(vim.g.mapleader)
       end
     end)
@@ -241,15 +241,15 @@ describe("Keymaps Configuration", function()
     it("avoids common conflicts", function()
       -- Arrange
       local protected_keys = {
-        "gg",  -- Go to top
-        "G",   -- Go to bottom
-        "dd",  -- Delete line
-        "yy",  -- Yank line
-        "p",   -- Paste
-        "u",   -- Undo (not <leader>u which is undotree)
-        "i",   -- Insert mode
-        "a",   -- Append
-        "o",   -- Open line (not <leader>o which is Goyo)
+        "gg", -- Go to top
+        "G", -- Go to bottom
+        "dd", -- Delete line
+        "yy", -- Yank line
+        "p", -- Paste
+        "u", -- Undo (not <leader>u which is undotree)
+        "i", -- Insert mode
+        "a", -- Append
+        "o", -- Open line (not <leader>o which is Goyo)
       }
 
       -- Act & Assert: Check each protected key
@@ -265,9 +265,9 @@ describe("Keymaps Configuration", function()
     it("maintains mode consistency", function()
       -- Arrange
       local normal_only = {
-        "<leader>s",  -- Save
-        "<leader>q",  -- Quit
-        "<leader>e",  -- Explorer
+        "<leader>s", -- Save
+        "<leader>q", -- Quit
+        "<leader>e", -- Explorer
       }
 
       -- Act: No action needed, checking mode mappings
@@ -315,9 +315,10 @@ describe("Keymaps Configuration", function()
 
       -- Act & Assert: Check mnemonic consistency
       for _, test in ipairs(mnemonic_tests) do
-        assert.is_true(test.key:match(test.letter) ~= nil,
-          "Mnemonic shortcut " .. test.key .. " should contain '" ..
-          test.letter .. "' for " .. test.meaning)
+        assert.is_true(
+          test.key:match(test.letter) ~= nil,
+          "Mnemonic shortcut " .. test.key .. " should contain '" .. test.letter .. "' for " .. test.meaning
+        )
       end
     end)
   end)
@@ -328,24 +329,22 @@ describe("Keymaps Configuration", function()
       local start = vim.fn.reltime()
 
       -- Act: Reload keymaps module
-      package.loaded['config.keymaps'] = nil
-      require('config.keymaps')
+      package.loaded["config.keymaps"] = nil
+      require("config.keymaps")
       local elapsed = vim.fn.reltimefloat(vim.fn.reltime(start))
 
       -- Assert: Keymap loading should be nearly instant
-      assert.is_true(elapsed < 0.01,
-        string.format("Keymap loading too slow: %.3fs", elapsed))
+      assert.is_true(elapsed < 0.01, string.format("Keymap loading too slow: %.3fs", elapsed))
     end)
 
     it("doesn't create excessive mappings", function()
       -- Arrange: No setup needed
 
       -- Act: Get all normal mode mappings
-      local all_maps = vim.api.nvim_get_keymap('n')
+      local all_maps = vim.api.nvim_get_keymap("n")
 
       -- Assert: Reasonable mapping count
-      assert.is_true(#all_maps < 500,
-        "Too many keymaps: " .. #all_maps .. " (possible conflict or duplication)")
+      assert.is_true(#all_maps < 500, "Too many keymaps: " .. #all_maps .. " (possible conflict or duplication)")
     end)
   end)
 end)

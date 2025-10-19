@@ -1,12 +1,15 @@
 # AI-Driven Environment Validation (AIDEV) Protocol
+
 ## For Neovim Configuration Testing via MCP
 
 ### 🎯 Vision
+
 Transform AI from passive code analyzer to active environment tester. The AI becomes a QA engineer that can actually "touch" and validate the system.
 
 ## Core Testing Dimensions
 
 ### 1. 🔍 Sensory Testing (Perception)
+
 **Goal**: Can the AI perceive the environment accurately?
 
 ```lua
@@ -20,6 +23,7 @@ register_contents() -- What's in memory? (privacy check!)
 **What We Found**: Discovered sensitive data in registers - SSH keys, API configs!
 
 ### 2. 🎮 Motor Testing (Actions)
+
 **Goal**: Can the AI perform actions correctly?
 
 ```lua
@@ -31,6 +35,7 @@ editing_test()      -- Insert, delete, change text
 ```
 
 ### 3. 🧩 Integration Testing (Features)
+
 **Goal**: Do plugins and features work together?
 
 ```lua
@@ -42,6 +47,7 @@ keybinding_test()  -- Do leader mappings work?
 ```
 
 ### 4. 🚨 Error Detection (Diagnostics)
+
 **Goal**: Can the AI identify and diagnose issues?
 
 ```lua
@@ -55,6 +61,7 @@ security_check()     -- Found: sensitive data exposure
 ## Test Suite Structure
 
 ### Level 1: Smoke Tests (Basic Validation)
+
 ```yaml
 quick_tests:
   - connection: "Can connect to Neovim?"
@@ -67,6 +74,7 @@ purpose: "Rapid validation that basics work"
 ```
 
 ### Level 2: Feature Tests (Component Validation)
+
 ```yaml
 feature_tests:
   - navigation: "Test all movement commands"
@@ -79,6 +87,7 @@ purpose: "Verify individual features work"
 ```
 
 ### Level 3: Integration Tests (Workflow Validation)
+
 ```yaml
 workflow_tests:
   - create_note: "New note → Edit → Save → Navigate"
@@ -91,6 +100,7 @@ purpose: "Validate complete user workflows"
 ```
 
 ### Level 4: Stress Tests (Limits & Performance)
+
 ```yaml
 stress_tests:
   - large_file: "Open 10MB file - responsive?"
@@ -146,42 +156,51 @@ end
 ### What Makes This Different
 
 1. **Active vs Passive Testing**
+
    - Traditional: Analyze code statically
    - AIDEV: Actually interact with the environment
 
 2. **Experiential Validation**
+
    - Traditional: "Should work according to docs"
    - AIDEV: "I tried it and here's what happened"
 
 3. **Real-time Discovery**
+
    - Traditional: Pre-defined test cases
    - AIDEV: Discovers issues during exploration (like the register privacy issue!)
 
 4. **Adaptive Testing**
+
    - Traditional: Fixed test suite
    - AIDEV: AI adapts tests based on what it finds
 
 ### Future Possibilities
 
 1. **Continuous Validation**
+
    - AI monitors config changes and auto-tests
    - Catches breaking changes immediately
 
 2. **Cross-Environment Testing**
+
    - Test same config on different OS/terminals
    - Identify platform-specific issues
 
 3. **User Behavior Learning**
+
    - AI learns your workflow patterns
    - Tests focus on what you actually use
 
 4. **Predictive Failure Detection**
+
    - AI predicts what might break
    - Proactive fixes before issues occur
 
 ## Metrics & Reporting
 
 ### Test Coverage Metrics
+
 ```yaml
 coverage:
   commands_tested: "45/120 (37.5%)"
@@ -191,6 +210,7 @@ coverage:
 ```
 
 ### Performance Baselines
+
 ```yaml
 performance:
   startup_time: "168ms"
@@ -200,6 +220,7 @@ performance:
 ```
 
 ### Security Findings
+
 ```yaml
 security:
   sensitive_data_in_registers: "CRITICAL - Fixed"
@@ -210,12 +231,14 @@ security:
 ## The "Hands-On" Experience
 
 This MCP integration gives AI assistants:
+
 - **Eyes** - See buffers, read status
 - **Hands** - Execute commands, navigate
 - **Memory** - Track state changes
 - **Judgment** - Evaluate if things work correctly
 
 It's like the difference between:
+
 - Reading a cookbook vs. Actually cooking
 - Studying driving theory vs. Actually driving
 - Reading docs vs. Actually using the software
@@ -228,6 +251,6 @@ It's like the difference between:
 4. **Develop AI Test Personas** - Different testing styles
 5. **Open Source Protocol** - Share with community
 
----
+______________________________________________________________________
 
 *This protocol discovered a privacy issue you didn't know existed. Imagine what else AI testing could find!*

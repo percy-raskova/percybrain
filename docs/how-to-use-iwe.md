@@ -1,4 +1,3 @@
-
 # How to use with your text editor
 
 ## Purpose
@@ -33,19 +32,19 @@ IWE provides comprehensive features for markdown-based knowledge management:
 
 Here's a reference connecting each LSP request with IWE features:
 
-|IWE Feature|LSP Request|Description|
-|-----------|-----------|-----------|
-|Extract/Inline Notes|Code Action|Split sections into files or merge them back|
-|AI Text Generation|Code Action|Generate, rewrite, or modify text using AI|
-|Text Transformation|Code Action|Convert lists to headers, change list types|
-|Link Navigation|Go To Definition|Follow markdown links to target documents|
-|Backlinks|Go To References|Find all documents referencing current document|
-|Document Outline|Document Symbols|View table of contents for navigation|
-|Global Search|Workspace Symbols|Search through all notes with fuzzy matching|
-|Auto-Format|Document Formatting|Normalize structure, headers, and links|
-|File Renaming|Rename Symbol|Rename files and update all references|
-|Link Completion|Completion|Auto-complete links as you type|
-|Visual Hints|Inlay Hints|Show parent references and link counts|
+| IWE Feature          | LSP Request         | Description                                     |
+| -------------------- | ------------------- | ----------------------------------------------- |
+| Extract/Inline Notes | Code Action         | Split sections into files or merge them back    |
+| AI Text Generation   | Code Action         | Generate, rewrite, or modify text using AI      |
+| Text Transformation  | Code Action         | Convert lists to headers, change list types     |
+| Link Navigation      | Go To Definition    | Follow markdown links to target documents       |
+| Backlinks            | Go To References    | Find all documents referencing current document |
+| Document Outline     | Document Symbols    | View table of contents for navigation           |
+| Global Search        | Workspace Symbols   | Search through all notes with fuzzy matching    |
+| Auto-Format          | Document Formatting | Normalize structure, headers, and links         |
+| File Renaming        | Rename Symbol       | Rename files and update all references          |
+| Link Completion      | Completion          | Auto-complete links as you type                 |
+| Visual Hints         | Inlay Hints         | Show parent references and link counts          |
 
 ## Usage Example
 
@@ -58,7 +57,7 @@ Here's a reference connecting each LSP request with IWE features:
 
 Suppose that you have the following in a Markdown file:
 
-``` markdown
+```markdown
 # My First Note
 
 There's some content here.
@@ -73,12 +72,12 @@ With a list inside it:
 
 ### Extracting a Section
 
-1.  Move your cursor to the `## Another section` line
-2.  Invoke the **Code Action** command (varies by editor)
-3.  Select "Extract section" from the options
-4.  Your file will now look like this:
+1. Move your cursor to the `## Another section` line
+2. Invoke the **Code Action** command (varies by editor)
+3. Select "Extract section" from the options
+4. Your file will now look like this:
 
-``` markdown
+```markdown
 # My First Note
 
 There's some content here.
@@ -90,11 +89,11 @@ The `2sbdlvhe` refers to the name of a new file IWE generated for you.
 
 ### Following the Link
 
-1.  Move your cursor anywhere on the `[Another section](2sbdlvhe)` link
-2.  Use **Go To Definition** command
-3.  Your editor will open the new file containing:
+1. Move your cursor anywhere on the `[Another section](2sbdlvhe)` link
+2. Use **Go To Definition** command
+3. Your editor will open the new file containing:
 
-``` markdown
+```markdown
 # Another section
 
 With a list inside it:
@@ -105,10 +104,10 @@ With a list inside it:
 
 ### Finding Backlinks
 
-1.  In the extracted file, move your cursor to the `# Another section` line
-2.  Use the **Go To References** command
-3.  You'll see a list of all files that link to this document
-4.  Select the original file to navigate back
+1. In the extracted file, move your cursor to the `# Another section` line
+2. Use the **Go To References** command
+3. You'll see a list of all files that link to this document
+4. Select the original file to navigate back
 
 ## Advanced Features
 
@@ -123,7 +122,7 @@ IWE supports configurable AI commands that can:
 
 Configure AI actions in your `.iwe/config.toml`:
 
-``` toml
+```toml
 [models.default]
 api_key_env = "OPENAI_API_KEY"
 base_url = "https://api.openai.com"
@@ -177,12 +176,12 @@ My Coffee Journey ⇒ Week 3 - Coffee week ⇒ Jan 26, 2025 - Cappuccino
 
 To reverse section extraction:
 
-1.  Move your cursor to a link like `[Another section](2sbdlvhe)`
-2.  Invoke **Code Action**
-3.  Select "Inline section"
-4.  The content returns to the original document:
+1. Move your cursor to a link like `[Another section](2sbdlvhe)`
+2. Invoke **Code Action**
+3. Select "Inline section"
+4. The content returns to the original document:
 
-``` markdown
+```markdown
 # My First Note
 
 There's some content here.
@@ -208,10 +207,10 @@ When IWE creates new files (via extraction):
 
 ## Best Practices
 
-1.  **Use Meaningful Headers**: Clear section titles improve navigation and search
-2.  **Link Liberally**: Create connections between related concepts
-3.  **Regular Formatting**: Use document formatting to maintain consistency
-4.  **Organize with Extraction**: Break large documents into focused, linked sections
-5.  **Leverage Search**: Use global search to discover connections and content
-6.  **Configure AI**: Set up AI actions that match your writing workflow
-7.  **Use Inlay Hints**: Enable hints to understand document relationships at a glance
+1. **Use Meaningful Headers**: Clear section titles improve navigation and search
+2. **Link Liberally**: Create connections between related concepts
+3. **Regular Formatting**: Use document formatting to maintain consistency
+4. **Organize with Extraction**: Break large documents into focused, linked sections
+5. **Leverage Search**: Use global search to discover connections and content
+6. **Configure AI**: Set up AI actions that match your writing workflow
+7. **Use Inlay Hints**: Enable hints to understand document relationships at a glance

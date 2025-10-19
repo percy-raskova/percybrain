@@ -1,30 +1,32 @@
 ---
-title: " UI Components  UI Components | nvim-lua/plenary.nvim"
+title: ' UI Components  UI Components | nvim-lua/plenary.nvim'
 author:
-published:    UI Components | nvim-lua/plenary.nvim | DeepWiki
-description: "   nvim-lua/plenary.nvim"
-source: "https://deepwiki.com/nvim-lua/plenary.nvim/5-ui-components"
+published: UI Components | nvim-lua/plenary.nvim | DeepWiki
+description: '   nvim-lua/plenary.nvim'
+source: https://deepwiki.com/nvim-lua/plenary.nvim/5-ui-components
 created: 2025-10-18
-category: "category:   [\"nvim-lua\",\"plenary.nvim\",\"5-ui-components\"]"
+category: 'category:   ["nvim-lua","plenary.nvim","5-ui-components"]'
 tags:
-  - "tags:"
-image: "image:    "
-cover: "cover: "
+  - 'tags:'
+image: 'image:    '
+cover: 'cover: '
 ---
+
 Menu
 
 ## UI Components
 
 Relevant source files
+
 - [POPUP.md](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/POPUP.md)
-- [lua/plenary/nvim\_meta.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/nvim_meta.lua)
+- [lua/plenary/nvim_meta.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/nvim_meta.lua)
 - [lua/plenary/popup/init.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/popup/init.lua)
 - [lua/plenary/popup/utils.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/popup/utils.lua)
 - [lua/plenary/run.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/run.lua)
 - [lua/plenary/window/border.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/window/border.lua)
 - [lua/plenary/window/float.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/window/float.lua)
-- [tests/plenary/popup\_requires\_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/popup_requires_spec.lua)
-- [tests/plenary/popup\_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/popup_spec.lua)
+- [tests/plenary/popup_requires_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/popup_requires_spec.lua)
+- [tests/plenary/popup_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/popup_spec.lua)
 
 This page documents the user interface components provided by plenary.nvim. These components help plugin developers create rich and interactive UI elements in Neovim with minimal effort, handling common tasks like window creation, borders, and positioning.
 
@@ -37,6 +39,7 @@ Plenary provides three main UI component systems:
 1. **Border** - A system for creating and managing borders around windows
 2. **Popup** - A wrapper for Vim's popup API in Neovim
 3. **Float** - Utilities for creating floating windows with specific layouts
+
 ```
 External UsageUI Component Hierarchyplenary.popup
 Vim-compatible popup API wrapperplenary.window.border
@@ -122,6 +125,7 @@ The `popup.create` function takes:
 
 1. Content (`what`) - Can be a string, list of strings, or a buffer number
 2. Options (`vim_options`) - Configuration for the popup
+
 ```
 local win_id = popup.create("Hello World", {
   line = 5,
@@ -141,22 +145,22 @@ Sources: [lua/plenary/popup/init.lua 115-443](https://github.com/nvim-lua/plenar
 
 The popup system supports many of the same options as Vim's popup API:
 
-| Option | Description |
-| --- | --- |
-| `line`, `col` | Position of the popup (1-based) |
-| `pos` | Position anchor ("topleft", "topright", "botleft", "botright", "center") |
-| `width`, `height` | Size of the popup |
-| `border` | Boolean or table specifying border thickness |
-| `borderchars` | Characters to use for border edges and corners |
-| `title` | Title text to display in the border |
-| `highlight` | Highlight group for popup content |
-| `borderhighlight` | Highlight group for border |
-| `titlehighlight` | Highlight group for title |
-| `padding` | Padding around content (similar to CSS padding) |
-| `zindex` | Z-index for stacking order (1-32000) |
-| `time` | Auto-close after specified milliseconds |
-| `moved` | Close when cursor moves |
-| `callback` | Function to call when popup item is selected |
+| Option            | Description                                                              |
+| ----------------- | ------------------------------------------------------------------------ |
+| `line`, `col`     | Position of the popup (1-based)                                          |
+| `pos`             | Position anchor ("topleft", "topright", "botleft", "botright", "center") |
+| `width`, `height` | Size of the popup                                                        |
+| `border`          | Boolean or table specifying border thickness                             |
+| `borderchars`     | Characters to use for border edges and corners                           |
+| `title`           | Title text to display in the border                                      |
+| `highlight`       | Highlight group for popup content                                        |
+| `borderhighlight` | Highlight group for border                                               |
+| `titlehighlight`  | Highlight group for title                                                |
+| `padding`         | Padding around content (similar to CSS padding)                          |
+| `zindex`          | Z-index for stacking order (1-32000)                                     |
+| `time`            | Auto-close after specified milliseconds                                  |
+| `moved`           | Close when cursor moves                                                  |
+| `callback`        | Function to call when popup item is selected                             |
 
 Sources: [lua/plenary/popup/init.lua 28-372](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/popup/init.lua#L28-L372) [POPUP.md 44-72](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/POPUP.md#L44-L72)
 
@@ -293,7 +297,7 @@ local win = float.centered_with_top_win(
 -- Use win.minor_bufnr for header content
 ```
 
-Sources: [tests/plenary/popup\_spec.lua 15-23](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/popup_spec.lua#L15-L23) [lua/plenary/window/float.lua 44-61](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/window/float.lua#L44-L61) [lua/plenary/window/float.lua 63-125](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/window/float.lua#L63-L125)
+Sources: [tests/plenary/popup_spec.lua 15-23](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/popup_spec.lua#L15-L23) [lua/plenary/window/float.lua 44-61](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/window/float.lua#L44-L61) [lua/plenary/window/float.lua 63-125](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/window/float.lua#L63-L125)
 
 ## Autocleaning and Event Handling
 
@@ -302,6 +306,7 @@ All UI components have built-in autocleaning to prevent window/buffer leaks:
 - Popup windows register autocmds to clean up when the buffer is deleted
 - Floating windows register autocmds to clean up associated windows
 - Borders automatically close when their content window closes
+
 ```
 "Neovim API""UI Component""Plugin""Neovim API""UI Component""Plugin"User interaction periodCreate windowCreate buffer(s)Open window(s)Register autocmds for cleanupBuffer or window close eventTrigger cleanup autocmdClose remaining windowsClean up buffers
 ```

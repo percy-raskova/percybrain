@@ -5,6 +5,7 @@ Simple, pragmatic test suite for OVIWrite/PercyBrain Neovim configuration.
 ## Philosophy
 
 **Not Enterprise Compliance Theater** - This test suite ensures:
+
 1. Code is syntactically valid (no broken Lua)
 2. Code is formatted consistently (StyLua)
 3. Code follows best practices (Selene linting)
@@ -12,6 +13,7 @@ Simple, pragmatic test suite for OVIWrite/PercyBrain Neovim configuration.
 5. Core config can load without errors
 
 **What this is NOT:**
+
 - Performance testing
 - Security auditing
 - Enterprise-grade compliance
@@ -67,6 +69,7 @@ Tests Failed: 0
 ## Test Details
 
 ### 1. Lua Syntax Validation
+
 - **Tool**: `luac` (if available) or `nvim --headless`
 - **Purpose**: Catch syntax errors before commit
 - **Files**: All `*.lua` files in `lua/` directory
@@ -74,6 +77,7 @@ Tests Failed: 0
 - **Fail**: Any syntax errors detected
 
 ### 2. Critical Files Exist
+
 - **Purpose**: Ensure core configuration structure intact
 - **Files Checked**:
   - `init.lua`
@@ -84,6 +88,7 @@ Tests Failed: 0
 - **Fail**: Any files missing
 
 ### 3. Core Config Loads
+
 - **Environment Aware**:
   - **CI**: Syntax validation only (plugins not installed)
   - **Local**: Full config load test with Neovim headless
@@ -92,6 +97,7 @@ Tests Failed: 0
 - **Fail**: Any load-time errors
 
 ### 4. Code Formatting (StyLua)
+
 - **Tool**: StyLua v2.3.0
 - **Purpose**: Consistent code style
 - **Timeout**: 30 seconds
@@ -100,6 +106,7 @@ Tests Failed: 0
 - **Fix**: Run `stylua lua/`
 
 ### 5. Code Quality (Selene)
+
 - **Tool**: Selene v0.29.0
 - **Purpose**: Catch common Lua mistakes
 - **Timeout**: 60 seconds
@@ -131,6 +138,7 @@ nvim --headless -c "lua require('config')" -c "qall"
 ### Tests Fail in CI but Pass Locally
 
 Common causes:
+
 1. **Tool version mismatch**: Check CI uses same versions
 2. **Path issues**: Verify tools are in PATH
 3. **Cache issues**: Clear GitHub Actions cache
@@ -152,6 +160,7 @@ If tests hang due to old cached tools:
 - **`lua-quality.yml`** - Format/lint only workflow
 
 Both workflows:
+
 - Run on push to any branch (if Lua files changed)
 - Run on pull requests to main/master
 - Cache tools for faster execution (~30s with cache)
@@ -240,6 +249,7 @@ selene --help
 ```
 
 Installs:
+
 - **StyLua v2.3.0** - Rust-based formatter
 - **Selene v0.29.0** - Rust-based linter
 
@@ -252,6 +262,7 @@ Installs:
 ## Contributing
 
 When adding new tests:
+
 1. Keep them simple and fast
 2. Add timeouts to prevent hangs
 3. Use temporary files for output capture (not command substitution)

@@ -3,12 +3,14 @@
 ## Prerequisites
 
 ### Required Software
+
 - [ ] Neovim >= 0.8.0
 - [ ] Git >= 2.19.0
 - [ ] Python >= 3.8 (for sembr tool)
 - [ ] UV package manager (for installing sembr)
 
 ### Install SemBr Binary
+
 ```bash
 # Install UV if not already installed
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -23,13 +25,17 @@ sembr --version
 ## Neovim Plugin Installation
 
 ### 1. Core Git Plugins
+
 These are automatically installed via lazy.nvim when you start Neovim:
+
 - [ ] vim-fugitive (Git operations)
 - [ ] gitsigns.nvim (Visual Git integration)
 - [ ] diffview.nvim (optional, for advanced diffs)
 
 ### 2. SemBr Integration Layer
+
 Already configured in your PercyBrain setup:
+
 - [ ] `/lua/percybrain/sembr-git.lua` - Core integration
 - [ ] `/lua/plugins/zettelkasten/sembr-integration.lua` - Plugin config
 - [ ] `/lua/plugins/utilities/fugitive.lua` - Fugitive extensions
@@ -38,6 +44,7 @@ Already configured in your PercyBrain setup:
 ## Git Configuration
 
 ### Automatic Configuration
+
 When you first use SemBr Git commands, the system will automatically configure Git:
 
 ```bash
@@ -50,6 +57,7 @@ git config merge.conflictstyle diff3
 ```
 
 ### Manual Configuration (Optional)
+
 If you want to configure Git manually:
 
 ```bash
@@ -70,6 +78,7 @@ git config merge.conflictstyle diff3
 ```
 
 ### .gitattributes Setup
+
 The system will automatically create `.gitattributes` in your Zettelkasten:
 
 ```gitattributes
@@ -93,12 +102,14 @@ The system will automatically create `.gitattributes` in your Zettelkasten:
 ## Testing the Installation
 
 ### 1. Start Neovim
+
 ```bash
 cd ~/Zettelkasten
 nvim
 ```
 
 ### 2. Check Plugin Installation
+
 ```vim
 :Lazy
 " Look for vim-fugitive and gitsigns.nvim in the list
@@ -106,6 +117,7 @@ nvim
 ```
 
 ### 3. Test SemBr Formatter
+
 ```vim
 " Open a markdown file
 :e test.md
@@ -120,6 +132,7 @@ iThis is a very long sentence that contains multiple clauses and should be broke
 ```
 
 ### 4. Test Git Integration
+
 ```vim
 " Check Git status (fugitive)
 :Git status
@@ -135,17 +148,19 @@ iThis is a very long sentence that contains multiple clauses and should be broke
 ```
 
 ### 5. Test Keymaps
-| Keymap | Command | Expected Result |
-|--------|---------|-----------------|
-| `<leader>zs` | Format with SemBr | Text breaks into semantic lines |
-| `<leader>zt` | Toggle auto-format | Enable/disable format on save |
-| `<leader>gsd` | SemBr Git diff | Diff with word wrap enabled |
-| `<leader>gsb` | SemBr Git blame | Blame with line wrapping |
-| `<leader>gsc` | SemBr Git commit | Commit with SemBr formatting |
+
+| Keymap        | Command            | Expected Result                 |
+| ------------- | ------------------ | ------------------------------- |
+| `<leader>zs`  | Format with SemBr  | Text breaks into semantic lines |
+| `<leader>zt`  | Toggle auto-format | Enable/disable format on save   |
+| `<leader>gsd` | SemBr Git diff     | Diff with word wrap enabled     |
+| `<leader>gsb` | SemBr Git blame    | Blame with line wrapping        |
+| `<leader>gsc` | SemBr Git commit   | Commit with SemBr formatting    |
 
 ## Verification Commands
 
 ### Check SemBr Binary
+
 ```bash
 # Should output version
 sembr --version
@@ -155,12 +170,14 @@ echo "This is a long sentence with multiple clauses that should be split." | sem
 ```
 
 ### Check Git Configuration
+
 ```bash
 cd ~/Zettelkasten
 git config --list | grep -E "(diff|merge)"
 ```
 
 ### Check Neovim Integration
+
 ```vim
 " Should list all SemBr commands
 :command GSembr
@@ -173,6 +190,7 @@ git config --list | grep -E "(diff|merge)"
 ## Troubleshooting
 
 ### SemBr Binary Not Found
+
 ```bash
 # Ensure UV is in PATH
 echo $PATH | grep -q ".local/bin" || export PATH="$HOME/.local/bin:$PATH"
@@ -182,6 +200,7 @@ uv tool install --force sembr
 ```
 
 ### Plugins Not Loading
+
 ```vim
 " Force reload plugins
 :Lazy reload vim-fugitive
@@ -192,6 +211,7 @@ uv tool install --force sembr
 ```
 
 ### Git Commands Not Working
+
 ```vim
 " Ensure you're in a Git repository
 :!git status
@@ -201,6 +221,7 @@ uv tool install --force sembr
 ```
 
 ### Formatting Not Working
+
 ```vim
 " Check if sembr is accessible from Neovim
 :!which sembr
@@ -212,12 +233,14 @@ uv tool install --force sembr
 ## Usage Tips
 
 ### Daily Workflow
+
 1. Write your notes naturally in long paragraphs
 2. Use `<leader>zs` to format with semantic line breaks before committing
 3. Git diffs will show meaningful changes at the clause level
 4. Hugo will render paragraphs correctly (ignoring line breaks)
 
 ### Auto-Format on Save
+
 ```vim
 " Enable auto-format for current session
 :SemBrToggle
@@ -227,6 +250,7 @@ uv tool install --force sembr
 ```
 
 ### Best Practices
+
 - Format just before committing for cleaner diffs
 - Use word-level diff view for reviewing changes
 - Keep auto-format OFF during initial drafting
@@ -235,6 +259,7 @@ uv tool install --force sembr
 ## Integration with Hugo
 
 Hugo automatically handles SemBr-formatted markdown:
+
 - Line breaks within paragraphs are ignored
 - Paragraphs are separated by blank lines
 - Result: Clean rendering despite semantic line breaks
@@ -244,6 +269,7 @@ No special Hugo configuration needed!
 ## Success Indicators
 
 ✅ **You're ready when:**
+
 - [ ] `sembr --version` shows output
 - [ ] `:SemBrFormat` command exists in Neovim
 - [ ] `<leader>zs` formats text into semantic lines
@@ -254,11 +280,12 @@ No special Hugo configuration needed!
 ## Support
 
 If you encounter issues:
+
 1. Check `:checkhealth` in Neovim
 2. Review `~/.config/nvim/lua/percybrain/sembr-git.lua`
 3. Verify Git version: `git --version` (need >= 2.19.0)
 4. Check sembr installation: `uv tool list | grep sembr`
 
----
+______________________________________________________________________
 
 **Remember the Philosophy**: We extend existing tools (vim-fugitive, gitsigns) rather than reinventing. The SemBr layer is thin and maintainable - only ~300 lines of integration code!

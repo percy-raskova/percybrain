@@ -1,31 +1,33 @@
 ---
-title: " Development Tools  Development Tools | nvim-lua/plenary.nvim"
+title: ' Development Tools  Development Tools | nvim-lua/plenary.nvim'
 author:
-published:    Development Tools | nvim-lua/plenary.nvim | DeepWiki
-description: "   nvim-lua/plenary.nvim"
-source: "https://deepwiki.com/nvim-lua/plenary.nvim/10-development-tools"
+published: Development Tools | nvim-lua/plenary.nvim | DeepWiki
+description: '   nvim-lua/plenary.nvim'
+source: https://deepwiki.com/nvim-lua/plenary.nvim/10-development-tools
 created: 2025-10-18
-category: "category:   [\"nvim-lua\",\"plenary.nvim\",\"10-development-tools\"]"
+category: 'category:   ["nvim-lua","plenary.nvim","10-development-tools"]'
 tags:
-  - "tags:"
-image: "image:    "
-cover: "cover: "
+  - 'tags:'
+image: 'image:    '
+cover: 'cover: '
 ---
+
 Menu
 
 ## Development Tools
 
 Relevant source files
+
 - [.styluaignore](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/.styluaignore)
 - [lua/plenary/\_meta/\_luassert.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/_meta/_luassert.lua)
 - [lua/plenary/busted.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/busted.lua)
 - [lua/plenary/log.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/log.lua)
 - [lua/plenary/profile.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/profile.lua)
 - [lua/plenary/profile/p.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/profile/p.lua)
-- [scripts/generate\_luassert\_types.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/scripts/generate_luassert_types.lua)
-- [tests/manual/large\_job\_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/manual/large_job_spec.lua)
-- [tests/plenary/simple\_busted\_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/simple_busted_spec.lua)
-- [tests/plenary/uses\_nvim\_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/uses_nvim_spec.lua)
+- [scripts/generate_luassert_types.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/scripts/generate_luassert_types.lua)
+- [tests/manual/large_job_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/manual/large_job_spec.lua)
+- [tests/plenary/simple_busted_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/simple_busted_spec.lua)
+- [tests/plenary/uses_nvim_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/uses_nvim_spec.lua)
 
 This page documents the development tools provided by plenary.nvim that help plugin developers create, test, debug, and optimize their Neovim plugins. These tools include a comprehensive logging system, a testing framework compatible with Busted, and profiling utilities for performance optimization.
 
@@ -51,16 +53,16 @@ The logging system (`plenary.log`) provides plugin developers with a configurabl
 
 The logging system can be configured with the following options:
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `plugin` | string | "plenary" | Name of plugin, prepended to log messages |
-| `use_console` | string/boolean | "async" | Print to Neovim console: 'sync','async',false |
-| `highlights` | boolean | true | Use syntax highlighting in console output |
-| `use_file` | boolean | true | Write logs to a file |
-| `outfile` | string | nil | Custom log file path (default: stdpath("log")/plugin.log) |
-| `use_quickfix` | boolean | false | Write logs to the quickfix list |
-| `level` | string | "info" | Minimum log level to record ("debug" if DEBUG\_PLENARY is set) |
-| `float_precision` | number | 0.01 | Precision for floating point values in logs |
+| Option            | Type           | Default   | Description                                                   |
+| ----------------- | -------------- | --------- | ------------------------------------------------------------- |
+| `plugin`          | string         | "plenary" | Name of plugin, prepended to log messages                     |
+| `use_console`     | string/boolean | "async"   | Print to Neovim console: 'sync','async',false                 |
+| `highlights`      | boolean        | true      | Use syntax highlighting in console output                     |
+| `use_file`        | boolean        | true      | Write logs to a file                                          |
+| `outfile`         | string         | nil       | Custom log file path (default: stdpath("log")/plugin.log)     |
+| `use_quickfix`    | boolean        | false     | Write logs to the quickfix list                               |
+| `level`           | string         | "info"    | Minimum log level to record ("debug" if DEBUG_PLENARY is set) |
+| `float_precision` | number         | 0.01      | Precision for floating point values in logs                   |
 
 Sources: [lua/plenary/log.lua 18-71](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/log.lua#L18-L71)
 
@@ -127,24 +129,24 @@ Sources: [lua/plenary/busted.lua 45-206](https://github.com/nvim-lua/plenary.nvi
 
 ### Test Framework API
 
-| Function | Description |
-| --- | --- |
-| `describe(desc, func)` | Defines a test suite or context |
-| `it(desc, func)` | Defines a test case |
-| `pending(desc, func)` | Marks a test as pending (will not run) |
-| `before_each(func)` | Runs before each test in the current scope |
-| `after_each(func)` | Runs after each test in the current scope |
-| `assert.*` | Assertions from luassert library (e.g., `assert.equals()`) |
+| Function               | Description                                                |
+| ---------------------- | ---------------------------------------------------------- |
+| `describe(desc, func)` | Defines a test suite or context                            |
+| `it(desc, func)`       | Defines a test case                                        |
+| `pending(desc, func)`  | Marks a test as pending (will not run)                     |
+| `before_each(func)`    | Runs before each test in the current scope                 |
+| `after_each(func)`     | Runs after each test in the current scope                  |
+| `assert.*`             | Assertions from luassert library (e.g., `assert.equals()`) |
 
 Sources: [lua/plenary/busted.lua 119-205](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/busted.lua#L119-L205)
 
 ### Command Interface
 
-| Command | Description |
-| --- | --- |
-| `:PlenaryBustedFile [file]` | Run tests in a single file |
-| `:PlenaryBustedDirectory [dir]` | Run all tests in a directory |
-| `<Plug>PlenaryTestFile` | Mapping to test the current file |
+| Command                         | Description                      |
+| ------------------------------- | -------------------------------- |
+| `:PlenaryBustedFile [file]`     | Run tests in a single file       |
+| `:PlenaryBustedDirectory [dir]` | Run all tests in a directory     |
+| `<Plug>PlenaryTestFile`         | Mapping to test the current file |
 
 ### Example Test File
 
@@ -153,39 +155,39 @@ Here's an example of how to structure tests with plenary.busted:
 ```
 describe("feature name", function()
   local count = 0
-  
+
   before_each(function()
     -- Setup code runs before each test
     count = 0
   end)
-  
+
   after_each(function()
     -- Teardown code runs after each test
   end)
-  
+
   it("should increment counter", function()
     count = count + 1
     assert.equals(1, count)
   end)
-  
+
   describe("nested context", function()
     before_each(function()
       -- Additional setup for this context
       count = count + 10
     end)
-    
+
     it("should have the right count", function()
       assert.equals(10, count)
     end)
   end)
-  
+
   pending("test that's not implemented yet", function()
     -- This test will be skipped and marked as pending
   end)
 end)
 ```
 
-Sources: [tests/plenary/simple\_busted\_spec.lua 1-206](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/simple_busted_spec.lua#L1-L206)
+Sources: [tests/plenary/simple_busted_spec.lua 1-206](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/simple_busted_spec.lua#L1-L206)
 
 ## Profiling Tools
 
@@ -202,10 +204,10 @@ Sources: [lua/plenary/profile.lua 1-32](https://github.com/nvim-lua/plenary.nvim
 
 ### Profiling API
 
-| Function | Description |
-| --- | --- |
-| `profile.start(out, opts)` | Start profiling, writing results to `out` file |
-| `profile.stop()` | Stop profiling and save results |
+| Function                                | Description                                                                                             |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `profile.start(out, opts)`              | Start profiling, writing results to `out` file                                                          |
+| `profile.stop()`                        | Stop profiling and save results                                                                         |
 | `profile.benchmark(iterations, f, ...)` | Run function `f` with arguments `...` for `iterations` times and return total execution time in seconds |
 
 The profiler options include:
@@ -265,7 +267,7 @@ Sources: [lua/plenary/profile.lua 8-29](https://github.com/nvim-lua/plenary.nvim
 The development tools are designed to work together while remaining independent modules:
 
 ```
-Neovim Plugin Development WorkflowWrite Plugin CodeWrite Tests 
+Neovim Plugin Development WorkflowWrite Plugin CodeWrite Tests
 (plenary.busted)Debug Issues
 (plenary.log)Optimize Performance
 (plenary.profile)

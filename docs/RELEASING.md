@@ -2,10 +2,9 @@
 
 **Philosophy**: Simple, automated releases that maintain quality without bureaucracy.
 
-**For Solo Dev**: You control when releases happen via git tags.
-**For Contributors**: Automation handles the rest after tag push.
+**For Solo Dev**: You control when releases happen via git tags. **For Contributors**: Automation handles the rest after tag push.
 
----
+______________________________________________________________________
 
 ## Quick Release Guide (TL;DR)
 
@@ -26,7 +25,7 @@ git push origin v1.2.3
 
 That's it! CI/CD handles the rest automatically.
 
----
+______________________________________________________________________
 
 ## Semantic Versioning Strategy
 
@@ -37,7 +36,9 @@ PercyBrain follows [Semantic Versioning 2.0.0](https://semver.org/):
 ### When to Bump Each Component
 
 #### MAJOR version (v1.x.x → v2.0.0)
+
 **Breaking changes** that require user action:
+
 - Plugin configuration API changes
 - Removed features or commands
 - Changed default keybindings that users rely on
@@ -46,7 +47,9 @@ PercyBrain follows [Semantic Versioning 2.0.0](https://semver.org/):
 **Example**: Renaming `require('config')` to `require('percybrain.config')`
 
 #### MINOR version (v1.2.x → v1.3.0)
+
 **New features** that don't break existing functionality:
+
 - New plugins added (e.g., new markdown preview tool)
 - New commands or keybindings
 - Enhanced PercyBrain features
@@ -55,7 +58,9 @@ PercyBrain follows [Semantic Versioning 2.0.0](https://semver.org/):
 **Example**: Adding AI-powered summarization to PercyBrain
 
 #### PATCH version (v1.2.3 → v1.2.4)
+
 **Bug fixes** and non-functional changes:
+
 - Fix startup errors
 - Correct plugin configuration issues
 - Documentation updates
@@ -74,7 +79,7 @@ Does it add new features? → YES → MINOR
 Is it a bug fix or small improvement? → YES → PATCH
 ```
 
----
+______________________________________________________________________
 
 ## Detailed Release Workflow
 
@@ -151,7 +156,7 @@ git ls-remote --tags origin | grep v1.2.3
 
 🚀 **Automation starts now!**
 
----
+______________________________________________________________________
 
 ### Phase 2: Automated Release (CI/CD)
 
@@ -187,7 +192,7 @@ GitHub Actions (`.github/workflows/release.yml`) automatically:
 
 **Typical Duration**: 3-5 minutes from tag push to published release.
 
----
+______________________________________________________________________
 
 ## Advanced Workflows
 
@@ -239,7 +244,7 @@ git tag v1.2.3 -m "Release 1.2.3: Fixed version"
 git push origin v1.2.3
 ```
 
-**⚠️ Warning**: Only do this for recent releases (<1 hour old). Users may have already installed.
+**⚠️ Warning**: Only do this for recent releases (\<1 hour old). Users may have already installed.
 
 ### Hotfix Release Process
 
@@ -264,7 +269,7 @@ git push origin main
 git push origin v1.2.4
 ```
 
----
+______________________________________________________________________
 
 ## What Gets Automated
 
@@ -286,13 +291,14 @@ git push origin v1.2.4
 - Pushing tag to trigger release
 - Announcing release to users
 
----
+______________________________________________________________________
 
 ## Release Checklist
 
 Use this checklist for every release:
 
 ### Pre-Release
+
 - [ ] All changes committed to main branch
 - [ ] Tests pass locally (`./tests/simple-test.sh`)
 - [ ] Code formatted (`stylua lua/`)
@@ -302,11 +308,13 @@ Use this checklist for every release:
 - [ ] Feature branch merged (if applicable)
 
 ### Tagging
+
 - [ ] Created annotated tag: `git tag vX.Y.Z -m "Release X.Y.Z: Summary"`
 - [ ] Tag follows format: `v` + `MAJOR.MINOR.PATCH`
 - [ ] Tag pushed to GitHub: `git push origin vX.Y.Z`
 
 ### Post-Release
+
 - [ ] GitHub Actions workflow completed successfully
 - [ ] Release visible at: https://github.com/yourusername/oviwrite/releases
 - [ ] Release notes look correct
@@ -314,7 +322,7 @@ Use this checklist for every release:
 - [ ] Announcement to users (optional: Discord, Reddit, etc.)
 - [ ] Close related GitHub issues/milestones
 
----
+______________________________________________________________________
 
 ## Troubleshooting
 
@@ -323,6 +331,7 @@ Use this checklist for every release:
 **Cause**: Lightweight tag instead of annotated tag.
 
 **Solution**:
+
 ```bash
 # Delete lightweight tag
 git tag -d v1.2.3
@@ -338,6 +347,7 @@ git push origin v1.2.3
 **Cause**: Code quality issues not caught locally.
 
 **Solution**:
+
 ```bash
 # Review workflow logs on GitHub Actions
 # Fix issues locally
@@ -357,6 +367,7 @@ git push origin v1.2.3
 **Cause**: Tag doesn't match `v#.#.#` format.
 
 **Solution**:
+
 ```bash
 # Wrong: v1.2, 1.2.3, release-1.2.3
 # Right: v1.2.3
@@ -371,6 +382,7 @@ git push origin v1.2.3
 **Don't do this!** Tests exist to prevent shipping broken code.
 
 If absolutely necessary:
+
 1. Go to `.github/workflows/release.yml`
 2. Comment out test steps temporarily
 3. Commit and push
@@ -379,7 +391,7 @@ If absolutely necessary:
 
 **Better approach**: Fix code so tests pass, even for hotfixes.
 
----
+______________________________________________________________________
 
 ## Example: First Release
 
@@ -409,7 +421,7 @@ git push origin v1.0.0
 # 7. Announce to users! 🎉
 ```
 
----
+______________________________________________________________________
 
 ## For Contributors
 
@@ -423,7 +435,7 @@ If someone opens a PR and it gets merged:
 
 **Contributors don't create releases** - only maintainers with push access to main.
 
----
+______________________________________________________________________
 
 ## Philosophy & Design Decisions
 
@@ -448,34 +460,38 @@ If someone opens a PR and it gets merged:
 - **Debugging**: Users can report exact version easily
 - **Professional**: Shows maturity and stability
 
----
+______________________________________________________________________
 
 ## Future Enhancements (Not Implemented Yet)
 
 Ideas for when the project grows:
 
 ### Conventional Commits (Team Phase)
+
 - Enforce commit format: `feat:`, `fix:`, `BREAKING CHANGE:`
 - Auto-calculate version bumps from commits
 - Requires: Pre-commit hooks, contributor education
 
 ### Release Branches (Multi-Version Support)
+
 - Maintain v1.x.x and v2.x.x simultaneously
 - Backport critical fixes to older versions
 - Requires: More complex branching strategy
 
 ### Beta/RC Releases (Advanced Testing)
+
 - Pre-release tags: v1.2.3-beta.1, v1.2.3-rc.1
 - Allow early testers to try features
 - Requires: Tag format extension, separate workflow
 
 ### Automated Announcements (Marketing)
+
 - Post to Discord, Reddit, Twitter automatically
 - Requires: API tokens, announcement templates
 
 **For now**: Keep it simple. Add complexity only when needed.
 
----
+______________________________________________________________________
 
 ## References
 
@@ -484,7 +500,7 @@ Ideas for when the project grows:
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [lazy.nvim Installation](https://github.com/folke/lazy.nvim)
 
----
+______________________________________________________________________
 
 **Questions?** Open a GitHub Issue or check the [GitHub Discussions](https://github.com/yourusername/percybrain/discussions).
 

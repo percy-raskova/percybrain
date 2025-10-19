@@ -1,33 +1,35 @@
 ---
-title: " Testing Framework  Testing Framework | nvim-lua/plenary.nvim"
+title: ' Testing Framework  Testing Framework | nvim-lua/plenary.nvim'
 author:
-published:    Testing Framework | nvim-lua/plenary.nvim | DeepWiki
-description: "   nvim-lua/plenary.nvim"
-source: "https://deepwiki.com/nvim-lua/plenary.nvim/10.1-testing-framework"
+published: Testing Framework | nvim-lua/plenary.nvim | DeepWiki
+description: '   nvim-lua/plenary.nvim'
+source: https://deepwiki.com/nvim-lua/plenary.nvim/10.1-testing-framework
 created: 2025-10-18
-category: "category:   [\"nvim-lua\",\"plenary.nvim\",\"10.1-testing-framework\"]"
+category: 'category:   ["nvim-lua","plenary.nvim","10.1-testing-framework"]'
 tags:
-  - "tags:"
-image: "image:    "
-cover: "cover: "
+  - 'tags:'
+image: 'image:    '
+cover: 'cover: '
 ---
+
 Menu
 
 ## Testing Framework
 
 Relevant source files
+
 - [.styluaignore](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/.styluaignore)
-- [TESTS\_README.md](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/TESTS_README.md)
+- [TESTS_README.md](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/TESTS_README.md)
 - [lua/plenary/\_meta/\_luassert.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/_meta/_luassert.lua)
 - [lua/plenary/busted.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/busted.lua)
 - [lua/plenary/neorocks/init.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/neorocks/init.lua)
 - [lua/plenary/window/init.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/window/init.lua)
 - [plugin/plenary.vim](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/plugin/plenary.vim)
-- [scripts/generate\_luassert\_types.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/scripts/generate_luassert_types.lua)
-- [tests/manual/large\_job\_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/manual/large_job_spec.lua)
-- [tests/plenary/async\_testing\_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/async_testing_spec.lua)
-- [tests/plenary/simple\_busted\_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/simple_busted_spec.lua)
-- [tests/plenary/uses\_nvim\_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/uses_nvim_spec.lua)
+- [scripts/generate_luassert_types.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/scripts/generate_luassert_types.lua)
+- [tests/manual/large_job_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/manual/large_job_spec.lua)
+- [tests/plenary/async_testing_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/async_testing_spec.lua)
+- [tests/plenary/simple_busted_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/simple_busted_spec.lua)
+- [tests/plenary/uses_nvim_spec.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/uses_nvim_spec.lua)
 
 This document provides comprehensive documentation of plenary.nvim's testing framework which offers a Busted-compatible interface for writing and running tests in Neovim plugins. The framework includes a test harness for executing tests and supports synchronous and asynchronous testing approaches. For information about logging in tests, see [Logging System](https://deepwiki.com/nvim-lua/plenary.nvim/10.2-logging-system).
 
@@ -47,6 +49,7 @@ The testing framework consists of two main components:
 
 1. **Test Harness** - Responsible for discovering and running tests, configured through commands
 2. **Busted Framework** - Provides the testing API and handles test execution, results, and reporting
+
 ```
 invokesusesexposesTestHarnesstest_file(filepath)test_directory(directory, opts)test_directory_command(...)BustedFrameworkdescribe(desc, func)inner_describe(desc, func)it(desc, func)pending(desc, func)before_each(func)after_each(func)run(file)format_results(res)CommandsPlenaryBustedFilePlenaryBustedDirectoryPlenaryTestFileGlobalFunctionsdescribeitpendingbefore_eachafter_eachassert
 ```
@@ -57,14 +60,14 @@ Sources: [lua/plenary/busted.lua 44-271](https://github.com/nvim-lua/plenary.nvi
 
 The testing framework exposes several global functions for defining test suites and individual tests:
 
-| Function | Description |
-| --- | --- |
-| `describe(desc, func)` | Defines a group of related tests with a description |
-| `it(desc, func)` | Defines an individual test case with a description |
-| `pending(desc, func)` | Marks a test as pending (skipped) |
-| `before_each(func)` | Registers a function to run before each test in the current scope |
-| `after_each(func)` | Registers a function to run after each test in the current scope |
-| `assert` | The assertion library (luassert) for making assertions in tests |
+| Function               | Description                                                       |
+| ---------------------- | ----------------------------------------------------------------- |
+| `describe(desc, func)` | Defines a group of related tests with a description               |
+| `it(desc, func)`       | Defines an individual test case with a description                |
+| `pending(desc, func)`  | Marks a test as pending (skipped)                                 |
+| `before_each(func)`    | Registers a function to run before each test in the current scope |
+| `after_each(func)`     | Registers a function to run after each test in the current scope  |
+| `assert`               | The assertion library (luassert) for making assertions in tests   |
 
 The framework maintains a stack of descriptions and setup/teardown functions to handle nested test suites correctly.
 
@@ -112,7 +115,7 @@ describe("module name", function()
       local result = my_module.my_function()
       assert.equals(expected_value, result)
     end)
-    
+
     it("should handle edge cases", function()
       -- Another test
       assert.truthy(my_module.validate())
@@ -128,22 +131,22 @@ Use `before_each` and `after_each` to set up preconditions and clean up after te
 ```
 describe("module with state", function()
   local state
-  
+
   before_each(function()
     -- Runs before each test in this describe block
     state = { count = 0 }
   end)
-  
+
   after_each(function()
     -- Runs after each test in this describe block
     state = nil
   end)
-  
+
   it("should modify state", function()
     state.count = state.count + 1
     assert.equals(1, state.count)
   end)
-  
+
   it("should have fresh state", function()
     -- state is reset by before_each
     assert.equals(0, state.count)
@@ -153,7 +156,7 @@ end)
 
 Setup and teardown functions are scoped to their `describe` block and any nested blocks. They run in order from outermost to innermost scope.
 
-Sources: [lua/plenary/busted.lua 142-171](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/busted.lua#L142-L171) [tests/plenary/simple\_busted\_spec.lua 27-68](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/simple_busted_spec.lua#L27-L68)
+Sources: [lua/plenary/busted.lua 142-171](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/busted.lua#L142-L171) [tests/plenary/simple_busted_spec.lua 27-68](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/simple_busted_spec.lua#L27-L68)
 
 ### Asynchronous Testing
 
@@ -163,16 +166,16 @@ The testing framework supports asynchronous testing using coroutines, allowing y
 describe("async operation", function()
   it("can test async code", function()
     local co = coroutine.running()
-    
+
     -- Set up an async operation
     vim.defer_fn(function()
       -- Resume test after operation completes
       coroutine.resume(co)
     end, 100)
-    
+
     -- Pause test execution until resumed
     coroutine.yield()
-    
+
     -- Test continues here after async operation
     assert(true)
   end)
@@ -185,7 +188,7 @@ This pattern can be used to test any asynchronous code, including callbacks, tim
 "Async Operation""Neovim Event Loop""Test Function""Async Operation""Neovim Event Loop""Test Function"Test pauses hereTest resumes hereStart testGet current coroutineStart async operationSchedule workcoroutine.yield()Complete workcoroutine.resume()Make assertions
 ```
 
-Sources: [tests/plenary/async\_testing\_spec.lua 1-75](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/async_testing_spec.lua#L1-L75)
+Sources: [tests/plenary/async_testing_spec.lua 1-75](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/tests/plenary/async_testing_spec.lua#L1-L75)
 
 ### Mocking with Luassert
 
@@ -200,17 +203,17 @@ describe("module using vim.api", function()
   it("calls api methods correctly", function()
     -- Create a mock of vim.api
     local api_mock = mock(vim.api, true)
-    
+
     -- Set up expectations
     api_mock.nvim_get_current_buf.returns(5)
-    
+
     -- Call code that uses vim.api
     my_module.function_under_test()
-    
+
     -- Verify api was called correctly
     assert.stub(api_mock.nvim_get_current_buf).was_called(1)
     assert.stub(api_mock.nvim_buf_set_lines).was_called_with(5, 0, -1, false, {"test"})
-    
+
     -- Restore original vim.api
     mock.revert(api_mock)
   end)
@@ -219,7 +222,7 @@ end)
 
 The assertions available through luassert are extensive and type-hinted for better editor integration.
 
-Sources: [lua/plenary/\_meta/\_luassert.lua 1-289](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/_meta/_luassert.lua#L1-L289) [TESTS\_README.md 54-130](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/TESTS_README.md#L54-L130)
+Sources: [lua/plenary/\_meta/\_luassert.lua 1-289](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/_meta/_luassert.lua#L1-L289) [TESTS_README.md 54-130](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/TESTS_README.md#L54-L130)
 
 ## Implementation Details
 
@@ -230,13 +233,14 @@ When a test file is executed through the test harness, the following process occ
 1. The file is loaded and executed
 2. `describe` blocks register test suites recursively
 3. For each `it` block encountered:
-	- All applicable `before_each` functions are run
-	- The test function is executed
-	- If the test passes, it's added to `results.pass`
-	- If the test fails, it's added to `results.fail` with error details
-	- All applicable `after_each` functions are run
+   - All applicable `before_each` functions are run
+   - The test function is executed
+   - If the test passes, it's added to `results.pass`
+   - If the test fails, it's added to `results.fail` with error details
+   - All applicable `after_each` functions are run
 4. Results are formatted and displayed
 5. In headless mode, appropriate exit code is set
+
 ```
 For Each TestYesNoRun Test FileLoad Test FileExecute Test FileProcess describe blocksRun before_each functionsExecute test functionTest passed?Add to passing resultsAdd to failing resultsRun after_each functionsFormat and display resultsSet exit code (headless mode)End
 ```
@@ -279,4 +283,4 @@ it("should throw an error for invalid input", function()
 end)
 ```
 
-Sources: [TESTS\_README.md 1-153](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/TESTS_README.md#L1-L153) [lua/plenary/busted.lua 5-30](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/busted.lua#L5-L30)
+Sources: [TESTS_README.md 1-153](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/TESTS_README.md#L1-L153) [lua/plenary/busted.lua 5-30](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/busted.lua#L5-L30)

@@ -58,7 +58,7 @@ vim.notify = function(msg, level, opts)
     table.insert(vim.g.percybrain_errors, {
       time = os.date("%H:%M:%S"),
       level = level == vim.log.levels.ERROR and "ERROR" or "WARN",
-      msg = msg
+      msg = msg,
     })
   end
   -- Call original notify

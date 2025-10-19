@@ -2,50 +2,57 @@
 -- Tests to establish baseline performance metrics
 
 describe("Performance Benchmarks", function()
+  before_each(function()
+    -- Arrange: Ensure clean state for performance measurements
+    collectgarbage("collect")
+  end)
+
+  after_each(function()
+    -- No cleanup needed - performance tests are read-only
+  end)
+
   describe("Startup Time", function()
     it("measures initial config loading", function()
+      -- Arrange: Prepare timing measurement
       local start = vim.fn.reltime()
 
       -- Force reload of core config
-      package.loaded['config'] = nil
-      package.loaded['config.globals'] = nil
-      package.loaded['config.options'] = nil
-      package.loaded['config.keymaps'] = nil
+      package.loaded["config"] = nil
+      package.loaded["config.globals"] = nil
+      package.loaded["config.options"] = nil
+      package.loaded["config.keymaps"] = nil
 
-      require('config')
-
+      -- Act: Load configuration and measure time
+      require("config")
       local elapsed = vim.fn.reltimefloat(vim.fn.reltime(start))
 
-      -- Report the time
+      -- Assert: Config should load quickly
       print(string.format("\n⚡ Config loading: %.3fs", elapsed))
 
       -- Establish thresholds
-      assert.is_true(elapsed < 0.5,
-        string.format("Config loading exceeds 500ms: %.3fs", elapsed))
+      assert.is_true(elapsed < 0.5, string.format("Config loading exceeds 500ms: %.3fs", elapsed))
     end)
 
     it("measures plugin manager initialization", function()
+      -- Arrange: Prepare timing measurement
       local start = vim.fn.reltime()
 
-      -- This would already be loaded, just measuring access time
-      local lazy = require('lazy')
-
+      -- Act: Access lazy.nvim (already loaded, measuring access time)
+      local _ = require("lazy")
       local elapsed = vim.fn.reltimefloat(vim.fn.reltime(start))
 
+      -- Assert: Should be nearly instant since already loaded
       print(string.format("⚡ Lazy.nvim access: %.3fs", elapsed))
-
-      -- Should be nearly instant since already loaded
-      assert.is_true(elapsed < 0.01,
-        string.format("Lazy access too slow: %.3fs", elapsed))
+      assert.is_true(elapsed < 0.01, string.format("Lazy access too slow: %.3fs", elapsed))
     end)
 
     it("measures plugin count and load status", function()
-      local lazy = require('lazy')
+      local lazy = require("lazy")
       local plugins = lazy.plugins()
       local loaded_count = 0
       local lazy_count = 0
 
-      for name, plugin in pairs(plugins) do
+      for _, plugin in pairs(plugins) do
         if plugin._.loaded then
           loaded_count = loaded_count + 1
         else
@@ -57,12 +64,11 @@ describe("Performance Benchmarks", function()
 
       print(string.format("\n📦 Plugin Statistics:"))
       print(string.format("  Total: %d", total))
-      print(string.format("  Loaded: %d (%.1f%%)", loaded_count, (loaded_count/total)*100))
-      print(string.format("  Lazy: %d (%.1f%%)", lazy_count, (lazy_count/total)*100))
+      print(string.format("  Loaded: %d (%.1f%%)", loaded_count, (loaded_count / total) * 100))
+      print(string.format("  Lazy: %d (%.1f%%)", lazy_count, (lazy_count / total) * 100))
 
       -- Most plugins should be lazy loaded
-      assert.is_true(lazy_count > loaded_count,
-        "Most plugins should be lazy loaded for performance")
+      assert.is_true(lazy_count > loaded_count, "Most plugins should be lazy loaded for performance")
     end)
   end)
 
@@ -75,14 +81,13 @@ describe("Performance Benchmarks", function()
       print(string.format("\n💾 Memory usage: %.2f MB", memory_mb))
 
       -- Baseline threshold
-      assert.is_true(memory_mb < 100,
-        string.format("Memory usage exceeds 100MB: %.2f MB", memory_mb))
+      assert.is_true(memory_mb < 100, string.format("Memory usage exceeds 100MB: %.2f MB", memory_mb))
     end)
 
     it("measures memory after garbage collection", function()
       -- Force garbage collection
       collectgarbage("collect")
-      collectgarbage("collect")  -- Run twice to be thorough
+      collectgarbage("collect") -- Run twice to be thorough
 
       local memory_kb = collectgarbage("count")
       local memory_mb = memory_kb / 1024
@@ -90,8 +95,7 @@ describe("Performance Benchmarks", function()
       print(string.format("💾 Memory after GC: %.2f MB", memory_mb))
 
       -- Should be lower after GC
-      assert.is_true(memory_mb < 80,
-        string.format("Memory still high after GC: %.2f MB", memory_mb))
+      assert.is_true(memory_mb < 80, string.format("Memory still high after GC: %.2f MB", memory_mb))
     end)
   end)
 
@@ -101,7 +105,7 @@ describe("Performance Benchmarks", function()
       package.loaded[module_name] = nil
 
       local start = vim.fn.reltime()
-      local ok, result = pcall(require, module_name)
+      local ok = pcall(require, module_name)
       local elapsed = vim.fn.reltimefloat(vim.fn.reltime(start))
 
       return ok, elapsed
@@ -122,9 +126,10 @@ describe("Performance Benchmarks", function()
         if ok then
           print(string.format("  %s: %.3fs", mod.name, elapsed))
 
-          assert.is_true(elapsed < mod.threshold,
-            string.format("%s exceeds threshold (%.3fs > %.3fs)",
-              mod.name, elapsed, mod.threshold))
+          assert.is_true(
+            elapsed < mod.threshold,
+            string.format("%s exceeds threshold (%.3fs > %.3fs)", mod.name, elapsed, mod.threshold)
+          )
         else
           print(string.format("  %s: FAILED TO LOAD", mod.name))
         end
@@ -140,7 +145,7 @@ describe("Performance Benchmarks", function()
       for i = 1, 100 do
         vim.keymap.set("n", string.format("<leader>test%d", i), function() end, {
           desc = string.format("Test keymap %d", i),
-          silent = true
+          silent = true,
         })
       end
 
@@ -149,8 +154,7 @@ describe("Performance Benchmarks", function()
       print(string.format("\n⚡ Setting 100 keymaps: %.3fs", elapsed))
 
       -- Should be very fast
-      assert.is_true(elapsed < 0.1,
-        string.format("Keymap setting too slow: %.3fs for 100 keymaps", elapsed))
+      assert.is_true(elapsed < 0.1, string.format("Keymap setting too slow: %.3fs for 100 keymaps", elapsed))
 
       -- Clean up
       for i = 1, 100 do
@@ -180,8 +184,7 @@ describe("Performance Benchmarks", function()
       print(string.format("⚡ Setting 500 options: %.3fs", elapsed))
 
       -- Should be fast
-      assert.is_true(elapsed < 0.05,
-        string.format("Option setting too slow: %.3fs", elapsed))
+      assert.is_true(elapsed < 0.05, string.format("Option setting too slow: %.3fs", elapsed))
     end)
   end)
 
@@ -191,7 +194,7 @@ describe("Performance Benchmarks", function()
       local buffers = {}
 
       -- Create 20 buffers
-      for i = 1, 20 do
+      for _ = 1, 20 do
         local buf = vim.api.nvim_create_buf(false, true)
         table.insert(buffers, buf)
       end
@@ -200,8 +203,7 @@ describe("Performance Benchmarks", function()
 
       print(string.format("\n⚡ Creating 20 buffers: %.3fs", elapsed))
 
-      assert.is_true(elapsed < 0.1,
-        string.format("Buffer creation too slow: %.3fs", elapsed))
+      assert.is_true(elapsed < 0.1, string.format("Buffer creation too slow: %.3fs", elapsed))
 
       -- Clean up
       for _, buf in ipairs(buffers) do
@@ -211,10 +213,9 @@ describe("Performance Benchmarks", function()
 
     it("measures window creation speed", function()
       local start = vim.fn.reltime()
-      local initial_win = vim.api.nvim_get_current_win()
 
       -- Create and close 10 splits
-      for i = 1, 10 do
+      for _ = 1, 10 do
         vim.cmd("vsplit")
       end
 
@@ -225,8 +226,7 @@ describe("Performance Benchmarks", function()
 
       print(string.format("⚡ Creating 10 splits: %.3fs", creation_time))
 
-      assert.is_true(creation_time < 0.5,
-        string.format("Window creation too slow: %.3fs", creation_time))
+      assert.is_true(creation_time < 0.5, string.format("Window creation too slow: %.3fs", creation_time))
     end)
   end)
 
@@ -236,10 +236,10 @@ describe("Performance Benchmarks", function()
       -- For now, just establish the baseline
 
       local metrics = {
-        config_load_ms = 100,   -- Max 100ms for config
-        plugin_load_ms = 300,   -- Max 300ms for plugins
+        config_load_ms = 100, -- Max 100ms for config
+        plugin_load_ms = 300, -- Max 300ms for plugins
         total_startup_ms = 500, -- Max 500ms total
-        memory_mb = 50,        -- Max 50MB initial memory
+        memory_mb = 50, -- Max 50MB initial memory
       }
 
       print("\n📊 Performance Baselines:")
@@ -262,9 +262,8 @@ describe("Performance Benchmarks", function()
         local modified = vim.bo.modified
         local buftype = vim.bo.buftype
 
-        if modified and buftype == "" then
-          -- Would trigger save here
-        end
+        -- Check if buffer would trigger auto-save (modified and normal buftype)
+        local _ = modified and buftype == ""
       end
 
       local elapsed = vim.fn.reltimefloat(vim.fn.reltime(start))
@@ -272,8 +271,7 @@ describe("Performance Benchmarks", function()
       print(string.format("\n⚡ Auto-save check (10x): %.3fs", elapsed))
 
       -- Should have minimal impact
-      assert.is_true(elapsed < 0.01,
-        string.format("Auto-save checks too slow: %.3fs", elapsed))
+      assert.is_true(elapsed < 0.01, string.format("Auto-save checks too slow: %.3fs", elapsed))
     end)
 
     it("measures distraction-free mode activation", function()
@@ -308,8 +306,7 @@ describe("Performance Benchmarks", function()
       end
 
       -- Should be instant
-      assert.is_true(elapsed < 0.01,
-        string.format("Mode switch too slow: %.3fs", elapsed))
+      assert.is_true(elapsed < 0.01, string.format("Mode switch too slow: %.3fs", elapsed))
     end)
   end)
 
@@ -319,7 +316,7 @@ describe("Performance Benchmarks", function()
       print("PERCYBRAIN PERFORMANCE SUMMARY")
       print(string.rep("=", 50))
 
-      local lazy = require('lazy')
+      local lazy = require("lazy")
       local plugins = lazy.plugins()
       local total_plugins = vim.tbl_count(plugins)
 
@@ -332,7 +329,7 @@ describe("Performance Benchmarks", function()
         ["Memory Usage"] = string.format("%.2f MB", memory_mb),
         ["Startup Target"] = "< 500ms",
         ["Memory Target"] = "< 50MB",
-        ["Grade"] = memory_mb < 50 and "✅ PASS" or "⚠️  NEEDS OPTIMIZATION"
+        ["Grade"] = memory_mb < 50 and "✅ PASS" or "⚠️  NEEDS OPTIMIZATION",
       }
 
       for key, value in pairs(metrics) do
@@ -342,8 +339,7 @@ describe("Performance Benchmarks", function()
       print(string.rep("=", 50))
 
       -- Overall check
-      assert.is_true(memory_mb < 100,
-        "Memory usage exceeds acceptable threshold")
+      assert.is_true(memory_mb < 100, "Memory usage exceeds acceptable threshold")
     end)
   end)
 end)

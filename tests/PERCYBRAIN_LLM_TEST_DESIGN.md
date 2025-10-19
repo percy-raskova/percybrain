@@ -1,11 +1,13 @@
 # PercyBrain Local LLM Unit Testing Framework Design
 
 ## Overview
+
 Comprehensive unit testing design for the PercyBrain Local LLM integration (`lua/plugins/ai-sembr/`) using the Plenary testing framework. Tests ensure Ollama integration works correctly for AI-assisted knowledge management.
 
 ## Architecture
 
 ### Test Structure
+
 ```
 tests/plenary/unit/ai-sembr/
 ├── ollama_spec.lua         # Core Ollama integration tests
@@ -420,17 +422,18 @@ nvim tests/plenary/unit/ai-sembr/ollama_spec.lua
 
 ### Coverage Goals
 
-| Component | Target Coverage | Priority |
-|-----------|----------------|----------|
-| API Communication | 95% | Critical |
-| Model Selection | 90% | High |
-| Command Execution | 85% | High |
-| Error Handling | 100% | Critical |
-| UI Components | 70% | Medium |
+| Component         | Target Coverage | Priority |
+| ----------------- | --------------- | -------- |
+| API Communication | 95%             | Critical |
+| Model Selection   | 90%             | High     |
+| Command Execution | 85%             | High     |
+| Error Handling    | 100%            | Critical |
+| UI Components     | 70%             | Medium   |
 
 ## Integration Test Scenarios
 
 ### Scenario 1: Complete AI Workflow
+
 ```lua
 it("completes full AI-assisted writing workflow", function()
   -- 1. Start Ollama service
@@ -443,6 +446,7 @@ end)
 ```
 
 ### Scenario 2: Model Switching
+
 ```lua
 it("switches between models for different tasks", function()
   -- 1. Use llama3.2 for prose
@@ -452,6 +456,7 @@ end)
 ```
 
 ### Scenario 3: Error Recovery
+
 ```lua
 it("recovers from connection failures", function()
   -- 1. Simulate Ollama crash
@@ -464,6 +469,7 @@ end)
 ## Mock Data Requirements
 
 ### Test Notes for Zettelkasten
+
 ```markdown
 # 202501181234 Test Note One
 Tags: #testing #ai #knowledge
@@ -474,6 +480,7 @@ Content for testing AI features...
 ```
 
 ### Test Prompts
+
 ```lua
 local test_prompts = {
   simple = "Explain this concept",
@@ -486,6 +493,7 @@ local test_prompts = {
 ## Validation Criteria
 
 ### Functional Requirements
+
 - ✅ Ollama service detection and startup
 - ✅ API communication with proper escaping
 - ✅ Model selection and switching
@@ -494,7 +502,8 @@ local test_prompts = {
 - ✅ Error handling and recovery
 
 ### Non-Functional Requirements
-- ⚡ Response time < 5s for local models
+
+- ⚡ Response time \< 5s for local models
 - 🎯 >85% test coverage
 - 🔄 Graceful degradation when Ollama unavailable
 - 💾 Session persistence between Neovim restarts
@@ -502,21 +511,25 @@ local test_prompts = {
 ## Implementation Timeline
 
 1. **Phase 1**: Core Ollama tests (Week 1)
+
    - Service management
    - API communication
    - Basic mocking
 
 2. **Phase 2**: AI Commands (Week 2)
+
    - All 6 command tests
    - UI components
    - Result display
 
 3. **Phase 3**: Advanced Features (Week 3)
+
    - Model selection
    - Chat interface
    - Draft generator
 
 4. **Phase 4**: Integration & Polish (Week 4)
+
    - End-to-end scenarios
    - Performance tests
    - Documentation

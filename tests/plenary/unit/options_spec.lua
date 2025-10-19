@@ -1,9 +1,6 @@
 -- Unit Tests: Vim Options Configuration
 -- Tests for writer-focused defaults and neurodiversity optimizations
 
-local helpers = require('tests.helpers')
-local mocks = require('tests.helpers.mocks')
-
 -- Helper function for table contains check
 local function contains(tbl, value)
   for _, v in pairs(tbl) do
@@ -17,8 +14,12 @@ end
 describe("Options Configuration", function()
   before_each(function()
     -- Arrange: Ensure options module is loaded fresh
-    package.loaded['config.options'] = nil
-    require('config.options')
+    package.loaded["config.options"] = nil
+    require("config.options")
+  end)
+
+  after_each(function()
+    -- No cleanup needed - options remain configured
   end)
 
   describe("Writer-Focused Defaults", function()
@@ -59,8 +60,7 @@ describe("Options Configuration", function()
       local textwidth = vim.opt.textwidth:get()
 
       -- Assert: Text width should be 80 or unlimited
-      assert.is_true(textwidth == 80 or textwidth == 0,
-        "Text width should be 80 or unlimited")
+      assert.is_true(textwidth == 80 or textwidth == 0, "Text width should be 80 or unlimited")
     end)
 
     it("enables line break at word boundaries", function()
@@ -138,8 +138,7 @@ describe("Options Configuration", function()
       local signcolumn = vim.opt.signcolumn:get()
 
       -- Assert: Sign column should be visible
-      assert.is_true(signcolumn == "yes" or signcolumn == "auto",
-        "Sign column should be visible")
+      assert.is_true(signcolumn == "yes" or signcolumn == "auto", "Sign column should be visible")
     end)
 
     it("enables mouse support", function()
@@ -161,9 +160,10 @@ describe("Options Configuration", function()
       local clipboard = vim.opt.clipboard:get()
 
       -- Assert: System clipboard integration should be enabled
-      assert.is_true(vim.tbl_contains(clipboard, "unnamedplus") or
-                     vim.tbl_contains(clipboard, "unnamed"),
-        "System clipboard integration should be enabled")
+      assert.is_true(
+        vim.tbl_contains(clipboard, "unnamedplus") or vim.tbl_contains(clipboard, "unnamed"),
+        "System clipboard integration should be enabled"
+      )
     end)
   end)
 
@@ -239,8 +239,7 @@ describe("Options Configuration", function()
       local shiftwidth = vim.opt.shiftwidth:get()
 
       -- Assert: Tab width should be consistent
-      assert.is_true(tabstop == 2 or tabstop == 4,
-        "Tab width should be 2 or 4 spaces")
+      assert.is_true(tabstop == 2 or tabstop == 4, "Tab width should be 2 or 4 spaces")
       assert.equals(tabstop, shiftwidth, "Shiftwidth should match tabstop")
     end)
   end)
@@ -253,8 +252,7 @@ describe("Options Configuration", function()
       local termguicolors_enabled = vim.opt.termguicolors:get()
 
       -- Assert: Terminal GUI colors should be enabled
-      assert.is_true(termguicolors_enabled,
-        "Terminal GUI colors should be enabled")
+      assert.is_true(termguicolors_enabled, "Terminal GUI colors should be enabled")
     end)
 
     it("enables cursor line highlighting", function()
@@ -264,8 +262,7 @@ describe("Options Configuration", function()
       local cursorline_enabled = vim.opt.cursorline:get()
 
       -- Assert: Cursor line should be highlighted
-      assert.is_true(cursorline_enabled,
-        "Cursor line should be highlighted")
+      assert.is_true(cursorline_enabled, "Cursor line should be highlighted")
     end)
 
     it("sets appropriate color column", function()
@@ -275,11 +272,13 @@ describe("Options Configuration", function()
       local colorcolumn = vim.opt.colorcolumn:get()
 
       -- Assert: Either empty or set to standard width
-      assert.is_true(#colorcolumn == 0 or
-                     vim.tbl_contains(colorcolumn, "80") or
-                     vim.tbl_contains(colorcolumn, "100") or
-                     vim.tbl_contains(colorcolumn, "120"),
-        "Color column should be unset or at standard width")
+      assert.is_true(
+        #colorcolumn == 0
+          or vim.tbl_contains(colorcolumn, "80")
+          or vim.tbl_contains(colorcolumn, "100")
+          or vim.tbl_contains(colorcolumn, "120"),
+        "Color column should be unset or at standard width"
+      )
     end)
   end)
 
@@ -291,8 +290,7 @@ describe("Options Configuration", function()
       local updatetime = vim.opt.updatetime:get()
 
       -- Assert: Update time should be responsive
-      assert.is_true(updatetime <= 300,
-        "Update time should be 300ms or less for responsive feel")
+      assert.is_true(updatetime <= 300, "Update time should be 300ms or less for responsive feel")
     end)
 
     it("sets reasonable timeout", function()
@@ -304,8 +302,7 @@ describe("Options Configuration", function()
 
       -- Assert: Timeout should be configured appropriately
       assert.is_true(timeout, "Timeout should be enabled")
-      assert.is_true(timeoutlen <= 500,
-        "Timeout length should be 500ms or less")
+      assert.is_true(timeoutlen <= 500, "Timeout length should be 500ms or less")
     end)
 
     it("enables lazy redraw for performance", function()
@@ -338,8 +335,7 @@ describe("Options Configuration", function()
       local pumheight = vim.opt.pumheight:get()
 
       -- Assert: Popup menu height should be reasonable
-      assert.is_true(pumheight >= 10 and pumheight <= 20,
-        "Popup menu height should be between 10-20 items")
+      assert.is_true(pumheight >= 10 and pumheight <= 20, "Popup menu height should be between 10-20 items")
     end)
   end)
 
@@ -376,8 +372,7 @@ describe("Options Configuration", function()
 
       -- Assert: Split characters should be defined for clarity
       assert.is_table(fillchars)
-      assert.is_true(fillchars.vert ~= nil or fillchars.horiz ~= nil,
-        "Split characters should be defined")
+      assert.is_true(fillchars.vert ~= nil or fillchars.horiz ~= nil, "Split characters should be defined")
     end)
 
     it("enables focus helpers", function()
@@ -388,10 +383,8 @@ describe("Options Configuration", function()
       local scrolloff = vim.opt.scrolloff:get()
 
       -- Assert: Focus helpers should be enabled
-      assert.is_true(cursorline,
-        "Cursor line should be enabled for focus")
-      assert.is_true(scrolloff >= 8,
-        "Scroll offset should maintain context")
+      assert.is_true(cursorline, "Cursor line should be enabled for focus")
+      assert.is_true(scrolloff >= 8, "Scroll offset should maintain context")
     end)
   end)
 
@@ -405,8 +398,7 @@ describe("Options Configuration", function()
 
       -- Assert: If paste is on, conflicting options should be disabled
       if paste_enabled then
-        assert.is_false(smartindent_enabled,
-          "Smart indent conflicts with paste mode")
+        assert.is_false(smartindent_enabled, "Smart indent conflicts with paste mode")
       end
     end)
 
@@ -421,13 +413,11 @@ describe("Options Configuration", function()
 
       -- Assert: Option dependencies should be satisfied
       if smartcase then
-        assert.is_true(ignorecase,
-          "Smartcase requires ignorecase to be set")
+        assert.is_true(ignorecase, "Smartcase requires ignorecase to be set")
       end
 
       if relativenumber then
-        assert.is_true(number,
-          "Relative numbers should have regular numbers enabled")
+        assert.is_true(number, "Relative numbers should have regular numbers enabled")
       end
     end)
   end)

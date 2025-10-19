@@ -4,9 +4,7 @@
 
 ## Prerequisites
 
-✅ Read `tests/PLENARY_TESTING_DESIGN.md` - Project testing standards
-✅ Review `tests/helpers/mocks.lua` - Available mock factories
-✅ Study `tests/plenary/unit/ai-sembr/ollama_spec.lua` - Refactored example
+✅ Read `tests/PLENARY_TESTING_DESIGN.md` - Project testing standards ✅ Review `tests/helpers/mocks.lua` - Available mock factories ✅ Study `tests/plenary/unit/ai-sembr/ollama_spec.lua` - Refactored example
 
 ## Refactoring Checklist
 
@@ -20,6 +18,7 @@
 ### Phase 2: Add Imports (1 min)
 
 **Add at top of file**:
+
 ```lua
 local helpers = require('tests.helpers')
 local mocks = require('tests.helpers.mocks')
@@ -28,6 +27,7 @@ local mocks = require('tests.helpers.mocks')
 ### Phase 3: Replace Inline Mocks (10-20 min)
 
 **BEFORE**:
+
 ```lua
 before_each(function()
   _G.vim = {
@@ -39,6 +39,7 @@ end)
 ```
 
 **AFTER**:
+
 ```lua
 before_each(function()
   -- Use appropriate mock factory
@@ -50,6 +51,7 @@ end)
 ### Phase 4: Apply AAA Pattern (15-30 min)
 
 **Structure every test**:
+
 ```lua
 it("descriptive test name", function()
   -- Arrange: Setup test data
@@ -80,6 +82,7 @@ nvim --headless -u tests/minimal_init.lua \
 ### 1. Ollama LLM (`mocks.ollama()`)
 
 **Usage**:
+
 ```lua
 local ollama_mock = mocks.ollama({
   model = "llama3.2:latest",  -- Optional
@@ -92,6 +95,7 @@ local original_io = ollama_mock:mock_io_popen()
 ```
 
 **Methods**:
+
 - `ollama_mock:setup_vim()` - Complete vim global mock
 - `ollama_mock:mock_io_popen()` - Service detection mock
 - `ollama_mock:generate(prompt, callback)` - API call mock
@@ -100,6 +104,7 @@ local original_io = ollama_mock:mock_io_popen()
 ### 2. Zettelkasten Vault (`mocks.vault()`)
 
 **Usage**:
+
 ```lua
 local vault = mocks.vault("/path/to/test/vault")
 vault:setup()
@@ -115,6 +120,7 @@ vault:teardown()
 ### 3. Notifications (`mocks.notifications()`)
 
 **Usage**:
+
 ```lua
 local notify_mock = mocks.notifications()
 notify_mock.capture()
@@ -130,6 +136,7 @@ notify_mock.restore()
 ### 4. LSP Client (`mocks.lsp_client()`)
 
 **Usage**:
+
 ```lua
 local lsp = mocks.lsp_client({
   name = "test_lsp",
@@ -143,6 +150,7 @@ local lsp = mocks.lsp_client({
 ### 5. Window Manager (`mocks.window_manager()`)
 
 **Usage**:
+
 ```lua
 local wm = mocks.window_manager()
 wm.setup()
@@ -154,6 +162,7 @@ assert.is_true(wm.navigate("left"))
 ### 6. Telescope Picker (`mocks.telescope_picker()`)
 
 **Usage**:
+
 ```lua
 local picker = mocks.telescope_picker({
   results = { "file1.md", "file2.md" },
@@ -164,6 +173,7 @@ local picker = mocks.telescope_picker({
 ### 7. Hugo Site (`mocks.hugo_site()`)
 
 **Usage**:
+
 ```lua
 local site = mocks.hugo_site("/path/to/test/site")
 site.setup()
@@ -176,6 +186,7 @@ site.teardown()
 ### 8. Timer (`mocks.timer()`)
 
 **Usage**:
+
 ```lua
 local timer = mocks.timer()
 
@@ -388,7 +399,7 @@ before_each(function()
 end)
 ```
 
----
+______________________________________________________________________
 
 ### ❌ DON'T: Preserve vim.inspect Manually
 
@@ -404,7 +415,7 @@ vim.inspect = function(obj) ... end
 -- Just use the mock factory
 ```
 
----
+______________________________________________________________________
 
 ### ❌ DON'T: Unclear Test Structure
 
@@ -430,7 +441,7 @@ it("does something", function()
 end)
 ```
 
----
+______________________________________________________________________
 
 ### ❌ DON'T: Duplicate Mock Setup
 
@@ -469,13 +480,13 @@ end)
 
 ## Metrics Target
 
-| Metric | Target |
-|--------|--------|
-| Code reduction | 30-50% |
-| AAA pattern | 100% |
-| Mock factory usage | 100% |
-| Helper imports | 100% |
-| Standards compliance | 6/6 |
+| Metric               | Target |
+| -------------------- | ------ |
+| Code reduction       | 30-50% |
+| AAA pattern          | 100%   |
+| Mock factory usage   | 100%   |
+| Helper imports       | 100%   |
+| Standards compliance | 6/6    |
 
 ## Validation Commands
 

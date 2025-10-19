@@ -14,6 +14,23 @@ globals = {
   "vim",
 }
 
+-- Per-file configurations
+files["tests/helpers/assertions.lua"] = {
+  -- Allow extending assert global with custom assertions (intentional for test framework)
+  globals = { "assert" },
+}
+
+files["tests/helpers/mocks.lua"] = {
+  -- Mock factory module - exports functions for other tests to use
+  -- Functions unused within this file but imported by other tests
+  ignore = { "M" }, -- Ignore unused assignments to module table
+}
+
+files["tests/plenary/unit/config_spec.lua"] = {
+  -- Test needs to inspect _G for global pollution detection (intentional)
+  globals = { "_G" },
+}
+
 -- Exclude directories
 exclude_files = {
   ".git",

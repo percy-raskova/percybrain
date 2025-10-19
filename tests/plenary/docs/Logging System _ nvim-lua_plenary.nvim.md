@@ -1,21 +1,23 @@
 ---
-title: " Logging System  Logging System | nvim-lua/plenary.nvim"
+title: ' Logging System  Logging System | nvim-lua/plenary.nvim'
 author:
-published:    Logging System | nvim-lua/plenary.nvim | DeepWiki
-description: "   nvim-lua/plenary.nvim"
-source: "https://deepwiki.com/nvim-lua/plenary.nvim/10.2-logging-system"
+published: Logging System | nvim-lua/plenary.nvim | DeepWiki
+description: '   nvim-lua/plenary.nvim'
+source: https://deepwiki.com/nvim-lua/plenary.nvim/10.2-logging-system
 created: 2025-10-18
-category: "category:   [\"nvim-lua\",\"plenary.nvim\",\"10.2-logging-system\"]"
+category: 'category:   ["nvim-lua","plenary.nvim","10.2-logging-system"]'
 tags:
-  - "tags:"
-image: "image:    "
-cover: "cover: "
+  - 'tags:'
+image: 'image:    '
+cover: 'cover: '
 ---
+
 Menu
 
 ## Logging System
 
 Relevant source files
+
 - [lua/plenary/log.lua](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/log.lua)
 
 This document covers the configurable logging system provided by plenary.nvim for Neovim plugin development. The logging system enables developers to record, trace, and debug their plugins with various output options including console output, log files, and the quickfix list.
@@ -48,18 +50,18 @@ Sources: [lua/plenary/log.lua 192-226](https://github.com/nvim-lua/plenary.nvim/
 
 The logging system is highly configurable. Here are the available configuration options:
 
-| Option | Default | Description |
-| --- | --- | --- |
-| `plugin` | `"plenary"` | Name of the plugin (prepended to log messages) |
-| `use_console` | `"async"` | Whether to print output to Neovim console (`"sync"`, `"async"`, or `false`) |
-| `highlights` | `true` | Whether to use highlighting in console output |
-| `use_file` | `true` | Whether to write logs to a file |
-| `outfile` | `stdpath("log")/plugin.log` | Path to the log file |
-| `use_quickfix` | `false` | Whether to write logs to the quickfix list |
-| `level` | `"info"` or `"debug"` | Minimum level to log (messages below this level are ignored) |
-| `modes` | See code | Configuration for each log level, including name and highlight group |
-| `float_precision` | `0.01` | Precision for floating-point values in logs |
-| `fmt_msg` | Function | Function to format log messages |
+| Option            | Default                     | Description                                                                 |
+| ----------------- | --------------------------- | --------------------------------------------------------------------------- |
+| `plugin`          | `"plenary"`                 | Name of the plugin (prepended to log messages)                              |
+| `use_console`     | `"async"`                   | Whether to print output to Neovim console (`"sync"`, `"async"`, or `false`) |
+| `highlights`      | `true`                      | Whether to use highlighting in console output                               |
+| `use_file`        | `true`                      | Whether to write logs to a file                                             |
+| `outfile`         | `stdpath("log")/plugin.log` | Path to the log file                                                        |
+| `use_quickfix`    | `false`                     | Whether to write logs to the quickfix list                                  |
+| `level`           | `"info"` or `"debug"`       | Minimum level to log (messages below this level are ignored)                |
+| `modes`           | See code                    | Configuration for each log level, including name and highlight group        |
+| `float_precision` | `0.01`                      | Precision for floating-point values in logs                                 |
+| `fmt_msg`         | Function                    | Function to format log messages                                             |
 
 Sources: [lua/plenary/log.lua 18-71](https://github.com/nvim-lua/plenary.nvim/blob/857c5ac6/lua/plenary/log.lua#L18-L71)
 
@@ -82,6 +84,7 @@ local custom_log = require('plenary.log').new({
 })
 custom_log.debug("Using a custom logger")
 ```
+
 ```
 Logger Creation.new(config)Default LoggerDefault ConfigurationCustom LoggerCustom Configurationrequire('plenary.log')Standard Log MethodsCustom-configured Log MethodsOutput with Default SettingsOutput with Custom Settings
 ```
@@ -175,12 +178,12 @@ local log = require('plenary.log').new({
 -- Throughout your plugin code
 local function process_file(filename)
   log.debug("Processing file:", filename)
-  
+
   if not vim.fn.filereadable(filename) then
     log.error("File not readable:", filename)
     return false
   end
-  
+
   log.info("Successfully processed", filename)
   return true
 end

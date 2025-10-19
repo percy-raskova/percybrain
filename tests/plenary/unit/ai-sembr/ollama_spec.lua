@@ -1,8 +1,7 @@
 -- Unit Tests: Ollama Local LLM Integration
 -- Tests the core Ollama plugin functionality for PercyBrain
 
-local helpers = require('tests.helpers')
-local mocks = require('tests.helpers.mocks')
+local mocks = require("tests.helpers.mocks")
 
 describe("Ollama Local LLM Integration", function()
   local ollama_module
@@ -22,19 +21,21 @@ describe("Ollama Local LLM Integration", function()
     notify_mock.capture()
 
     -- Load the actual module
-    package.loaded['plugins.ai-sembr.ollama'] = nil
-    local plugin_spec = require('plugins.ai-sembr.ollama')
+    package.loaded["plugins.ai-sembr.ollama"] = nil
+    local plugin_spec = require("plugins.ai-sembr.ollama")
     if plugin_spec.config then
       plugin_spec.config()
+      -- Testing module global pollution: Check if plugin sets global M
       ollama_module = _G.M or {}
     end
   end)
 
   after_each(function()
+    -- Restore global vim after testing module pollution
     _G.vim = original_vim
-    io.popen = original_io_popen
+    io.popen = original_io_popen -- luacheck: ignore (restore mocked io.popen)
     notify_mock.restore()
-    package.loaded['plugins.ai-sembr.ollama'] = nil
+    package.loaded["plugins.ai-sembr.ollama"] = nil
   end)
 
   describe("Service Management", function()
@@ -117,7 +118,7 @@ describe("Ollama Local LLM Integration", function()
 
       -- Assert
       assert.truthy(curl_cmd_captured:match('\\"quoted\\"'))
-      assert.truthy(curl_cmd_captured:match('\\n'))
+      assert.truthy(curl_cmd_captured:match("\\n"))
     end)
 
     it("handles successful API response", function()
@@ -126,7 +127,7 @@ describe("Ollama Local LLM Integration", function()
       vim.fn.jobstart = function(cmd, opts)
         if opts.on_stdout then
           opts.on_stdout(nil, {
-            '{"model":"llama3.2:latest","response":"AI generated text","done":true}'
+            '{"model":"llama3.2:latest","response":"AI generated text","done":true}',
           })
         end
         return 123
@@ -161,7 +162,9 @@ describe("Ollama Local LLM Integration", function()
   describe("Context Extraction", function()
     it("gets buffer context around cursor", function()
       -- Arrange
-      vim.api.nvim_win_get_cursor = function() return { 50, 0 } end
+      vim.api.nvim_win_get_cursor = function()
+        return { 50, 0 }
+      end
 
       -- Act
       local context = ollama_module.get_buffer_context()
@@ -173,8 +176,12 @@ describe("Ollama Local LLM Integration", function()
 
     it("handles buffer boundaries correctly", function()
       -- Arrange
-      vim.api.nvim_win_get_cursor = function() return { 1, 0 } end
-      vim.api.nvim_buf_line_count = function() return 5 end
+      vim.api.nvim_win_get_cursor = function()
+        return { 1, 0 }
+      end
+      vim.api.nvim_buf_line_count = function()
+        return 5
+      end
 
       -- Act
       local context = ollama_module.get_buffer_context()
@@ -185,10 +192,15 @@ describe("Ollama Local LLM Integration", function()
 
     it("gets visual selection correctly", function()
       -- Arrange
-      vim.fn.mode = function() return "v" end
+      vim.fn.mode = function()
+        return "v"
+      end
       vim.fn.getpos = function(mark)
-        if mark == "'<" then return { 0, 5, 1, 0 }
-        elseif mark == "'>" then return { 0, 10, 20, 0 } end
+        if mark == "'<" then
+          return { 0, 5, 1, 0 }
+        elseif mark == "'>" then
+          return { 0, 10, 20, 0 }
+        end
       end
 
       -- Act
@@ -207,12 +219,14 @@ describe("Ollama Local LLM Integration", function()
         prompt_captured = cmd
         if opts.on_stdout then
           opts.on_stdout(nil, {
-            '{"response":"Mock response","done":true}'
+            '{"response":"Mock response","done":true}',
           })
         end
         return 123
       end
-      return function() return prompt_captured end
+      return function()
+        return prompt_captured
+      end
     end
 
     it("explains text with proper prompt", function()
@@ -389,7 +403,7 @@ describe("Ollama Local LLM Integration", function()
         input = function(opts, callback)
           input_prompt_captured = opts.prompt
           callback("What is this about?")
-        end
+        end,
       }
 
       -- Act
@@ -404,7 +418,7 @@ describe("Ollama Local LLM Integration", function()
       vim.ui = {
         input = function(opts, callback)
           callback("")
-        end
+        end,
       }
       local api_called = false
       vim.fn.jobstart = function()
@@ -432,7 +446,9 @@ describe("Ollama Local LLM Integration", function()
     it("handles context_lines configuration", function()
       -- Arrange
       ollama_module.config.context_lines = 25
-      vim.api.nvim_win_get_cursor = function() return { 50, 0 } end
+      vim.api.nvim_win_get_cursor = function()
+        return { 50, 0 }
+      end
 
       -- Act
       local context = ollama_module.get_buffer_context()
@@ -444,27 +460,33 @@ describe("Ollama Local LLM Integration", function()
 
   describe("Telescope Integration", function()
     local function setup_telescope_mocks()
-      package.loaded['telescope.actions'] = {
+      package.loaded["telescope.actions"] = {
         select_default = { replace = function() end },
-        close = function() end
+        close = function() end,
       }
-      package.loaded['telescope.actions.state'] = {
+      package.loaded["telescope.actions.state"] = {
         get_selected_entry = function()
           return {
-            value = { func = function() end, name = "Test Command" }
+            value = { func = function() end, name = "Test Command" },
           }
-        end
+        end,
       }
-      package.loaded['telescope.pickers'] = {
+      package.loaded["telescope.pickers"] = {
         new = function(_, config)
           return { find = function() end }
-        end
+        end,
       }
-      package.loaded['telescope.finders'] = {
-        new_table = function(opts) return opts end
+      package.loaded["telescope.finders"] = {
+        new_table = function(opts)
+          return opts
+        end,
       }
-      package.loaded['telescope.config'] = {
-        values = { generic_sorter = function() return {} end }
+      package.loaded["telescope.config"] = {
+        values = {
+          generic_sorter = function()
+            return {}
+          end,
+        },
       }
     end
 
@@ -474,12 +496,12 @@ describe("Ollama Local LLM Integration", function()
       local picker_created = false
       local picker_config = nil
 
-      package.loaded['telescope.pickers'] = {
+      package.loaded["telescope.pickers"] = {
         new = function(_, config)
           picker_config = config
           picker_created = true
           return { find = function() end }
-        end
+        end,
       }
 
       -- Act
@@ -497,11 +519,11 @@ describe("Ollama Local LLM Integration", function()
       setup_telescope_mocks()
       local commands_in_menu = nil
 
-      package.loaded['telescope.finders'] = {
+      package.loaded["telescope.finders"] = {
         new_table = function(opts)
           commands_in_menu = opts.results
           return opts
-        end
+        end,
       }
 
       -- Act
@@ -528,15 +550,20 @@ describe("Ollama Local LLM Integration", function()
       end
 
       -- Act
-      local plugin_spec = require('plugins.ai-sembr.ollama')
+      local plugin_spec = require("plugins.ai-sembr.ollama")
       if plugin_spec.config then
         plugin_spec.config()
       end
 
       -- Assert
       local expected_commands = {
-        "PercyExplain", "PercySummarize", "PercyLinks",
-        "PercyImprove", "PercyAsk", "PercyIdeas", "PercyAI"
+        "PercyExplain",
+        "PercySummarize",
+        "PercyLinks",
+        "PercyImprove",
+        "PercyAsk",
+        "PercyIdeas",
+        "PercyAI",
       }
       for _, cmd in ipairs(expected_commands) do
         assert.is_not_nil(registered_commands[cmd])
@@ -551,7 +578,7 @@ describe("Ollama Local LLM Integration", function()
       end
 
       -- Act
-      local plugin_spec = require('plugins.ai-sembr.ollama')
+      local plugin_spec = require("plugins.ai-sembr.ollama")
       if plugin_spec.config then
         plugin_spec.config()
       end
@@ -561,7 +588,7 @@ describe("Ollama Local LLM Integration", function()
       assert.is_true(command_opts["PercySummarize"].range)
       assert.is_true(command_opts["PercyImprove"].range)
 
-      for name, opts in pairs(command_opts) do
+      for _, opts in pairs(command_opts) do
         assert.is_string(opts.desc)
         assert.truthy(opts.desc:match("AI"))
       end
@@ -575,21 +602,29 @@ describe("Ollama Local LLM Integration", function()
       vim.keymap = {
         set = function(mode, lhs, rhs, opts)
           table.insert(registered_keymaps, {
-            mode = mode, lhs = lhs, rhs = rhs, opts = opts
+            mode = mode,
+            lhs = lhs,
+            rhs = rhs,
+            opts = opts,
           })
-        end
+        end,
       }
 
       -- Act
-      local plugin_spec = require('plugins.ai-sembr.ollama')
+      local plugin_spec = require("plugins.ai-sembr.ollama")
       if plugin_spec.config then
         plugin_spec.config()
       end
 
       -- Assert
       local expected_maps = {
-        "<leader>aa", "<leader>ae", "<leader>as", "<leader>al",
-        "<leader>aw", "<leader>aq", "<leader>ax"
+        "<leader>aa",
+        "<leader>ae",
+        "<leader>as",
+        "<leader>al",
+        "<leader>aw",
+        "<leader>aq",
+        "<leader>ax",
       }
 
       for _, expected_lhs in ipairs(expected_maps) do
@@ -611,11 +646,11 @@ describe("Ollama Local LLM Integration", function()
       vim.keymap = {
         set = function(mode, lhs, rhs, opts)
           keymaps_by_lhs[lhs] = { mode = mode, opts = opts }
-        end
+        end,
       }
 
       -- Act
-      local plugin_spec = require('plugins.ai-sembr.ollama')
+      local plugin_spec = require("plugins.ai-sembr.ollama")
       if plugin_spec.config then
         plugin_spec.config()
       end

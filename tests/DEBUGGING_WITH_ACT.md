@@ -5,6 +5,7 @@ Guide for testing GitHub Actions workflows locally using Act.
 ## What is Act?
 
 Act is a tool that runs your GitHub Actions locally in Docker containers. It helps you:
+
 - Test workflows before pushing to GitHub
 - Debug failing CI tests quickly
 - Iterate faster on workflow changes
@@ -12,16 +13,19 @@ Act is a tool that runs your GitHub Actions locally in Docker containers. It hel
 ## Installation
 
 ### Linux (Debian/Ubuntu)
+
 ```bash
 curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
 ```
 
 ### macOS
+
 ```bash
 brew install act
 ```
 
 ### Verify Installation
+
 ```bash
 act --version
 ```
@@ -29,12 +33,14 @@ act --version
 ## Basic Usage
 
 ### List Available Workflows
+
 ```bash
 # From project root (/home/percy/.config/nvim)
 act -l
 ```
 
 Expected output:
+
 ```
 Stage  Job ID  Job name       Workflow name              Workflow file
 0      test    test           PercyBrain Simple Tests    percybrain-tests.yml
@@ -42,6 +48,7 @@ Stage  Job ID  Job name       Workflow name              Workflow file
 ```
 
 ### Run Main Test Workflow
+
 ```bash
 # Run the full test suite
 act push --job test
@@ -54,6 +61,7 @@ act push --job test --verbose --debug
 ```
 
 ### Run Quality Workflow
+
 ```bash
 act push --job format-and-lint
 ```
@@ -61,9 +69,11 @@ act push --job format-and-lint
 ## Common Issues & Solutions
 
 ### Issue: "Docker not running"
+
 **Error**: Cannot connect to Docker daemon
 
 **Solution**:
+
 ```bash
 # Start Docker service
 sudo systemctl start docker
@@ -73,9 +83,11 @@ sudo systemctl start docker
 ```
 
 ### Issue: "Container architecture mismatch"
+
 **Error**: Platform mismatch warnings
 
 **Solution**: Create `.actrc` in project root:
+
 ```bash
 cat > .actrc << 'ACTRC'
 -P ubuntu-latest=catthehacker/ubuntu:act-latest
@@ -84,19 +96,24 @@ ACTRC
 ```
 
 ### Issue: "Cache not working"
+
 **Note**: Act doesn't perfectly replicate GitHub Actions cache behavior
 
 **Workaround**: Run without cache or manually test tool installation:
+
 ```bash
 # Test tool installation step
 act push --job test -s GITHUB_ACTIONS=true
 ```
 
 ### Issue: "Tests hang on Selene"
+
 **Symptom**: Tests stop responding during linting phase
 
 **Debug Steps**:
+
 1. Check if issue is in Act or the script:
+
 ```bash
 # Run tests locally (outside Act)
 cd tests/
@@ -104,6 +121,7 @@ cd tests/
 ```
 
 2. Check Act container:
+
 ```bash
 # Run interactive shell in Act container
 act push --job test -b
@@ -114,14 +132,17 @@ cd /home/runner/work/neovim-iwe/neovim-iwe/tests
 ```
 
 3. Check tool versions in container:
+
 ```bash
 act push --job test --verbose | grep -A5 "Tool Verification"
 ```
 
 ### Issue: "PATH not set correctly"
+
 **Symptom**: Tools not found even after installation
 
 **Debug**: Add verification step to workflow (already included):
+
 ```yaml
 - name: Verify tool installation
   run: |
@@ -134,7 +155,9 @@ act push --job test --verbose | grep -A5 "Tool Verification"
 ## Debugging Techniques
 
 ### 1. Interactive Container Shell
+
 Drop into a shell to manually test:
+
 ```bash
 act push --job test -b
 ```
@@ -142,25 +165,33 @@ act push --job test -b
 Then run commands interactively.
 
 ### 2. Dry Run (No Execution)
+
 See what Act would do:
+
 ```bash
 act push --job test --dryrun
 ```
 
 ### 3. Reuse Containers
+
 Speed up debugging by reusing containers:
+
 ```bash
 act push --job test --reuse
 ```
 
 ### 4. Verbose Output
+
 See all steps and output:
+
 ```bash
 act push --job test --verbose 2>&1 | tee act-debug.log
 ```
 
 ### 5. Specific Step Testing
+
 Test just one step by commenting out others in workflow, then:
+
 ```bash
 act push --job test
 ```
@@ -169,23 +200,25 @@ act push --job test
 
 ### Differences to Be Aware Of
 
-| Feature | Act | GitHub Actions |
-|---------|-----|----------------|
-| Cache | Limited/unreliable | Full cache support |
-| Secrets | Manual setup needed | Automatic from repo |
-| Environment | Docker container | GitHub-hosted runner |
+| Feature     | Act                      | GitHub Actions       |
+| ----------- | ------------------------ | -------------------- |
+| Cache       | Limited/unreliable       | Full cache support   |
+| Secrets     | Manual setup needed      | Automatic from repo  |
+| Environment | Docker container         | GitHub-hosted runner |
 | Performance | Depends on local machine | Consistent cloud VMs |
-| Network | Local network/DNS | GitHub network |
+| Network     | Local network/DNS        | GitHub network       |
 
 ### When to Use Act
 
 ✅ **Good for:**
+
 - Testing workflow syntax
 - Debugging failing tests
 - Iterating on workflow logic
 - Checking tool installation
 
 ❌ **Not reliable for:**
+
 - Cache behavior testing
 - Performance benchmarks
 - Network-dependent operations
@@ -196,17 +229,20 @@ act push --job test
 When you make changes:
 
 1. **Test locally first** (fastest):
+
 ```bash
 cd tests/
 ./simple-test.sh
 ```
 
 2. **Test with Act** (if workflow changes):
+
 ```bash
 act push --job test
 ```
 
 3. **Push to GitHub** (final verification):
+
 ```bash
 git add .
 git commit -m "Fix: description"

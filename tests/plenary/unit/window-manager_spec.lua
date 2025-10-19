@@ -1,9 +1,6 @@
 -- Unit Tests: Window Manager Module
 -- Tests for PercyBrain's custom window management system
 
-local helpers = require('tests.helpers')
-local mocks = require('tests.helpers.mocks')
-
 -- Helper function for table contains check
 local function contains(tbl, value)
   for _, v in ipairs(tbl) do
@@ -16,17 +13,14 @@ end
 
 describe("Window Manager", function()
   local wm
-  local wm_mock
-  local original_vim
   local original_notify
 
   before_each(function()
     -- Arrange: Load window manager module
-    package.loaded['config.window-manager'] = nil
-    wm = require('config.window-manager')
+    package.loaded["config.window-manager"] = nil
+    wm = require("config.window-manager")
 
-    -- Setup window manager mock
-    wm_mock = mocks.window_manager()
+    -- Save original vim.notify
     original_notify = vim.notify
     vim.notify = function() end
   end)
@@ -43,19 +37,31 @@ describe("Window Manager", function()
         -- Navigation
         "navigate",
         -- Splitting
-        "split_horizontal", "split_vertical",
+        "split_horizontal",
+        "split_vertical",
         -- Moving
         "move_window",
         -- Closing
-        "close_window", "close_other_windows", "quit_window",
+        "close_window",
+        "close_other_windows",
+        "quit_window",
         -- Resizing
-        "equalize_windows", "maximize_width", "maximize_height",
+        "equalize_windows",
+        "maximize_width",
+        "maximize_height",
         -- Buffer management
-        "list_buffers", "next_buffer", "prev_buffer", "delete_buffer",
+        "list_buffers",
+        "next_buffer",
+        "prev_buffer",
+        "delete_buffer",
         -- Layout presets
-        "layout_wiki", "layout_focus", "layout_reset", "layout_research",
+        "layout_wiki",
+        "layout_focus",
+        "layout_reset",
+        "layout_research",
         -- Info and setup
-        "window_info", "setup"
+        "window_info",
+        "setup",
       }
 
       -- Act & Assert
@@ -169,7 +175,7 @@ describe("Window Manager", function()
 
       vim.fn.winnr = function(arg)
         if arg == "$" then
-          return 2  -- Simulate 2 windows
+          return 2 -- Simulate 2 windows
         end
         return 1
       end
@@ -198,7 +204,7 @@ describe("Window Manager", function()
 
       vim.fn.winnr = function(arg)
         if arg == "$" then
-          return 1  -- Only 1 window
+          return 1 -- Only 1 window
         end
         return 1
       end
@@ -371,8 +377,7 @@ describe("Window Manager", function()
 
       -- Assert
       assert.is_true(contains(commands, "only"))
-      assert.is_true(vim.tbl_contains(commands, "NvimTreeOpen") or
-                     vim.tbl_contains(commands, "vsplit"))
+      assert.is_true(vim.tbl_contains(commands, "NvimTreeOpen") or vim.tbl_contains(commands, "vsplit"))
 
       vim.cmd = original_cmd
       vim.defer_fn = original_defer
@@ -449,7 +454,7 @@ describe("Window Manager", function()
       local original_winnr = vim.fn.winnr
 
       vim.api.nvim_list_wins = function()
-        return {1001, 1002, 1003}
+        return { 1001, 1002, 1003 }
       end
 
       vim.api.nvim_get_current_win = function()
@@ -481,7 +486,7 @@ describe("Window Manager", function()
         table.insert(keymaps, {
           mode = mode,
           lhs = lhs,
-          desc = opts and opts.desc or nil
+          desc = opts and opts.desc or nil,
         })
       end
 
@@ -521,7 +526,7 @@ describe("Window Manager", function()
         table.insert(keymaps, {
           mode = mode,
           lhs = lhs,
-          desc = opts and opts.desc or nil
+          desc = opts and opts.desc or nil,
         })
       end
 
@@ -531,8 +536,7 @@ describe("Window Manager", function()
       -- Assert: All keymaps in normal mode with <leader>w prefix and descriptions
       for _, km in ipairs(keymaps) do
         assert.equals("n", km.mode, "All window keymaps should be normal mode")
-        assert.is_true(km.lhs:match("^<leader>w") ~= nil,
-          "Keymap " .. km.lhs .. " should start with <leader>w")
+        assert.is_true(km.lhs:match("^<leader>w") ~= nil, "Keymap " .. km.lhs .. " should start with <leader>w")
         assert.is_string(km.desc, "Keymap " .. km.lhs .. " should have description")
         assert.is_true(#km.desc > 0, "Description should not be empty")
       end
@@ -547,14 +551,13 @@ describe("Window Manager", function()
       local start = vim.fn.reltime()
 
       -- Act
-      package.loaded['config.window-manager'] = nil
-      require('config.window-manager')
+      package.loaded["config.window-manager"] = nil
+      require("config.window-manager")
 
       local elapsed = vim.fn.reltimefloat(vim.fn.reltime(start))
 
       -- Assert
-      assert.is_true(elapsed < 0.05,
-        string.format("Window manager loading too slow: %.3fs", elapsed))
+      assert.is_true(elapsed < 0.05, string.format("Window manager loading too slow: %.3fs", elapsed))
     end)
   end)
 
@@ -568,7 +571,7 @@ describe("Window Manager", function()
           table.insert(keymaps, {
             mode = mode,
             lhs = lhs,
-            desc = opts and opts.desc or nil
+            desc = opts and opts.desc or nil,
           })
         end
       end
@@ -579,9 +582,10 @@ describe("Window Manager", function()
       -- Assert
       assert.equals(1, #keymaps, "Should have quick toggle keymap")
       assert.equals("<leader>ww", keymaps[1].lhs)
-      assert.is_true(keymaps[1].desc:lower():match("quick") ~= nil or
-                     keymaps[1].desc:lower():match("toggle") ~= nil,
-                     "Should indicate quick toggle functionality")
+      assert.is_true(
+        keymaps[1].desc:lower():match("quick") ~= nil or keymaps[1].desc:lower():match("toggle") ~= nil,
+        "Should indicate quick toggle functionality"
+      )
 
       vim.keymap.set = original_set
     end)
@@ -604,8 +608,7 @@ describe("Window Manager", function()
       wm.equalize_windows()
 
       -- Assert
-      assert.is_true(notify_count >= 4,
-        "Functions should provide visual feedback via notifications")
+      assert.is_true(notify_count >= 4, "Functions should provide visual feedback via notifications")
 
       vim.cmd = original_cmd
     end)

@@ -1,6 +1,6 @@
 # Plenary-Based Unit Testing Workflow Design
-*Architecture Document for PercyBrain Plugin Testing*
-*Date: 2025-10-18*
+
+*Architecture Document for PercyBrain Plugin Testing* *Date: 2025-10-18*
 
 ## Executive Summary
 
@@ -628,17 +628,20 @@ end)
 ## Quality Standards
 
 ### Test Coverage Requirements
+
 - **Unit Tests**: 80% minimum coverage
 - **Integration Tests**: Critical paths covered
 - **Performance Tests**: All benchmarks passing
 - **Neurodiversity Features**: 100% coverage
 
 ### Test Naming Conventions
+
 - Files: `*_spec.lua` suffix
 - Describe blocks: Module or feature name
 - It blocks: "should" + specific behavior
 
 ### Assertion Best Practices
+
 - Use specific assertions (`assert.equals` vs `assert.is_true`)
 - Include meaningful error messages
 - Test both success and failure cases
@@ -647,6 +650,7 @@ end)
 ## Implementation Roadmap
 
 ### Phase 1: Foundation (Week 1)
+
 - [x] Set up Plenary test structure
 - [x] Create test runner script
 - [ ] Implement test helpers and assertions
@@ -654,18 +658,21 @@ end)
 - [ ] Set up Makefile
 
 ### Phase 2: Core Tests (Week 2)
+
 - [ ] Unit tests for config modules
 - [ ] Integration tests for plugin loading
 - [ ] Neurodiversity feature tests
 - [ ] Performance benchmarks
 
 ### Phase 3: Workflow Tests (Week 3)
+
 - [ ] Zettelkasten workflow tests
 - [ ] AI-assisted writing tests
 - [ ] Publishing workflow tests
 - [ ] LSP integration tests
 
 ### Phase 4: CI/CD Integration (Week 4)
+
 - [ ] GitHub Actions workflow
 - [ ] Coverage reporting
 - [ ] Performance regression detection
@@ -674,6 +681,7 @@ end)
 ## Conclusion
 
 This Plenary-based testing architecture provides:
+
 - **Comprehensive Coverage**: Unit, integration, workflow, and performance tests
 - **Neurodiversity Focus**: Dedicated tests for ADHD/autism features
 - **Developer Experience**: Watch mode, custom assertions, mock utilities

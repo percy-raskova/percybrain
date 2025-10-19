@@ -50,7 +50,9 @@ function M.vault(path)
     vim.fn.mkdir(self.path .. "/.iwe", "p")
 
     -- Create default templates
-    self:create_template("default", [[
+    self:create_template(
+      "default",
+      [[
 ---
 title: {{title}}
 date: {{date}}
@@ -58,9 +60,12 @@ tags: []
 ---
 
 # {{title}}
-]])
+]]
+    )
 
-    self:create_template("daily", [[
+    self:create_template(
+      "daily",
+      [[
 ---
 title: Daily Note - {{date}}
 date: {{date}}
@@ -73,7 +78,8 @@ type: daily
 - [ ]
 
 ## Notes
-]])
+]]
+    )
   end
 
   function vault:teardown()
@@ -95,8 +101,9 @@ type: daily
 
   function vault:create_daily_note(date)
     date = date or os.date("%Y%m%d")
-    local path = self.path .. "/daily/" .. date .. ".md"
-    local content = string.format([[
+    local note_path = self.path .. "/daily/" .. date .. ".md"
+    local content = string.format(
+      [[
 ---
 title: Daily Note - %s
 date: %s
@@ -104,9 +111,13 @@ type: daily
 ---
 
 # Daily Note - %s
-]], date, date, date)
-    vim.fn.writefile(vim.split(content, "\n"), path)
-    return path
+]],
+      date,
+      date,
+      date
+    )
+    vim.fn.writefile(vim.split(content, "\n"), note_path)
+    return note_path
   end
 
   function vault:get_backlinks(note_id)
@@ -139,9 +150,15 @@ function M.ollama(options)
     _G.vim = vim.tbl_extend("force", _G.vim or {}, {
       -- API mocks
       api = vim.tbl_extend("force", vim.api or {}, {
-        nvim_get_current_buf = function() return 1 end,
-        nvim_win_get_cursor = function() return { 10, 0 } end,
-        nvim_buf_line_count = function() return 100 end,
+        nvim_get_current_buf = function()
+          return 1
+        end,
+        nvim_win_get_cursor = function()
+          return { 10, 0 }
+        end,
+        nvim_buf_line_count = function()
+          return 100
+        end,
         nvim_buf_get_lines = function(buf, start_line, end_line)
           local lines = {}
           for i = start_line + 1, end_line do
@@ -149,27 +166,39 @@ function M.ollama(options)
           end
           return lines
         end,
-        nvim_create_buf = function() return 2 end,
+        nvim_create_buf = function()
+          return 2
+        end,
         nvim_buf_set_lines = function() end,
         nvim_buf_set_option = function() end,
-        nvim_open_win = function() return 1001 end,
+        nvim_open_win = function()
+          return 1001
+        end,
         nvim_win_set_option = function() end,
         nvim_buf_set_keymap = function() end,
         nvim_create_user_command = function() end,
-        nvim_exec2 = function(cmd, opts) return { output = "" } end,
+        nvim_exec2 = function(cmd, opts)
+          return { output = "" }
+        end,
       }),
 
       -- Function mocks
       fn = vim.tbl_extend("force", vim.fn or {}, {
-        mode = function() return "n" end,
+        mode = function()
+          return "n"
+        end,
         getpos = function(mark)
-          if mark == "'<" then return { 0, 5, 0, 0 }
-          elseif mark == "'>" then return { 0, 10, 0, 0 } end
+          if mark == "'<" then
+            return { 0, 5, 0, 0 }
+          elseif mark == "'>" then
+            return { 0, 10, 0, 0 }
+          end
         end,
         jobstart = function(cmd, opts)
           if opts and opts.on_stdout then
             vim.defer_fn(function()
-              local response = mock.responses[cmd] or '{"model":"llama3.2:latest","response":"Mock AI response","done":true}'
+              local response = mock.responses[cmd]
+                or '{"model":"llama3.2:latest","response":"Mock AI response","done":true}'
               opts.on_stdout(nil, { response })
             end, 10)
           end
@@ -180,7 +209,7 @@ function M.ollama(options)
             return {
               model = "llama3.2:latest",
               response = str:match('"response":"([^"]+)"'),
-              done = true
+              done = true,
             }
           end
           return nil
@@ -191,7 +220,9 @@ function M.ollama(options)
       log = vim.log or { levels = { INFO = 2, WARN = 3, ERROR = 4 } },
       o = { columns = 120, lines = 40 },
       loop = { sleep = function(ms) end },
-      defer_fn = function(fn, timeout) fn() end,
+      defer_fn = function(fn, timeout)
+        fn()
+      end,
       split = function(str, sep)
         local result = {}
         for line in str:gmatch("[^\n]+") do
@@ -201,8 +232,10 @@ function M.ollama(options)
       end,
       tbl_extend = function(behavior, ...)
         local result = {}
-        for _, tbl in ipairs({...}) do
-          for k, v in pairs(tbl) do result[k] = v end
+        for _, tbl in ipairs({ ... }) do
+          for k, v in pairs(tbl) do
+            result[k] = v
+          end
         end
         return result
       end,
@@ -225,15 +258,15 @@ function M.ollama(options)
   -- Mock io.popen for service detection
   function mock:mock_io_popen()
     local original = io.popen
-    io.popen = function(cmd)
+    io.popen = function(cmd) -- luacheck: ignore
       return {
-        read = function(self, format)
+        read = function(_, _)
           if cmd:match("pgrep.-ollama") then
             return mock.is_running and "12345\n" or ""
           end
           return ""
         end,
-        close = function() end
+        close = function() end,
       }
     end
     return original
@@ -256,7 +289,7 @@ function M.ollama(options)
       models = {
         { name = "llama3.2", size = "2.0 GB" },
         { name = "codellama", size = "3.8 GB" },
-      }
+      },
     }
   end
 
@@ -273,19 +306,20 @@ function M.auto_save()
 
   return {
     setup = function(config)
-      state.config = config or {
-        enabled = true,
-        execution_message = "AutoSave: saved",
-        events = { "InsertLeave", "TextChanged" },
-        conditions = {
-          exists = true,
-          filename_is_not = {},
-          filetype_is_not = {},
-          modifiable = true,
-        },
-        write_all_buffers = false,
-        debounce_delay = 135,
-      }
+      state.config = config
+        or {
+          enabled = true,
+          execution_message = "AutoSave: saved",
+          events = { "InsertLeave", "TextChanged" },
+          conditions = {
+            exists = true,
+            filename_is_not = {},
+            filetype_is_not = {},
+            modifiable = true,
+          },
+          write_all_buffers = false,
+          debounce_delay = 135,
+        }
     end,
     save = function()
       state.saves = state.saves + 1
@@ -387,7 +421,8 @@ function M.hugo_site(path)
     new_post = function(title)
       local filename = title:lower():gsub(" ", "-") .. ".md"
       local post_path = path .. "/content/posts/" .. filename
-      local content = string.format([[
+      local content = string.format(
+        [[
 ---
 title: "%s"
 date: %s
@@ -395,7 +430,11 @@ draft: false
 ---
 
 # %s
-]], title, os.date("%Y-%m-%dT%H:%M:%S"), title)
+]],
+        title,
+        os.date("%Y-%m-%dT%H:%M:%S"),
+        title
+      )
       vim.fn.writefile(vim.split(content, "\n"), post_path)
       return post_path
     end,
@@ -422,8 +461,9 @@ function M.notifications()
       vim.notify = original
     end,
     clear = function()
-      messages = {}
-      mock.messages = messages
+      for i = #messages, 1, -1 do
+        messages[i] = nil
+      end
     end,
     has = function(pattern)
       for _, msg in ipairs(messages) do

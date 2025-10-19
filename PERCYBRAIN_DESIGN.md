@@ -1,14 +1,13 @@
 # PercyBrain System Architecture Design
 
-**Version**: 2.0
-**Status**: Design Specification
-**Target**: Enhanced Zettelkasten system with LSP, LLM, and semantic line breaks
+**Version**: 2.0 **Status**: Design Specification **Target**: Enhanced Zettelkasten system with LSP, LLM, and semantic line breaks
 
----
+______________________________________________________________________
 
 ## Brand Identity
 
 **PercyBrain** is a personal knowledge management system built on Neovim, designed for writers and researchers who value:
+
 - **Terminal Integration**: Seamless command-line workflow without leaving your editor
 - **Local-First**: Your data, your machine, your control - no cloud dependencies
 - **AI-Augmented**: Local LLMs enhance your thinking without compromising privacy
@@ -18,16 +17,18 @@
 **Philosophy**: Your second brain should be as fast as your first brain - capturing ideas at the speed of thought, connecting knowledge automatically, and publishing effortlessly.
 
 **Target Users**:
+
 - Writers seeking Obsidian-like features in Neovim
 - Researchers managing large knowledge bases
 - Developers who live in the terminal
 - Privacy-conscious users preferring local-only tools
 
----
+______________________________________________________________________
 
 ## Executive Summary
 
 This document specifies a comprehensive redesign of PercyBrain to integrate:
+
 1. **IWE LSP** - Intelligent markdown LSP for link management, navigation, and knowledge graph
 2. **SemBr** - ML-based semantic line break automation for prose formatting
 3. **Ollama** - Local LLM integration for AI-assisted writing and note enhancement
@@ -35,7 +36,7 @@ This document specifies a comprehensive redesign of PercyBrain to integrate:
 
 **Design Philosophy**: Transform Neovim into a complete Zettelkasten environment rivaling Obsidian while maintaining terminal integration, plain text benefits, and local-first architecture.
 
----
+______________________________________________________________________
 
 ## System Architecture
 
@@ -90,16 +91,18 @@ This document specifies a comprehensive redesign of PercyBrain to integrate:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
----
+______________________________________________________________________
 
 ## Component Specifications
 
 ### 1. IWE LSP Integration
 
 #### Purpose
+
 Provide intelligent markdown editing with link management, navigation, backlinks, and knowledge graph analysis.
 
 #### Architecture
+
 ```lua
 -- lua/plugins/iwe-lsp.lua
 return {
@@ -136,6 +139,7 @@ return {
 ```
 
 #### Key Features to Leverage
+
 1. **Link Completion**: Auto-complete `[[note-name]]` as you type
 2. **Link Navigation**: `gd` to follow links, `gr` for references
 3. **Backlinks**: Show all notes linking to current note
@@ -145,6 +149,7 @@ return {
 7. **Code Actions**: Extract sub-notes, inline notes, convert formats
 
 #### Keymaps
+
 ```lua
 -- In lua/config/zettelkasten.lua
 vim.keymap.set('n', '<leader>zl', vim.lsp.buf.definition, { desc = "Follow link" })
@@ -155,6 +160,7 @@ vim.keymap.set('n', '<leader>zR', vim.lsp.buf.rename, { desc = "Rename note" })
 ```
 
 #### IWE-Specific Commands
+
 ```lua
 -- Custom commands leveraging IWE LSP
 vim.api.nvim_create_user_command('PercyGraph', function()
@@ -173,16 +179,18 @@ vim.api.nvim_create_user_command('PercyNormalize', function()
 end, {})
 ```
 
----
+______________________________________________________________________
 
 ### 2. SemBr Integration (Semantic Line Breaks)
 
 #### Purpose
+
 Automatically format prose with semantic line breaks for better version control diffs and readability.
 
 #### Architecture
 
 **Integration Strategy**: SemBr supports three integration paths:
+
 1. **CLI wrapper**: Direct command-line calls via `:!sembr`
 2. **MCP Server**: Model Context Protocol for persistent model loading
 3. **Future plugin**: Direct Lua/FFI integration (when available)
@@ -291,6 +299,7 @@ return {
 #### Performance Optimization
 
 **MCP Server Mode** (for persistent model loading):
+
 ```lua
 -- Alternative: Use SemBr MCP server for faster processing
 local function start_sembr_mcp()
@@ -319,11 +328,12 @@ local function format_with_sembr_mcp()
 end
 ```
 
----
+______________________________________________________________________
 
 ### 3. Ollama Integration (Local LLM)
 
 #### Purpose
+
 AI-assisted writing, note enhancement, summarization, and knowledge synthesis using local LLMs.
 
 #### Architecture
@@ -567,11 +577,12 @@ end
 vim.api.nvim_create_user_command('OllamaSelectModel', select_model, {})
 ```
 
----
+______________________________________________________________________
 
 ### 4. Automated Publishing Pipeline
 
 #### Purpose
+
 One-command workflow to publish Zettelkasten to static site with preprocessing, optimization, and deployment.
 
 #### Architecture
@@ -777,52 +788,57 @@ vim.keymap.set('n', '<leader>zp', publishing.publish, { desc = "Publish to stati
 vim.keymap.set('n', '<leader>zP', publishing.preview, { desc = "Preview site locally" })
 ```
 
----
+______________________________________________________________________
 
 ## Enhanced Keyboard Shortcuts
 
 ### Zettelkasten Core (`<leader>z`)
-| Key | Command | Description |
-|-----|---------|-------------|
-| `<leader>zn` | New note | Create permanent note with prompt |
-| `<leader>zd` | Daily note | Open/create today's daily note |
-| `<leader>zi` | Inbox note | Quick fleeting note capture |
-| `<leader>zf` | Find notes | Telescope fuzzy find |
-| `<leader>zg` | Search notes | Telescope live grep |
-| `<leader>zb` | Backlinks | Find notes linking here |
-| `<leader>zw` | Zen mode | Distraction-free writing |
+
+| Key          | Command      | Description                       |
+| ------------ | ------------ | --------------------------------- |
+| `<leader>zn` | New note     | Create permanent note with prompt |
+| `<leader>zd` | Daily note   | Open/create today's daily note    |
+| `<leader>zi` | Inbox note   | Quick fleeting note capture       |
+| `<leader>zf` | Find notes   | Telescope fuzzy find              |
+| `<leader>zg` | Search notes | Telescope live grep               |
+| `<leader>zb` | Backlinks    | Find notes linking here           |
+| `<leader>zw` | Zen mode     | Distraction-free writing          |
 
 ### IWE LSP (`<leader>zl` - LSP operations)
-| Key | Command | Description |
-|-----|---------|-------------|
-| `<leader>zl` | Follow link | Jump to linked note |
-| `<leader>zr` | References | Show all references (backlinks) |
-| `<leader>zh` | Hover | Preview note content |
+
+| Key          | Command      | Description                         |
+| ------------ | ------------ | ----------------------------------- |
+| `<leader>zl` | Follow link  | Jump to linked note                 |
+| `<leader>zr` | References   | Show all references (backlinks)     |
+| `<leader>zh` | Hover        | Preview note content                |
 | `<leader>za` | Code actions | LSP actions (extract, inline, etc.) |
-| `<leader>zR` | Rename | Rename note + update all links |
+| `<leader>zR` | Rename       | Rename note + update all links      |
 
 ### SemBr Formatting (`<leader>zs`)
-| Key | Command | Description |
-|-----|---------|-------------|
-| `<leader>zs` | Format buffer | Apply semantic line breaks |
-| `<leader>zs` (visual) | Format selection | Format selected text only |
+
+| Key                   | Command          | Description                |
+| --------------------- | ---------------- | -------------------------- |
+| `<leader>zs`          | Format buffer    | Apply semantic line breaks |
+| `<leader>zs` (visual) | Format selection | Format selected text only  |
 
 ### AI Commands (`<leader>za` - AI operations)
-| Key | Command | Description |
-|-----|---------|-------------|
-| `<leader>zas` | AI summarize | Generate note summary |
-| `<leader>zac` | AI connections | Suggest related topics |
-| `<leader>zae` | AI expand | Expand fleeting → permanent |
-| `<leader>zat` | AI tags | Generate tags |
-| `<leader>zaq` | AI chat | Interactive Q&A about note |
+
+| Key           | Command        | Description                 |
+| ------------- | -------------- | --------------------------- |
+| `<leader>zas` | AI summarize   | Generate note summary       |
+| `<leader>zac` | AI connections | Suggest related topics      |
+| `<leader>zae` | AI expand      | Expand fleeting → permanent |
+| `<leader>zat` | AI tags        | Generate tags               |
+| `<leader>zaq` | AI chat        | Interactive Q&A about note  |
 
 ### Publishing (`<leader>zp`)
-| Key | Command | Description |
-|-----|---------|-------------|
-| `<leader>zp` | Publish | Full pipeline: process → build → deploy |
-| `<leader>zP` | Preview | Start local preview server |
 
----
+| Key          | Command | Description                             |
+| ------------ | ------- | --------------------------------------- |
+| `<leader>zp` | Publish | Full pipeline: process → build → deploy |
+| `<leader>zP` | Preview | Start local preview server              |
+
+______________________________________________________________________
 
 ## Workflow Examples
 
@@ -864,7 +880,7 @@ vim.keymap.set('n', '<leader>zP', publishing.preview, { desc = "Preview site loc
 8. Press <leader>zp            # Publish daily
 ```
 
----
+______________________________________________________________________
 
 ## Installation and Setup
 
@@ -934,7 +950,7 @@ cd ~/Zettelkasten
 iwe init  # Initialize IWE workspace
 ```
 
----
+______________________________________________________________________
 
 ## Configuration Files
 
@@ -984,7 +1000,7 @@ inlay_hints = true
 graph_view = true
 ```
 
----
+______________________________________________________________________
 
 ## Testing and Validation
 
@@ -1021,30 +1037,34 @@ end)
 - [ ] Static site builds correctly
 - [ ] Backlinks display properly
 
----
+______________________________________________________________________
 
 ## Performance Considerations
 
 ### SemBr Performance
+
 - **Model Selection**: Use `bert-small` for balance (850 words/sec)
 - **MCP Server**: For frequent formatting, use MCP server mode to keep model loaded
 - **Selective Formatting**: Format only on explicit command, not every save
 
 ### Ollama Performance
+
 - **Model Size**: Start with `llama3.2` (3.2B params) for speed
 - **Context Window**: Limit note size for summarization (max 4K tokens)
 - **Async Processing**: Run AI commands asynchronously to avoid blocking
 
 ### IWE LSP Performance
+
 - **Workspace Size**: IWE handles large vaults efficiently (tested up to 10K notes)
 - **Index Caching**: LSP caches link index for fast lookups
 - **Incremental Updates**: Only reindexes changed files
 
----
+______________________________________________________________________
 
 ## Future Enhancements
 
 ### Phase 2 (Post-MVP)
+
 1. **Graph Visualization**: Integrate IWE graph generation with Neovim floating windows
 2. **Spaced Repetition**: Integrate with Anki for flashcard generation
 3. **Mobile Sync**: Obsidian Git plugin compatibility for mobile access
@@ -1052,16 +1072,18 @@ end)
 5. **Web Clipper**: Browser extension to capture web content directly to inbox
 
 ### Phase 3 (Advanced)
+
 1. **Collaborative Editing**: Multi-user Zettelkasten with conflict resolution
 2. **Advanced Search**: Semantic search using Ollama embeddings
 3. **Custom Templates**: Lua-based template engine for note creation
 4. **Export Formats**: PDF, EPUB, LaTeX book generation from Zettelkasten
 
----
+______________________________________________________________________
 
 ## Troubleshooting
 
 ### IWE LSP Not Connecting
+
 ```bash
 # Check IWE is installed
 which iwe
@@ -1075,6 +1097,7 @@ iwe lsp
 ```
 
 ### SemBr Errors
+
 ```bash
 # Check sembr installation
 pip show sembr
@@ -1087,6 +1110,7 @@ sembr --model bert-small --version
 ```
 
 ### Ollama Not Responding
+
 ```bash
 # Check Ollama service
 systemctl status ollama  # Linux
@@ -1100,6 +1124,7 @@ ollama pull llama3.2
 ```
 
 ### Publishing Fails
+
 ```bash
 # Check Hugo installation
 hugo version
@@ -1112,7 +1137,7 @@ hugo --verbose
 ls -la ~/blog/public
 ```
 
----
+______________________________________________________________________
 
 ## References
 
@@ -1123,7 +1148,6 @@ ls -la ~/blog/public
 - **Quartz**: https://quartz.jzhao.xyz
 - **Zettelkasten Method**: https://zettelkasten.de
 
----
+______________________________________________________________________
 
-**Document Status**: Design Complete - Ready for Implementation
-**Next Step**: Create plugin files and test integration
+**Document Status**: Design Complete - Ready for Implementation **Next Step**: Create plugin files and test integration

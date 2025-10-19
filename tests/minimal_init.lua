@@ -2,18 +2,18 @@
 -- Isolated environment for Plenary test execution
 
 -- Set up runtime paths
-vim.opt.rtp:append('.')
-vim.opt.packpath:append('.')
+vim.opt.rtp:append(".")
+vim.opt.packpath:append(".")
 
 -- CRITICAL: Ensure vim.inspect exists as a FUNCTION before loading Plenary
 -- This is required by Plenary's busted.lua for error reporting
 -- In Neovim 0.10+, vim.inspect is a module/table, we need the function
-if type(vim.inspect) ~= 'function' then
-  local inspect_module = vim.inspect or require('vim.inspect')
+if type(vim.inspect) ~= "function" then
+  local inspect_module = vim.inspect or require("vim.inspect")
   vim.inspect = inspect_module.inspect or inspect_module
 
   -- If still not a function, create a simple polyfill
-  if type(vim.inspect) ~= 'function' then
+  if type(vim.inspect) ~= "function" then
     vim.inspect = function(obj, opts)
       return vim.fn.string(obj)
     end
@@ -60,7 +60,7 @@ if vim.fn.isdirectory(plenary_path) == 1 then
 
   -- Ensure Plenary's dependencies are available
   pcall(function()
-    require('plenary')
+    require("plenary")
   end)
 else
   -- If Plenary isn't installed via lazy, install it for testing
@@ -85,12 +85,12 @@ else
 end
 
 -- Add test helpers to runtime path and Lua package path
-vim.opt.rtp:append('tests')
+vim.opt.rtp:append("tests")
 
 -- CRITICAL: Add project root to Lua package path for require('tests.helpers')
 local project_root = vim.fn.getcwd()
-package.path = package.path .. ';' .. project_root .. '/?.lua'
-package.path = package.path .. ';' .. project_root .. '/?/init.lua'
+package.path = package.path .. ";" .. project_root .. "/?.lua"
+package.path = package.path .. ";" .. project_root .. "/?/init.lua"
 
 -- Set up test-specific options
 vim.opt.swapfile = false
@@ -105,13 +105,15 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
 -- Load test helpers globally (optional, wrapped in pcall)
-local helpers_ok, helpers = pcall(require, 'tests.helpers')
+local helpers_ok, helpers = pcall(require, "tests.helpers")
 if helpers_ok then
   _G.test_helpers = helpers
 else
   -- Provide minimal stubs if helpers fail to load
   _G.test_helpers = {
-    create_test_buffer = function() return vim.api.nvim_create_buf(false, true) end,
+    create_test_buffer = function()
+      return vim.api.nvim_create_buf(false, true)
+    end,
     cleanup_buffer = function(buf)
       if vim.api.nvim_buf_is_valid(buf) then
         vim.api.nvim_buf_delete(buf, { force = true })
@@ -120,25 +122,22 @@ else
   }
 end
 
-local assertions_ok, assertions = pcall(require, 'tests.helpers.assertions')
+local assertions_ok, assertions = pcall(require, "tests.helpers.assertions")
 if assertions_ok then
   _G.test_assertions = assertions
 end
 
-local mocks_ok, mocks = pcall(require, 'tests.helpers.mocks')
+local mocks_ok, mocks = pcall(require, "tests.helpers.mocks")
 if mocks_ok then
   _G.test_mocks = mocks
 end
 
 -- Utility function for running tests
 _G.run_test_file = function(file)
-  require('plenary.busted').run(file)
+  require("plenary.busted").run(file)
 end
 
 -- Utility function for running test directory
 _G.run_test_directory = function(directory)
-  require('plenary.test_harness').test_directory(
-    directory,
-    { minimal_init = 'tests/minimal_init.lua' }
-  )
+  require("plenary.test_harness").test_directory(directory, { minimal_init = "tests/minimal_init.lua" })
 end

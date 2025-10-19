@@ -43,6 +43,10 @@ return {
             end
           end
         end,
+        -- Remember if NvimTree was open
+        function()
+          vim.g.nvim_tree_was_open = require("nvim-tree.view").is_visible()
+        end,
       },
 
       post_restore_cmds = {
@@ -52,14 +56,6 @@ return {
           if vim.g.nvim_tree_was_open then
             nvim_tree_api.tree.open()
           end
-        end,
-      },
-
-      -- Save extra info
-      pre_save_cmds = {
-        function()
-          -- Remember if NvimTree was open
-          vim.g.nvim_tree_was_open = require("nvim-tree.view").is_visible()
         end,
       },
 
@@ -84,8 +80,9 @@ return {
       end,
     })
 
-    -- Restore notification
-    vim.api.nvim_create_autocmd("SessionRestored", {
+    -- Restore notification (using User autocmd pattern)
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "SessionRestored",
       callback = function()
         vim.notify("✨ Session restored! Welcome back.", vim.log.levels.INFO)
       end,

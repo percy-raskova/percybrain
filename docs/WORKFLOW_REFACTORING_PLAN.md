@@ -1,13 +1,13 @@
 # PercyBrain Workflow-Focused Refactoring Plan
 
-**Date**: 2025-10-17
-**Goal**: Reorganize 67 plugins into clear workflow-based directories aligned with primary use cases
+**Date**: 2025-10-17 **Goal**: Reorganize 67 plugins into clear workflow-based directories aligned with primary use cases
 
----
+______________________________________________________________________
 
 ## 📋 Use Case Priority
 
 ### 1. **Knowledge Management / Zettelkasten** (Primary)
+
 - Note capture and organization
 - Wiki-style linking
 - Backlinks and reference discovery
@@ -15,23 +15,26 @@
 - IWE LSP integration for markdown
 
 ### 2. **AI-Assisted Writing** (Secondary)
+
 - Parse semantic line-broken notes
 - Generate rough drafts from notes
 - Text improvement and expansion
 - SemBr formatting integration
 
 ### 3. **Long-Form Prose Writing** (Tertiary)
+
 - Distraction-free writing modes
 - LaTeX for academic papers
 - Citation management
 - Document formatting
 
 ### 4. **Static Site Publishing** (Supporting)
+
 - Hugo integration
 - Markdown to web publishing
 - Preview and deployment
 
----
+______________________________________________________________________
 
 ## 🗂️ New Directory Structure
 
@@ -139,102 +142,107 @@ lua/plugins/
 └── init.lua               # Plugin loader (updated)
 ```
 
----
+______________________________________________________________________
 
 ## 🔄 Plugin Migration Map
 
 ### Zettelkasten Workflow (11 plugins)
 
-| Current Location | New Location | Action |
-|------------------|--------------|--------|
-| N/A | `zettelkasten/iwe-lsp.lua` | **ADD** - IWE markdown LSP |
-| `vim-wiki.lua` | `zettelkasten/vim-wiki.lua` | **MOVE** |
-| `vim-zettel.lua` | `zettelkasten/vim-zettel.lua` | **MOVE** |
-| `obsidianNvim.lua` | `zettelkasten/obsidian.lua` | **MOVE + RENAME** |
-| `telescope.lua` | `zettelkasten/telescope.lua` | **MOVE** - primary search |
-| `img-clip.lua` | `zettelkasten/img-clip.lua` | **MOVE** |
-| `fzf-lua.lua` | `navigation/fzf-lua.lua` | **MOVE** - alternative |
-| `fzf-vim.lua` | N/A | **DELETE** - redundant |
+| Current Location   | New Location                  | Action                     |
+| ------------------ | ----------------------------- | -------------------------- |
+| N/A                | `zettelkasten/iwe-lsp.lua`    | **ADD** - IWE markdown LSP |
+| `vim-wiki.lua`     | `zettelkasten/vim-wiki.lua`   | **MOVE**                   |
+| `vim-zettel.lua`   | `zettelkasten/vim-zettel.lua` | **MOVE**                   |
+| `obsidianNvim.lua` | `zettelkasten/obsidian.lua`   | **MOVE + RENAME**          |
+| `telescope.lua`    | `zettelkasten/telescope.lua`  | **MOVE** - primary search  |
+| `img-clip.lua`     | `zettelkasten/img-clip.lua`   | **MOVE**                   |
+| `fzf-lua.lua`      | `navigation/fzf-lua.lua`      | **MOVE** - alternative     |
+| `fzf-vim.lua`      | N/A                           | **DELETE** - redundant     |
 
 ### AI & SemBr Workflow (3 plugins)
 
-| Current Location | New Location | Action |
-|------------------|--------------|--------|
-| `ollama.lua` | `ai-sembr/ollama.lua` | **MOVE** |
-| `sembr.lua` | `ai-sembr/sembr.lua` | **MOVE** |
-| N/A | `ai-sembr/ai-draft.lua` | **CREATE** - draft generator |
-| `gen.lua` | N/A | **DELETE** - redundant |
+| Current Location | New Location            | Action                       |
+| ---------------- | ----------------------- | ---------------------------- |
+| `ollama.lua`     | `ai-sembr/ollama.lua`   | **MOVE**                     |
+| `sembr.lua`      | `ai-sembr/sembr.lua`    | **MOVE**                     |
+| N/A              | `ai-sembr/ai-draft.lua` | **CREATE** - draft generator |
+| `gen.lua`        | N/A                     | **DELETE** - redundant       |
 
 ### Prose Writing Workflow (14 plugins)
 
 #### Distraction-Free (4 plugins)
-| Current Location | New Location | Action |
-|------------------|--------------|--------|
-| `goyo.lua` | `prose-writing/distraction-free/goyo.lua` | **MOVE** |
-| `zen-mode.lua` | `prose-writing/distraction-free/zen-mode.lua` | **MOVE** |
-| `limelight.lua` | `prose-writing/distraction-free/limelight.lua` | **MOVE** |
-| `centerpad.lua` | `prose-writing/distraction-free/centerpad.lua` | **MOVE** |
-| `twilight.lua` | N/A | **DELETE** - redundant |
+
+| Current Location | New Location                                   | Action                 |
+| ---------------- | ---------------------------------------------- | ---------------------- |
+| `goyo.lua`       | `prose-writing/distraction-free/goyo.lua`      | **MOVE**               |
+| `zen-mode.lua`   | `prose-writing/distraction-free/zen-mode.lua`  | **MOVE**               |
+| `limelight.lua`  | `prose-writing/distraction-free/limelight.lua` | **MOVE**               |
+| `centerpad.lua`  | `prose-writing/distraction-free/centerpad.lua` | **MOVE**               |
+| `twilight.lua`   | N/A                                            | **DELETE** - redundant |
 
 #### Editing Tools (5 plugins)
-| Current Location | New Location | Action |
-|------------------|--------------|--------|
-| N/A | `prose-writing/editing/nvim-surround.lua` | **ADD** |
-| N/A | `prose-writing/editing/vim-textobj-sentence.lua` | **ADD** |
-| N/A | `prose-writing/editing/vim-repeat.lua` | **ADD** |
-| `vim-pencil.lua` | `prose-writing/editing/vim-pencil.lua` | **MOVE** |
-| N/A | `prose-writing/editing/undotree.lua` | **ADD** |
+
+| Current Location | New Location                                     | Action   |
+| ---------------- | ------------------------------------------------ | -------- |
+| N/A              | `prose-writing/editing/nvim-surround.lua`        | **ADD**  |
+| N/A              | `prose-writing/editing/vim-textobj-sentence.lua` | **ADD**  |
+| N/A              | `prose-writing/editing/vim-repeat.lua`           | **ADD**  |
+| `vim-pencil.lua` | `prose-writing/editing/vim-pencil.lua`           | **MOVE** |
+| N/A              | `prose-writing/editing/undotree.lua`             | **ADD**  |
 
 #### Formatting (2 plugins)
-| Current Location | New Location | Action |
-|------------------|--------------|--------|
-| `autopairs.lua` | `prose-writing/formatting/autopairs.lua` | **MOVE** |
-| `comment.lua` | `prose-writing/formatting/comment.lua` | **MOVE** |
+
+| Current Location | New Location                             | Action   |
+| ---------------- | ---------------------------------------- | -------- |
+| `autopairs.lua`  | `prose-writing/formatting/autopairs.lua` | **MOVE** |
+| `comment.lua`    | `prose-writing/formatting/comment.lua`   | **MOVE** |
 
 #### Grammar (3 plugins)
-| Current Location | New Location | Action |
-|------------------|--------------|--------|
-| N/A | `prose-writing/grammar/ltex-ls.lua` | **ADD** - LanguageTool LSP |
-| `vale.lua` | `prose-writing/grammar/vale.lua` | **MOVE** |
-| `thesaurusquery.lua` | `prose-writing/grammar/thesaurus.lua` | **MOVE + RENAME** |
-| `LanguageTool.lua` | N/A | **EVALUATE** - may be redundant with ltex-ls |
-| `vim-grammarous.lua` | N/A | **DELETE** - use ltex-ls instead |
+
+| Current Location     | New Location                          | Action                                       |
+| -------------------- | ------------------------------------- | -------------------------------------------- |
+| N/A                  | `prose-writing/grammar/ltex-ls.lua`   | **ADD** - LanguageTool LSP                   |
+| `vale.lua`           | `prose-writing/grammar/vale.lua`      | **MOVE**                                     |
+| `thesaurusquery.lua` | `prose-writing/grammar/thesaurus.lua` | **MOVE + RENAME**                            |
+| `LanguageTool.lua`   | N/A                                   | **EVALUATE** - may be redundant with ltex-ls |
+| `vim-grammarous.lua` | N/A                                   | **DELETE** - use ltex-ls instead             |
 
 ### Academic Writing Workflow (4 plugins)
 
-| Current Location | New Location | Action |
-|------------------|--------------|--------|
-| `vimtex.lua` | `academic/vimtex.lua` | **MOVE** |
-| `vim-pandoc.lua` | `academic/vim-pandoc.lua` | **MOVE** |
+| Current Location        | New Location                     | Action   |
+| ----------------------- | -------------------------------- | -------- |
+| `vimtex.lua`            | `academic/vimtex.lua`            | **MOVE** |
+| `vim-pandoc.lua`        | `academic/vim-pandoc.lua`        | **MOVE** |
 | `vim-latex-preview.lua` | `academic/vim-latex-preview.lua` | **MOVE** |
-| `cmp-dictionary.lua` | `academic/cmp-dictionary.lua` | **MOVE** |
+| `cmp-dictionary.lua`    | `academic/cmp-dictionary.lua`    | **MOVE** |
 
 ### Publishing Workflow (3 plugins)
 
-| Current Location | New Location | Action |
-|------------------|--------------|--------|
-| N/A | `publishing/hugo.lua` | **ADD** - Hugo integration |
-| `markdown-preview.lua` | `publishing/markdown-preview.lua` | **MOVE** |
-| `autopandoc.lua` | `publishing/autopandoc.lua` | **MOVE** |
+| Current Location       | New Location                      | Action                     |
+| ---------------------- | --------------------------------- | -------------------------- |
+| N/A                    | `publishing/hugo.lua`             | **ADD** - Hugo integration |
+| `markdown-preview.lua` | `publishing/markdown-preview.lua` | **MOVE**                   |
+| `autopandoc.lua`       | `publishing/autopandoc.lua`       | **MOVE**                   |
 
 ### Removed Plugins (8 total)
 
-| Plugin | Reason |
-|--------|--------|
-| `fountain.lua` | **User request** - removed screenwriting |
-| `twilight.lua` | **Redundant** - duplicate of limelight |
-| `vimorg.lua` | **Deprecated** - use nvim-orgmode |
-| `fzf-vim.lua` | **Redundant** - superseded by fzf-lua |
-| `gen.lua` | **Redundant** - custom ollama.lua is better |
-| `vim-grammarous.lua` | **Redundant** - use ltex-ls instead |
-| `LanguageTool.lua` | **Evaluate** - may be redundant with ltex-ls |
-| `autopandoc.lua` | **Optional** - evaluate if actually used |
+| Plugin               | Reason                                       |
+| -------------------- | -------------------------------------------- |
+| `fountain.lua`       | **User request** - removed screenwriting     |
+| `twilight.lua`       | **Redundant** - duplicate of limelight       |
+| `vimorg.lua`         | **Deprecated** - use nvim-orgmode            |
+| `fzf-vim.lua`        | **Redundant** - superseded by fzf-lua        |
+| `gen.lua`            | **Redundant** - custom ollama.lua is better  |
+| `vim-grammarous.lua` | **Redundant** - use ltex-ls instead          |
+| `LanguageTool.lua`   | **Evaluate** - may be redundant with ltex-ls |
+| `autopandoc.lua`     | **Optional** - evaluate if actually used     |
 
----
+______________________________________________________________________
 
 ## 🆕 New Plugins to Add
 
 ### 1. **IWE LSP** - Markdown Knowledge Management
+
 **Purpose**: Modern LSP for markdown with wiki-style linking, backlinks, extract/inline sections
 
 **File**: `lua/plugins/zettelkasten/iwe-lsp.lua`
@@ -287,6 +295,7 @@ require('lspconfig').markdown_oxide.setup({
 ```
 
 ### 2. **Hugo Integration** - Static Site Publishing
+
 **Purpose**: Hugo commands and preview integration
 
 **File**: `lua/plugins/publishing/hugo.lua`
@@ -332,6 +341,7 @@ return {
 ```
 
 ### 3. **ltex-ls** - LanguageTool LSP
+
 **Purpose**: Grammar and style checking via LSP
 
 **File**: `lua/plugins/prose-writing/grammar/ltex-ls.lua`
@@ -367,6 +377,7 @@ require('lspconfig').ltex.setup({
 ```
 
 ### 4. **AI Draft Generator** - Convert Notes to Prose
+
 **Purpose**: Parse semantic line-broken notes and generate rough drafts
 
 **File**: `lua/plugins/ai-sembr/ai-draft.lua`
@@ -521,6 +532,7 @@ Generate a rough draft outline and opening sections:
 ### 5. **Essential Prose Editing Plugins**
 
 **nvim-surround**: `lua/plugins/prose-writing/editing/nvim-surround.lua`
+
 ```lua
 return {
   "kylechui/nvim-surround",
@@ -533,6 +545,7 @@ return {
 ```
 
 **vim-repeat**: `lua/plugins/prose-writing/editing/vim-repeat.lua`
+
 ```lua
 return {
   "tpope/vim-repeat",
@@ -541,6 +554,7 @@ return {
 ```
 
 **vim-textobj-sentence**: `lua/plugins/prose-writing/editing/vim-textobj-sentence.lua`
+
 ```lua
 return {
   "preservim/vim-textobj-sentence",
@@ -555,6 +569,7 @@ return {
 ```
 
 **undotree**: `lua/plugins/prose-writing/editing/undotree.lua`
+
 ```lua
 return {
   "mbbill/undotree",
@@ -565,7 +580,7 @@ return {
 }
 ```
 
----
+______________________________________________________________________
 
 ## 📝 Updated Plugin Loader
 
@@ -593,13 +608,14 @@ return {
 
 Lazy.nvim will automatically load all `.lua` files in subdirectories, so the new structure works immediately.
 
----
+______________________________________________________________________
 
 ## 🔧 Grammar Checker Decision: LanguageTool (ltex-ls)
 
 **Choice**: **ltex-ls** (LanguageTool via LSP)
 
 **Rationale**:
+
 1. **LSP Integration**: Works natively with Neovim's LSP client
 2. **Real-time Checking**: Inline diagnostics as you write
 3. **More Powerful**: Full LanguageTool engine (5000+ rules)
@@ -607,13 +623,15 @@ Lazy.nvim will automatically load all `.lua` files in subdirectories, so the new
 5. **Active Development**: Well-maintained Mason package
 
 **Remove**:
+
 - `LanguageTool.lua` (non-LSP version, less integrated)
 - `vim-grammarous.lua` (older, less powerful)
 
 **Keep**:
+
 - `vale.lua` (different focus: style/prose linting, complementary)
 
----
+______________________________________________________________________
 
 ## 🚀 Migration Script
 
@@ -887,23 +905,26 @@ echo "  5. Restart and verify: :checkhealth"
 echo ""
 ```
 
----
+______________________________________________________________________
 
 ## 📊 Impact Assessment
 
 ### Before Refactoring
+
 - **67 plugins** in flat structure
 - **8 redundant plugins**
 - **Unclear organization** (mixed workflows)
 - **Missing**: IWE LSP, Hugo, AI draft generator, essential prose tools
 
 ### After Refactoring
+
 - **64 plugins** (-4.5%) in workflow structure
 - **0 redundant plugins** (all cleaned)
 - **Clear organization** (14 workflow directories)
 - **Complete workflows**: Zettelkasten → AI → Prose → Publishing
 
 ### Plugin Count by Workflow
+
 - Zettelkasten: 11 plugins (including IWE LSP)
 - AI & SemBr: 3 plugins (including draft generator)
 - Prose Writing: 14 plugins (distraction-free + editing + grammar)
@@ -911,42 +932,48 @@ echo ""
 - Publishing: 3 plugins (including Hugo)
 - Supporting: 29 plugins (LSP, UI, navigation, utilities)
 
----
+______________________________________________________________________
 
 ## 🔗 Integration Points
 
 ### IWE LSP + vim-wiki
+
 - IWE: Modern LSP features (code actions, diagnostics)
 - vim-wiki: Traditional wiki commands and file management
 - **Both can coexist**: Different feature sets, complementary
 
 ### Ollama AI + IWE AI
+
 - Ollama: PercyBrain custom commands (explain, summarize, improve)
 - IWE: Document-level AI actions (configurable prompts)
 - AI Draft Generator: Combines multiple notes into prose
 - **All compatible**: Different scopes and purposes
 
 ### SemBr + IWE Formatting
+
 - SemBr: ML-based semantic line breaks
 - IWE: LSP-based document formatting
 - **Complementary**: SemBr for breaks, IWE for structure
 
 ### Hugo + Markdown Preview
+
 - Hugo: Static site generation and publishing
 - markdown-preview: Real-time markdown rendering
 - **Different purposes**: Preview vs. production
 
----
+______________________________________________________________________
 
 ## 🎯 Final Checklist
 
 ### Prerequisites
+
 - [ ] Backup current configuration: `cp -r ~/.config/nvim ~/.config/nvim.backup`
 - [ ] Ensure iwe binary installed: `cargo install iwe`
 - [ ] Verify Ollama running: `ollama list`
 - [ ] Check Hugo installed: `hugo version`
 
 ### Execution
+
 - [ ] Run refactoring script: `./scripts/refactor-plugins.sh`
 - [ ] Review new plugin implementations
 - [ ] Update LSP config with IWE and ltex-ls
@@ -955,6 +982,7 @@ echo ""
 - [ ] Run health check: `:checkhealth`
 
 ### Validation
+
 - [ ] Test IWE LSP: Navigate markdown links with `gd`
 - [ ] Test AI draft: `<leader>ad` to generate draft from notes
 - [ ] Test Hugo: `:HugoServer` to preview site
@@ -962,33 +990,37 @@ echo ""
 - [ ] Test prose editing: Try nvim-surround with `ys` commands
 - [ ] Verify all workflows functional
 
----
+______________________________________________________________________
 
 ## 📝 Next Steps After Refactoring
 
 1. **Document Your Workflows**
+
    - Create workflow guides in `docs/workflows/`
    - Zettelkasten workflow with IWE
    - AI-assisted writing workflow
    - Publishing workflow with Hugo
 
 2. **Configure IWE**
+
    - Create `.iwe/config.toml` in Zettelkasten directory
    - Configure AI models for IWE actions
    - Set up custom code actions
 
 3. **Optimize Keybindings**
+
    - Review overlapping keybindings
    - Create workflow-specific keybinding groups
    - Update WhichKey configuration
 
 4. **Test Real Workflows**
+
    - Create test note in Zettelkasten
    - Generate draft from notes
    - Publish to Hugo site
    - Write academic paper with LaTeX
 
----
+______________________________________________________________________
 
 **Full implementation details**: See individual plugin files and LSP configuration updates in this document.
 

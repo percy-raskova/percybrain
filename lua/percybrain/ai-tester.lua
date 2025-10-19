@@ -8,7 +8,7 @@ M.results = {
   passed = {},
   failed = {},
   warnings = {},
-  discoveries = {}
+  discoveries = {},
 }
 
 -- Test 1: Basic connectivity
@@ -25,14 +25,14 @@ end
 
 -- Test 2: Navigation capabilities
 function M.test_navigation()
-  local start_line = vim.fn.line('.')
+  local start_line = vim.fn.line(".")
   vim.cmd("normal gg")
-  local after_gg = vim.fn.line('.')
+  local after_gg = vim.fn.line(".")
   vim.cmd("normal G")
-  local after_G = vim.fn.line('.')
+  local after_G = vim.fn.line(".")
   vim.cmd("normal " .. start_line .. "G")
 
-  if after_gg == 1 and after_G == vim.fn.line('$') then
+  if after_gg == 1 and after_G == vim.fn.line("$") then
     table.insert(M.results.passed, "✅ Navigation: gg/G commands work")
     return true
   else
@@ -51,7 +51,7 @@ function M.test_plugins()
     ["which-key"] = "WhichKey",
     ["nvim-tree"] = "NvimTree",
     ["lazy"] = "Lazy",
-    ["treesitter"] = "TSInstall"
+    ["treesitter"] = "TSInstall",
   }
 
   for name, command in pairs(plugin_checks) do
@@ -96,7 +96,12 @@ function M.test_security()
 
   -- Check for sensitive data in registers
   local sensitive_patterns = {
-    "password", "secret", "token", "key", "api", "ssh"
+    "password",
+    "secret",
+    "token",
+    "key",
+    "api",
+    "ssh",
   }
 
   for i = 0, 9 do
@@ -122,12 +127,15 @@ end
 
 -- Test 6: Interactive UI limitations (discovered!)
 function M.test_ui_limitations()
-  table.insert(M.results.discoveries, [[
+  table.insert(
+    M.results.discoveries,
+    [[
 🔍 DISCOVERY: Interactive UI Limitation
 - WhichKey, Telescope, and other floating windows cannot be properly controlled via MCP
 - These require user input that MCP cannot simulate
 - Workaround: Test non-interactive alternatives or command-line equivalents
-  ]])
+  ]]
+  )
 
   -- List interactive commands to avoid
   local interactive_commands = {
@@ -135,10 +143,13 @@ function M.test_ui_limitations()
     "Telescope",
     "Lazy",
     ":help",
-    "fzf"
+    "fzf",
   }
 
-  table.insert(M.results.warnings, "⚠️  UI: Cannot test interactive commands: " .. table.concat(interactive_commands, ", "))
+  table.insert(
+    M.results.warnings,
+    "⚠️  UI: Cannot test interactive commands: " .. table.concat(interactive_commands, ", ")
+  )
   return true
 end
 
@@ -147,7 +158,7 @@ function M.test_performance()
   local start_time = vim.loop.hrtime()
 
   -- Simple performance test
-  for i = 1, 100 do
+  for _ = 1, 100 do
     vim.cmd("normal j")
     vim.cmd("normal k")
   end
@@ -167,7 +178,7 @@ end
 -- Test 8: Error detection capabilities
 function M.test_error_detection()
   -- Try to trigger a safe error
-  local ok, err = pcall(vim.cmd, "ThisCommandDoesNotExist")
+  local ok = pcall(vim.cmd, "ThisCommandDoesNotExist")
 
   if not ok then
     table.insert(M.results.passed, "✅ Error Detection: Can capture and handle errors")
@@ -184,20 +195,20 @@ function M.run_all_tests()
     passed = {},
     failed = {},
     warnings = {},
-    discoveries = {}
+    discoveries = {},
   }
 
   vim.notify("🤖 AI Testing Protocol Starting...", vim.log.levels.INFO)
 
   local tests = {
-    {"Connection", M.test_connection},
-    {"Navigation", M.test_navigation},
-    {"Plugins", M.test_plugins},
-    {"Keybindings", M.test_keybindings},
-    {"Security", M.test_security},
-    {"UI Limitations", M.test_ui_limitations},
-    {"Performance", M.test_performance},
-    {"Error Detection", M.test_error_detection}
+    { "Connection", M.test_connection },
+    { "Navigation", M.test_navigation },
+    { "Plugins", M.test_plugins },
+    { "Keybindings", M.test_keybindings },
+    { "Security", M.test_security },
+    { "UI Limitations", M.test_ui_limitations },
+    { "Performance", M.test_performance },
+    { "Error Detection", M.test_error_detection },
   }
 
   for _, test in ipairs(tests) do
@@ -261,7 +272,7 @@ function M.generate_report()
 end
 
 -- Create command for manual testing
-vim.api.nvim_create_user_command('AITest', function()
+vim.api.nvim_create_user_command("AITest", function()
   local report = M.run_all_tests()
 
   -- Create a new buffer with the report

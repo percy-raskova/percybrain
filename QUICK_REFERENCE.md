@@ -2,11 +2,12 @@
 
 **Essential commands, shortcuts, and patterns for daily use**
 
----
+______________________________________________________________________
 
 ## 🚀 Essential Commands
 
 ### Neovim
+
 ```bash
 nvim                                    # Start PercyBrain
 nvim +checkhealth                      # Diagnose issues
@@ -15,6 +16,7 @@ nvim --headless -c "lua print(#require('lazy').plugins())" -c "qall"  # Count pl
 ```
 
 ### Testing
+
 ```bash
 ./tests/simple-test.sh                 # Run all tests
 stylua lua/                            # Format code
@@ -22,6 +24,7 @@ selene lua/                            # Lint code
 ```
 
 ### Git Workflow
+
 ```bash
 git status && git branch               # Check state (always first!)
 git checkout -b feature/name           # Create feature branch
@@ -29,47 +32,51 @@ git add . && git commit -m "msg"       # Commit changes
 git push -u origin feature/name        # Push feature branch
 ```
 
----
+______________________________________________________________________
 
 ## ⌨️ Essential Keybindings
 
 **Leader key**: `<space>`
 
 ### Core Operations
-| Key | Action |
-|-----|--------|
-| `<leader>e` | Toggle file tree |
-| `<leader>s` | Save file |
-| `<leader>q` | Quit |
-| `<leader>g` | LazyGit |
+
+| Key         | Action              |
+| ----------- | ------------------- |
+| `<leader>e` | Toggle file tree    |
+| `<leader>s` | Save file           |
+| `<leader>q` | Quit                |
+| `<leader>g` | LazyGit             |
 | `<leader>L` | Lazy plugin manager |
 
 ### Zettelkasten (PRIMARY USE CASE)
-| Key | Action |
-|-----|--------|
-| `<leader>zn` | New note |
-| `<leader>zd` | Daily note |
-| `<leader>zi` | Inbox capture |
-| `<leader>zf` | Find notes |
+
+| Key          | Action         |
+| ------------ | -------------- |
+| `<leader>zn` | New note       |
+| `<leader>zd` | Daily note     |
+| `<leader>zi` | Inbox capture  |
+| `<leader>zf` | Find notes     |
 | `<leader>zg` | Search content |
-| `<leader>zr` | Backlinks |
-| `<leader>ad` | AI Draft |
+| `<leader>zr` | Backlinks      |
+| `<leader>ad` | AI Draft       |
 
 ### Writing Focus
-| Key | Action |
-|-----|--------|
-| `<leader>fz` | Zen mode |
-| `<leader>o` | Goyo mode |
-| `<leader>u` | Undo tree |
+
+| Key          | Action    |
+| ------------ | --------- |
+| `<leader>fz` | Zen mode  |
+| `<leader>o`  | Goyo mode |
+| `<leader>u`  | Undo tree |
 
 ### Hugo Publishing
-| Command | Action |
-|---------|--------|
-| `:HugoNew` | New post |
-| `:HugoServer` | Preview |
-| `:HugoPublish` | Publish |
 
----
+| Command        | Action   |
+| -------------- | -------- |
+| `:HugoNew`     | New post |
+| `:HugoServer`  | Preview  |
+| `:HugoPublish` | Publish  |
+
+______________________________________________________________________
 
 ## 📁 Directory Structure
 
@@ -93,13 +100,14 @@ git push -u origin feature/name        # Push feature branch
 └── *.md                        # User documentation
 ```
 
----
+______________________________________________________________________
 
 ## 🔧 Common Tasks
 
 ### Adding a Plugin
 
 1. **Choose workflow directory**:
+
    - Zettelkasten → `lua/plugins/zettelkasten/`
    - Writing tools → `lua/plugins/prose-writing/editing/`
    - Experimental → `lua/plugins/experimental/`
@@ -107,6 +115,7 @@ git push -u origin feature/name        # Push feature branch
 2. **Create file**: `lua/plugins/[workflow]/plugin-name.lua`
 
 3. **Plugin spec**:
+
 ```lua
 return {
   "author/plugin-repo",
@@ -118,6 +127,7 @@ return {
 ```
 
 4. **For new workflow dirs**: Add to `lua/plugins/init.lua`:
+
 ```lua
 { import = "plugins.new-dir" }
 ```
@@ -150,7 +160,7 @@ selene lua/ --display-style=quiet  # Show errors only
 nvim --headless -c "lua require('config')" -c "qall"
 ```
 
----
+______________________________________________________________________
 
 ## 🚨 Critical Patterns
 
@@ -161,6 +171,7 @@ nvim --headless -c "lua require('config')" -c "qall"
 **CAUSE**: `lua/plugins/init.lua` returns table without explicit imports
 
 **SOLUTION**: Add explicit imports for ALL workflow directories:
+
 ```lua
 return {
   { "folke/neoconf.nvim", cmd = "Neoconf" },
@@ -180,7 +191,7 @@ return {
 
 **WHY**: Enforced by StyLua, catches in CI
 
----
+______________________________________________________________________
 
 ## 📊 Quick Stats
 
@@ -190,19 +201,19 @@ return {
 - **Config Lines**: ~3,000+ Lua
 - **Docs**: 20+ markdown files
 
----
+______________________________________________________________________
 
 ## 🔗 Quick Links
 
-| Document | Purpose |
-|----------|---------|
-| [PROJECT_INDEX.md](PROJECT_INDEX.md) | Master navigation hub ⭐ |
-| [CLAUDE.md](CLAUDE.md) | Technical guide (23K) ⭐ |
-| [PERCYBRAIN_DESIGN.md](PERCYBRAIN_DESIGN.md) | Architecture (38K) |
-| [PERCYBRAIN_SETUP.md](PERCYBRAIN_SETUP.md) | Setup guide (12K) |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guide (13K) |
+| Document                                     | Purpose                  |
+| -------------------------------------------- | ------------------------ |
+| [PROJECT_INDEX.md](PROJECT_INDEX.md)         | Master navigation hub ⭐ |
+| [CLAUDE.md](CLAUDE.md)                       | Technical guide (23K) ⭐ |
+| [PERCYBRAIN_DESIGN.md](PERCYBRAIN_DESIGN.md) | Architecture (38K)       |
+| [PERCYBRAIN_SETUP.md](PERCYBRAIN_SETUP.md)   | Setup guide (12K)        |
+| [CONTRIBUTING.md](CONTRIBUTING.md)           | Contribution guide (13K) |
 
----
+______________________________________________________________________
 
 ## 💡 Pro Tips
 
@@ -213,26 +224,30 @@ return {
 5. **Read CLAUDE.md**: It's the definitive technical guide
 6. **Check PROJECT_INDEX.md**: Master navigation for all docs
 
----
+______________________________________________________________________
 
 ## 🆘 Emergency Contacts
 
 ### Blank Screen
+
 → [CLAUDE.md:481-503](CLAUDE.md)
 
 ### Plugin Not Loading
+
 → Check `lua/plugins/init.lua` imports
 
 ### Test Failures
+
 → [claudedocs/TESTING_QUICKSTART.md](claudedocs/TESTING_QUICKSTART.md)
 
 ### IWE LSP Issues
+
 → `cargo install iwe` + check `:LspInfo`
 
 ### AI Features Broken
+
 → `ollama list` + `ollama pull llama3.2`
 
----
+______________________________________________________________________
 
-**Last Updated**: 2025-10-17
-**For Full Details**: See [PROJECT_INDEX.md](PROJECT_INDEX.md)
+**Last Updated**: 2025-10-17 **For Full Details**: See [PROJECT_INDEX.md](PROJECT_INDEX.md)

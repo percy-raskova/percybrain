@@ -7,12 +7,13 @@ Your Neovim-based Obsidian replacement for knowledge management, integrated term
 ### Initial Setup (5 minutes)
 
 1. **Create your Zettelkasten directory**:
+
    ```bash
    mkdir -p ~/Zettelkasten/{inbox,daily,templates}
    ```
 
-2. **Configure paths** (optional, defaults to ~/Zettelkasten):
-   Edit `lua/config/zettelkasten.lua` if you want different paths:
+2. **Configure paths** (optional, defaults to ~/Zettelkasten): Edit `lua/config/zettelkasten.lua` if you want different paths:
+
    ```lua
    M.config = {
      home = vim.fn.expand("~/MyNotes"),  -- Change this
@@ -21,16 +22,18 @@ Your Neovim-based Obsidian replacement for knowledge management, integrated term
    ```
 
 3. **Start Neovim**:
+
    ```bash
    nvim
    ```
 
 4. **Test it works**:
+
    - Press `<leader>zn` (space-z-n) to create a new note
    - Type a title, hit Enter
    - Start writing!
 
----
+______________________________________________________________________
 
 ## Two-Part Workflow
 
@@ -39,31 +42,38 @@ Your Neovim-based Obsidian replacement for knowledge management, integrated term
 **Goal**: Capture ideas instantly without friction
 
 #### Quick Inbox Note
+
 ```
 <leader>zi   " Create timestamped note in inbox/
 ```
+
 - Drops you directly into insert mode
 - Minimal frontmatter
 - Process later
 
 #### New Zettelkasten Note
+
 ```
 <leader>zn   " Create permanent note with proper structure
 ```
+
 - Prompts for title
 - Creates timestamped filename: `202510170145-my-note.md`
 - Includes YAML frontmatter
 
 #### Daily Note
+
 ```
 <leader>zd   " Open/create today's daily note
 ```
+
 - One note per day: `daily/2025-10-17.md`
 - Journal entries, meeting notes, etc.
 
 ### Part 2: Integrate & Publish
 
 #### Search & Navigation
+
 ```
 <leader>zf   " Find notes by filename (fuzzy search)
 <leader>zg   " Search notes content (grep)
@@ -71,6 +81,7 @@ Your Neovim-based Obsidian replacement for knowledge management, integrated term
 ```
 
 #### Link Notes (Wiki-style)
+
 ```markdown
 # In your note:
 This connects to [[another-note]] and [[2025-10-17-ideas]].
@@ -82,59 +93,66 @@ This connects to [[another-note]] and [[2025-10-17-ideas]].
 ```
 
 #### Writing Mode
+
 ```
 <leader>zw   " Enter distraction-free Zen mode
 ```
 
 #### Publish to Static Site
+
 ```
 :PercyPublish   " Export to Hugo/Jekyll/etc.
 :PercyPreview   " Start local preview server
 ```
 
----
+______________________________________________________________________
 
 ## Complete Keyboard Reference
 
 ### Zettelkasten Operations
-| Key | Command | Description |
-|-----|---------|-------------|
-| `<leader>zn` | `:PercyNew` | Create new permanent note |
-| `<leader>zd` | `:PercyDaily` | Open today's daily note |
-| `<leader>zi` | `:PercyInbox` | Quick capture to inbox |
-| `<leader>zf` | Find notes | Fuzzy find by filename |
-| `<leader>zg` | Search notes | Live grep through content |
-| `<leader>zb` | Backlinks | Find links to current note |
-| `<leader>zw` | Zen mode | Distraction-free writing |
-| `<leader>zp` | `:PercyPublish` | Export to static site |
+
+| Key          | Command         | Description                |
+| ------------ | --------------- | -------------------------- |
+| `<leader>zn` | `:PercyNew`     | Create new permanent note  |
+| `<leader>zd` | `:PercyDaily`   | Open today's daily note    |
+| `<leader>zi` | `:PercyInbox`   | Quick capture to inbox     |
+| `<leader>zf` | Find notes      | Fuzzy find by filename     |
+| `<leader>zg` | Search notes    | Live grep through content  |
+| `<leader>zb` | Backlinks       | Find links to current note |
+| `<leader>zw` | Zen mode        | Distraction-free writing   |
+| `<leader>zp` | `:PercyPublish` | Export to static site      |
 
 ### Writing Tools (Inherited from OVIWrite)
-| Key | Command | Description |
-|-----|---------|-------------|
-| `<leader>z` | Zen mode | Centered writing |
-| `<leader>o` | Goyo | Minimalist mode |
+
+| Key          | Command     | Description        |
+| ------------ | ----------- | ------------------ |
+| `<leader>z`  | Zen mode    | Centered writing   |
+| `<leader>o`  | Goyo        | Minimalist mode    |
 | `<leader>sp` | Soft pencil | Soft line wrapping |
 
 ### Navigation (Telescope)
-| Key | Command | Description |
-|-----|---------|-------------|
+
+| Key          | Command    | Description             |
+| ------------ | ---------- | ----------------------- |
 | `<leader>ff` | Find files | Project-wide fuzzy find |
-| `<leader>fg` | Live grep | Search all files |
-| `<leader>fb` | Buffers | Switch open files |
+| `<leader>fg` | Live grep  | Search all files        |
+| `<leader>fb` | Buffers    | Switch open files       |
 
 ### Terminal (Built-in)
-| Key | Command | Description |
-|-----|---------|-------------|
-| `<leader>t` | Terminal | Open integrated terminal |
+
+| Key          | Command        | Description              |
+| ------------ | -------------- | ------------------------ |
+| `<leader>t`  | Terminal       | Open integrated terminal |
 | `<leader>ft` | Float terminal | Floating terminal window |
 
----
+______________________________________________________________________
 
 ## Zettelkasten Best Practices
 
 ### Note Structure
 
 **Permanent Note Example**:
+
 ```markdown
 ---
 title: My Brilliant Idea
@@ -162,12 +180,14 @@ The core insight...
 ### Linking Strategy
 
 **Wiki-style Links**:
+
 ```markdown
 [[note-title]]              # Link to note
 [[note-title|Custom Text]]  # Link with different display text
 ```
 
 **Tags for Discovery**:
+
 ```yaml
 tags: [#concept, #project/myproject, #source/book]
 ```
@@ -175,6 +195,7 @@ tags: [#concept, #project/myproject, #source/book]
 ### Processing Workflow
 
 **Inbox → Permanent Notes**:
+
 1. Review `inbox/` daily/weekly
 2. Expand fleeting notes into permanent notes
 3. Add connections `[[links]]`
@@ -182,17 +203,19 @@ tags: [#concept, #project/myproject, #source/book]
 5. Delete or archive processed inbox items
 
 **Find orphan notes** (notes with no links):
+
 ```vim
 :PercyOrphans  " TODO: Implement this
 ```
 
----
+______________________________________________________________________
 
 ## Static Site Publishing
 
 ### Option 1: Hugo (Recommended)
 
 **Setup Hugo site**:
+
 ```bash
 cd ~
 hugo new site blog
@@ -203,6 +226,7 @@ echo "theme = 'PaperMod'" >> config.toml
 ```
 
 **Configure in zettelkasten.lua**:
+
 ```lua
 M.config = {
   export_path = vim.fn.expand("~/blog/content/zettelkasten"),
@@ -210,6 +234,7 @@ M.config = {
 ```
 
 **Publish**:
+
 ```vim
 :PercyPublish   " Copies notes to ~/blog/content/
 :PercyPreview   " Starts Hugo server at localhost:1313
@@ -226,6 +251,7 @@ npx quartz create
 ```
 
 Update `zettelkasten.lua`:
+
 ```lua
 function M.publish()
   vim.fn.system('cd ~/Zettelkasten && npx quartz build')
@@ -235,12 +261,13 @@ end
 ### Option 3: Jekyll (GitHub Pages)
 
 Free hosting with GitHub Pages:
+
 ```bash
 gem install jekyll bundler
 jekyll new ~/blog
 ```
 
----
+______________________________________________________________________
 
 ## Cleanup: Remove Unused Plugins
 
@@ -263,11 +290,12 @@ rm cl-neovim.lua     # Common Lisp
 ```
 
 **Test after removal**:
+
 ```bash
 nvim --headless -c "quit"  # Should start without errors
 ```
 
----
+______________________________________________________________________
 
 ## Enhancing Your System
 
@@ -276,6 +304,7 @@ nvim --headless -c "quit"  # Should start without errors
 **Why**: Best of both worlds - Neovim + Obsidian features
 
 Edit `lua/plugins/obsidianNvim.lua`:
+
 ```lua
 return {
   "epwalsh/obsidian.nvim",
@@ -333,6 +362,7 @@ return {
 ```
 
 **Benefits**:
+
 - Link autocomplete
 - Backlinks panel
 - Daily note templates
@@ -369,7 +399,7 @@ return {
 }
 ```
 
----
+______________________________________________________________________
 
 ## Workflow Examples
 
@@ -433,13 +463,14 @@ return {
 cd ~/blog && git add . && git commit -m "Update" && git push
 ```
 
----
+______________________________________________________________________
 
 ## Troubleshooting
 
 ### "No such file or directory: ~/Zettelkasten"
 
 Create the directory:
+
 ```bash
 mkdir -p ~/Zettelkasten/{inbox,daily,templates}
 ```
@@ -451,6 +482,7 @@ Install and configure obsidian.nvim (see "Enhancing Your System" above)
 ### Can't find telescope
 
 Install telescope properly:
+
 ```bash
 nvim
 :Lazy install telescope.nvim
@@ -459,6 +491,7 @@ nvim
 ### Terminal doesn't work
 
 Use built-in terminal:
+
 ```
 :terminal
 # Or
@@ -482,24 +515,27 @@ Use built-in terminal:
 
 They share the same markdown files perfectly!
 
----
+______________________________________________________________________
 
 ## Next Steps
 
 ### Immediate Actions
 
 1. ✅ **Test the system**:
+
    ```bash
    nvim
    # Press <leader>zn and create a note
    ```
 
 2. ✅ **Create your first notes**:
+
    - Daily note: `<leader>zd`
    - Permanent note: `<leader>zn`
    - Quick capture: `<leader>zi`
 
 3. ✅ **Set up static site** (optional):
+
    - Choose Hugo/Quartz/Jekyll
    - Configure export path
    - Test: `:PercyPublish`
@@ -507,54 +543,63 @@ They share the same markdown files perfectly!
 ### Customization
 
 4. **Adjust paths** (if needed):
+
    - Edit `lua/config/zettelkasten.lua`
    - Change `M.config.home` to your preferred location
 
 5. **Add obsidian.nvim** (recommended):
+
    - Better link autocomplete
    - Backlinks panel
    - Obsidian compatibility
 
 6. **Create templates**:
+
    - Add files to `~/Zettelkasten/templates/`
    - Use in zettelkasten.lua
 
 ### Advanced
 
 7. **Custom commands**:
+
    - Add to `lua/config/zettelkasten.lua`
    - Weekly reviews
    - Tag management
    - Graph generation
 
 8. **Automation**:
+
    - Git auto-commit
    - Auto-publish on save
    - Backup scripts
 
----
+______________________________________________________________________
 
 ## Resources
 
 ### Zettelkasten Method
+
 - [zettelkasten.de](https://zettelkasten.de/) - The definitive guide
 - [How to Take Smart Notes](https://www.amazon.com/How-Take-Smart-Notes-Nonfiction/dp/1542866502) - Book
 
 ### Static Site Generators
+
 - [Hugo](https://gohugo.io/) - Fast, simple
 - [Quartz](https://quartz.jzhao.xyz/) - Obsidian-like
 - [Jekyll](https://jekyllrb.com/) - GitHub Pages
 
 ### Neovim Plugins
+
 - [obsidian.nvim](https://github.com/epwalsh/obsidian.nvim)
 - [telekasten.nvim](https://github.com/renerocksai/telekasten.nvim)
 - [neorg](https://github.com/nvim-neorg/neorg)
 
----
+______________________________________________________________________
 
 ## Support
 
 **Issues or Questions?**
+
 - Check validation: `./scripts/validate.sh`
 - Neovim health: `:checkhealth`
 - Plugin status: `:Lazy`

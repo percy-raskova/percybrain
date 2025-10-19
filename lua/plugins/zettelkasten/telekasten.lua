@@ -69,16 +69,8 @@ return {
 
       -- Telescope configuration (consistent UI)
       command_palette_theme = "ivy",
-      show_tags_theme = "ivy",
       find_notes_theme = "ivy",
       find_command = "rg", -- You have ripgrep
-
-      -- Calendar configuration (visual structure for ADHD)
-      calendar_opts = {
-        weeknm = 1, -- Week starts Monday (predictable)
-        calendar_monday = 1,
-        calendar_mark = "left-fit",
-      },
 
       -- Visual feedback
       show_tags_theme = "dropdown",
@@ -87,7 +79,7 @@ return {
       -- Integration with your existing tools
       plug_into_calendar = true,
       calendar_opts = {
-        weeknm = 1,
+        weeknm = 1, -- Week starts Monday (predictable)
         calendar_monday = 1,
         calendar_mark = "left-fit",
       },

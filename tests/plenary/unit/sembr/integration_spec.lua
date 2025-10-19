@@ -3,7 +3,7 @@
 -- Philosophy: Test the integration layer, not the underlying tools
 
 -- NOTE: Helpers/mocks imports commented out due to path issues in Plenary
--- These are provided globally by minimal_init.lua as _G.test_helpers, _G.test_mocks
+-- Testing global pollution: These are provided globally by minimal_init.lua as _G.test_helpers, _G.test_mocks
 -- local helpers = require('tests.helpers')
 -- local mocks = require('tests.helpers.mocks')
 
@@ -25,8 +25,8 @@ describe("SemBr Git Integration", function()
 
   before_each(function()
     -- Arrange: Load module and save original vim state
-    package.loaded['percybrain.sembr-git'] = nil
-    sembr_git = require('percybrain.sembr-git')
+    package.loaded["percybrain.sembr-git"] = nil
+    sembr_git = require("percybrain.sembr-git")
 
     original_vim = {
       system = vim.fn.system,
@@ -41,7 +41,7 @@ describe("SemBr Git Integration", function()
       tabpage_list_wins = vim.api.nvim_tabpage_list_wins,
       win_get_buf = vim.api.nvim_win_get_buf,
       reltime = vim.fn.reltime,
-      reltimefloat = vim.fn.reltimefloat
+      reltimefloat = vim.fn.reltimefloat,
     }
   end)
 
@@ -133,7 +133,7 @@ describe("SemBr Git Integration", function()
       end
 
       vim.fn.filereadable = function(path)
-        return 0  -- File doesn't exist
+        return 0 -- File doesn't exist
       end
 
       local written_content = nil
@@ -147,10 +147,8 @@ describe("SemBr Git Integration", function()
 
       -- Assert: gitattributes content was created correctly
       assert.is_table(written_content, "Should write content as table")
-      assert.is_true(contains(written_content, "*.md diff=markdown"),
-        "Should configure markdown diff attribute")
-      assert.is_true(contains(written_content, "*.md merge=union"),
-        "Should configure union merge strategy")
+      assert.is_true(contains(written_content, "*.md diff=markdown"), "Should configure markdown diff attribute")
+      assert.is_true(contains(written_content, "*.md merge=union"), "Should configure union merge strategy")
     end)
   end)
 
@@ -164,11 +162,11 @@ describe("SemBr Git Integration", function()
 
       -- Mock window operations
       vim.api.nvim_tabpage_list_wins = function()
-        return {1001, 1002}
+        return { 1001, 1002 }
       end
 
       vim.api.nvim_win_get_buf = function(win)
-        return win - 1000  -- Simple mock buffer numbers
+        return win - 1000 -- Simple mock buffer numbers
       end
 
       -- Mock buffer and window options with proper metatable access
@@ -178,8 +176,8 @@ describe("SemBr Git Integration", function()
       -- Create mock buffer options that respond to indexing
       vim.bo = setmetatable({}, {
         __index = function(t, buf)
-          return { diff = true }  -- All buffers have diff mode
-        end
+          return { diff = true } -- All buffers have diff mode
+        end,
       })
 
       -- Create mock window options with diffopt support
@@ -188,23 +186,22 @@ describe("SemBr Git Integration", function()
         __index = function(t, win)
           if not window_opts[win] then
             window_opts[win] = {
-              diffopt = "filler,closeoff"  -- Default diffopt value
+              diffopt = "filler,closeoff", -- Default diffopt value
             }
           end
           return setmetatable(window_opts[win], {
             __newindex = function(wt, k, v)
               rawset(wt, k, v)
-            end
+            end,
           })
-        end
+        end,
       })
 
       -- Act: Create SemBr diff
       sembr_git.sembr_diff()
 
       -- Assert: Fugitive's diff was called
-      assert.is_true(contains(commands, "Gdiffsplit"),
-        "Should call Fugitive's Gdiffsplit command")
+      assert.is_true(contains(commands, "Gdiffsplit"), "Should call Fugitive's Gdiffsplit command")
 
       -- Cleanup: Restore original options
       vim.bo = original_bo
@@ -227,15 +224,14 @@ describe("SemBr Git Integration", function()
             wrap_set = true
           end
           rawset(t, k, v)
-        end
+        end,
       })
 
       -- Act: Create SemBr blame
       sembr_git.sembr_blame()
 
       -- Assert: Blame was called with wrap enabled
-      assert.is_true(contains(commands, "Git blame"),
-        "Should call Fugitive's Git blame command")
+      assert.is_true(contains(commands, "Git blame"), "Should call Fugitive's Git blame command")
       assert.is_true(wrap_set, "Should enable line wrapping for blame")
 
       -- Cleanup: Restore metatable
@@ -255,20 +251,13 @@ describe("SemBr Git Integration", function()
       sembr_git.setup_commands()
 
       -- Assert: All SemBr commands were created
-      assert.is_true(contains(commands_created, "GSemBrDiff"),
-        "Should create GSemBrDiff command")
-      assert.is_true(contains(commands_created, "GSemBrBlame"),
-        "Should create GSemBrBlame command")
-      assert.is_true(contains(commands_created, "GSemBrStage"),
-        "Should create GSemBrStage command")
-      assert.is_true(contains(commands_created, "GSemBrCommit"),
-        "Should create GSemBrCommit command")
-      assert.is_true(contains(commands_created, "GSemBrSetup"),
-        "Should create GSemBrSetup command")
-      assert.is_true(contains(commands_created, "GSemBrWordDiff"),
-        "Should create GSemBrWordDiff command")
-      assert.is_true(contains(commands_created, "GSemBrParaDiff"),
-        "Should create GSemBrParaDiff command")
+      assert.is_true(contains(commands_created, "GSemBrDiff"), "Should create GSemBrDiff command")
+      assert.is_true(contains(commands_created, "GSemBrBlame"), "Should create GSemBrBlame command")
+      assert.is_true(contains(commands_created, "GSemBrStage"), "Should create GSemBrStage command")
+      assert.is_true(contains(commands_created, "GSemBrCommit"), "Should create GSemBrCommit command")
+      assert.is_true(contains(commands_created, "GSemBrSetup"), "Should create GSemBrSetup command")
+      assert.is_true(contains(commands_created, "GSemBrWordDiff"), "Should create GSemBrWordDiff command")
+      assert.is_true(contains(commands_created, "GSemBrParaDiff"), "Should create GSemBrParaDiff command")
     end)
   end)
 
@@ -280,7 +269,7 @@ describe("SemBr Git Integration", function()
         table.insert(keymaps_created, {
           mode = mode,
           lhs = lhs,
-          desc = opts and opts.desc or nil
+          desc = opts and opts.desc or nil,
         })
       end
 
@@ -294,14 +283,10 @@ describe("SemBr Git Integration", function()
       end
 
       -- Assert: All expected keymaps were created
-      assert.is_true(contains(keymap_lhs, "<leader>gsd"),
-        "Should create <leader>gsd keymap for SemBr diff")
-      assert.is_true(contains(keymap_lhs, "<leader>gsb"),
-        "Should create <leader>gsb keymap for SemBr blame")
-      assert.is_true(contains(keymap_lhs, "<leader>gss"),
-        "Should create <leader>gss keymap for SemBr stage")
-      assert.is_true(contains(keymap_lhs, "<leader>gsc"),
-        "Should create <leader>gsc keymap for SemBr commit")
+      assert.is_true(contains(keymap_lhs, "<leader>gsd"), "Should create <leader>gsd keymap for SemBr diff")
+      assert.is_true(contains(keymap_lhs, "<leader>gsb"), "Should create <leader>gsb keymap for SemBr blame")
+      assert.is_true(contains(keymap_lhs, "<leader>gss"), "Should create <leader>gss keymap for SemBr stage")
+      assert.is_true(contains(keymap_lhs, "<leader>gsc"), "Should create <leader>gsc keymap for SemBr commit")
     end)
   end)
 
@@ -322,7 +307,7 @@ describe("SemBr Git Integration", function()
       local original_wo = vim.wo
 
       vim.api.nvim_tabpage_list_wins = function()
-        return {1001, 1002}
+        return { 1001, 1002 }
       end
 
       vim.api.nvim_win_get_buf = function(win)
@@ -332,7 +317,7 @@ describe("SemBr Git Integration", function()
       vim.bo = setmetatable({}, {
         __index = function(t, buf)
           return { diff = true, filetype = "markdown" }
-        end
+        end,
       })
 
       local window_opts = {}
@@ -340,15 +325,15 @@ describe("SemBr Git Integration", function()
         __index = function(t, win)
           if not window_opts[win] then
             window_opts[win] = {
-              diffopt = "filler,closeoff"  -- Default diffopt value
+              diffopt = "filler,closeoff", -- Default diffopt value
             }
           end
           return setmetatable(window_opts[win], {
             __newindex = function(wt, k, v)
               rawset(wt, k, v)
-            end
+            end,
           })
-        end
+        end,
       })
 
       -- Act: Use SemBr commands that should call Fugitive underneath
@@ -356,10 +341,8 @@ describe("SemBr Git Integration", function()
       sembr_git.sembr_blame()
 
       -- Assert: Fugitive commands were used
-      assert.is_true(contains(commands, "Gdiffsplit"),
-        "SemBr diff should use Fugitive's Gdiffsplit")
-      assert.is_true(contains(commands, "Git blame"),
-        "SemBr blame should use Fugitive's Git blame")
+      assert.is_true(contains(commands, "Gdiffsplit"), "SemBr diff should use Fugitive's Gdiffsplit")
+      assert.is_true(contains(commands, "Git blame"), "SemBr blame should use Fugitive's Git blame")
 
       -- Cleanup: Restore original state
       vim.bo = original_bo
@@ -370,14 +353,13 @@ describe("SemBr Git Integration", function()
       -- Arrange: Test that we can configure gitsigns buffer variables
 
       -- Act: Set gitsigns word diff (normally done in autocmd)
-      local ok, result = pcall(function()
+      local ok = pcall(function()
         vim.b.gitsigns_word_diff = true
       end)
 
       -- Assert: Buffer variables can be set without errors
       assert.is_true(ok, "Should be able to set gitsigns buffer variables")
-      assert.is_true(vim.b.gitsigns_word_diff,
-        "Should enable word diff for gitsigns")
+      assert.is_true(vim.b.gitsigns_word_diff, "Should enable word diff for gitsigns")
     end)
   end)
 
@@ -385,7 +367,7 @@ describe("SemBr Git Integration", function()
     it("initializes when in Git repository", function()
       -- Arrange: Mock Git detection to simulate being in a repo
       vim.fn.isdirectory = function(path)
-        if path == '.git' then
+        if path == ".git" then
           return 1
         end
         return 0
@@ -411,7 +393,7 @@ describe("SemBr Git Integration", function()
     it("skips setup when not in Git repository", function()
       -- Arrange: Mock Git detection to simulate no Git repo
       vim.fn.isdirectory = function(path)
-        return 0  -- No .git directory
+        return 0 -- No .git directory
       end
 
       vim.fn.system = function(cmd)
@@ -442,14 +424,13 @@ describe("SemBr Git Integration", function()
       local start_time = os.clock()
 
       -- Act: Load the module fresh
-      package.loaded['percybrain.sembr-git'] = nil
-      require('percybrain.sembr-git')
+      package.loaded["percybrain.sembr-git"] = nil
+      require("percybrain.sembr-git")
 
       local elapsed = os.clock() - start_time
 
       -- Assert: Module loads within performance budget
-      assert.is_true(elapsed < 0.05,
-        string.format("SemBr Git loading too slow: %.3fs (expected < 0.05s)", elapsed))
+      assert.is_true(elapsed < 0.05, string.format("SemBr Git loading too slow: %.3fs (expected < 0.05s)", elapsed))
     end)
   end)
 end)

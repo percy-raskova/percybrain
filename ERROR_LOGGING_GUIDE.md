@@ -6,14 +6,14 @@ Using Neovim's **built-in** error tracking features:
 
 ### Inside Neovim
 
-| Command | Keybinding | Description |
-|---------|------------|-------------|
-| `:messages` | - | Show all messages/errors from current session |
-| `:PercyErrors` | `<leader>pe` | Show all errors in a new split window |
-| `:PercyRecent` | - | Show only recent errors from this session |
-| `:PercyHealth` | `<leader>ph` | Run full health check |
-| `:checkhealth` | - | Native Neovim health check |
-| `:Lazy log` | - | Show lazy.nvim plugin loading errors |
+| Command        | Keybinding   | Description                                   |
+| -------------- | ------------ | --------------------------------------------- |
+| `:messages`    | -            | Show all messages/errors from current session |
+| `:PercyErrors` | `<leader>pe` | Show all errors in a new split window         |
+| `:PercyRecent` | -            | Show only recent errors from this session     |
+| `:PercyHealth` | `<leader>ph` | Run full health check                         |
+| `:checkhealth` | -            | Native Neovim health check                    |
+| `:Lazy log`    | -            | Show lazy.nvim plugin loading errors          |
 
 ### From Terminal
 
@@ -78,11 +78,12 @@ Neovim stores logs in these locations:
 ## 🔧 If You See Lots of Errors
 
 Most common causes:
+
 1. **Missing external tools** - Run `:checkhealth` to see what's missing
 2. **Plugin conflicts** - Check `:Lazy` for failed plugins
 3. **LSP not installed** - Verify `cargo install iwe` completed
 4. **Old plugin cache** - Try `:Lazy clean` then `:Lazy sync`
 
----
+______________________________________________________________________
 
 *Error logger loaded in: `lua/percybrain/error-logger.lua`*

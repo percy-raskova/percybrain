@@ -4,13 +4,13 @@
 local M = {}
 
 -- Path utilities
-M.test_dir = vim.fn.fnamemodify(debug.getinfo(1).source:sub(2), ':h:h')
-M.root_dir = vim.fn.fnamemodify(M.test_dir, ':h')
-M.fixture_dir = M.test_dir .. '/fixtures'
+M.test_dir = vim.fn.fnamemodify(debug.getinfo(1).source:sub(2), ":h:h")
+M.root_dir = vim.fn.fnamemodify(M.test_dir, ":h")
+M.fixture_dir = M.test_dir .. "/fixtures"
 
 -- Load a fixture file
 function M.load_fixture(name)
-  local path = M.fixture_dir .. '/' .. name
+  local path = M.fixture_dir .. "/" .. name
   if vim.fn.filereadable(path) == 1 then
     return vim.fn.readfile(path)
   end
@@ -20,14 +20,14 @@ end
 -- Create temporary test directory
 function M.create_temp_dir()
   local tmpdir = vim.fn.tempname()
-  vim.fn.mkdir(tmpdir, 'p')
+  vim.fn.mkdir(tmpdir, "p")
   return tmpdir
 end
 
 -- Clean up temporary directory
 function M.cleanup_temp_dir(dir)
   if vim.fn.isdirectory(dir) == 1 then
-    vim.fn.delete(dir, 'rf')
+    vim.fn.delete(dir, "rf")
   end
 end
 
@@ -66,7 +66,7 @@ function M.mock_notify()
   vim.notify = function(msg, level)
     table.insert(notifications, {
       message = msg,
-      level = level
+      level = level,
     })
   end
 
@@ -74,18 +74,18 @@ function M.mock_notify()
     notifications = notifications,
     restore = function()
       vim.notify = original
-    end
+    end,
   }
 end
 
 -- Ensure plugin is loaded
 function M.ensure_plugin(name)
-  local lazy = require('lazy')
+  local lazy = require("lazy")
   local plugin = lazy.plugins()[name]
 
   if plugin and not plugin.loaded then
     -- Force load the plugin
-    require('lazy').load({ plugins = { name } })
+    require("lazy").load({ plugins = { name } })
   end
 
   return plugin
@@ -101,7 +101,7 @@ function M.create_test_buffer(options)
   end
 
   if options.filetype then
-    vim.api.nvim_buf_set_option(buf, 'filetype', options.filetype)
+    vim.api.nvim_buf_set_option(buf, "filetype", options.filetype)
   end
 
   if options.name then

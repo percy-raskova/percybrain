@@ -19,7 +19,7 @@ end
 
 -- Assert plugin is loaded
 function M.plugin_loaded(name)
-  local lazy = require('lazy')
+  local lazy = require("lazy")
   local plugin = lazy.plugins()[name]
   assert.is_not_nil(plugin, "Plugin not found: " .. name)
   assert.is_true(plugin.loaded, "Plugin not loaded: " .. name)
@@ -27,7 +27,7 @@ end
 
 -- Assert plugin is NOT loaded (lazy)
 function M.plugin_lazy(name)
-  local lazy = require('lazy')
+  local lazy = require("lazy")
   local plugin = lazy.plugins()[name]
   assert.is_not_nil(plugin, "Plugin not found: " .. name)
   assert.is_false(plugin.loaded or false, "Plugin should be lazy: " .. name)
@@ -51,8 +51,7 @@ function M.keymap_equals(mode, lhs, expected_rhs)
   local keymaps = vim.api.nvim_get_keymap(mode)
   for _, keymap in ipairs(keymaps) do
     if keymap.lhs == lhs then
-      assert.equals(expected_rhs, keymap.rhs,
-        string.format("Keymap %s %s has wrong rhs", mode, lhs))
+      assert.equals(expected_rhs, keymap.rhs, string.format("Keymap %s %s has wrong rhs", mode, lhs))
       return
     end
   end
@@ -74,8 +73,7 @@ end
 function M.buffer_contains(buf, text)
   local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
   local content = table.concat(lines, "\n")
-  assert.is_true(content:find(text, 1, true) ~= nil,
-    "Buffer does not contain: " .. text)
+  assert.is_true(content:find(text, 1, true) ~= nil, "Buffer does not contain: " .. text)
 end
 
 -- Assert LSP client attached
@@ -100,17 +98,18 @@ end
 -- Assert performance metric
 function M.performance_under(metric_fn, threshold, message)
   local value = metric_fn()
-  assert.is_true(value < threshold,
-    string.format("%s: %s (threshold: %s)", message or "Performance exceeded", value, threshold))
+  assert.is_true(
+    value < threshold,
+    string.format("%s: %s (threshold: %s)", message or "Performance exceeded", value, threshold)
+  )
 end
 
 -- Assert memory usage
 function M.memory_under_mb(max_mb)
-  collectgarbage('collect')
-  local memory_kb = collectgarbage('count')
+  collectgarbage("collect")
+  local memory_kb = collectgarbage("count")
   local memory_mb = memory_kb / 1024
-  assert.is_true(memory_mb < max_mb,
-    string.format("Memory usage: %.2fMB (max: %.2fMB)", memory_mb, max_mb))
+  assert.is_true(memory_mb < max_mb, string.format("Memory usage: %.2fMB (max: %.2fMB)", memory_mb, max_mb))
 end
 
 -- Assert table contains value
@@ -132,16 +131,16 @@ end
 function M.neurodiversity_feature_enabled(feature)
   local features = {
     auto_save = function()
-      return pcall(require, 'auto-save')
+      return pcall(require, "auto-save")
     end,
     auto_session = function()
-      return pcall(require, 'auto-session')
+      return pcall(require, "auto-session")
     end,
     telekasten = function()
-      return pcall(require, 'telekasten')
+      return pcall(require, "telekasten")
     end,
     trouble = function()
-      return pcall(require, 'trouble')
+      return pcall(require, "trouble")
     end,
   }
 

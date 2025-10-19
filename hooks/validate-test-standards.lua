@@ -10,8 +10,8 @@ local standards = {
     check = function(content)
       -- Only require imports if helpers/mocks are actually used
       local uses_helpers = content:match("helpers%.") or content:match("mocks%.")
-      local has_imports = content:match("require%('tests%.helpers'%)")
-        or content:match("require%('tests%.helpers%.mocks'%)")
+      local has_imports = content:match("require%([\"']tests%.helpers[\"']%)")
+        or content:match("require%([\"']tests%.helpers%.mocks[\"']%)")
 
       -- If not using helpers/mocks, pass automatically
       if not uses_helpers then
@@ -43,17 +43,44 @@ local standards = {
   {
     name = "No Global Pollution",
     check = function(content)
-      return not content:match("_G%.")
+      -- Allow _G references if file is testing for global pollution
+      local has_global_ref = content:match("_G%.")
+      if not has_global_ref then
+        return true -- No _G usage, pass
+      end
+
+      -- If using _G, check if it's for testing global pollution
+      local testing_pollution = content:match("global pollution")
+        or content:match("Global Pollution")
+        or content:match("doesn't leak global")
+        or content:match("inspect _G")
+
+      return testing_pollution ~= nil
     end,
-    fix = "Remove _G. references, use local variables instead",
+    fix = "Remove _G. references, use local variables (or add comment explaining global pollution test)",
   },
   {
     name = "Local Helper Functions",
     check = function(content)
-      -- Should have 'local function' or is simple enough not to need it
-      return content:match("local function") or #content < 200
+      -- Find non-local function definitions (excluding describe/it/before_each/after_each)
+      local has_nonlocal_function = false
+
+      for line in content:gmatch("[^\r\n]+") do
+        -- Match function definitions
+        local func_def = line:match("^%s*function%s+(%w+)")
+        if func_def then
+          -- Exclude test framework functions
+          if func_def ~= "describe" and func_def ~= "it" and func_def ~= "before_each" and func_def ~= "after_each" then
+            has_nonlocal_function = true
+            break
+          end
+        end
+      end
+
+      -- Pass if no non-local functions found
+      return not has_nonlocal_function
     end,
-    fix = "Define helper functions as 'local function name()'",
+    fix = "Define helper functions as 'local function name()' (not 'function name()')",
   },
   {
     name = "No Raw assert.contains",

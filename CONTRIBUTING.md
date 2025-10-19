@@ -23,17 +23,20 @@ Thank you for your interest in contributing to OVIWrite! This document provides 
 ### First-Time Setup
 
 1. **Clone the repository**
+
 ```bash
 git clone https://github.com/MiragianCycle/OVIWrite.git
 cd OVIWrite
 ```
 
 2. **Run development environment setup**
+
 ```bash
 ./scripts/setup-dev-env.sh
 ```
 
 This script will:
+
 - Check dependencies (Neovim, Git)
 - Install git hooks (pre-commit, pre-push)
 - Make validation scripts executable
@@ -41,6 +44,7 @@ This script will:
 - Test validation scripts
 
 3. **Verify installation**
+
 ```bash
 ./scripts/validate.sh
 ```
@@ -90,6 +94,7 @@ OVIWrite uses a **4-layer validation pyramid** to ensure code quality.
 ### Layer 1: Static Validation (~5 seconds)
 
 **What it checks**:
+
 - Lua syntax errors
 - Duplicate plugin files (e.g., `nvim-tree.lua` + `nvimtree.lua`)
 - Deprecated API usage (e.g., `vim.highlight.on_yank`)
@@ -98,6 +103,7 @@ OVIWrite uses a **4-layer validation pyramid** to ensure code quality.
 **When it runs**: Pre-commit hook, CI
 
 **Run manually**:
+
 ```bash
 ./scripts/validate.sh  # Layer 1-2 only
 ./scripts/validate.sh --check duplicates
@@ -107,6 +113,7 @@ OVIWrite uses a **4-layer validation pyramid** to ensure code quality.
 ### Layer 2: Structural Validation (~10 seconds)
 
 **What it checks**:
+
 - Plugin spec structure (must return `{ "author/repo", config = ... }`)
 - lazy.nvim field validation (correct use of `opts`, `event`, etc.)
 - Keymap conflicts (duplicate key bindings)
@@ -115,6 +122,7 @@ OVIWrite uses a **4-layer validation pyramid** to ensure code quality.
 **When it runs**: Pre-commit hook, CI
 
 **Run manually**:
+
 ```bash
 ./scripts/validate.sh
 ```
@@ -122,6 +130,7 @@ OVIWrite uses a **4-layer validation pyramid** to ensure code quality.
 ### Layer 3: Dynamic Validation (~60 seconds)
 
 **What it checks**:
+
 - Neovim startup without errors
 - `:checkhealth` passes
 - Individual plugin loading
@@ -129,6 +138,7 @@ OVIWrite uses a **4-layer validation pyramid** to ensure code quality.
 **When it runs**: Pre-push hook, CI (on PR to main)
 
 **Run manually**:
+
 ```bash
 ./scripts/validate.sh --full
 ./scripts/validate.sh --check startup
@@ -138,12 +148,14 @@ OVIWrite uses a **4-layer validation pyramid** to ensure code quality.
 ### Layer 4: Documentation Sync (~30 seconds)
 
 **What it checks**:
+
 - CLAUDE.md plugin list matches actual plugins
 - Keyboard shortcuts documentation is current
 
 **When it runs**: CI (warnings only, doesn't block)
 
 **Run manually**:
+
 ```bash
 ./scripts/validate.sh --check docs
 ./scripts/extract-keymaps.lua  # Generate keymap table
@@ -435,6 +447,7 @@ lua/
 ```
 
 **Rules**:
+
 - One plugin per file in `lua/plugins/*.lua`
 - Plugin files must return lazy.nvim spec: `{ "author/repo", ... }`
 - Utility modules go in `lua/utils/`, not `lua/plugins/`
@@ -465,6 +478,7 @@ chore: update dependencies
 ```
 
 **Types**:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation only
@@ -477,11 +491,13 @@ chore: update dependencies
 ### Before Submitting
 
 1. **Run full validation**
+
 ```bash
 ./scripts/validate.sh --full
 ```
 
 2. **Update documentation** (if needed)
+
 ```bash
 # Add plugin to CLAUDE.md
 # Update keyboard shortcuts if added new keymaps
@@ -489,6 +505,7 @@ chore: update dependencies
 ```
 
 3. **Test manually in Neovim**
+
 ```bash
 nvim
 # Test your changes work as expected
@@ -550,6 +567,6 @@ OVIWrite is actively seeking new maintainers! If you're interested in taking on 
 2. Demonstrate understanding of the architecture and validation system
 3. Reach out via GitHub Issues expressing interest
 
----
+______________________________________________________________________
 
 **Thank you for contributing to OVIWrite and supporting writers everywhere!** 🎉

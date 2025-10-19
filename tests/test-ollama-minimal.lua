@@ -7,7 +7,7 @@ print("1. vim.inspect type:", type(vim.inspect))
 if type(vim.inspect) == "function" then
   print("2. ✅ vim.inspect is a function")
   print("3. Test: vim.inspect({a=1})")
-  print(vim.inspect({a=1, b=2}))
+  print(vim.inspect({ a = 1, b = 2 }))
 else
   print("2. ❌ vim.inspect is NOT a function, it's:", type(vim.inspect))
 end
@@ -23,7 +23,7 @@ local mock_vim = {
   end,
   cmd = function(cmd)
     print("Mock cmd:", cmd)
-  end
+  end,
 }
 
 print("5. mock_vim.inspect type:", type(mock_vim.inspect))
@@ -31,7 +31,7 @@ print("6. mock_vim.cmd type:", type(mock_vim.cmd))
 
 -- Try loading Plenary
 print("\n=== Loading Plenary ===")
-local ok, plenary = pcall(require, 'plenary')
+local ok, plenary = pcall(require, "plenary")
 if ok then
   print("7. ✅ Plenary loaded successfully")
 else
