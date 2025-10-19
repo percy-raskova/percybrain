@@ -4,26 +4,44 @@
 
 ## Documentation Map
 
-**Core Docs** (repo root):
+Documentation follows [Diataxis framework](https://diataxis.fr/) (tutorial/how-to/reference/explanation):
 
-- `README.md` → Quick start
-- `PERCYBRAIN_DESIGN.md` → Architecture (1,129 lines)
-- `PERCYBRAIN_SETUP.md` → Install/config
-- `PERCYBRAIN_SYSTEM_ANALYSIS.md` → Technical analysis
+**🎓 Tutorials** (learning-oriented):
 
-**AI Memories** (Serena MCP): 30 total
+- `docs/tutorials/GETTING_STARTED.md` → Zero to first linked note (30 min)
+- `PERCYBRAIN_SETUP.md` → Complete installation guide
 
-- **Permanent**: `project_overview`, `codebase_structure`, `percybrain_lazy_nvim_pattern`, `percybrain_technical_patterns`, `percy_development_patterns`, `style_and_conventions`, `architecture`
-- **Session** (archivable): `session_2025-10-17_workflow_refactoring_complete`, `test_refactoring_session_5_files_complete_2025-10-18`
+**📖 How-To Guides** (task-oriented):
+
+- `docs/how-to/ZETTELKASTEN_WORKFLOW.md` → Daily/weekly/monthly habits
+- `docs/how-to/AI_USAGE_GUIDE.md` → Ollama setup + AI commands
+- `docs/development/PRECOMMIT_HOOKS.md` → Quality gates
+
+**📋 Reference** (information-oriented):
+
+- `docs/testing/TEST_COVERAGE_REPORT.md` → Current metrics (44/44 passing)
+- `docs/testing/TESTING_GUIDE.md` → Validation architecture
+- `QUICK_REFERENCE.md` → Keyboard shortcuts
+
+**💡 Explanation** (understanding-oriented):
+
+- `docs/explanation/WHY_PERCYBRAIN.md` → Problems solved, philosophy
+- `docs/explanation/NEURODIVERSITY_DESIGN.md` → ADHD/autism-first design
+- `docs/explanation/COGNITIVE_ARCHITECTURE.md` → Distributed cognition system
+- `docs/explanation/LOCAL_AI_RATIONALE.md` → Privacy, offline-first
+- `docs/explanation/AI_TESTING_PHILOSOPHY.md` → Active testing paradigm
+
+**🔧 Technical** (architecture/design):
+
+- `PERCYBRAIN_DESIGN.md` → System architecture (1,129 lines)
+- `CLAUDE.md` → This file (AI assistant context)
+
+**🤖 AI Memories** (Serena MCP): 30+ total
+
+- **Permanent**: `project_overview`, `codebase_structure`, `percy_development_patterns`, `documentation_consolidation_token_optimization_2025-10-19`
 - **Access**: `list_memories`, `read_memory("name")`
 
-**Reports** (`claudedocs/`): Post-op summaries
-
-- `PERCYBRAIN_PHASE1_COMPLETE.md`, `COMPLETE_TEST_REFACTORING_REPORT.md`, `PRECOMMIT_HOOKS_DESIGN.md`
-
-**Tests** (`tests/`): `README.md`, `PLENARY_TESTING_DESIGN.md`, `PERCYBRAIN_LLM_TEST_DESIGN.md`
-
-**AI Journal** (`claudedocs/scratches/`): NOT YET IMPLEMENTED
+**📝 Session Reports**: Archived in git history (git log for detailed completion reports)
 
 ## Architecture Essentials
 
