@@ -9,6 +9,7 @@ Documentation follows [Diataxis framework](https://diataxis.fr/) (tutorial/how-t
 **🎓 Tutorials** (learning-oriented):
 
 - `docs/tutorials/GETTING_STARTED.md` → Zero to first linked note (30 min)
+- `docs/tutorials/ACADEMIC_WRITING_TUTORIAL.md` → First academic paper with LaTeX/citations (60-90 min)
 - `PERCYBRAIN_SETUP.md` → Complete installation guide
 
 **📖 How-To Guides** (task-oriented):

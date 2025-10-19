@@ -178,6 +178,7 @@ Documentation organized by purpose using the [Diataxis framework](https://diatax
 Start here if you're new:
 
 - **[Getting Started](docs/tutorials/GETTING_STARTED.md)**: Your first 30 minutes with PercyBrain ⭐
+- **[Academic Writing Tutorial](docs/tutorials/ACADEMIC_WRITING_TUTORIAL.md)**: Write your first academic paper with LaTeX and citations
 - **[PERCYBRAIN_SETUP.md](PERCYBRAIN_SETUP.md)**: Complete installation and configuration
 
 ### 📖 How-To Guides (Task-Oriented)
