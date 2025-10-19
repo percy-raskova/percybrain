@@ -1,10 +1,6 @@
 # AI-Driven Environment Validation (AIDEV) Protocol
 
-## For Neovim Configuration Testing via MCP
-
-### 🎯 Vision
-
-Transform AI from passive code analyzer to active environment tester. The AI becomes a QA engineer that can actually "touch" and validate the system.
+**Category**: Technical Reference | **For**: Neovim MCP Testing | **Philosophy**: See [docs/explanation/AI_TESTING_PHILOSOPHY.md](docs/explanation/AI_TESTING_PHILOSOPHY.md)
 
 ## Core Testing Dimensions
 
@@ -151,52 +147,6 @@ function AITester:generate_report(results)
 end
 ```
 
-## Revolutionary Insights
-
-### What Makes This Different
-
-1. **Active vs Passive Testing**
-
-   - Traditional: Analyze code statically
-   - AIDEV: Actually interact with the environment
-
-2. **Experiential Validation**
-
-   - Traditional: "Should work according to docs"
-   - AIDEV: "I tried it and here's what happened"
-
-3. **Real-time Discovery**
-
-   - Traditional: Pre-defined test cases
-   - AIDEV: Discovers issues during exploration (like the register privacy issue!)
-
-4. **Adaptive Testing**
-
-   - Traditional: Fixed test suite
-   - AIDEV: AI adapts tests based on what it finds
-
-### Future Possibilities
-
-1. **Continuous Validation**
-
-   - AI monitors config changes and auto-tests
-   - Catches breaking changes immediately
-
-2. **Cross-Environment Testing**
-
-   - Test same config on different OS/terminals
-   - Identify platform-specific issues
-
-3. **User Behavior Learning**
-
-   - AI learns your workflow patterns
-   - Tests focus on what you actually use
-
-4. **Predictive Failure Detection**
-
-   - AI predicts what might break
-   - Proactive fixes before issues occur
-
 ## Metrics & Reporting
 
 ### Test Coverage Metrics
@@ -228,21 +178,6 @@ security:
   unencrypted_credentials: "None found"
 ```
 
-## The "Hands-On" Experience
-
-This MCP integration gives AI assistants:
-
-- **Eyes** - See buffers, read status
-- **Hands** - Execute commands, navigate
-- **Memory** - Track state changes
-- **Judgment** - Evaluate if things work correctly
-
-It's like the difference between:
-
-- Reading a cookbook vs. Actually cooking
-- Studying driving theory vs. Actually driving
-- Reading docs vs. Actually using the software
-
 ## Next Steps
 
 1. **Automate Test Suite** - Create scheduled test runs
@@ -253,4 +188,4 @@ It's like the difference between:
 
 ______________________________________________________________________
 
-*This protocol discovered a privacy issue you didn't know existed. Imagine what else AI testing could find!*
+**See Also**: [AI Testing Philosophy](docs/explanation/AI_TESTING_PHILOSOPHY.md) for conceptual foundations and paradigm shifts.

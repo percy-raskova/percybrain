@@ -171,20 +171,45 @@ ______________________________________________________________________
 
 ## Documentation
 
-### 📚 Start Here
+Documentation organized by purpose using the [Diataxis framework](https://diataxis.fr/):
 
-- **[PROJECT_INDEX.md](PROJECT_INDEX.md)**: Master navigation hub for all documentation ⭐
-- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)**: Essential commands and shortcuts
+### 🎓 Tutorials (Learning-Oriented)
 
-### 📖 User Guides
+Start here if you're new:
 
+- **[Getting Started](docs/tutorials/GETTING_STARTED.md)**: Your first 30 minutes with PercyBrain ⭐
 - **[PERCYBRAIN_SETUP.md](PERCYBRAIN_SETUP.md)**: Complete installation and configuration
-- **[claudedocs/PERCYBRAIN_USER_GUIDE.md](claudedocs/PERCYBRAIN_USER_GUIDE.md)**: Comprehensive user guide
+
+### 📖 How-To Guides (Task-Oriented)
+
+Practical workflows and problem-solving:
+
+- **[Zettelkasten Workflow](docs/how-to/ZETTELKASTEN_WORKFLOW.md)**: Daily/weekly/monthly habits
+- **[AI Usage Guide](docs/how-to/AI_USAGE_GUIDE.md)**: Ollama setup and AI commands
+- **[Pre-commit Hooks](docs/development/PRECOMMIT_HOOKS.md)**: Quality gates and validation
+
+### 📋 Reference (Information-Oriented)
+
+Look up facts and specifications:
+
+- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)**: Essential commands and shortcuts
+- **[Test Coverage Report](docs/testing/TEST_COVERAGE_REPORT.md)**: Current test metrics
+- **[Testing Guide](docs/testing/TESTING_GUIDE.md)**: Validation architecture
+
+### 💡 Explanation (Understanding-Oriented)
+
+Understand the "why" behind design decisions:
+
+- **[Why PercyBrain?](docs/explanation/WHY_PERCYBRAIN.md)**: Problems solved and philosophy
+- **[Neurodiversity Design](docs/explanation/NEURODIVERSITY_DESIGN.md)**: ADHD/autism-first approach
+- **[Cognitive Architecture](docs/explanation/COGNITIVE_ARCHITECTURE.md)**: Distributed cognition system
+- **[Local AI Rationale](docs/explanation/LOCAL_AI_RATIONALE.md)**: Privacy and offline-first
+- **[AI Testing Philosophy](docs/explanation/AI_TESTING_PHILOSOPHY.md)**: Why active testing matters
 
 ### 🔧 Technical
 
-- **[CLAUDE.md](CLAUDE.md)**: Technical guide for developers and AI assistants
-- **[PERCYBRAIN_DESIGN.md](PERCYBRAIN_DESIGN.md)**: System architecture and design decisions
+- **[CLAUDE.md](CLAUDE.md)**: AI assistant context and technical index
+- **[PERCYBRAIN_DESIGN.md](PERCYBRAIN_DESIGN.md)**: System architecture and implementation
 - **[CONTRIBUTING.md](CONTRIBUTING.md)**: Contribution guidelines and workflow
 
 ______________________________________________________________________
