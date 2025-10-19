@@ -353,5 +353,8 @@ Context:
     )
 
     vim.notify("🧠 PercyBrain AI loaded - <leader>aa for AI menu", vim.log.levels.INFO)
+
+    -- Export module globally for testing
+    _G.M = M
   end,
 }
