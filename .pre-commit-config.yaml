@@ -1,0 +1,170 @@
+# Pre-commit hook configuration for PercyBrain
+# Install: pre-commit install
+# Run manually: pre-commit run --all-files
+# Update versions: pre-commit autoupdate
+
+repos:
+  # ============================================================================
+  # BASIC FILE HYGIENE (Built-in hooks)
+  # ============================================================================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        name: Trim trailing whitespace
+
+      - id: end-of-file-fixer
+        name: Fix end-of-file (ensure newline)
+
+      - id: mixed-line-ending
+        name: Normalize line endings (LF)
+        args: ['--fix=lf']
+
+      - id: check-merge-conflict
+        name: Check for merge conflict markers
+
+      - id: check-added-large-files
+        name: Prevent large files (>500KB)
+        args: ['--maxkb=500']
+
+      - id: check-yaml
+        name: Validate YAML syntax
+        files: \.ya?ml$
+
+  # ============================================================================
+  # MARKDOWN DOCUMENTATION (Formatting & Linting)
+  # ============================================================================
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.17
+    hooks:
+      - id: mdformat
+        name: Format Markdown files
+        args: ['--wrap', 'no', '--number']
+        additional_dependencies:
+          - mdformat-gfm  # GitHub Flavored Markdown
+          - mdformat-frontmatter  # YAML frontmatter support
+          - mdformat-tables  # Table formatting
+        files: \.md$
+        exclude: ^(lazy-lock\.json)$
+
+  # ============================================================================
+  # SECURITY - SECRET SCANNING (CRITICAL)
+  # ============================================================================
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        name: Scan for secrets (API keys, tokens, passwords)
+        args:
+          - '--baseline'
+          - '.secrets.baseline'
+        exclude: ^(lazy-lock\.json|tests/.*_spec\.lua)$
+
+        # Common secret patterns detected:
+        # - AWS keys, GitHub PATs, Slack tokens
+        # - Private keys, API keys, passwords
+        # - High entropy strings (base64, hex)
+
+  # ============================================================================
+  # LUA CODE QUALITY (Syntax & Static Analysis)
+  # ============================================================================
+  - repo: local
+    hooks:
+      - id: lua-syntax-check
+        name: Lua Syntax Validation (luac)
+        entry: luac -p
+        language: system
+        files: \.lua$
+        description: Fast syntax check using Lua compiler
+
+      - id: luacheck
+        name: Luacheck Static Analysis
+        entry: luacheck
+        language: system
+        args:
+          - '--globals'
+          - 'vim'
+          - '--no-color'
+          - '--codes'
+        files: \.lua$
+        description: |
+          Detects:
+          - Undefined global variables
+          - Unused variables and function arguments
+          - Shadowing of variables
+          - Unreachable code
+
+  # ============================================================================
+  # LUA FORMATTING (Code Style)
+  # ============================================================================
+  - repo: local
+    hooks:
+      - id: stylua-check
+        name: StyLua Formatting Check
+        entry: stylua
+        language: system
+        args: ['--check']
+        files: \.lua$
+        description: Check Lua code formatting (run 'stylua .' to auto-fix)
+
+        # If this fails:
+        # Fix with: stylua .
+        # Or configure exceptions in .stylua.toml
+
+  # ============================================================================
+  # PERCYBRAIN-SPECIFIC HOOKS (Custom Validators)
+  # ============================================================================
+  - repo: local
+    hooks:
+      - id: plugin-spec-validator
+        name: Validate Plugin Specs (lazy.nvim)
+        entry: hooks/validate-plugin-spec.lua
+        language: script
+        files: ^lua/plugins/.*\.lua$
+        description: Ensure plugin files return valid lazy.nvim specs
+
+        # Validates:
+        # - Returns table with plugin repo or import spec
+        # - No broken lazy.nvim configurations
+        # - Proper plugin structure
+
+      - id: test-standards-validator
+        name: Test Standards Compliance (6/6)
+        entry: hooks/validate-test-standards.lua
+        language: script
+        files: ^tests/.*_spec\.lua$
+        description: Enforce PercyBrain test quality standards
+
+        # Checks:
+        # 1. Helper/mock imports at top
+        # 2. before_each/after_each present
+        # 3. AAA pattern comments
+        # 4. No _G. global pollution
+        # 5. Local helper functions
+        # 6. No raw assert.contains
+
+      - id: debug-code-detector
+        name: Debug Code Detection
+        entry: hooks/detect-debug-code.sh
+        language: script
+        files: \.lua$
+        exclude: ^tests/
+        description: Catch leftover debug statements
+
+        # Detects:
+        # - print() statements
+        # - vim.notify with DEBUG level
+        # - TODO/FIXME without issue references
+        # - XXX markers
+
+# ============================================================================
+# HOOK EXECUTION BEHAVIOR
+# ============================================================================
+# - Hooks run on 'git commit' automatically
+# - Only staged files are checked (fast!)
+# - Results are cached (re-runs only on changes)
+# - Skip all hooks: git commit --no-verify
+# - Skip specific hook: SKIP=hook-id git commit
+# - Run manually: pre-commit run
+# - Run on all files: pre-commit run --all-files
+# - Update hook versions: pre-commit autoupdate
