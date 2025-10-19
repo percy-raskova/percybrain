@@ -16,13 +16,21 @@ Documentation follows [Diataxis framework](https://diataxis.fr/) (tutorial/how-t
 - `docs/how-to/ZETTELKASTEN_WORKFLOW.md` → Daily/weekly/monthly habits
 - `docs/how-to/AI_USAGE_GUIDE.md` → Ollama setup + AI commands
 - `docs/how-to/MISE_USAGE.md` → Task runner and tool management
+- `docs/how-to/MIGRATION_FROM_OBSIDIAN.md` → Switch from Obsidian
 - `docs/development/PRECOMMIT_HOOKS.md` → Quality gates
 
 **📋 Reference** (information-oriented):
 
+- `docs/reference/KEYBINDINGS_REFERENCE.md` → Complete keymap catalog
+- `docs/reference/LSP_REFERENCE.md` → Language Server Protocol details
+- `docs/reference/PLUGIN_REFERENCE.md` → All 67 plugins documented
 - `docs/testing/TEST_COVERAGE_REPORT.md` → Current metrics (44/44 passing)
 - `docs/testing/TESTING_GUIDE.md` → Validation architecture
 - `QUICK_REFERENCE.md` → Keyboard shortcuts
+
+**🛠️ Troubleshooting**:
+
+- `docs/troubleshooting/TROUBLESHOOTING_GUIDE.md` → Common issues and solutions
 
 **💡 Explanation** (understanding-oriented):
 

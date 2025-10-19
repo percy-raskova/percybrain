@@ -187,15 +187,23 @@ Practical workflows and problem-solving:
 - **[Zettelkasten Workflow](docs/how-to/ZETTELKASTEN_WORKFLOW.md)**: Daily/weekly/monthly habits
 - **[AI Usage Guide](docs/how-to/AI_USAGE_GUIDE.md)**: Ollama setup and AI commands
 - **[Mise Usage](docs/how-to/MISE_USAGE.md)**: Task runner and tool management
+- **[Migration from Obsidian](docs/how-to/MIGRATION_FROM_OBSIDIAN.md)**: Switch from Obsidian to PercyBrain
 - **[Pre-commit Hooks](docs/development/PRECOMMIT_HOOKS.md)**: Quality gates and validation
 
 ### 📋 Reference (Information-Oriented)
 
 Look up facts and specifications:
 
+- **[Keybindings Reference](docs/reference/KEYBINDINGS_REFERENCE.md)**: Complete keymap catalog
+- **[LSP Reference](docs/reference/LSP_REFERENCE.md)**: Language Server Protocol details
+- **[Plugin Reference](docs/reference/PLUGIN_REFERENCE.md)**: All 67 plugins documented
 - **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)**: Essential commands and shortcuts
 - **[Test Coverage Report](docs/testing/TEST_COVERAGE_REPORT.md)**: Current test metrics
 - **[Testing Guide](docs/testing/TESTING_GUIDE.md)**: Validation architecture
+
+### 🛠️ Troubleshooting
+
+- **[Troubleshooting Guide](docs/troubleshooting/TROUBLESHOOTING_GUIDE.md)**: Common issues and solutions
 
 ### 💡 Explanation (Understanding-Oriented)
 
