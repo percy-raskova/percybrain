@@ -15,11 +15,14 @@ fi
 for file in "${files[@]}"; do
   issues=()
 
-  # Check for print() statements
-  if grep -n "print(" "$file" > /dev/null 2>&1; then
-    while IFS=: read -r line_num line_content; do
-      issues+=("Line $line_num: print() statement found")
-    done < <(grep -n "print(" "$file")
+  # Check for print() statements - only in test files
+  # Production code legitimately uses print() for user-facing output
+  if [[ "$file" == tests/* ]]; then
+    if grep -n "print(" "$file" > /dev/null 2>&1; then
+      while IFS=: read -r line_num line_content; do
+        issues+=("Line $line_num: print() statement found (use assertions in tests)")
+      done < <(grep -n "print(" "$file")
+    fi
   fi
 
   # Check for vim.notify with DEBUG level
