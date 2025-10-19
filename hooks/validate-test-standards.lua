@@ -8,9 +8,20 @@ local standards = {
   {
     name = "Helper/Mock Imports",
     check = function(content)
-      return content:match("require%('tests%.helpers'%)") or content:match("require%('tests%.helpers%.mocks'%)")
+      -- Only require imports if helpers/mocks are actually used
+      local uses_helpers = content:match("helpers%.") or content:match("mocks%.")
+      local has_imports = content:match("require%('tests%.helpers'%)")
+        or content:match("require%('tests%.helpers%.mocks'%)")
+
+      -- If not using helpers/mocks, pass automatically
+      if not uses_helpers then
+        return true
+      end
+
+      -- If using them, must have imports
+      return has_imports
     end,
-    fix = "Add: local helpers = require('tests.helpers')",
+    fix = "Add: local helpers = require('tests.helpers') (only if using helpers/mocks)",
   },
   {
     name = "State Management (before_each/after_each)",

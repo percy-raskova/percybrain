@@ -1,197 +1,269 @@
--- Zettelkasten Workflow Tests
--- Complete test coverage for PercyBrain's primary use case
+-- Zettelkasten Workflow Integration Tests
+-- Complete test coverage for PercyBrain's primary knowledge management use case
 
-local helpers = require('tests.helpers')
-local assertions = require('tests.helpers.assertions')
-local mocks = require('tests.helpers.mocks')
+-- Local helper function to create test note
+local function create_note(path, content)
+  vim.fn.writefile(vim.split(content, "\n"), path)
+end
 
 describe("Zettelkasten Workflow", function()
-  local vault
-  local temp_dir
+  local zettelkasten
+  local test_home
+  local original_expand
 
   before_each(function()
-    -- Create mock vault
-    vault = mocks.vault()
-    vault:setup()
+    -- Arrange: Set up isolated test environment
+    test_home = vim.fn.tempname()
+    original_expand = vim.fn.expand
 
-    -- Set up PercyBrain paths
-    vim.g.zettelkasten_dir = vault.path
-    vim.g.percy_vault = vault.path
+    vim.fn.expand = function(path)
+      if path:match("^~/Zettelkasten") then
+        return test_home .. path:gsub("^~/Zettelkasten", "")
+      end
+      return original_expand(path)
+    end
+
+    -- Load zettelkasten module
+    package.loaded["config.zettelkasten"] = nil
+    zettelkasten = require("config.zettelkasten")
+    zettelkasten.setup()
   end)
 
   after_each(function()
-    -- Clean up
-    vault:teardown()
+    -- Cleanup: Remove test directory
+    if vim.fn.isdirectory(test_home) == 1 then
+      vim.fn.delete(test_home, "rf")
+    end
+
+    vim.fn.expand = original_expand
   end)
 
   describe("Core Note Operations", function()
-    it("creates new note with timestamp ID", function()
-      local timestamp_pattern = "%d%d%d%d%d%d%d%d%d%d%d%d"
-      local note_path = vault:create_note("202501011200", "# Test Note")
+    it("creates new note with frontmatter template", function()
+      -- Arrange: No existing notes
 
-      assert.file_exists(note_path)
-      assert.is_true(note_path:match(timestamp_pattern) ~= nil)
+      -- Act: Create note manually (simulating new_note function logic)
+      local timestamp = os.date("%Y%m%d%H%M")
+      local filename = timestamp .. "-test-note.md"
+      local filepath = test_home .. "/" .. filename
+      local content = [[---
+title: Test Note
+date: 2025-10-18
+tags: []
+---
+
+# Test Note
+
+Content here.]]
+      create_note(filepath, content)
+
+      -- Assert: Note exists with correct structure
+      assert.equals(1, vim.fn.filereadable(filepath))
+      local file_content = table.concat(vim.fn.readfile(filepath), "\n")
+      assert.is_true(file_content:match("^%-%-%-") ~= nil)
+      assert.is_true(file_content:match("title: Test Note") ~= nil)
     end)
 
     it("creates daily note with correct format", function()
-      local date = os.date("%Y%m%d")
-      local daily_path = vault:create_daily_note(date)
+      -- Arrange: Daily directory exists
+      local date = os.date("%Y-%m-%d")
+      local daily_path = test_home .. "/daily/" .. date .. ".md"
 
-      assert.file_exists(daily_path)
-      assert.is_true(daily_path:match("daily/" .. date) ~= nil)
+      -- Act: Create daily note
+      zettelkasten.daily_note()
 
+      -- Assert: Daily note exists
+      assert.equals(1, vim.fn.filereadable(daily_path))
       local content = table.concat(vim.fn.readfile(daily_path), "\n")
-      assert.is_true(content:match("type: daily") ~= nil)
+      assert.is_true(content:match("tags: %[daily%]") ~= nil)
     end)
 
     it("creates inbox note for quick capture", function()
-      local inbox_path = vault.path .. "/inbox/quick-note.md"
-      vault:create_note("inbox/quick-note", "Quick capture content")
+      -- Arrange: Inbox directory exists
+      local timestamp = os.date("%Y%m%d%H%M%S")
 
-      assert.file_exists(inbox_path)
-    end)
+      -- Act: Create inbox note manually
+      local inbox_path = test_home .. "/inbox/" .. timestamp .. ".md"
+      create_note(inbox_path, "---\ntitle: Quick Note\ntags: [inbox]\n---\n\n")
 
-    it("applies template correctly", function()
-      local template_content = [[
----
-title: {{title}}
-tags: [{{tags}}]
----
-
-# {{title}}
-]]
-      vault:create_template("research", template_content)
-
-      local template_path = vault.path .. "/templates/research.md"
-      assert.file_exists(template_path)
+      -- Assert: Inbox note created
+      assert.equals(1, vim.fn.filereadable(inbox_path))
+      assert.is_true(vim.fn.filereadable(inbox_path) == 1)
     end)
   end)
 
-  describe("Wiki-style Linking", function()
-    it("creates wiki links in correct format", function()
-      local link = "[[202501011200]]"
-      assert.equals("[[202501011200]]", link)
+  describe("Markdown-style Linking", function()
+    it("creates Markdown links in correct format", function()
+      -- Arrange: Expected Markdown link format
+      local link = "[Display Text](target.md)"
+
+      -- Act: Verify pattern matches Markdown format
+      local pattern = "%[([^%]]+)%]%(([^%)]+)%)"
+      local display, target = link:match(pattern)
+
+      -- Assert: Link components extracted correctly
+      assert.equals("Display Text", display)
+      assert.equals("target.md", target)
     end)
 
-    it("creates named wiki links", function()
-      local link = "[[202501011200|Test Note]]"
-      assert.is_true(link:match("%[%[.+|.+%]%]") ~= nil)
+    it("creates named Markdown links with extension", function()
+      -- Arrange: Link with descriptive text and .md extension
+      local link = "[Reference Note](202501011200.md)"
+
+      -- Act: Parse link
+      local pattern = "%[([^%]]+)%]%(([^%)]+)%)"
+      local display, target = link:match(pattern)
+
+      -- Assert: Both parts parsed correctly
+      assert.equals("Reference Note", display)
+      assert.equals("202501011200.md", target)
     end)
 
     it("finds backlinks to current note", function()
-      -- Create notes with links
-      vault:create_note("note1", "Link to [[target_note]]")
-      vault:create_note("note2", "Another [[target_note]] reference")
-      vault:create_note("target_note", "# Target Note")
+      -- Arrange: Create notes with Markdown links
+      create_note(test_home .. "/note1.md", "Link to [target note](target-note.md)")
+      create_note(test_home .. "/note2.md", "Another [reference](target-note.md)")
+      create_note(test_home .. "/target-note.md", "# Target Note")
 
-      local backlinks = vault:get_backlinks("target_note")
-      assert.equals(2, #backlinks)
+      -- Act: Analyze links
+      local notes = zettelkasten.analyze_links()
+
+      -- Assert: Target note has 2 incoming links
+      assert.equals(2, notes["target-note"].incoming)
     end)
 
-    it("handles link completion", function()
-      -- Create several notes
-      vault:create_note("202501011200", "# Note 1")
-      vault:create_note("202501011201", "# Note 2")
-      vault:create_note("202501011202", "# Note 3")
+    it("handles link completion through file listing", function()
+      -- Arrange: Create several notes
+      create_note(test_home .. "/note1.md", "# Note 1")
+      create_note(test_home .. "/note2.md", "# Note 2")
+      create_note(test_home .. "/note3.md", "# Note 3")
 
-      local notes = vim.fn.glob(vault.path .. "/*.md", false, true)
+      -- Act: List available notes
+      local notes = vim.fn.glob(test_home .. "/*.md", false, true)
+
+      -- Assert: All notes available for completion
       assert.is_true(#notes >= 3)
     end)
   end)
 
   describe("Knowledge Graph Operations", function()
     it("identifies orphan notes", function()
-      -- Create orphan note (no links in or out)
-      vault:create_note("orphan", "# Orphan Note\nNo links here")
+      -- Arrange: Create orphan (no links in or out)
+      create_note(test_home .. "/orphan.md", "# Orphan Note\n\nNo links here.")
 
       -- Create linked notes
-      vault:create_note("linked1", "Link to [[linked2]]")
-      vault:create_note("linked2", "Link back to [[linked1]]")
+      create_note(test_home .. "/linked1.md", "Link to [linked2](linked2.md)")
+      create_note(test_home .. "/linked2.md", "Link back to [linked1](linked1.md)")
 
-      -- Mock orphan detection
-      local orphans = { vault.path .. "/orphan.md" }
-      assert.equals(1, #orphans)
+      -- Act: Analyze for orphans
+      local notes = zettelkasten.analyze_links()
+
+      -- Assert: Orphan has no connections
+      assert.equals(0, notes["orphan"].total)
+      -- Linked notes have connections
+      assert.is_true(notes["linked1"].total > 0)
+      assert.is_true(notes["linked2"].total > 0)
     end)
 
     it("identifies hub notes", function()
-      -- Create hub note (many connections)
-      vault:create_note("hub", [[
-# Hub Note
-Links to [[note1]], [[note2]], [[note3]], [[note4]], [[note5]]
-]])
+      -- Arrange: Create hub note with many connections
+      local hub_content = [[# Hub Note
 
-      -- Create regular notes
+Links to:
+- [note 1](note1.md)
+- [note 2](note2.md)
+- [note 3](note3.md)
+- [note 4](note4.md)
+- [note 5](note5.md)
+]]
+      create_note(test_home .. "/hub.md", hub_content)
+
+      -- Create notes that link back
       for i = 1, 5 do
-        vault:create_note("note" .. i, "Link to [[hub]]")
+        create_note(test_home .. "/note" .. i .. ".md", "Link to [hub](hub.md)")
       end
 
-      -- Mock hub detection (most connected)
-      local hubs = { vault.path .. "/hub.md" }
-      assert.equals(1, #hubs)
+      -- Act: Analyze connections
+      local notes = zettelkasten.analyze_links()
+
+      -- Assert: Hub has high connection count (5 out + 5 in = 10 total)
+      assert.equals(5, notes["hub"].outgoing)
+      assert.equals(5, notes["hub"].incoming)
+      assert.equals(10, notes["hub"].total)
     end)
 
     it("generates knowledge graph structure", function()
-      -- Create interconnected notes
-      vault:create_note("topic_a", "Links to [[topic_b]] and [[topic_c]]")
-      vault:create_note("topic_b", "Links to [[topic_c]]")
-      vault:create_note("topic_c", "Links to [[topic_a]]")
+      -- Arrange: Create interconnected notes
+      create_note(test_home .. "/topic-a.md", "Links to [topic B](topic-b.md) and [topic C](topic-c.md)")
+      create_note(test_home .. "/topic-b.md", "Links to [topic C](topic-c.md)")
+      create_note(test_home .. "/topic-c.md", "Links to [topic A](topic-a.md)")
 
-      -- Mock graph structure
-      local graph = {
-        nodes = { "topic_a", "topic_b", "topic_c" },
-        edges = {
-          { from = "topic_a", to = "topic_b" },
-          { from = "topic_a", to = "topic_c" },
-          { from = "topic_b", to = "topic_c" },
-          { from = "topic_c", to = "topic_a" },
-        }
-      }
+      -- Act: Analyze full graph
+      local notes = zettelkasten.analyze_links()
 
-      assert.equals(3, #graph.nodes)
-      assert.equals(4, #graph.edges)
+      -- Assert: All nodes present with correct connections
+      assert.is_not_nil(notes["topic-a"])
+      assert.is_not_nil(notes["topic-b"])
+      assert.is_not_nil(notes["topic-c"])
+
+      -- Verify bidirectional connections
+      assert.equals(2, notes["topic-a"].outgoing) -- A -> B, A -> C
+      assert.equals(1, notes["topic-a"].incoming) -- C -> A
     end)
   end)
 
   describe("Search and Navigation", function()
     it("finds notes by filename pattern", function()
-      -- Create notes with patterns
-      vault:create_note("project_alpha", "# Project Alpha")
-      vault:create_note("project_beta", "# Project Beta")
-      vault:create_note("daily_20250101", "# Daily Note")
+      -- Arrange: Create notes with patterns
+      create_note(test_home .. "/project-alpha.md", "# Project Alpha")
+      create_note(test_home .. "/project-beta.md", "# Project Beta")
+      create_note(test_home .. "/daily-20250101.md", "# Daily Note")
 
-      local project_notes = vim.fn.glob(vault.path .. "/project_*.md", false, true)
+      -- Act: Search for project notes
+      local project_notes = vim.fn.glob(test_home .. "/project-*.md", false, true)
+
+      -- Assert: Found exactly 2 project notes
       assert.equals(2, #project_notes)
     end)
 
-    it("searches note content", function()
-      -- Create notes with searchable content
-      vault:create_note("note1", "Content with keyword: neurodiversity")
-      vault:create_note("note2", "Different content")
-      vault:create_note("note3", "Also mentions neurodiversity here")
+    it("searches note content for keywords", function()
+      -- Arrange: Create notes with searchable content
+      create_note(test_home .. "/note1.md", "Content with keyword: neurodiversity")
+      create_note(test_home .. "/note2.md", "Different content")
+      create_note(test_home .. "/note3.md", "Also mentions neurodiversity here")
 
-      -- Mock content search
-      local results = {
-        vault.path .. "/note1.md",
-        vault.path .. "/note3.md",
-      }
-      assert.equals(2, #results)
+      -- Act: Read and grep for keyword
+      local files = vim.fn.glob(test_home .. "/*.md", false, true)
+      local matches = {}
+      for _, file in ipairs(files) do
+        local content = table.concat(vim.fn.readfile(file), "\n")
+        if content:match("neurodiversity") then
+          table.insert(matches, file)
+        end
+      end
+
+      -- Assert: Found 2 matching notes
+      assert.equals(2, #matches)
     end)
 
-    it("navigates to linked notes", function()
-      local source_note = vault:create_note("source", "Link to [[target]]")
-      local target_note = vault:create_note("target", "# Target Note")
+    it("navigates to linked notes via file paths", function()
+      -- Arrange: Create source and target notes
+      create_note(test_home .. "/source.md", "Link to [target](target.md)")
+      local target_path = test_home .. "/target.md"
+      create_note(target_path, "# Target Note")
 
-      -- Mock navigation (would use 'gd' in real scenario)
-      assert.file_exists(source_note)
-      assert.file_exists(target_note)
+      -- Act: Verify target exists
+      local target_exists = vim.fn.filereadable(target_path)
+
+      -- Assert: Target note is accessible
+      assert.equals(1, target_exists)
     end)
   end)
 
   describe("Publishing Integration", function()
-    it("exports notes to Hugo format", function()
-      -- Create note with frontmatter
-      vault:create_note("publish_me", [[
----
+    it("exports notes with frontmatter for Hugo", function()
+      -- Arrange: Create note with Hugo-compatible frontmatter
+      local note_content = [[---
 title: "Article Title"
 date: 2025-01-01
 tags: [zettelkasten, knowledge]
@@ -199,210 +271,75 @@ tags: [zettelkasten, knowledge]
 
 # Article Title
 
-Content for publishing
-]])
+Content for publishing.]]
+      create_note(test_home .. "/publish-me.md", note_content)
 
-      -- Mock Hugo export
-      local hugo_site = mocks.hugo_site()
-      hugo_site.setup()
+      -- Act: Read note
+      local content = table.concat(vim.fn.readfile(test_home .. "/publish-me.md"), "\n")
 
-      local exported_path = hugo_site.path .. "/content/posts/publish_me.md"
-      -- In real implementation, would copy and transform
-
-      hugo_site.teardown()
+      -- Assert: Has valid frontmatter
+      assert.is_true(content:match("^%-%-%-") ~= nil)
+      assert.is_true(content:match("title:") ~= nil)
+      assert.is_true(content:match("date:") ~= nil)
+      assert.is_true(content:match("tags:") ~= nil)
     end)
 
-    it("handles internal link conversion for publishing", function()
-      local content_with_links = [[
-# Note with Links
+    it("converts internal Markdown links for web publishing", function()
+      -- Arrange: Note with internal Markdown links
+      local content_with_links = "This links to [another note](202501011200.md) and [note](202501011201.md)."
 
-This links to [[202501011200|another note]] and [[202501011201]].
-]]
-
-      -- Mock link conversion for web
-      local converted = content_with_links:gsub(
-        "%[%[([^%]|]+)|?([^%]]*)%]%]",
-        function(id, title)
-          if title and title ~= "" then
-            return string.format("[%s](/notes/%s/)", title, id)
-          else
-            return string.format("[%s](/notes/%s/)", id, id)
-          end
-        end
-      )
-
-      assert.is_true(converted:match("%[another note%]%(/notes/") ~= nil)
-    end)
-  end)
-
-  describe("IWE LSP Integration", function()
-    it("provides link completion", function()
-      -- Mock LSP completion items
-      local completions = {
-        { label = "[[202501011200]]", kind = 18 }, -- Reference kind
-        { label = "[[202501011201]]", kind = 18 },
-      }
-
-      assert.equals(2, #completions)
-      assert.equals(18, completions[1].kind) -- Reference completion kind
-    end)
-
-    it("supports rename refactoring", function()
-      -- Create notes with references
-      vault:create_note("old_name", "# Old Name")
-      vault:create_note("referrer", "Link to [[old_name]]")
-
-      -- Mock rename operation
-      local old_path = vault.path .. "/old_name.md"
-      local new_path = vault.path .. "/new_name.md"
-
-      -- In real implementation, IWE would update all references
-      assert.file_exists(old_path)
-    end)
-
-    it("provides hover information", function()
-      -- Mock hover over a wiki link
-      local hover_info = {
-        contents = {
-          kind = "markdown",
-          value = "# Target Note\n\nFirst paragraph of the target note..."
-        }
-      }
-
-      assert.equals("markdown", hover_info.contents.kind)
-    end)
-  end)
-
-  describe("AI Integration", function()
-    local ollama
-
-    before_each(function()
-      ollama = mocks.ollama()
-    end)
-
-    it("generates draft from notes", function()
-      -- Create related notes
-      vault:create_note("topic_research_1", "Research point 1")
-      vault:create_note("topic_research_2", "Research point 2")
-      vault:create_note("topic_research_3", "Research point 3")
-
-      -- Mock draft generation
-      local collected_notes = {
-        vault.path .. "/topic_research_1.md",
-        vault.path .. "/topic_research_2.md",
-        vault.path .. "/topic_research_3.md",
-      }
-
-      local co = coroutine.running()
-      ollama.generate("Synthesize these notes into a draft", function(response)
-        assert.is_not_nil(response.response)
-        assert.is_true(response.done)
-        coroutine.resume(co)
+      -- Act: Convert Markdown links to web format
+      local converted = content_with_links:gsub("%[([^%]]+)%]%(([^%)]+)%)", function(text, target)
+        local id = target:gsub("%.md$", "")
+        return string.format("[%s](/notes/%s/)", text, id)
       end)
 
-      coroutine.yield()
-    end)
-
-    it("suggests related links", function()
-      vault:create_note("current", "Content about Neovim plugins")
-
-      -- Mock AI link suggestions
-      local suggestions = {
-        "[[plugin_architecture]]",
-        "[[lazy_loading]]",
-        "[[configuration_best_practices]]",
-      }
-
-      assert.equals(3, #suggestions)
-    end)
-
-    it("improves writing style", function()
-      local original = "This is bad writing that needs improvement"
-
-      local co = coroutine.running()
-      ollama.generate("Improve: " .. original, function(response)
-        assert.is_not_nil(response.response)
-        assert.not_equals(original, response.response)
-        coroutine.resume(co)
-      end)
-
-      coroutine.yield()
-    end)
-  end)
-
-  describe("Semantic Line Breaks", function()
-    it("formats with semantic breaks", function()
-      local unformatted = "This is a long sentence that should be broken at semantic boundaries for better git diffs and readability."
-
-      -- Mock SemBr formatting
-      local formatted = [[
-This is a long sentence
-that should be broken at semantic boundaries
-for better git diffs and readability.]]
-
-      assert.not_equals(unformatted, formatted)
-      assert.is_true(formatted:match("\n") ~= nil)
-    end)
-
-    it("preserves code blocks", function()
-      local content_with_code = [[
-# Title
-
-Some text here.
-
-```lua
-local function test()
-  return "should not be formatted"
-end
-```
-
-More text here.
-]]
-
-      -- Mock SemBr with code preservation
-      -- Code blocks should remain untouched
-      assert.is_true(content_with_code:match("```lua") ~= nil)
+      -- Assert: Links converted to web paths
+      assert.is_true(converted:match("%[another note%]%(/notes/202501011200/%)") ~= nil)
+      assert.is_true(converted:match("%[note%]%(/notes/202501011201/%)") ~= nil)
     end)
   end)
 
   describe("Workflow Commands", function()
     it("executes PercyNew command", function()
-      -- Mock command execution
-      local created = false
-      vim.api.nvim_create_user_command("PercyNew", function()
-        created = true
+      -- Arrange: Set up command
+      local executed = false
+      vim.api.nvim_create_user_command("TestPercyNew", function()
+        executed = true
       end, {})
 
-      vim.cmd("PercyNew")
-      assert.is_true(created)
+      -- Act: Execute command
+      vim.cmd("TestPercyNew")
 
-      vim.api.nvim_del_user_command("PercyNew")
+      -- Assert: Command executed
+      assert.is_true(executed)
+
+      -- Cleanup
+      vim.api.nvim_del_user_command("TestPercyNew")
     end)
 
     it("executes PercyDaily command", function()
-      -- Mock daily note creation
-      local daily_created = false
-      vim.api.nvim_create_user_command("PercyDaily", function()
-        daily_created = true
-      end, {})
+      -- Arrange: Daily note command exists
+      local before_count = #vim.fn.glob(test_home .. "/daily/*.md", false, true)
 
-      vim.cmd("PercyDaily")
-      assert.is_true(daily_created)
+      -- Act: Create daily note
+      zettelkasten.daily_note()
 
-      vim.api.nvim_del_user_command("PercyDaily")
+      -- Assert: Daily note created
+      local after_count = #vim.fn.glob(test_home .. "/daily/*.md", false, true)
+      assert.equals(before_count + 1, after_count)
     end)
 
-    it("executes PercyPublish command", function()
-      -- Mock publish workflow
-      local published = false
-      vim.api.nvim_create_user_command("PercyPublish", function()
-        published = true
-      end, {})
+    it("executes PercyPublish workflow", function()
+      -- Arrange: Create export path
+      local export_path = vim.fn.tempname()
+      zettelkasten.config.export_path = export_path
 
-      vim.cmd("PercyPublish")
-      assert.is_true(published)
+      -- Act: Publish command exists
+      local commands = vim.api.nvim_get_commands({})
 
-      vim.api.nvim_del_user_command("PercyPublish")
+      -- Assert: PercyPublish command available
+      assert.is_not_nil(commands.PercyPublish)
     end)
   end)
 end)

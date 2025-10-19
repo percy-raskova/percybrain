@@ -238,7 +238,8 @@ function M.backlinks()
   require("telescope.builtin").live_grep({
     cwd = M.config.home,
     prompt_title = "🔗 Backlinks to " .. current_file,
-    default_text = "[[" .. current_file,
+    -- Search for Markdown links: [text](filename) or [text](filename.md)
+    default_text = "](" .. current_file,
   })
 end
 
@@ -260,7 +261,9 @@ end
 -- Knowledge graph analysis
 function M.analyze_links()
   local notes = {}
-  local link_pattern = "%[%[([^%]]+)%]%]" -- Match [[wiki links]]
+  -- Match Markdown links: [text](target.md) or [text](target)
+  -- Captures: (1) display text, (2) target filename
+  local link_pattern = "%[([^%]]+)%]%(([^%)]+)%)"
 
   -- Scan all markdown files
   local files = vim.fn.globpath(M.config.home, "**/*.md", false, true)
@@ -271,8 +274,10 @@ function M.analyze_links()
 
     -- Count outgoing links
     local outgoing = {}
-    for link in content:gmatch(link_pattern) do
-      table.insert(outgoing, link)
+    for _, target in content:gmatch(link_pattern) do
+      -- Normalize filename: strip .md extension and path if present
+      local normalized = target:gsub("%.md$", ""):match("([^/]+)$") or target
+      table.insert(outgoing, normalized)
     end
 
     -- Count incoming links (backlinks)
@@ -280,7 +285,13 @@ function M.analyze_links()
     for _, other_file in ipairs(files) do
       if other_file ~= filepath then
         local other_content = table.concat(vim.fn.readfile(other_file), "\n")
-        if other_content:match("%[%[" .. filename .. "%]%]") then
+        -- Check for both [text](filename) and [text](filename.md)
+        -- Escape filename for pattern matching
+        local escaped_filename = vim.pesc(filename)
+        if
+          other_content:match("%]%(" .. escaped_filename .. "%)")
+          or other_content:match("%]%(" .. escaped_filename .. "%.md%)")
+        then
           incoming = incoming + 1
         end
       end
