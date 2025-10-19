@@ -186,6 +186,7 @@ Practical workflows and problem-solving:
 
 - **[Zettelkasten Workflow](docs/how-to/ZETTELKASTEN_WORKFLOW.md)**: Daily/weekly/monthly habits
 - **[AI Usage Guide](docs/how-to/AI_USAGE_GUIDE.md)**: Ollama setup and AI commands
+- **[Mise Usage](docs/how-to/MISE_USAGE.md)**: Task runner and tool management
 - **[Pre-commit Hooks](docs/development/PRECOMMIT_HOOKS.md)**: Quality gates and validation
 
 ### 📋 Reference (Information-Oriented)
@@ -204,6 +205,7 @@ Understand the "why" behind design decisions:
 - **[Neurodiversity Design](docs/explanation/NEURODIVERSITY_DESIGN.md)**: ADHD/autism-first approach
 - **[Cognitive Architecture](docs/explanation/COGNITIVE_ARCHITECTURE.md)**: Distributed cognition system
 - **[Local AI Rationale](docs/explanation/LOCAL_AI_RATIONALE.md)**: Privacy and offline-first
+- **[Mise Rationale](docs/explanation/MISE_RATIONALE.md)**: Why Mise for task running and tool management
 - **[AI Testing Philosophy](docs/explanation/AI_TESTING_PHILOSOPHY.md)**: Why active testing matters
 
 ### 🔧 Technical

@@ -15,6 +15,7 @@ Documentation follows [Diataxis framework](https://diataxis.fr/) (tutorial/how-t
 
 - `docs/how-to/ZETTELKASTEN_WORKFLOW.md` → Daily/weekly/monthly habits
 - `docs/how-to/AI_USAGE_GUIDE.md` → Ollama setup + AI commands
+- `docs/how-to/MISE_USAGE.md` → Task runner and tool management
 - `docs/development/PRECOMMIT_HOOKS.md` → Quality gates
 
 **📋 Reference** (information-oriented):
@@ -29,6 +30,7 @@ Documentation follows [Diataxis framework](https://diataxis.fr/) (tutorial/how-t
 - `docs/explanation/NEURODIVERSITY_DESIGN.md` → ADHD/autism-first design
 - `docs/explanation/COGNITIVE_ARCHITECTURE.md` → Distributed cognition system
 - `docs/explanation/LOCAL_AI_RATIONALE.md` → Privacy, offline-first
+- `docs/explanation/MISE_RATIONALE.md` → Why Mise for task running and tool management
 - `docs/explanation/AI_TESTING_PHILOSOPHY.md` → Active testing paradigm
 
 **🔧 Technical** (architecture/design):
