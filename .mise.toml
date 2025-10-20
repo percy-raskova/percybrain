@@ -69,6 +69,42 @@ run = """
 mise run test:_watch test:contract "tests/contract/**/*.lua" "specs/percybrain_contract.lua"
 """
 
+[tasks."test:contract:zettelkasten"]
+description = "🔏 Test Zettelkasten contract specifications"
+run = """
+nvim --headless -u tests/minimal_init.lua \
+  -c "PlenaryBustedFile tests/contract/zettelkasten_templates_spec.lua" \
+  -c "qa!"
+"""
+sources = ["tests/contract/zettelkasten_templates_spec.lua", "lua/config/zettelkasten.lua"]
+
+[tasks."test:contract:hugo"]
+description = "🔏 Test Hugo frontmatter contract specifications"
+run = """
+nvim --headless -u tests/minimal_init.lua \
+  -c "PlenaryBustedFile tests/contract/hugo_frontmatter_spec.lua" \
+  -c "qa!"
+"""
+sources = ["tests/contract/hugo_frontmatter_spec.lua", "lua/percybrain/hugo-menu.lua"]
+
+[tasks."test:contract:ai"]
+description = "🔏 Test AI model selection contract specifications"
+run = """
+nvim --headless -u tests/minimal_init.lua \
+  -c "PlenaryBustedFile tests/contract/ai_model_selection_spec.lua" \
+  -c "qa!"
+"""
+sources = ["tests/contract/ai_model_selection_spec.lua", "lua/percybrain/ai-model-selector.lua"]
+
+[tasks."test:contract:write-quit"]
+description = "🔏 Test Write-Quit AI Pipeline contract specifications"
+run = """
+nvim --headless -u tests/minimal_init.lua \
+  -c "PlenaryBustedFile tests/contract/write_quit_pipeline_spec.lua" \
+  -c "qa!"
+"""
+sources = ["tests/contract/write_quit_pipeline_spec.lua", "lua/percybrain/write-quit-pipeline.lua"]
+
 # ----------------------------------------------------------------------------
 # CAPABILITY TESTS - Tests that features WORK
 # ----------------------------------------------------------------------------
@@ -99,7 +135,25 @@ nvim --headless -u tests/minimal_init.lua \
   -c "PlenaryBustedDirectory tests/capability/ai/ {minimal_init = 'tests/minimal_init.lua'}" \
   -c "qa!"
 """
-sources = ["tests/capability/ai/**/*.lua", "lua/plugins/ai-sembr/**/*.lua"]
+sources = ["tests/capability/ai/**/*.lua", "lua/plugins/ai-sembr/**/*.lua", "lua/percybrain/ai-model-selector.lua"]
+
+[tasks."test:capability:write-quit"]
+description = "🎯 Test Write-Quit AI Pipeline capabilities"
+run = """
+nvim --headless -u tests/minimal_init.lua \
+  -c "PlenaryBustedDirectory tests/capability/write-quit/ {minimal_init = 'tests/minimal_init.lua'}" \
+  -c "qa!"
+"""
+sources = ["tests/capability/write-quit/**/*.lua", "lua/percybrain/write-quit-pipeline.lua"]
+
+[tasks."test:capability:hugo"]
+description = "🎯 Test Hugo frontmatter and publishing capabilities"
+run = """
+nvim --headless -u tests/minimal_init.lua \
+  -c "PlenaryBustedDirectory tests/capability/hugo/ {minimal_init = 'tests/minimal_init.lua'}" \
+  -c "qa!"
+"""
+sources = ["tests/capability/hugo/**/*.lua", "lua/percybrain/hugo-menu.lua"]
 
 # ----------------------------------------------------------------------------
 # REGRESSION TESTS - Protect critical behaviors
