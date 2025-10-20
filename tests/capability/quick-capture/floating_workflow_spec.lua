@@ -159,7 +159,7 @@ describe("Floating Quick Capture Workflow Capabilities", function()
       vim.wait(500)
 
       -- Assert: File saved to inbox directory
-      assert.is_truthy(save_path:match("/inbox/"), "File should be in inbox directory")
+      assert.is_truthy(save_path:match("test%-zettelkasten%-inbox"), "File should be in inbox directory")
       assert.equals(1, vim.fn.filereadable(save_path), "File should exist in inbox")
     end)
   end)
