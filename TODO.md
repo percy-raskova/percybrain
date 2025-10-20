@@ -129,3 +129,79 @@
 3. Write TDD tests for write-quit AI pipeline (with wiki vs fleeting logic)
 4. Write TDD tests for floating quick capture
 5. Implement each module to pass its tests
+
+## Future Enhancements (Nice-to-Have)
+
+### CI/CD Infrastructure
+
+- [ ] Create root-level directory structure for external files (templates, configs, assets)
+  - Purpose: Enable CI/CD deployment to test runners
+  - Example: `/external/templates/` containing fleeting.md, wiki.md
+  - Goal: "Can we install on runner machine and pass all tests?" → Zero-friction end-user deployment
+  - Priority: Before GitHub publication for production-ready distribution
+
+### Web Browsing Integration
+
+- [ ] Lynx/W3M plugin development with comprehensive tests
+  - Purpose: Terminal-based web browsing within Neovim
+  - Priority: Nice-to-have, future enhancement
+
+### Personal Information Management (PIM)
+
+- [ ] Email integration (TUI-based email client)
+
+  - Priority: Nice-to-have, future enhancement
+
+- [ ] Personal finances/accounting TUI integration
+
+  - Priority: Nice-to-have, future enhancement
+
+### Time & Task Management
+
+- [ ] Pendulum.lua for time tracking
+
+  - Purpose: Time management and tracking within workflow
+  - Priority: Nice-to-have, future enhancement
+
+- [ ] GTD-style personal life management system
+
+  - Features: Daily/weekly/monthly notes, TODOs, calendar integration
+  - Purpose: Complete personal productivity system
+  - Priority: Nice-to-have, future enhancement
+
+### Literate Programming Integration
+
+- [ ] Framework for literate programming integrated with wiki system
+  - Purpose: Write code and documentation together in wiki pages
+  - Features: Code extraction, tangling, weaving into publishable docs
+  - Integration: Hugo publishing pipeline for literate documents
+  - Priority: Nice-to-have, future enhancement (not part of MVP workflow)
+
+## Self-Sufficiency & Maintainability (Higher Priority)
+
+### Lua Development IDE Features
+
+- [ ] Full Lua LSP configuration for Neovim config development
+
+  - Purpose: Enable self-sufficient config maintenance without AI dependency
+  - Features needed:
+    - Lua language server (lua-ls) with Neovim API completion
+    - Go-to-definition for functions, modules, plugins
+    - Symbol search and references across config
+    - Inline documentation and hover info
+    - Linting and diagnostics for Lua errors
+    - Code formatting (StyLua integration - already have)
+    - Debugging support (DAP for Lua)
+  - Priority: **HIGH** - Critical for long-term maintainability
+  - Rationale: "If I want to not be completely reliant on AI and get shit done myself"
+
+- [ ] Enhanced code navigation for Neovim config
+
+  - Telescope integration for config-specific searches
+  - Plugin spec navigation (jump to plugin definitions)
+  - Keymap browser and conflict detection
+
+- [ ] Inline documentation and examples
+
+  - Quick reference for Neovim API patterns
+  - Plugin configuration examples accessible in-editor
