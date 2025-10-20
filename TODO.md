@@ -257,11 +257,12 @@
 - [x] Fix error callback invocation (move mkdir to async operation)
 - [x] All 38 tests passing (21 contract + 17 capability)
 
-### 🎨 REFACTOR Phase - PENDING
+### ✅ REFACTOR Phase - COMPLETE
 
-- [ ] Remove code duplication (if any)
-- [ ] Add inline comments for clarity
-- [ ] Optimize performance if needed
+- [x] Extract helper functions (configure_buffer_options, register_buffer_keymaps, close_window_if_valid)
+- [x] Add enhanced inline comments for async save logic
+- [x] Reduce code duplication (window close logic → helper function)
+- [x] All 38 tests still passing, 0 luacheck warnings
 
 **Test Results**:
 
@@ -288,7 +289,10 @@
   - Buffer isolation and preservation ✅
   - Performance (\< 100ms window open) ✅
 
-**Commit**: `77b8499` - Complete Floating Quick Capture GREEN phase
+**Commits**:
+
+- `77b8499` - Floating Quick Capture GREEN phase
+- `a1818c5` - Floating Quick Capture REFACTOR phase (complete TDD cycle)
 
 ## Next Steps - Remaining Workflow Components
 
