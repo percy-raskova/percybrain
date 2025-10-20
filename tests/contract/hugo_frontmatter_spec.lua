@@ -1,0 +1,298 @@
+-- Contract Tests for Hugo Frontmatter Validation
+-- Tests what the system MUST, MUST NOT, and MAY do for Hugo publishing
+-- Kent Beck: "Specify the contract before implementation"
+
+describe("Hugo Frontmatter Validation Contract", function()
+  before_each(function()
+    -- Arrange: Ensure clean test state
+  end)
+
+  after_each(function()
+    -- Cleanup: No state to restore
+  end)
+
+  describe("Hugo Frontmatter Format Contract", function()
+    it("MUST validate draft field is boolean", function()
+      -- Arrange: Wiki note with valid draft field
+      local valid_frontmatter = [[
+---
+title: "Test Note"
+date: 2025-10-19
+draft: false
+tags: []
+categories: []
+description: "Test"
+---
+]]
+
+      -- Act: Parse frontmatter
+      local hugo = require("percybrain.hugo-menu")
+      local frontmatter = hugo.parse_frontmatter(valid_frontmatter)
+
+      -- Assert: draft is boolean
+      assert.is_not_nil(frontmatter)
+      assert.equals("boolean", type(frontmatter.draft))
+    end)
+
+    it("MUST validate date field is YYYY-MM-DD format", function()
+      -- Arrange: Wiki note with valid date
+      local valid_frontmatter = [[
+---
+title: "Test Note"
+date: 2025-10-19
+draft: false
+---
+]]
+
+      -- Act: Parse frontmatter
+      local hugo = require("percybrain.hugo-menu")
+      local frontmatter = hugo.parse_frontmatter(valid_frontmatter)
+
+      -- Assert: date matches YYYY-MM-DD pattern
+      assert.is_not_nil(frontmatter)
+      assert.matches("^%d%d%d%d%-%d%d%-%d%d$", frontmatter.date)
+    end)
+
+    it("MUST validate tags field is array", function()
+      -- Arrange: Wiki note with tags
+      local valid_frontmatter = [[
+---
+title: "Test Note"
+date: 2025-10-19
+draft: false
+tags: [test, hugo]
+---
+]]
+
+      -- Act: Parse frontmatter
+      local hugo = require("percybrain.hugo-menu")
+      local frontmatter = hugo.parse_frontmatter(valid_frontmatter)
+
+      -- Assert: tags is table (array)
+      assert.is_not_nil(frontmatter)
+      assert.equals("table", type(frontmatter.tags))
+    end)
+
+    it("MUST validate categories field is array", function()
+      -- Arrange: Wiki note with categories
+      local valid_frontmatter = [[
+---
+title: "Test Note"
+date: 2025-10-19
+draft: false
+categories: [zettelkasten]
+---
+]]
+
+      -- Act: Parse frontmatter
+      local hugo = require("percybrain.hugo-menu")
+      local frontmatter = hugo.parse_frontmatter(valid_frontmatter)
+
+      -- Assert: categories is table (array)
+      assert.is_not_nil(frontmatter)
+      assert.equals("table", type(frontmatter.categories))
+    end)
+
+    it("MUST validate title field exists and is string", function()
+      -- Arrange: Wiki note with title
+      local valid_frontmatter = [[
+---
+title: "Test Note"
+date: 2025-10-19
+draft: false
+---
+]]
+
+      -- Act: Parse frontmatter
+      local hugo = require("percybrain.hugo-menu")
+      local frontmatter = hugo.parse_frontmatter(valid_frontmatter)
+
+      -- Assert: title is string
+      assert.is_not_nil(frontmatter)
+      assert.equals("string", type(frontmatter.title))
+      assert.equals("Test Note", frontmatter.title)
+    end)
+  end)
+
+  describe("Hugo Frontmatter Validation Contract", function()
+    it("MUST detect invalid draft field (string instead of boolean)", function()
+      -- Arrange: Invalid frontmatter with string draft
+      local invalid_frontmatter = [[
+---
+title: "Test Note"
+date: 2025-10-19
+draft: "false"
+---
+]]
+
+      -- Act: Validate frontmatter
+      local hugo = require("percybrain.hugo-menu")
+      local is_valid, errors = hugo.validate_frontmatter(invalid_frontmatter)
+
+      -- Assert: Validation fails with draft error
+      assert.is_false(is_valid)
+      assert.is_not_nil(errors)
+      assert.matches("draft.*boolean", errors)
+    end)
+
+    it("MUST detect invalid date format", function()
+      -- Arrange: Invalid frontmatter with wrong date format
+      local invalid_frontmatter = [[
+---
+title: "Test Note"
+date: 10/19/2025
+draft: false
+---
+]]
+
+      -- Act: Validate frontmatter
+      local hugo = require("percybrain.hugo-menu")
+      local is_valid, errors = hugo.validate_frontmatter(invalid_frontmatter)
+
+      -- Assert: Validation fails with date error
+      assert.is_false(is_valid)
+      assert.is_not_nil(errors)
+      assert.matches("date.*YYYY%-MM%-DD", errors)
+    end)
+
+    it("MUST detect missing required fields", function()
+      -- Arrange: Incomplete frontmatter
+      local incomplete_frontmatter = [[
+---
+title: "Test Note"
+---
+]]
+
+      -- Act: Validate frontmatter
+      local hugo = require("percybrain.hugo-menu")
+      local is_valid, errors = hugo.validate_frontmatter(incomplete_frontmatter)
+
+      -- Assert: Validation fails with missing field error
+      assert.is_false(is_valid)
+      assert.is_not_nil(errors)
+      assert.matches("missing.*date", errors)
+    end)
+
+    it("MUST accept valid Hugo-compatible frontmatter", function()
+      -- Arrange: Complete valid frontmatter
+      local valid_frontmatter = [[
+---
+title: "Distributed Cognition"
+date: 2025-10-19
+draft: false
+tags: [cognition, systems]
+categories: [research]
+description: "Exploring distributed cognition systems"
+bibliography: references.bib
+cite-method: biblatex
+---
+]]
+
+      -- Act: Validate frontmatter
+      local hugo = require("percybrain.hugo-menu")
+      local is_valid, errors = hugo.validate_frontmatter(valid_frontmatter)
+
+      -- Assert: Validation passes
+      assert.is_true(is_valid)
+      assert.is_nil(errors)
+    end)
+  end)
+
+  describe("Hugo Publishing Safety Contract", function()
+    it("FORBIDDEN to publish notes with invalid frontmatter", function()
+      -- Arrange: Note with invalid frontmatter
+      local test_note = "/tmp/test-invalid-hugo.md"
+      local invalid_content = [[
+---
+title: "Invalid Note"
+date: not-a-date
+draft: "false"
+---
+# Content
+]]
+
+      -- Write test file
+      local file = io.open(test_note, "w")
+      file:write(invalid_content)
+      file:close()
+
+      -- Act: Attempt to validate for publishing
+      local hugo = require("percybrain.hugo-menu")
+      local is_valid, errors = hugo.validate_file_for_publishing(test_note)
+
+      -- Assert: Validation blocks publishing
+      assert.is_false(is_valid)
+      assert.is_not_nil(errors)
+
+      -- Cleanup
+      vim.fn.delete(test_note)
+    end)
+
+    it("MUST exclude inbox directory from publishing", function()
+      -- Arrange: Inbox path pattern
+      local inbox_note = vim.fn.expand("~/Zettelkasten/inbox/fleeting-note.md")
+
+      -- Act: Check if should be published
+      local hugo = require("percybrain.hugo-menu")
+      local should_publish = hugo.should_publish_file(inbox_note)
+
+      -- Assert: Inbox notes not published
+      assert.is_false(should_publish)
+    end)
+
+    it("MUST include root zettelkasten notes for publishing", function()
+      -- Arrange: Root zettelkasten path
+      local wiki_note = vim.fn.expand("~/Zettelkasten/distributed-cognition.md")
+
+      -- Act: Check if should be published
+      local hugo = require("percybrain.hugo-menu")
+      local should_publish = hugo.should_publish_file(wiki_note)
+
+      -- Assert: Wiki notes are published
+      assert.is_true(should_publish)
+    end)
+  end)
+
+  describe("Frontmatter Extraction Contract", function()
+    it("MUST extract frontmatter from note content", function()
+      -- Arrange: Note with frontmatter
+      local note_content = [[
+---
+title: "Test Note"
+date: 2025-10-19
+draft: false
+---
+
+# Test Note
+
+Content here
+]]
+
+      -- Act: Extract frontmatter
+      local hugo = require("percybrain.hugo-menu")
+      local frontmatter = hugo.extract_frontmatter(note_content)
+
+      -- Assert: Frontmatter extracted correctly
+      assert.is_not_nil(frontmatter)
+      assert.equals("Test Note", frontmatter.title)
+      assert.equals("2025-10-19", frontmatter.date)
+      assert.equals(false, frontmatter.draft)
+    end)
+
+    it("MUST return nil for notes without frontmatter", function()
+      -- Arrange: Note without frontmatter
+      local note_content = [[
+# Test Note
+
+Content without frontmatter
+]]
+
+      -- Act: Extract frontmatter
+      local hugo = require("percybrain.hugo-menu")
+      local frontmatter = hugo.extract_frontmatter(note_content)
+
+      -- Assert: No frontmatter extracted
+      assert.is_nil(frontmatter)
+    end)
+  end)
+end)
