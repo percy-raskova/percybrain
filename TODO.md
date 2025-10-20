@@ -26,10 +26,17 @@
 
 ### Code/Implementation
 
-- `/home/percy/.config/nvim/lua/percybrain/hugo-menu.lua` - Hugo publishing menu (<leader>h)
+- `/home/percy/.config/nvim/lua/percybrain/hugo-menu.lua` - Hugo publishing menu (<leader>h) + frontmatter validation (248 lines)
 - `/home/percy/.config/nvim/lua/percybrain/dashboard-menu.lua` - Dashboard menu (<leader>d)
 - `/home/percy/.config/nvim/lua/plugins/utilities/percybrain-dashboard.lua` - Plugin loader
 - `/home/percy/.config/nvim/TODO.md` - Session progress tracking
+
+**Hugo Frontmatter Validation Functions**:
+
+- `parse_frontmatter()` - YAML parser (preserves types: booleans, arrays, strings)
+- `validate_frontmatter()` - Hugo compatibility validation with detailed errors
+- `should_publish_file()` - Publishing eligibility (excludes inbox directory)
+- `validate_file_for_publishing()` - File read + frontmatter validation
 
 ### Templates (TDD Artifacts)
 
@@ -38,8 +45,15 @@
 
 ### Tests (TDD - Written BEFORE Implementation) ✅
 
-- `/home/percy/.config/nvim/tests/contract/zettelkasten_templates_spec.lua` - Contract tests
-- `/home/percy/.config/nvim/tests/capability/zettelkasten/template_workflow_spec.lua` - Capability tests
+**Template System**:
+
+- `/home/percy/.config/nvim/tests/contract/zettelkasten_templates_spec.lua` - Contract tests (8 tests)
+- `/home/percy/.config/nvim/tests/capability/zettelkasten/template_workflow_spec.lua` - Capability tests (10 tests)
+
+**Hugo Frontmatter Validation**:
+
+- `/home/percy/.config/nvim/tests/contract/hugo_frontmatter_spec.lua` - Contract tests (14 tests)
+- `/home/percy/.config/nvim/tests/capability/hugo/publishing_workflow_spec.lua` - Capability tests (9 tests)
 
 ## Files Modified This Session
 
@@ -122,10 +136,46 @@
 - [ ] ~~Optimize template loading~~ (already efficient)
 - [ ] ~~Add inline comments for clarity~~ (code is clear)
 
-## Next Steps After Template System
+## Current TDD Cycle - Hugo Frontmatter Validation ✅ COMPLETE
 
-1. Add Hugo frontmatter validation to hugo-menu.lua (with TDD)
-2. Write TDD tests for AI model selection
+### ✅ RED Phase (Write failing tests) - COMPLETE
+
+- [x] Write CONTRACT tests for Hugo frontmatter parsing and validation
+- [x] Write CAPABILITY tests for publishing workflow
+- [x] Confirm all tests fail (functions don't exist)
+
+### ✅ GREEN Phase (Implementation) - COMPLETE
+
+- [x] Implement `parse_frontmatter()` - YAML parser preserving types
+- [x] Implement `validate_frontmatter()` - Hugo compatibility validation
+- [x] Implement `should_publish_file()` - Inbox exclusion logic
+- [x] Implement `validate_file_for_publishing()` - File read + validation
+- [x] All 23 tests passing (14 contract + 9 capability)
+
+### ✅ REFACTOR Phase - COMPLETE
+
+- [x] Fix luacheck warnings (operator precedence, unused variable)
+- [x] Verify 6/6 test standards compliance
+- [x] 0 luacheck warnings, all pre-commit hooks passing
+
+**Test Results**:
+
+- Contract tests: 14/14 ✅
+  - YAML parser handles booleans, arrays, strings correctly ✅
+  - Validation detects invalid draft, date, tags, categories ✅
+  - Inbox exclusion from publishing ✅
+- Capability tests: 9/9 ✅
+  - User can validate Hugo-compatible wiki notes ✅
+  - Error messages are helpful and actionable ✅
+  - Batch publishing validation workflow ✅
+  - Optional BibTeX fields supported ✅
+
+**Commit**: `17cefa6` - Complete Hugo frontmatter validation TDD cycle
+
+## Next Steps After Hugo Validation
+
+1. ~~Add Hugo frontmatter validation to hugo-menu.lua (with TDD)~~ ✅ DONE
+2. Write TDD tests for AI model selection with Ollama integration
 3. Write TDD tests for write-quit AI pipeline (with wiki vs fleeting logic)
 4. Write TDD tests for floating quick capture
 5. Implement each module to pass its tests
@@ -135,10 +185,42 @@
 ### CI/CD Infrastructure
 
 - [ ] Create root-level directory structure for external files (templates, configs, assets)
+
   - Purpose: Enable CI/CD deployment to test runners
-  - Example: `/external/templates/` containing fleeting.md, wiki.md
   - Goal: "Can we install on runner machine and pass all tests?" → Zero-friction end-user deployment
   - Priority: Before GitHub publication for production-ready distribution
+
+  **Required External Files Structure**:
+
+  ```
+  /external/
+  ├── templates/
+  │   ├── fleeting.md          # Zettelkasten fleeting note template
+  │   └── wiki.md              # Zettelkasten wiki page template (Hugo-compatible)
+  ├── hugo/
+  │   ├── config.toml          # Hugo site configuration
+  │   ├── archetypes/          # Hugo content templates
+  │   │   └── default.md
+  │   ├── content/             # Hugo content directory
+  │   │   └── zettelkasten/    # Published wiki notes destination
+  │   ├── layouts/             # Hugo theme layouts (if custom)
+  │   ├── static/              # Static assets (images, CSS, JS)
+  │   └── themes/              # Hugo theme (if not using module)
+  └── configs/
+      └── hugo-example.toml    # Example Hugo configuration for users
+  ```
+
+  **Deployment Testing Requirements**:
+
+  - Templates deployable to `~/Zettelkasten/templates/`
+  - Hugo site structure deployable to `~/blog/` (or configurable path)
+  - CI pipeline tests:
+    1. Install Neovim config
+    2. Deploy external files to correct locations
+    3. Run all tests (currently 44/44 passing + Hugo tests)
+    4. Verify Hugo build succeeds with sample content
+    5. Validate frontmatter on all wiki pages
+  - Zero-friction end-user experience: "Clone → Run setup → Working system"
 
 ### Web Browsing Integration
 
