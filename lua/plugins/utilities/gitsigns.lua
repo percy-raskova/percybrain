@@ -1,6 +1,30 @@
--- gitsigns.nvim: Visual Git integration for Neovim
--- Shows git changes in sign column, inline blame, hunk actions
--- Industry standard for visual Git indicators
+-- Plugin: Gitsigns
+-- Purpose: Visual Git integration - show changes, blame, hunk operations in editor
+-- Workflow: utilities
+-- Why: Context awareness and version control visibility - displays Git status inline
+--      (sign column indicators for add/change/delete) reducing context switching to
+--      terminal. ADHD-optimized through visual feedback (immediate change visibility),
+--      hunk staging (granular commits without CLI), and inline blame (attribution
+--      without git log). Critical for Zettelkasten versioning and collaborative note evolution.
+-- Config: full
+--
+-- Usage:
+--   ]c / [c - Navigate hunks (next/previous change)
+--   <leader>hs - Stage hunk, <leader>hr - Reset hunk
+--   <leader>hp - Preview hunk in floating window
+--   <leader>hb - Show inline blame, <leader>hB - Toggle persistent blame
+--   <leader>hd - Diff current file
+--   ih (text object) - Select hunk for operations
+--
+-- Dependencies:
+--   plenary.nvim (Lua utilities)
+--
+-- Configuration Notes:
+--   Sign column glyphs: ┃ (add/change), ▁ (delete), ┆ (untracked)
+--   SemBr integration: word_diff enabled for markdown files
+--   Custom commands: GSemBrPreview, GSemBrDiffThis (wrap-aware diff viewing)
+--   WhichKey integration: <leader>h group for hunk operations
+--   Performance: max_file_length = 40000 (disable for large files)
 
 return {
   "lewis6991/gitsigns.nvim",

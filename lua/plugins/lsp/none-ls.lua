@@ -1,3 +1,29 @@
+-- Plugin: none-ls (null-ls successor)
+-- Purpose: Bridge non-LSP tools (formatters/linters) into LSP ecosystem
+-- Workflow: utilities
+-- Why: Unified tooling interface - makes formatters like prettier and linters like
+--      eslint work through LSP protocol, providing consistent UX with language servers.
+--      ADHD-optimized through automatic format-on-save (eliminates manual formatting),
+--      unified diagnostic display (all issues in one place), and predictable behavior.
+--      Critical for maintaining code quality without cognitive overhead of manual tool invocation.
+-- Config: full
+--
+-- Usage:
+--   Automatic format-on-save (configured in on_attach)
+--   :lua vim.lsp.buf.format() - Manual format current buffer
+--   Diagnostics appear inline with LSP diagnostics
+--
+-- Dependencies:
+--   mason-null-ls (bridges Mason-installed tools to null-ls)
+--   External: prettier, stylua, black, isort, pylint, eslint_d (Mason-installed)
+--
+-- Configuration Notes:
+--   ensure_installed: Auto-installs formatters/linters via Mason
+--   format_on_save: Triggered by BufWritePre autocmd (automatic)
+--   root_dir detection: Uses .null-ls-root, Makefile, .git, package.json
+--   Conditional linting: eslint_d only runs if .eslintrc.js/cjs exists
+--   Filter setup: Only uses null-ls for formatting (prevents conflicts with LSP servers)
+
 return {
   "nvimtools/none-ls.nvim", -- configure formatters & linters
   lazy = true,
@@ -46,7 +72,8 @@ return {
         diagnostics.pylint,
         diagnostics.eslint_d.with({ -- js/ts linter
           condition = function(utils)
-            return utils.root_has_file({ ".eslintrc.js", ".eslintrc.cjs" }) -- only enable if root has .eslintrc.js or .eslintrc.cjs
+            -- only enable if root has .eslintrc.js or .eslintrc.cjs
+            return utils.root_has_file({ ".eslintrc.js", ".eslintrc.cjs" })
           end,
         }),
       },
@@ -60,7 +87,7 @@ return {
             callback = function()
               vim.lsp.buf.format({
                 filter = function(client)
-                  --  only use null-ls for formatting instead of lsp server
+                  --  only use null-ls for formatting
                   return client.name == "null-ls"
                 end,
                 bufnr = bufnr,
