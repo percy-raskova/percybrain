@@ -172,13 +172,83 @@
 
 **Commit**: `17cefa6` - Complete Hugo frontmatter validation TDD cycle
 
-## Next Steps After Hugo Validation
+## Current TDD Cycle - AI Model Selection ✅ COMPLETE
+
+### ✅ RED Phase (Write failing tests) - COMPLETE
+
+- [x] Write CONTRACT tests for AI model selection with Ollama
+- [x] Write CAPABILITY tests for model selection workflow
+- [x] Confirm all tests fail (functions don't exist)
+
+### ✅ GREEN Phase (Implementation) - COMPLETE
+
+- [x] Implement AI model selector module in `lua/percybrain/ai-model-selector.lua`
+- [x] All 33 tests passing (16 contract + 17 capability)
+
+### ✅ REFACTOR Phase - COMPLETE
+
+- [x] Fix luacheck warnings
+- [x] Verify 6/6 test standards compliance
+- [x] 0 luacheck warnings, all pre-commit hooks passing
+
+**Test Results**:
+
+- Contract tests: 16/16 ✅
+  - Model listing and selection ✅
+  - Session persistence ✅
+  - Ollama integration ✅
+  - Error handling for missing Ollama ✅
+- Capability tests: 17/17 ✅
+  - Interactive model selection workflow ✅
+  - Task-specific model suggestions ✅
+  - Integration with existing Ollama config ✅
+
+## Current TDD Cycle - Write-Quit AI Pipeline ✅ COMPLETE
+
+### ✅ RED Phase (Write failing tests) - COMPLETE
+
+- [x] Write CONTRACT tests for write-quit AI pipeline
+- [x] Write CAPABILITY tests for pipeline workflow
+- [x] Confirm all tests fail (functions don't exist)
+
+### ✅ GREEN Phase (Implementation) - COMPLETE
+
+- [x] Implement write-quit pipeline in `lua/percybrain/write-quit-pipeline.lua`
+- [x] All 49 tests passing (25 contract + 24 capability)
+
+### ✅ REFACTOR Phase - COMPLETE
+
+- [x] Fix luacheck warnings (unused variables)
+- [x] Add .luacheckrc exception for stylua-formatted assertions
+- [x] Verify 6/6 test standards compliance
+- [x] 0 luacheck warnings, all pre-commit hooks passing
+
+**Test Results**:
+
+- Contract tests: 25/25 ✅
+  - BufWritePost autocmd registration ✅
+  - Wiki vs fleeting note detection ✅
+  - Background AI processing (non-blocking) ✅
+  - Hugo frontmatter preservation ✅
+  - Ollama integration ✅
+  - Error handling ✅
+- Capability tests: 24/24 ✅
+  - Write and quit with automatic AI processing ✅
+  - Background processing without blocking editor ✅
+  - Processing status notifications ✅
+  - Manual processing keybinding ✅
+  - Queue management for rapid saves ✅
+  - Configuration options ✅
+
+**Commit**: `e361bbc` - Complete Write-Quit AI Pipeline TDD cycle
+
+## Next Steps - Remaining Workflow Components
 
 1. ~~Add Hugo frontmatter validation to hugo-menu.lua (with TDD)~~ ✅ DONE
-2. Write TDD tests for AI model selection with Ollama integration
-3. Write TDD tests for write-quit AI pipeline (with wiki vs fleeting logic)
-4. Write TDD tests for floating quick capture
-5. Implement each module to pass its tests
+2. ~~Write TDD tests for AI model selection with Ollama integration~~ ✅ DONE
+3. ~~Write TDD tests for write-quit AI pipeline (with wiki vs fleeting logic)~~ ✅ DONE
+4. **Write TDD tests for floating quick capture** ← CURRENT
+5. Implement floating quick capture module to pass its tests
 
 ## Future Enhancements (Nice-to-Have)
 
