@@ -31,6 +31,11 @@ files["tests/plenary/unit/config_spec.lua"] = {
   globals = { "_G" },
 }
 
+files["tests/capability/write-quit/pipeline_workflow_spec.lua"] = {
+  -- Line 61: Multi-condition assert statement exceeds 120 chars (stylua formatted)
+  max_line_length = false, -- Disable line length check for this file
+}
+
 -- Exclude directories
 exclude_files = {
   ".git",

@@ -50,9 +50,9 @@ local standards = {
         return true -- No _G usage, pass
       end
 
-      -- If using _G, check if it's for testing global pollution
-      local testing_pollution = content:match("global pollution")
-        or content:match("Global Pollution")
+      -- If using _G, check if it's for testing global pollution (case-insensitive)
+      local content_lower = content:lower()
+      local testing_pollution = content_lower:match("global pollution")
         or content:match("doesn't leak global")
         or content:match("inspect _G")
 

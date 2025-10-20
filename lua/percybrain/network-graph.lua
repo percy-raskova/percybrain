@@ -48,9 +48,9 @@ local function scan_network()
       local content = file:read("*all")
       file:close()
 
-      -- Count wiki links [[link]]
+      -- Count markdown links [text](link.md) or [text](link)
       local link_count = 0
-      for _ in content:gmatch("%[%[.-%]%]") do
+      for _ in content:gmatch("%[.-%]%(.-%)") do
         link_count = link_count + 1
       end
 
@@ -77,7 +77,7 @@ end
 local function generate_header()
   return [[
 ╔═══════════════════════════════════════════════════════════════════════╗
-║  ⬢  PERCYBRAIN NEURAL NETWORK VISUALIZATION  ⬢  BORG COLLECTIVE  ⬢  ║
+║  ⬢  PERCYBRAIN NEURAL NETWORK VISUALIZATION  ⬢  BORG COLLECTIVE  ⬢    ║
 ╚═══════════════════════════════════════════════════════════════════════╝
   ]]
 end
@@ -310,7 +310,7 @@ M.show_borg = function()
     title_pos = "center",
   }
 
-  local win = vim.api.nvim_open_win(buf, true, win_opts)
+  local _ = vim.api.nvim_open_win(buf, true, win_opts)
 
   -- Keymaps
   vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>close<cr>", { noremap = true, silent = true })
@@ -321,7 +321,7 @@ end
 
 -- Quick stats in status message
 M.quick_stats = function()
-  local notes, connections = scan_network()
+  local notes, _ = scan_network()
 
   local hubs = vim.tbl_filter(function(n)
     return n.is_hub

@@ -103,9 +103,9 @@ local function analyze_link_density()
 
       total_notes = total_notes + 1
 
-      -- Count wiki links [[link]]
+      -- Count markdown links [text](link.md) or [text](link)
       local link_count = 0
-      for _ in content:gmatch("%[%[.-%]%]") do
+      for _ in content:gmatch("%[.-%]%(.-%)") do
         link_count = link_count + 1
       end
 
@@ -317,7 +317,7 @@ M.toggle = function()
     title_pos = "center",
   }
 
-  local win = vim.api.nvim_open_win(buf, true, win_opts)
+  local _ = vim.api.nvim_open_win(buf, true, win_opts)
 
   -- Keymaps
   vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>close<cr>", { noremap = true, silent = true })
