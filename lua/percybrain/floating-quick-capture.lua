@@ -70,20 +70,23 @@ function M.get_window_config()
   }
 end
 
-function M.create_capture_buffer()
-  -- Create scratch buffer for capture
-  local buffer = vim.api.nvim_create_buf(false, true)
+-- Helper: Configure buffer options for scratch buffer
+local function configure_buffer_options(buffer)
+  local options = {
+    buftype = "nofile", -- Scratch buffer (not associated with a file)
+    bufhidden = "wipe", -- Delete buffer when hidden
+    modifiable = true, -- Allow text editing
+    filetype = "markdown", -- Enable markdown syntax highlighting
+  }
 
-  -- Configure buffer as modifiable scratch buffer
-  vim.api.nvim_buf_set_option(buffer, "buftype", "nofile")
-  vim.api.nvim_buf_set_option(buffer, "bufhidden", "wipe")
-  vim.api.nvim_buf_set_option(buffer, "modifiable", true)
-  vim.api.nvim_buf_set_option(buffer, "filetype", "markdown")
+  for option, value in pairs(options) do
+    vim.api.nvim_buf_set_option(buffer, option, value)
+  end
+end
 
-  -- Set buffer keymaps
-  local keymaps = M.get_buffer_keymaps()
-
-  -- Save and close
+-- Helper: Register buffer-local keymaps
+local function register_buffer_keymaps(buffer, keymaps)
+  -- Save and close keymap
   vim.api.nvim_buf_set_keymap(buffer, "n", keymaps.save.key, "", {
     callback = M.save_and_close,
     desc = keymaps.save.desc,
@@ -91,13 +94,32 @@ function M.create_capture_buffer()
     silent = true,
   })
 
-  -- Cancel without saving
+  -- Cancel without saving keymap
   vim.api.nvim_buf_set_keymap(buffer, "n", keymaps.cancel.key, "", {
     callback = M.cancel_capture,
     desc = keymaps.cancel.desc,
     noremap = true,
     silent = true,
   })
+end
+
+-- Helper: Close floating window if valid
+local function close_window_if_valid(window)
+  if window and vim.api.nvim_win_is_valid(window) then
+    vim.api.nvim_win_close(window, true)
+  end
+end
+
+function M.create_capture_buffer()
+  -- Create scratch buffer for capture
+  local buffer = vim.api.nvim_create_buf(false, true)
+
+  -- Configure buffer options
+  configure_buffer_options(buffer)
+
+  -- Register buffer-local keymaps
+  local keymaps = M.get_buffer_keymaps()
+  register_buffer_keymaps(buffer, keymaps)
 
   return buffer
 end
@@ -136,13 +158,12 @@ end
 
 function M.cancel_capture()
   -- Close window without saving
-  if state.current_window and vim.api.nvim_win_is_valid(state.current_window) then
-    vim.api.nvim_win_close(state.current_window, true)
-  end
+  close_window_if_valid(state.current_window)
 
   -- Restore previous buffer
   M.restore_previous_buffer()
 
+  -- Clear state
   state.current_window = nil
   state.current_buffer = nil
 end
@@ -234,25 +255,26 @@ function M.save_and_close()
   -- Get save path
   local save_path = M.get_save_path()
 
-  -- Close capture window
-  if state.current_window and vim.api.nvim_win_is_valid(state.current_window) then
-    vim.api.nvim_win_close(state.current_window, true)
-  end
-
+  -- Close capture window and clear state
+  close_window_if_valid(state.current_window)
   state.current_window = nil
   state.current_buffer = nil
 
-  -- Async save to avoid blocking
+  -- Async save to avoid blocking the editor
+  -- Uses vim.schedule() to defer file I/O to the event loop
+  -- This ensures the UI remains responsive during save operations
   vim.schedule(function()
-    -- Attempt to save file
+    -- Wrap file operations in pcall to catch errors
+    -- Errors are propagated to on_save_error callback for user handling
     local success, err = pcall(function()
-      -- Ensure directory exists
+      -- Create inbox directory if it doesn't exist
+      -- Must be inside pcall to handle permission errors gracefully
       local dir = vim.fn.fnamemodify(save_path, ":h")
       if vim.fn.isdirectory(dir) == 0 then
-        vim.fn.mkdir(dir, "p")
+        vim.fn.mkdir(dir, "p") -- Recursive creation with "p" flag
       end
 
-      -- Write file
+      -- Write formatted content to file
       local file = io.open(save_path, "w")
       if not file then
         error("Could not open file for writing: " .. save_path)
@@ -262,13 +284,16 @@ function M.save_and_close()
       file:close()
     end)
 
-    -- Handle save result
+    -- Invoke appropriate callback based on save result
+    -- Success: Notify user and trigger success callback
+    -- Failure: Preserve content and trigger error callback
     if success then
       M.on_save_success(save_path)
     else
       M.on_save_error(err, formatted_content)
     end
 
+    -- Clear save-in-progress flag to allow next capture
     state.save_in_progress = false
   end)
 
