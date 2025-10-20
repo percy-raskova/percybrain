@@ -35,7 +35,8 @@ return {
       keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
 
       opts.desc = "See available code actions"
-      keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
+      -- see available code actions, in visual mode will apply to selection
+      keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
 
       opts.desc = "Smart rename"
       keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
@@ -77,7 +78,8 @@ return {
     })
 
     -- configure typescript server with plugin
-    lspconfig["tsserver"].setup({
+    -- FIXED: Use ts_ls instead of deprecated tsserver
+    lspconfig["ts_ls"].setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })
@@ -112,19 +114,33 @@ return {
     })
     --
     -- configure LanguageTool grammar checker (ltex-ls)
-    lspconfig["ltex"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      filetypes = { "markdown", "text", "tex", "org" },
-      settings = {
-        ltex = {
-          language = "en-US",
-          additionalRules = {
-            enablePickyRules = true,
+    -- Only configure if ltex-ls is installed
+    if vim.fn.executable("ltex-ls") == 1 then
+      -- FIXED: Disable annoying "Checking document" popup notifications
+      local ltex_capabilities = vim.deepcopy(capabilities)
+      ltex_capabilities.window = ltex_capabilities.window or {}
+      ltex_capabilities.window.workDoneProgress = false -- Disable progress popups
+
+      lspconfig["ltex"].setup({
+        capabilities = ltex_capabilities,
+        on_attach = on_attach,
+        filetypes = { "markdown", "text", "tex", "org" },
+        settings = {
+          ltex = {
+            language = "en-US",
+            additionalRules = {
+              enablePickyRules = true,
+            },
+            -- Disable status text that shows "Checking document"
+            statusBarItem = false,
           },
         },
-      },
-    })
+      })
+    else
+      -- Notify user that ltex-ls is not installed (info level, not error)
+      local ltex_msg = "ltex-ls not found - grammar checking disabled. " .. "Install: https://valentjn.github.io/ltex/"
+      vim.notify(ltex_msg, vim.log.levels.INFO)
+    end
     --
     -- configure texlab server
     lspconfig["texlab"].setup({
@@ -133,10 +149,14 @@ return {
     })
 
     -- configure Grammarly server
-    lspconfig["grammarly-languageserver"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
+    -- FIXED: Use 'grammarly' not 'grammarly-languageserver'
+    -- Only configure if grammarly is available
+    if vim.fn.executable("grammarly-languageserver") == 1 then
+      lspconfig["grammarly"].setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+      })
+    end
 
     -- configure prisma orm server
     lspconfig["prismals"].setup({

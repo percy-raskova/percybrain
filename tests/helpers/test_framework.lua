@@ -430,4 +430,68 @@ function M.suite(name, setup_fn)
   }
 end
 
+-- ============================================================================
+-- STARTUP TESTING HELPERS
+-- ============================================================================
+
+-- Validate Neovim startup behavior and configuration health
+M.Startup = {}
+M.Startup.__index = M.Startup
+
+function M.Startup:new()
+  local instance = {
+    warnings = {},
+    errors = {},
+    deprecations = {},
+  }
+  setmetatable(instance, M.Startup)
+  return instance
+end
+
+-- Capture startup messages
+function M.Startup:capture_messages()
+  -- Run Neovim headless and capture output
+  local handle = io.popen("nvim --headless -c 'messages' -c 'qa!' 2>&1")
+  if not handle then
+    return {}
+  end
+
+  local output = handle:read("*all")
+  handle:close()
+
+  local messages = {}
+  for line in output:gmatch("[^\r\n]+") do
+    table.insert(messages, line)
+  end
+
+  return messages
+end
+
+-- Check for deprecation warnings
+function M.Startup:has_deprecations()
+  local messages = self:capture_messages()
+  for _, msg in ipairs(messages) do
+    if msg:match("[Dd]eprecated") then
+      table.insert(self.deprecations, msg)
+    end
+  end
+  return #self.deprecations > 0
+end
+
+-- Check for errors
+function M.Startup:has_errors()
+  local messages = self:capture_messages()
+  for _, msg in ipairs(messages) do
+    if msg:match("[Ee]rror") or msg:match("failed") then
+      table.insert(self.errors, msg)
+    end
+  end
+  return #self.errors > 0
+end
+
+-- Validate clean startup
+function M.Startup:is_clean()
+  return not self:has_deprecations() and not self:has_errors()
+end
+
 return M

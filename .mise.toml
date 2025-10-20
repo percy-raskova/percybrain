@@ -125,6 +125,20 @@ nvim --headless -u tests/minimal_init.lua \
 sources = ["tests/regression/adhd_protections_spec.lua", "lua/config/options.lua"]
 
 # ----------------------------------------------------------------------------
+# STARTUP TESTS - Smoke tests for clean startup
+# ----------------------------------------------------------------------------
+[tasks."test:startup"]
+description = "🚀 Startup Smoke Tests - Verify clean startup without warnings"
+alias = "ts"
+run = """
+nvim --headless -u tests/minimal_init.lua \
+  -c "PlenaryBustedDirectory tests/startup/ {minimal_init = 'tests/minimal_init.lua'}" \
+  -c "qa!"
+"""
+sources = ["tests/startup/**/*.lua", "lua/plugins/**/*.lua"]
+outputs = [".cache/test/startup-results.json"]
+
+# ----------------------------------------------------------------------------
 # INTEGRATION TESTS - Component interactions
 # ----------------------------------------------------------------------------
 [tasks."test:integration"]
@@ -156,14 +170,14 @@ outputs = [".cache/test/unit-results.json"]
 # COMPOSITE TEST WORKFLOWS
 # ----------------------------------------------------------------------------
 [tasks.test]
-description = "🧪 Run all tests in order: contract → capability → regression → integration"
+description = "🧪 Run all tests in order: startup → contract → capability → regression → integration"
 alias = "t"
-depends = ["test:contract", "test:capability", "test:regression", "test:integration"]
+depends = ["test:startup", "test:contract", "test:capability", "test:regression", "test:integration"]
 
 [tasks."test:quick"]
-description = "⚡ Quick test run - contract + regression only (fast feedback)"
+description = "⚡ Quick test run - startup + contract + regression (fast feedback)"
 alias = "tq"
-depends = ["test:contract", "test:regression"]
+depends = ["test:startup", "test:contract", "test:regression"]
 
 [tasks."test:comprehensive"]
 description = "🔬 Comprehensive test suite with coverage analysis"
@@ -180,8 +194,12 @@ echo ""
 mkdir -p .cache/test
 
 # Run each test type with timing
+echo "🚀 Startup Smoke Tests..."
+time mise run test:startup || echo "Startup: FAILED" > .cache/test/status
+
+echo ""
 echo "🔏 Contract Tests..."
-time mise run test:contract || echo "Contract: FAILED" > .cache/test/status
+time mise run test:contract || echo "Contract: FAILED" >> .cache/test/status
 
 echo ""
 echo "🎯 Capability Tests..."

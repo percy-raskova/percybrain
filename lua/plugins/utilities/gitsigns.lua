@@ -193,14 +193,11 @@ return {
       end,
 
       -- Integration with other plugins
-      yadm = {
-        enable = false,
-      },
+      -- REMOVED: yadm (deprecated/removed in gitsigns 0.7+)
+      -- REMOVED: _extmark_signs, _threaded_diff, _refresh_staged_on_update
+      --          (internal fields with underscore prefix - not for user config)
 
-      -- Performance optimizations for ADHD/focus features
-      _refresh_staged_on_update = true,
-      _threaded_diff = true,
-      _extmark_signs = true,
+      -- Performance optimizations for ADHD/focus features handled by defaults
     })
 
     -- Custom commands for SemBr workflows
