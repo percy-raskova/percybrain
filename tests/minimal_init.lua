@@ -111,6 +111,12 @@ if not config_ok then
   vim.notify("Warning: Could not load config.options for testing: " .. tostring(config_err), vim.log.levels.WARN)
 end
 
+-- Load keymaps for contract tests that validate keybinding availability
+local keymaps_ok, keymaps_err = pcall(require, "config.keymaps")
+if not keymaps_ok then
+  vim.notify("Warning: Could not load config.keymaps for testing: " .. tostring(keymaps_err), vim.log.levels.WARN)
+end
+
 -- Load test helpers globally (optional, wrapped in pcall)
 local helpers_ok, helpers = pcall(require, "tests.helpers")
 if helpers_ok then

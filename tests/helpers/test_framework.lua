@@ -299,6 +299,17 @@ function M.Contract:report()
   return report
 end
 
+-- Check if a keybinding is available (static method)
+function M.Contract.keybinding_available(keymap)
+  local mappings = vim.api.nvim_get_keymap("n")
+  for _, mapping in ipairs(mappings) do
+    if mapping.lhs == keymap then
+      return true
+    end
+  end
+  return false
+end
+
 -- ============================================================================
 -- ASSERTION HELPERS
 -- ============================================================================
