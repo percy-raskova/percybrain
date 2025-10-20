@@ -35,7 +35,36 @@ return {
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(), -- show completion suggestions
         ["<C-e>"] = cmp.mapping.abort(), -- close completion window
-        ["<CR>"] = cmp.mapping.confirm({ select = false }),
+        -- Tab to accept completion, Enter for line break
+        ["<Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.confirm({ select = true }) -- accept selected item
+          elseif luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump() -- expand snippet or jump to next placeholder
+          else
+            fallback() -- insert tab
+          end
+        end, { "i", "s" }),
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
+          if cmp.visible() then
+            cmp.select_prev_item() -- navigate to previous suggestion
+          elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1) -- jump to previous snippet placeholder
+          else
+            fallback()
+          end
+        end, { "i", "s" }),
+        ["<CR>"] = cmp.mapping({
+          i = function(fallback)
+            if cmp.visible() and cmp.get_active_entry() then
+              cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
+            else
+              fallback() -- just insert line break
+            end
+          end,
+          s = cmp.mapping.confirm({ select = true }),
+          c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
+        }),
       }),
       -- sources for autocompletion
       sources = cmp.config.sources({
