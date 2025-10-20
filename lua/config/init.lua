@@ -11,10 +11,12 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+require("config.quiet-startup").setup() -- Suppress verbose plugin notifications
 require("config.globals")
 require("config.keymaps")
 require("config.options")
 require("config.privacy") -- Privacy protection (clear registers, etc.)
+require("config.health-fixes").setup() -- Apply checkhealth fixes (TDD implementation)
 require("config.zettelkasten").setup() -- Zettelkasten system
 require("config.window-manager").setup() -- Window management system
 require("percybrain.dashboard").setup() -- AI metrics auto-analysis

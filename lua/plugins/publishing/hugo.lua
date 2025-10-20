@@ -1,3 +1,31 @@
+-- Plugin: Hugo Integration
+-- Purpose: Publish Zettelkasten notes to Hugo static site (blog, digital garden, knowledge wiki)
+-- Workflow: publishing
+-- Why: Transforms private notes into public knowledge sharing. Hugo's speed and simplicity match
+--      Zettelkasten's plain-text philosophy. Commands streamline the publish workflow (new post,
+--      preview, build, deploy). Bridges personal knowledge management with audience engagement.
+--      Supports neurodiversity advocacy through accessible knowledge sharing.
+-- Config: full - custom commands for Hugo workflow
+--
+-- Usage:
+--   :HugoNew [title] - Create new post in content/posts/
+--   :HugoServer - Start local preview server (http://localhost:1313)
+--   :HugoBuild - Build static site to public/
+--   :HugoPublish - Build + git commit + push (full deployment)
+--   <leader>zp - Quick publish (build and deploy)
+--   <leader>zv - Preview site locally
+--   <leader>zb - Build site
+--
+-- Dependencies:
+--   External: hugo (install with package manager or from gohugo.io)
+--
+-- Configuration Notes:
+--   - Assumes Hugo project structure (content/, themes/, config.toml)
+--   - Posts created in content/posts/ with kebab-case naming
+--   - HugoPublish does full CI/CD: build + commit + push (customize as needed)
+--   - Works with YAML frontmatter from Zettelkasten templates
+--   - Supports Hugo's markdown extensions and shortcodes
+
 return {
   "phelipetls/jsonpath.nvim", -- Dependency for Hugo
   ft = { "markdown", "md" },

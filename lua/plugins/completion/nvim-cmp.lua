@@ -1,3 +1,32 @@
+-- Plugin: nvim-cmp
+-- Purpose: Intelligent autocompletion engine with LSP, snippets, and buffer content
+-- Workflow: completion
+-- Why: Reduces typing effort and cognitive load by offering contextual suggestions. Critical for
+--      ADHD users who benefit from reduced friction in writing. LSP integration provides accurate
+--      code/text completions. Snippets accelerate common patterns. Buffer completion suggests
+--      words from current file (helpful for consistent terminology). Path completion reduces
+--      errors in file references. Visual icons (lspkind) aid pattern recognition.
+-- Config: full - custom keybindings, multiple completion sources, VS Code-style icons
+--
+-- Usage:
+--   <Tab> - Accept selected completion (prose-friendly: Tab = accept, Enter = line break)
+--   <S-Tab> - Navigate to previous suggestion
+--   <C-j> / <C-k> - Navigate completion suggestions
+--   <C-Space> - Manually trigger completion
+--   <C-e> - Abort completion
+--   <C-b> / <C-f> - Scroll documentation preview
+--
+-- Dependencies:
+--   Internal: LuaSnip (snippet engine), lspkind (icons), friendly-snippets (snippet library)
+--   Works with: nvim-lspconfig (LSP completions), cmp-dictionary (academic writing)
+--
+-- Configuration Notes:
+--   - Tab accepts completion (prose-optimized, differs from typical Vim behavior)
+--   - Enter inserts line break unless completion is explicitly selected
+--   - Completion sources prioritized: LSP > snippets > buffer > paths
+--   - Visual icons from lspkind for function, variable, keyword recognition
+--   - Integrates with all configured LSP servers (IWE LSP for note titles, etc.)
+
 return {
   "hrsh7th/nvim-cmp",
   event = "InsertEnter",

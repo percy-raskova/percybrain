@@ -1,7 +1,25 @@
 -- Plugin: Alpha Dashboard
--- Purpose: PercyBrain startup screen with Blood Moon aesthetic
+-- Purpose: PercyBrain startup screen with Blood Moon aesthetic and quick-access menu
 -- Workflow: ui
--- Config: full
+-- Why: Provides immediate context and orientation on startup - critical for ADHD users who need
+--      clear entry points. ASCII logo establishes identity, menu offers predictable navigation
+--      to common workflows (new note, wiki, AI, terminal). Startup stats provide performance
+--      feedback without intrusion. Reduces decision paralysis by presenting curated options.
+-- Config: full - custom ASCII logo, themed buttons, startup metrics
+--
+-- Usage:
+--   Opens automatically on nvim startup (VimEnter event)
+--   Single-key shortcuts: z/w/d/m/t/a/n/D/b/l/g/q
+--   Displays plugin load count and startup time in footer
+--
+-- Dependencies: none (pure Neovim plugin)
+--
+-- Configuration Notes:
+--   - Custom PercyBrain ASCII logo with tagline
+--   - Blood Moon theme integration (AlphaHeader, AlphaButtons, AlphaShortcut, AlphaFooter highlight groups)
+--   - 12 curated menu options covering all major workflows
+--   - Auto-closes Lazy.nvim when dashboard ready (clean startup experience)
+--   - Performance stats calculated from lazy.nvim plugin loader
 
 return {
   "goolord/alpha-nvim",
@@ -32,6 +50,7 @@ return {
 
     -- Custom menu buttons with exact user requirements
     -- stylua: ignore
+    -- luacheck: push ignore 631
     dashboard.section.buttons.val = {
       dashboard.button("z", "📝 " .. " New zettelkasten note",    "<cmd> lua require('config.zettelkasten').new_note() <cr>"),
       dashboard.button("w", "📚 " .. " Wiki explorer",            "<cmd> NvimTreeOpen <cr>"),
@@ -46,6 +65,7 @@ return {
       dashboard.button("g", "🕸️ " .. " Network graph of notes",   "<cmd> lua require('percybrain.network-graph').show_borg() <cr>"),
       dashboard.button("q", "🚪 " .. " Quit",                     "<cmd> qa <cr>"),
     }
+    -- luacheck: pop
 
     -- Apply Blood Moon styling
     for _, button in ipairs(dashboard.section.buttons.val) do

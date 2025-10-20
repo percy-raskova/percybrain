@@ -1,3 +1,25 @@
+-- Plugin: Telescope
+-- Purpose: Fuzzy finder for navigating notes, searching content, and exploring the Zettelkasten
+-- Workflow: zettelkasten
+-- Why: ADHD optimization - fast, predictable visual search reduces cognitive load when exploring
+--      interconnected notes. Dropdown theme provides consistent, focused UI without distraction.
+--      Essential for discovering connections across the knowledge base.
+-- Config: minimal - themed for consistency
+--
+-- Usage:
+--   <leader>ff - Find files (notes)
+--   <leader>fg - Live grep (search content across all notes)
+--   <leader>fb - Switch between open buffers
+--   <leader>fk - Browse keymaps
+--   <leader>fh - Search help tags
+--
+-- Dependencies: none (pure Neovim plugin)
+--
+-- Configuration Notes:
+--   - dropdown theme: Centered, focused UI without distraction
+--   - hidden = true: Shows hidden files for complete note discovery
+--   - C-j/C-k navigation: Consistent with vim motion muscle memory
+
 local mapkey = require("utils.keymapper").mapkey
 
 local config = function()

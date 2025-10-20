@@ -6,11 +6,15 @@ return {
   "rmagatti/auto-session",
   lazy = false, -- Load immediately for session restoration
   config = function()
+    -- Only auto-restore if files were passed as arguments
+    -- This lets alpha dashboard show when opening nvim without args
+    local should_restore = #vim.fn.argv() > 0
+
     require("auto-session").setup({
       -- Session management
       auto_session_enabled = true,
       auto_save_enabled = true,
-      auto_restore_enabled = true,
+      auto_restore_enabled = should_restore,
 
       -- Where to save sessions
       auto_session_root_dir = vim.fn.stdpath("data") .. "/sessions/",
@@ -89,6 +93,10 @@ return {
     })
 
     -- Initial notification
-    vim.notify("📂 Auto-session enabled! State persists across restarts.", vim.log.levels.INFO)
+    if should_restore then
+      vim.notify("📂 Auto-session: Restoring previous session", vim.log.levels.INFO)
+    else
+      vim.notify("📂 Auto-session: Save enabled, auto-restore disabled (no args)", vim.log.levels.INFO)
+    end
   end,
 }

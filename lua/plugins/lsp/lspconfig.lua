@@ -1,3 +1,39 @@
+-- Plugin: nvim-lspconfig
+-- Purpose: Language Server Protocol configuration for intelligent code features across languages
+-- Workflow: lsp
+-- Why: Provides IDE-like features (go-to-definition, hover docs, diagnostics, code actions) that
+--      reduce cognitive load when writing. Consistent interface across all languages (Lua, Python,
+--      JavaScript, Markdown via IWE LSP, LaTeX via ltex-ls). Real-time error detection catches
+--      issues early. Autocomplete integration improves writing flow. Critical foundation for
+--      PercyBrain's intelligent editing experience.
+-- Config: full - comprehensive keybindings and LSP server setup
+--
+-- Usage:
+--   gd - Go to definition
+--   gD - Go to declaration
+--   gR - Show references (Telescope)
+--   gi - Show implementations
+--   gt - Show type definitions
+--   K - Hover documentation
+--   <leader>ca - Code actions
+--   <leader>rn - Smart rename
+--   <leader>D - Buffer diagnostics
+--   <leader>d - Line diagnostics
+--   [d / ]d - Navigate diagnostics
+--   <leader>rs - Restart LSP
+--
+-- Dependencies:
+--   External: Various LSP servers installed via Mason (html, typescript, css, tailwind, etc.)
+--   Internal: nvim-cmp for autocompletion integration
+--
+-- Configuration Notes:
+--   - on_attach: Sets up keybindings for every LSP server
+--   - capabilities: Enables nvim-cmp integration for autocompletion
+--   - Custom diagnostic signs in gutter (errors, warnings, hints, info)
+--   - Configures multiple language servers (HTML, TypeScript, CSS, Tailwind, Lua, etc.)
+--   - IWE LSP for markdown is configured separately in zettelkasten/iwe-lsp.lua
+--   - ltex-ls for grammar/spelling is configured via Mason
+
 return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
