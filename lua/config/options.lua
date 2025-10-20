@@ -53,7 +53,7 @@ opt.undodir = { vim.fn.stdpath("state") .. "/undo" }
 opt.updatetime = 250 -- Faster completion (default 4000ms)
 opt.timeoutlen = 300 -- Faster key sequence completion
 opt.ttimeoutlen = 10 -- Faster key code sequences
-opt.lazyredraw = true -- Don't redraw during macros
+opt.lazyredraw = false -- Don't redraw during macros
 
 -- Completion
 opt.completeopt = "menuone,noselect"
