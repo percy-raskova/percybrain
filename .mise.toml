@@ -50,16 +50,43 @@ idiomatic_version_file_enable_tools = ["node", "python"]
 # ============================================================================
 
 # ----------------------------------------------------------------------------
+# TEST RUNNER HELPER (Internal - Do Not Call Directly)
+# ----------------------------------------------------------------------------
+[tasks."test:_run_plenary_dir"]
+description = "Internal: Run plenary tests for a directory"
+run = """
+#!/bin/bash
+TEST_DIR="$1"
+if [ -z "$TEST_DIR" ]; then
+  echo "Error: TEST_DIR required"
+  exit 1
+fi
+nvim --headless -u tests/minimal_init.lua \
+  -c "PlenaryBustedDirectory tests/$TEST_DIR/ {minimal_init = 'tests/minimal_init.lua'}" \
+  -c "qa!"
+"""
+
+[tasks."test:_run_plenary_file"]
+description = "Internal: Run plenary tests for a single file"
+run = """
+#!/bin/bash
+TEST_FILE="$1"
+if [ -z "$TEST_FILE" ]; then
+  echo "Error: TEST_FILE required"
+  exit 1
+fi
+nvim --headless -u tests/minimal_init.lua \
+  -c "PlenaryBustedFile $TEST_FILE" \
+  -c "qa!"
+"""
+
+# ----------------------------------------------------------------------------
 # CONTRACT TESTS - Tests against specifications
 # ----------------------------------------------------------------------------
 [tasks."test:contract"]
 description = "🔏 Contract Tests - Verify PercyBrain adheres to specifications"
 alias = "tc"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/contract/ {minimal_init = 'tests/minimal_init.lua'}" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_dir contract"
 sources = ["tests/contract/**/*.lua", "specs/percybrain_contract.lua"]
 outputs = [".cache/test/contract-results.json"]
 
@@ -71,38 +98,22 @@ mise run test:_watch test:contract "tests/contract/**/*.lua" "specs/percybrain_c
 
 [tasks."test:contract:zettelkasten"]
 description = "🔏 Test Zettelkasten contract specifications"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedFile tests/contract/zettelkasten_templates_spec.lua" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_file tests/contract/zettelkasten_templates_spec.lua"
 sources = ["tests/contract/zettelkasten_templates_spec.lua", "lua/config/zettelkasten.lua"]
 
 [tasks."test:contract:hugo"]
 description = "🔏 Test Hugo frontmatter contract specifications"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedFile tests/contract/hugo_frontmatter_spec.lua" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_file tests/contract/hugo_frontmatter_spec.lua"
 sources = ["tests/contract/hugo_frontmatter_spec.lua", "lua/percybrain/hugo-menu.lua"]
 
 [tasks."test:contract:ai"]
 description = "🔏 Test AI model selection contract specifications"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedFile tests/contract/ai_model_selection_spec.lua" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_file tests/contract/ai_model_selection_spec.lua"
 sources = ["tests/contract/ai_model_selection_spec.lua", "lua/percybrain/ai-model-selector.lua"]
 
 [tasks."test:contract:write-quit"]
 description = "🔏 Test Write-Quit AI Pipeline contract specifications"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedFile tests/contract/write_quit_pipeline_spec.lua" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_file tests/contract/write_quit_pipeline_spec.lua"
 sources = ["tests/contract/write_quit_pipeline_spec.lua", "lua/percybrain/write-quit-pipeline.lua"]
 
 # ----------------------------------------------------------------------------
@@ -111,48 +122,28 @@ sources = ["tests/contract/write_quit_pipeline_spec.lua", "lua/percybrain/write-
 [tasks."test:capability"]
 description = "🎯 Capability Tests - Verify features work as expected"
 alias = "tcap"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/capability/ {minimal_init = 'tests/minimal_init.lua'}" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_dir capability"
 sources = ["tests/capability/**/*.lua", "lua/**/*.lua"]
 outputs = [".cache/test/capability-results.json"]
 
 [tasks."test:capability:zettelkasten"]
 description = "🎯 Test Zettelkasten capabilities"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/capability/zettelkasten/ {minimal_init = 'tests/minimal_init.lua'}" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_dir capability/zettelkasten"
 sources = ["tests/capability/zettelkasten/**/*.lua", "lua/config/zettelkasten.lua", "lua/plugins/zettelkasten/**/*.lua"]
 
 [tasks."test:capability:ai"]
 description = "🎯 Test AI/Ollama capabilities"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/capability/ai/ {minimal_init = 'tests/minimal_init.lua'}" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_dir capability/ai"
 sources = ["tests/capability/ai/**/*.lua", "lua/plugins/ai-sembr/**/*.lua", "lua/percybrain/ai-model-selector.lua"]
 
 [tasks."test:capability:write-quit"]
 description = "🎯 Test Write-Quit AI Pipeline capabilities"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/capability/write-quit/ {minimal_init = 'tests/minimal_init.lua'}" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_dir capability/write-quit"
 sources = ["tests/capability/write-quit/**/*.lua", "lua/percybrain/write-quit-pipeline.lua"]
 
 [tasks."test:capability:hugo"]
 description = "🎯 Test Hugo frontmatter and publishing capabilities"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/capability/hugo/ {minimal_init = 'tests/minimal_init.lua'}" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_dir capability/hugo"
 sources = ["tests/capability/hugo/**/*.lua", "lua/percybrain/hugo-menu.lua"]
 
 # ----------------------------------------------------------------------------
@@ -161,21 +152,13 @@ sources = ["tests/capability/hugo/**/*.lua", "lua/percybrain/hugo-menu.lua"]
 [tasks."test:regression"]
 description = "🛡️ Regression Tests - Ensure critical ADHD optimizations remain intact"
 alias = "tr"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/regression/ {minimal_init = 'tests/minimal_init.lua'}" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_dir regression"
 sources = ["tests/regression/**/*.lua", "lua/config/options.lua"]
 outputs = [".cache/test/regression-results.json"]
 
 [tasks."test:regression:adhd"]
 description = "🛡️ Test ADHD-specific optimizations are preserved"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedFile tests/regression/adhd_protections_spec.lua" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_file tests/regression/adhd_protections_spec.lua"
 sources = ["tests/regression/adhd_protections_spec.lua", "lua/config/options.lua"]
 
 # ----------------------------------------------------------------------------
@@ -184,11 +167,7 @@ sources = ["tests/regression/adhd_protections_spec.lua", "lua/config/options.lua
 [tasks."test:startup"]
 description = "🚀 Startup Smoke Tests - Verify clean startup without warnings"
 alias = "ts"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/performance/ {minimal_init = 'tests/minimal_init.lua'}" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_dir performance"
 sources = ["tests/performance/**/*.lua", "lua/plugins/**/*.lua"]
 outputs = [".cache/test/startup-results.json"]
 
@@ -198,11 +177,7 @@ outputs = [".cache/test/startup-results.json"]
 [tasks."test:integration"]
 description = "🔗 Integration Tests - Test component interactions"
 alias = "ti"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/integration/ {minimal_init = 'tests/minimal_init.lua'}" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_dir integration"
 sources = ["tests/integration/**/*.lua", "lua/**/*.lua"]
 outputs = [".cache/test/integration-results.json"]
 
@@ -212,11 +187,7 @@ outputs = [".cache/test/integration-results.json"]
 [tasks."test:unit"]
 description = "📦 Unit Tests - Individual component testing"
 alias = "tu"
-run = """
-nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/unit/ {minimal_init = 'tests/minimal_init.lua'}" \
-  -c "qa!"
-"""
+run = "mise run test:_run_plenary_dir unit"
 sources = ["tests/unit/**/*.lua", "lua/**/*.lua"]
 outputs = [".cache/test/unit-results.json"]
 
@@ -238,7 +209,6 @@ description = "🔬 Comprehensive test suite with coverage analysis"
 alias = "tcomp"
 run = """
 #!/bin/bash
-set -e
 
 echo "🧪 PercyBrain Comprehensive Test Suite"
 echo "======================================="
@@ -246,38 +216,45 @@ echo ""
 
 # Create results directory
 mkdir -p .cache/test
+> .cache/test/status.json  # Clear status file
+
+# Track failures
+FAILED_COUNT=0
+
+run_test() {
+  TEST_NAME=$1
+  TEST_COMMAND=$2
+
+  echo "$TEST_NAME..."
+  if time mise run "$TEST_COMMAND"; then
+    echo "{\"test\": \"$TEST_NAME\", \"status\": \"PASSED\"}" >> .cache/test/status.json
+  else
+    echo "{\"test\": \"$TEST_NAME\", \"status\": \"FAILED\"}" >> .cache/test/status.json
+    FAILED_COUNT=$((FAILED_COUNT + 1))
+  fi
+  echo ""
+}
 
 # Run each test type with timing
-echo "🚀 Startup Smoke Tests..."
-time mise run test:startup || echo "Startup: FAILED" > .cache/test/status
-
-echo ""
-echo "🔏 Contract Tests..."
-time mise run test:contract || echo "Contract: FAILED" >> .cache/test/status
-
-echo ""
-echo "🎯 Capability Tests..."
-time mise run test:capability || echo "Capability: FAILED" >> .cache/test/status
-
-echo ""
-echo "🛡️ Regression Tests..."
-time mise run test:regression || echo "Regression: FAILED" >> .cache/test/status
-
-echo ""
-echo "🔗 Integration Tests..."
-time mise run test:integration || echo "Integration: FAILED" >> .cache/test/status
+run_test "🚀 Startup Smoke Tests" "test:startup"
+run_test "🔏 Contract Tests" "test:contract"
+run_test "🎯 Capability Tests" "test:capability"
+run_test "🛡️ Regression Tests" "test:regression"
+run_test "🔗 Integration Tests" "test:integration"
 
 # Generate report
 mise run test:report
 
-# Check for failures
-if [ -f .cache/test/status ]; then
-  echo ""
-  echo "❌ Some tests failed. See report above."
-  exit 1
-else
-  echo ""
+# Summary
+echo ""
+echo "======================================="
+if [ $FAILED_COUNT -eq 0 ]; then
   echo "✅ All tests passed!"
+  exit 0
+else
+  echo "❌ $FAILED_COUNT test suite(s) failed"
+  echo "See status: cat .cache/test/status.json"
+  exit 1
 fi
 """
 
@@ -306,22 +283,29 @@ run = """
 #!/bin/bash
 echo "📊 Test Results Report"
 echo "====================="
+echo ""
 
-if [ -f .cache/test/contract-results.json ]; then
-  echo "Contract Tests: $(cat .cache/test/contract-results.json | grep -c PASS) passed"
-fi
+report_test_type() {
+  TYPE=$1
+  FILE=$2
 
-if [ -f .cache/test/capability-results.json ]; then
-  echo "Capability Tests: $(cat .cache/test/capability-results.json | grep -c PASS) passed"
-fi
+  if [ -f "$FILE" ]; then
+    PASSED=$(grep -c "PASS" "$FILE" 2>/dev/null || echo "0")
+    FAILED=$(grep -c "FAIL" "$FILE" 2>/dev/null || echo "0")
+    echo "$TYPE: $PASSED passed, $FAILED failed"
+  else
+    echo "$TYPE: No results cached (run 'mise test:${TYPE,,}')"
+  fi
+}
 
-if [ -f .cache/test/regression-results.json ]; then
-  echo "Regression Tests: $(cat .cache/test/regression-results.json | grep -c PASS) passed"
-fi
+report_test_type "Contract Tests   " ".cache/test/contract-results.json"
+report_test_type "Capability Tests " ".cache/test/capability-results.json"
+report_test_type "Regression Tests " ".cache/test/regression-results.json"
+report_test_type "Integration Tests" ".cache/test/integration-results.json"
+report_test_type "Startup Tests    " ".cache/test/startup-results.json"
 
-if [ -f .cache/test/integration-results.json ]; then
-  echo "Integration Tests: $(cat .cache/test/integration-results.json | grep -c PASS) passed"
-fi
+echo ""
+echo "Run 'mise test:clean' to clear cache"
 """
 
 [tasks."test:clean"]

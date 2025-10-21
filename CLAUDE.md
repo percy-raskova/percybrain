@@ -1,6 +1,6 @@
 # CLAUDE.md - PercyBrain AI Context Index
 
-**Project**: Neovim Zettelkasten + AI Writing Environment | **Testing**: 44/44 passing, 6/6 standards | **Arch**: 68 plugins/14 workflows
+**Project**: Neovim Zettelkasten + AI Writing Environment | **Testing**: 44/44 passing, 6/6 standards | **Arch**: 68 plugins/14 workflows (17 imports)
 
 ## Documentation Map
 
@@ -98,19 +98,70 @@ Without imports → blank screen (lazy.nvim stops auto-scan when table returned)
 **Dev Workflow**:
 
 ```bash
-nvim                              # Start
-:Lazy sync                        # Update plugins
-:checkhealth                      # Diagnose
-./tests/run-all-unit-tests.sh    # Test (44/44)
+nvim                    # Start
+:Lazy sync              # Update plugins
+:checkhealth            # Diagnose
+
+# Testing (Mise Framework - PRIMARY)
+mise test               # Full suite: startup → contract → capability → regression → integration
+mise test:quick         # Fast feedback: startup + contract + regression (~30s)
+mise tc                 # Contract tests only (specs compliance)
+mise tcap               # Capability tests only (features work)
+mise tr                 # Regression tests only (ADHD protections)
+mise ti                 # Integration tests only (component interactions)
+
+# Testing (Legacy Scripts - ALTERNATIVE)
+./tests/run-all-unit-tests.sh           # All unit tests
+./tests/run-health-tests.sh             # Health checks
+./tests/run-keymap-tests.sh             # Keymap validation
+./tests/run-integration-tests.sh        # Integration tests
+./tests/run-ollama-tests.sh             # AI/Ollama tests
+
+# Code Quality
+mise lint               # Luacheck static analysis
+mise format             # Auto-format with stylua
+mise check              # Full quality check: lint + format + test:quick + hooks
 ```
+
+**Test Architecture** (Kent Beck):
+
+Philosophy: "Test capabilities, not configuration"
+
+- **Contract** (`mise tc`): Verify specs adherence (Zettelkasten templates, Hugo frontmatter, AI models)
+- **Capability** (`mise tcap`): Features work as expected (Zettelkasten, AI, Write-Quit pipeline)
+- **Regression** (`mise tr`): ADHD optimizations preserved (critical protections)
+- **Integration** (`mise ti`): Component interactions validated
+- **Startup** (`mise ts`): Smoke tests for clean boot
 
 **Quality Gates** (pre-commit):
 
 - luacheck (0 warnings), stylua (auto-fix), test-standards (6/6), debug-detector
 
+**Setup** (first time):
+
+```bash
+# Install pre-commit hooks
+uvx --from pre-commit-uv pre-commit install
+
+# Initialize secrets baseline
+uvx --from detect-secrets detect-secrets scan > .secrets.baseline
+
+# Or use mise setup (handles all of above)
+mise setup
+```
+
 ## Critical Patterns
 
 **lazy.nvim Detection**: `nvim --headless -c "lua print(#require('lazy').plugins())" -c "qall"` → should show 80+, not 3
+
+**⚠️ Headless Nvim Warning**: Only call headless nvim with timeout/termination mechanism. Otherwise it hangs indefinitely.
+
+**Environment Variables** (.mise.toml):
+
+- `LUA_PATH`: Enables `require()` from lua/ and tests/ directories (critical for test execution)
+- `TEST_PARALLEL=false`: Neovim tests MUST run sequentially (shared state, cannot parallelize)
+- `NPM_CONFIG_AUDIT=false`: Suppress npm audit noise during CI/development
+- `NPM_CONFIG_FUND=false`: Suppress npm funding messages
 
 **Plugin Spec**:
 
@@ -136,15 +187,21 @@ return {
 
 **Required**: Neovim ≥0.8.0, Git ≥2.19.0, Nerd Font
 
+**Mise** (task runner + tool manager): `curl https://mise.jdx.dev/install.sh | sh`
+
+- Testing: `mise test`, `mise test:quick`, `mise tc/tcap/tr/ti`
+- Quality: `mise lint`, `mise format`, `mise check`
+- Setup: `mise setup` (first-time development environment)
+
 **PercyBrain**: IWE LSP (`cargo install iwe`) ✅, SemBr (`uv tool install sembr`) ✅, Ollama (`ollama pull llama3.2`) ✅, Hugo (optional)
 
-**Dev**: ripgrep, Node.js, Pandoc, LaTeX
+**Dev**: ripgrep, Node.js, Pandoc, LaTeX, pre-commit (`uvx --from pre-commit-uv`)
 
 ## Troubleshooting
 
-**Blank screen** → Check `lua/plugins/init.lua` explicit imports **IWE LSP** → `:LspInfo`, verify `cargo install iwe` **AI fail** → `ollama list`, check llama3.2 **Tests** → `./tests/run-all-unit-tests.sh`
+**Blank screen** → Check `lua/plugins/init.lua` explicit imports **IWE LSP** → `:LspInfo`, verify `cargo install iwe` **AI fail** → `ollama list`, check llama3.2 **Tests fail** → `mise test:quick` for fast feedback, `mise test:debug` for verbose output **Plugin detection** → `nvim --headless -c "lua print(#require('lazy').plugins())" -c "qall"` (should show 68+)
 
-**Reload**: `:source ~/.config/nvim/init.lua` | `:Lazy reload [plugin]` **Health**: `:checkhealth` | `:Lazy health` | `:Lazy restore`
+**Reload**: `:source ~/.config/nvim/init.lua` | `:Lazy reload [plugin]` **Health**: `:checkhealth` | `:Lazy health` | `:Lazy restore` **Quality**: `mise check` (lint + format + test:quick + hooks)
 
 ## Status
 

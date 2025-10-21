@@ -14,7 +14,8 @@
   "repository": {
     "tracked_files": 249,
     "total_plugins": 68,
-    "total_workflows": 18,
+    "total_workflows": 14,
+    "total_workflow_imports": 17,
     "total_config_files": 7,
     "total_test_lines": 5656,
     "total_documentation_files": 29
@@ -25,7 +26,7 @@
       "lua/config/init.lua",
       "lazy.nvim setup",
       "lua/plugins/init.lua",
-      "18 workflow imports"
+      "17 workflow imports (14 directories, 4 prose-writing subdirs)"
     ],
     "core_principles": [
       "Zettelkasten-first knowledge management",
@@ -515,14 +516,14 @@
   },
   "development": {
     "git": {
-      "current_branch": "kent-beck-testing-review",
+      "current_branch": "workflow/zettelkasten-wiki-ai-pipeline",
       "main_branch": "main",
       "recent_work": [
-        "Tutorial expansion (Zettelkasten + Academic Writing)",
-        "Phase 5 documentation consolidation (Important Tier)",
-        "Documentation map updates (README.md, CLAUDE.md)"
+        "feat(tests): automatic test discovery for all runners (d7ce0fd)",
+        "GTD Phase 3: AI-powered task decomposition complete (ef4b0f6)",
+        "Health check comprehensive issue fixes (ef4b0f6)"
       ],
-      "working_tree": "Clean (1 untracked Serena memory file)"
+      "working_tree": "Modified: 11 files (9 deleted assets, 1 modified keymap, 1 new IWE LSP)"
     },
     "workflow": {
       "startup": "nvim",
@@ -594,13 +595,14 @@
     }
   },
   "metadata": {
-    "generated": "2025-10-19",
-    "generator": "sc:index --type structure --format json",
-    "version": "1.0.0",
-    "branch": "kent-beck-testing-review",
+    "generated": "2025-10-21",
+    "generator": "sc:index --update (Claude Code)",
+    "version": "1.1.0",
+    "branch": "workflow/zettelkasten-wiki-ai-pipeline",
     "total_tracked_files": 249,
     "total_plugins": 68,
-    "total_workflows": 18,
+    "total_workflows": 14,
+    "total_workflow_imports": 17,
     "test_status": "44/44 passing"
   }
 }
