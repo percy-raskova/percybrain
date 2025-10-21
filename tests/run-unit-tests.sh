@@ -15,18 +15,15 @@ echo -e "${BLUE}═════════════════════�
 echo -e "${BLUE}     PercyBrain Unit Test Suite${NC}"
 echo -e "${BLUE}═══════════════════════════════════════════════${NC}"
 
-# Test categories
-UNIT_TESTS=(
-    "tests/unit/config_spec.lua"
-    "tests/unit/options_spec.lua"
-    "tests/unit/keymaps_spec.lua"
-    "tests/unit/globals_spec.lua"
-    "tests/unit/window_manager_spec.lua"
-)
+# Test categories - Auto-discovery enabled
+# All *_spec.lua files are automatically discovered and run
+# New test files are included without manual updates
 
-PERFORMANCE_TESTS=(
-    "tests/performance/startup_spec.lua"
-)
+# Auto-discover unit tests (top-level only, alphabetically sorted)
+UNIT_TESTS=$(find tests/unit -maxdepth 1 -name "*_spec.lua" -type f | sort)
+
+# Auto-discover performance tests (alphabetically sorted)
+PERFORMANCE_TESTS=$(find tests/performance -name "*_spec.lua" -type f | sort)
 
 # Function to run a test file
 run_test() {
@@ -52,7 +49,8 @@ echo "════════════════════════�
 total_tests=0
 passed_tests=0
 
-for test in "${UNIT_TESTS[@]}"; do
+# Iterate over auto-discovered unit tests
+for test in $UNIT_TESTS; do
     ((total_tests++))
     if run_test "$test"; then
         ((passed_tests++))
@@ -63,7 +61,8 @@ done
 echo -e "\n${BLUE}Running Performance Benchmarks...${NC}"
 echo "═══════════════════════════════════════"
 
-for test in "${PERFORMANCE_TESTS[@]}"; do
+# Iterate over auto-discovered performance tests
+for test in $PERFORMANCE_TESTS; do
     ((total_tests++))
     if run_test "$test"; then
         ((passed_tests++))

@@ -12,21 +12,22 @@ NC='\033[0m' # No Color
 echo "Running Keymap Centralization Test Suite..."
 echo "==========================================="
 
-# Array of test files
-test_files=(
-  "cleanup_spec.lua"
-  "loading_spec.lua"
-  "registry_spec.lua"
-  "syntax_spec.lua"
-  "namespace_spec.lua"
-)
+# Auto-discover all keymap tests (alphabetically sorted)
+# New test files are automatically included without manual updates
+keymap_test_paths=$(find tests/unit/keymap -name "*_spec.lua" -type f | sort)
 
-total_tests=${#test_files[@]}
+total_tests=0
 passed=0
 failed=0
 
+# Count total tests
+for path in $keymap_test_paths; do
+  ((total_tests++))
+done
+
 # Run each test file
-for test_file in "${test_files[@]}"; do
+for test_path in $keymap_test_paths; do
+  test_file=$(basename "$test_path")
   echo ""
   echo "Running: $test_file"
 

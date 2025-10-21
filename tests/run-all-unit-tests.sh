@@ -65,18 +65,16 @@ run_test() {
     echo "$output" | grep -E "Success:|Failed :|Errors :" || true
 }
 
-# Test categories
+# Test categories - Auto-discovery enabled
+# All *_spec.lua files are automatically discovered and run by category
+# New test files are included without manual updates
+
 echo -e "\n${BLUE}══════════ Core Configuration Tests ══════════${NC}"
 
-# Core tests
-CORE_TESTS=(
-    "tests/unit/config_spec.lua"
-    "tests/unit/options_spec.lua"
-    "tests/unit/keymaps_spec.lua"
-    "tests/unit/globals_spec.lua"
-)
+# Auto-discover core unit tests (top-level only, alphabetically sorted)
+CORE_TESTS=$(find tests/unit -maxdepth 1 -name "*_spec.lua" -type f | sort)
 
-for test in "${CORE_TESTS[@]}"; do
+for test in $CORE_TESTS; do
     if [ -f "$test" ]; then
         run_test "$test"
     fi
@@ -84,15 +82,23 @@ done
 
 echo -e "\n${BLUE}══════════ Plugin Unit Tests ══════════${NC}"
 
-# Plugin tests
-PLUGIN_TESTS=(
-    "tests/unit/window_manager_spec.lua"
-    "tests/unit/ai/ollama_spec.lua"
-    "tests/unit/sembr/formatter_spec.lua"
-    "tests/unit/sembr/integration_spec.lua"
-)
+# Auto-discover AI tests
+AI_TESTS=$(find tests/unit/ai -name "*_spec.lua" -type f 2>/dev/null | sort || true)
 
-for test in "${PLUGIN_TESTS[@]}"; do
+# Auto-discover SemBr tests
+SEMBR_TESTS=$(find tests/unit/sembr -name "*_spec.lua" -type f 2>/dev/null | sort || true)
+
+# Auto-discover GTD tests
+GTD_TESTS=$(find tests/unit/gtd -name "*_spec.lua" -type f 2>/dev/null | sort || true)
+
+# Auto-discover Keymap tests
+KEYMAP_TESTS=$(find tests/unit/keymap -name "*_spec.lua" -type f 2>/dev/null | sort || true)
+
+# Auto-discover Zettelkasten tests
+ZK_TESTS=$(find tests/unit/zettelkasten -name "*_spec.lua" -type f 2>/dev/null | sort || true)
+
+# Run all plugin tests
+for test in $AI_TESTS $SEMBR_TESTS $GTD_TESTS $KEYMAP_TESTS $ZK_TESTS; do
     if [ -f "$test" ]; then
         run_test "$test"
     fi
@@ -100,13 +106,10 @@ done
 
 echo -e "\n${BLUE}══════════ Workflow Tests ══════════${NC}"
 
-# Workflow tests
-WORKFLOW_TESTS=(
-    "tests/integration/zettelkasten_workflow_spec.lua"
-    "tests/unit/core_spec.lua"
-)
+# Auto-discover integration workflow tests
+WORKFLOW_TESTS=$(find tests/integration -name "*_spec.lua" -type f 2>/dev/null | sort || true)
 
-for test in "${WORKFLOW_TESTS[@]}"; do
+for test in $WORKFLOW_TESTS; do
     if [ -f "$test" ]; then
         run_test "$test"
     fi
@@ -114,12 +117,10 @@ done
 
 echo -e "\n${BLUE}══════════ Performance Tests ══════════${NC}"
 
-# Performance tests
-PERF_TESTS=(
-    "tests/performance/startup_spec.lua"
-)
+# Auto-discover performance tests
+PERF_TESTS=$(find tests/performance -name "*_spec.lua" -type f 2>/dev/null | sort || true)
 
-for test in "${PERF_TESTS[@]}"; do
+for test in $PERF_TESTS; do
     if [ -f "$test" ]; then
         run_test "$test"
     fi
