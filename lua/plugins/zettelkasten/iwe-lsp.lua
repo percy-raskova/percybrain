@@ -22,14 +22,8 @@
 --   - Requires 'iwe' binary in PATH for functionality
 --   - Works seamlessly with Telekasten's link notation
 
-return {
-  "Feel-ix-343/markdown-oxide",
-  ft = "markdown",
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-  },
-  config = function()
-    -- IWE LSP is configured via lua/plugins/lsp/lspconfig.lua
-    -- This file just ensures the plugin is loaded
-  end,
-}
+-- IWE LSP is configured directly in lua/plugins/lsp/lspconfig.lua
+-- No separate plugin needed - IWE is a standalone LSP server binary installed via cargo
+-- This file is kept for documentation purposes but has no active configuration
+
+return {}

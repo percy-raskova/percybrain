@@ -135,7 +135,7 @@ test_keybinding_integrity() {
     trap "rm -f $temp_output" RETURN
 
     # Test critical leader mappings
-    nvim --headless -c "lua vim.cmd('verbose map <leader>z'); vim.cmd('qall!')" > "$temp_output" 2>&1
+    nvim --headless -c 'verbose map <leader>z' -c 'qall' > "$temp_output" 2>&1
 
     if grep -q "<leader>zn" "$temp_output"; then
         echo -e "  ${GREEN}✓${NC} Telekasten keybindings registered"
@@ -145,9 +145,9 @@ test_keybinding_integrity() {
         WARNINGS=$((WARNINGS + 1))
     fi
 
-    nvim --headless -c "lua vim.cmd('verbose map <leader>w'); vim.cmd('qall!')" > "$temp_output" 2>&1
+    nvim --headless -c 'verbose map <leader>wh' -c 'qall' > "$temp_output" 2>&1
 
-    if grep -q "<leader>wh" "$temp_output"; then
+    if grep -q "<leader>wh" "$temp_output" || grep -q "<Space>wh" "$temp_output"; then
         echo -e "  ${GREEN}✓${NC} Window manager keybindings active"
         TESTS_PASSED=$((TESTS_PASSED + 1))
     else
@@ -155,7 +155,7 @@ test_keybinding_integrity() {
         TESTS_FAILED=$((TESTS_FAILED + 1))
     fi
 
-    nvim --headless -c "lua vim.cmd('verbose map <leader>x'); vim.cmd('qall!')" > "$temp_output" 2>&1
+    nvim --headless -c 'verbose map <leader>x' -c 'qall' > "$temp_output" 2>&1
 
     if grep -q "<leader>xx" "$temp_output"; then
         echo -e "  ${GREEN}✓${NC} Trouble keybindings configured"
@@ -239,14 +239,14 @@ test_plugin_ecosystem() {
 
     local plugin_count=$(grep "Plugins:" "$temp_output" | cut -d: -f2)
 
-    if [ "$plugin_count" -eq 81 ]; then
-        echo -e "  ${GREEN}✓${NC} Exact plugin count: 81 (optimized)"
+    if [ "$plugin_count" -eq 83 ]; then
+        echo -e "  ${GREEN}✓${NC} Exact plugin count: 83 (optimized)"
         TESTS_PASSED=$((TESTS_PASSED + 1))
     elif [ "$plugin_count" -ge 80 ]; then
         echo -e "  ${GREEN}✓${NC} Plugin count healthy: $plugin_count"
         TESTS_PASSED=$((TESTS_PASSED + 1))
     else
-        echo -e "  ${RED}✗${NC} Low plugin count: $plugin_count (expected 81)"
+        echo -e "  ${RED}✗${NC} Low plugin count: $plugin_count (expected 83)"
         TESTS_FAILED=$((TESTS_FAILED + 1))
     fi
 

@@ -52,7 +52,7 @@ echo "────────────────────────�
 
 # Execute tests with verbose output for coverage analysis
 TEST_OUTPUT=$(nvim --headless -u /tmp/test_init.lua \
-    -c "lua require('plenary.busted').run('tests/plenary/unit/ai-sembr/ollama_spec.lua')" \
+    -c "lua require('plenary.busted').run('tests/unit/ai/ollama_spec.lua')" \
     -c "qall!" 2>&1 || true)
 
 echo "$TEST_OUTPUT"
@@ -73,14 +73,14 @@ echo -e "\n${YELLOW}Test Coverage Breakdown:${NC}"
 echo "────────────────────────────────────────────────"
 
 # Count test categories from the spec file
-SERVICE_TESTS=$(grep -c '"Service Management"' tests/plenary/unit/ai-sembr/ollama_spec.lua || echo "0")
-API_TESTS=$(grep -c '"API Communication"' tests/plenary/unit/ai-sembr/ollama_spec.lua || echo "0")
-CONTEXT_TESTS=$(grep -c '"Context Extraction"' tests/plenary/unit/ai-sembr/ollama_spec.lua || echo "0")
-AI_CMD_TESTS=$(grep -c '"AI Commands"' tests/plenary/unit/ai-sembr/ollama_spec.lua || echo "0")
-UI_TESTS=$(grep -c '"Result Display"' tests/plenary/unit/ai-sembr/ollama_spec.lua || echo "0")
-TELESCOPE_TESTS=$(grep -c '"Telescope Integration"' tests/plenary/unit/ai-sembr/ollama_spec.lua || echo "0")
-USER_CMD_TESTS=$(grep -c '"User Command Registration"' tests/plenary/unit/ai-sembr/ollama_spec.lua || echo "0")
-ERROR_TESTS=$(grep -c '"Error Edge Cases"' tests/plenary/unit/ai-sembr/ollama_spec.lua || echo "0")
+SERVICE_TESTS=$(grep -c '"Service Management"' tests/unit/ai/ollama_spec.lua || echo "0")
+API_TESTS=$(grep -c '"API Communication"' tests/unit/ai/ollama_spec.lua || echo "0")
+CONTEXT_TESTS=$(grep -c '"Context Extraction"' tests/unit/ai/ollama_spec.lua || echo "0")
+AI_CMD_TESTS=$(grep -c '"AI Commands"' tests/unit/ai/ollama_spec.lua || echo "0")
+UI_TESTS=$(grep -c '"Result Display"' tests/unit/ai/ollama_spec.lua || echo "0")
+TELESCOPE_TESTS=$(grep -c '"Telescope Integration"' tests/unit/ai/ollama_spec.lua || echo "0")
+USER_CMD_TESTS=$(grep -c '"User Command Registration"' tests/unit/ai/ollama_spec.lua || echo "0")
+ERROR_TESTS=$(grep -c '"Error Edge Cases"' tests/unit/ai/ollama_spec.lua || echo "0")
 
 # Display coverage by component
 echo -e "✅ Service Management:        ${GREEN}100%${NC} (3 tests)"

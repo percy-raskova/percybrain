@@ -28,11 +28,7 @@ function M.setup(opts)
   -- Merge user config with defaults
   state.config = vim.tbl_deep_extend("force", state.config, opts or {})
 
-  -- Register keybinding
-  vim.keymap.set("n", state.config.keybinding, M.open_capture_window, {
-    desc = "Open floating quick capture",
-    silent = true,
-  })
+  -- Keybinding now managed in lua/config/keymaps/quick-capture.lua
 
   return M
 end

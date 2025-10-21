@@ -17,15 +17,15 @@ echo -e "${BLUE}═════════════════════�
 
 # Test categories
 UNIT_TESTS=(
-    "tests/plenary/unit/config_spec.lua"
-    "tests/plenary/unit/options_spec.lua"
-    "tests/plenary/unit/keymaps_spec.lua"
-    "tests/plenary/unit/globals_spec.lua"
-    "tests/plenary/unit/window-manager_spec.lua"
+    "tests/unit/config_spec.lua"
+    "tests/unit/options_spec.lua"
+    "tests/unit/keymaps_spec.lua"
+    "tests/unit/globals_spec.lua"
+    "tests/unit/window_manager_spec.lua"
 )
 
 PERFORMANCE_TESTS=(
-    "tests/plenary/performance/startup_spec.lua"
+    "tests/performance/startup_spec.lua"
 )
 
 # Function to run a test file

@@ -30,9 +30,6 @@ function M.setup()
     end
   end
 
-  -- Set up keymaps
-  M.setup_keymaps()
-
   -- Set up commands
   M.setup_commands()
 end
@@ -100,26 +97,8 @@ function M.apply_template(template_content, title)
   return content
 end
 
--- Keymaps for Zettelkasten workflow
-function M.setup_keymaps()
-  local opts = { noremap = true, silent = true }
-
-  -- Quick capture (z = Zettelkasten)
-  vim.keymap.set("n", "<leader>zn", M.new_note, opts)
-  vim.keymap.set("n", "<leader>zd", M.daily_note, opts)
-  vim.keymap.set("n", "<leader>zi", M.inbox_note, opts)
-
-  -- Search & navigation
-  vim.keymap.set("n", "<leader>zf", M.find_notes, opts)
-  vim.keymap.set("n", "<leader>zg", M.search_notes, opts)
-  vim.keymap.set("n", "<leader>zb", M.backlinks, opts)
-
-  -- Publishing
-  vim.keymap.set("n", "<leader>zp", M.publish, opts)
-
-  -- Focus modes (f = focus)
-  vim.keymap.set("n", "<leader>fz", "<cmd>ZenMode<cr>", opts)
-end
+-- Keymaps now managed in lua/config/keymaps/zettelkasten.lua
+-- Business logic only below
 
 -- Create new note with template
 function M.new_note()
@@ -432,6 +411,13 @@ function M.find_hubs()
     :find()
 end
 
+-- Open wiki browser (file tree) in Zettelkasten directory
+function M.wiki_browser()
+  -- Change to Zettelkasten directory and open NvimTree
+  vim.cmd("cd " .. M.config.home)
+  vim.cmd("NvimTreeOpen")
+end
+
 -- Set up user commands
 function M.setup_commands()
   vim.api.nvim_create_user_command("PercyNew", M.new_note, {})
@@ -445,6 +431,7 @@ function M.setup_commands()
   end, {})
   vim.api.nvim_create_user_command("PercyOrphans", M.find_orphans, { desc = "Find orphan notes (no links)" })
   vim.api.nvim_create_user_command("PercyHubs", M.find_hubs, { desc = "Find hub notes (most connected)" })
+  vim.api.nvim_create_user_command("PercyWiki", M.wiki_browser, { desc = "Open wiki browser in Zettelkasten" })
 end
 
 return M

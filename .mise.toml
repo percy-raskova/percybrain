@@ -186,10 +186,10 @@ description = "🚀 Startup Smoke Tests - Verify clean startup without warnings"
 alias = "ts"
 run = """
 nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/startup/ {minimal_init = 'tests/minimal_init.lua'}" \
+  -c "PlenaryBustedDirectory tests/performance/ {minimal_init = 'tests/minimal_init.lua'}" \
   -c "qa!"
 """
-sources = ["tests/startup/**/*.lua", "lua/plugins/**/*.lua"]
+sources = ["tests/performance/**/*.lua", "lua/plugins/**/*.lua"]
 outputs = [".cache/test/startup-results.json"]
 
 # ----------------------------------------------------------------------------
@@ -207,17 +207,17 @@ sources = ["tests/integration/**/*.lua", "lua/**/*.lua"]
 outputs = [".cache/test/integration-results.json"]
 
 # ----------------------------------------------------------------------------
-# UNIT TESTS - Legacy compatibility wrapper
+# UNIT TESTS - Individual component testing
 # ----------------------------------------------------------------------------
 [tasks."test:unit"]
-description = "📦 Unit Tests - Individual component testing (legacy)"
+description = "📦 Unit Tests - Individual component testing"
 alias = "tu"
 run = """
 nvim --headless -u tests/minimal_init.lua \
-  -c "PlenaryBustedDirectory tests/plenary/unit/ {minimal_init = 'tests/minimal_init.lua'}" \
+  -c "PlenaryBustedDirectory tests/unit/ {minimal_init = 'tests/minimal_init.lua'}" \
   -c "qa!"
 """
-sources = ["tests/plenary/unit/**/*.lua", "lua/**/*.lua"]
+sources = ["tests/unit/**/*.lua", "lua/**/*.lua"]
 outputs = [".cache/test/unit-results.json"]
 
 # ----------------------------------------------------------------------------

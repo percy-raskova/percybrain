@@ -63,7 +63,7 @@ EOF
 run_test() {
     local test_file=$1
     local test_name=$(basename "$test_file" _spec.lua)
-    local test_category=$(dirname "$test_file" | sed 's|tests/plenary/||')
+    local test_category=$(dirname "$test_file" | sed 's|tests/||')
 
     echo -e "\n${YELLOW}Testing:${NC} $test_category/$test_name"
     echo "────────────────────────────────────────────────"
@@ -104,10 +104,10 @@ echo -e "\n${BLUE}══════════ Core Configuration Tests ══
 
 # Core tests
 CORE_TESTS=(
-    "tests/plenary/unit/config_spec.lua"
-    "tests/plenary/unit/options_spec.lua"
-    "tests/plenary/unit/keymaps_spec.lua"
-    "tests/plenary/unit/globals_spec.lua"
+    "tests/unit/config_spec.lua"
+    "tests/unit/options_spec.lua"
+    "tests/unit/keymaps_spec.lua"
+    "tests/unit/globals_spec.lua"
 )
 
 for test in "${CORE_TESTS[@]}"; do
@@ -120,10 +120,10 @@ echo -e "\n${BLUE}══════════ Plugin Unit Tests ════�
 
 # Plugin tests
 PLUGIN_TESTS=(
-    "tests/plenary/unit/window-manager_spec.lua"
-    "tests/plenary/unit/ai-sembr/ollama_spec.lua"
-    "tests/plenary/unit/sembr/formatter_spec.lua"
-    "tests/plenary/unit/sembr/integration_spec.lua"
+    "tests/unit/window_manager_spec.lua"
+    "tests/unit/ai/ollama_spec.lua"
+    "tests/unit/sembr/formatter_spec.lua"
+    "tests/unit/sembr/integration_spec.lua"
 )
 
 for test in "${PLUGIN_TESTS[@]}"; do
@@ -136,8 +136,8 @@ echo -e "\n${BLUE}══════════ Workflow Tests ═════�
 
 # Workflow tests
 WORKFLOW_TESTS=(
-    "tests/plenary/workflows/zettelkasten_spec.lua"
-    "tests/plenary/core_spec.lua"
+    "tests/integration/zettelkasten_workflow_spec.lua"
+    "tests/unit/core_spec.lua"
 )
 
 for test in "${WORKFLOW_TESTS[@]}"; do
@@ -150,7 +150,7 @@ echo -e "\n${BLUE}══════════ Performance Tests ════�
 
 # Performance tests
 PERF_TESTS=(
-    "tests/plenary/performance/startup_spec.lua"
+    "tests/performance/startup_spec.lua"
 )
 
 for test in "${PERF_TESTS[@]}"; do

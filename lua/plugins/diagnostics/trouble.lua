@@ -3,37 +3,14 @@
 -- Repository: https://github.com/folke/trouble.nvim
 -- Version: v3.7.1 (API updated for Trouble v3)
 
+-- Import keymaps from central registry
+local keymaps = require("config.keymaps.tools.diagnostics")
+
 return {
   "folke/trouble.nvim",
   dependencies = { "nvim-tree/nvim-web-devicons" },
   cmd = "Trouble",
-  keys = {
-    -- Main trouble interface (x = diagnostics/errors)
-    -- V3 API: Use "Trouble diagnostics" instead of "TroubleToggle"
-    { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "🚨 Toggle diagnostics" },
-    { "<leader>xw", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "📄 Buffer diagnostics" },
-    { "<leader>xd", "<cmd>Trouble diagnostics toggle<cr>", desc = "📁 Workspace diagnostics" },
-    { "<leader>xq", "<cmd>Trouble quickfix toggle<cr>", desc = "⚡ Quickfix list" },
-    { "<leader>xl", "<cmd>Trouble loclist toggle<cr>", desc = "📍 Location list" },
-    { "<leader>xr", "<cmd>Trouble lsp toggle<cr>", desc = "🔍 LSP references" },
-    { "<leader>xs", "<cmd>Trouble symbols toggle<cr>", desc = "🔤 Document symbols" },
-
-    -- Navigation (consistent with vim motions)
-    {
-      "[t",
-      function()
-        require("trouble").prev({ skip_groups = true, jump = true })
-      end,
-      desc = "⬆️ Previous trouble",
-    },
-    {
-      "]t",
-      function()
-        require("trouble").next({ skip_groups = true, jump = true })
-      end,
-      desc = "⬇️ Next trouble",
-    },
-  },
+  keys = keymaps, -- All trouble keymaps managed in lua/config/keymaps/diagnostics.lua
 
   opts = {
     -- V3 API: Simplified configuration

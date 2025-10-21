@@ -243,7 +243,8 @@ return {
 
     -- configure IWE markdown server (PercyBrain Zettelkasten)
     -- IWE is installed via cargo: cargo install iwe
-    lspconfig["markdown_oxide"].setup({
+    -- IWE LSP for Zettelkasten markdown files
+    lspconfig["iwe"].setup({
       capabilities = capabilities,
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)

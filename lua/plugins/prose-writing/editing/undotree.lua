@@ -21,10 +21,11 @@
 --   timestamp, file state, and branch structure. All states persist until file
 --   rewritten, providing complete session history.
 
+-- Import keymaps from central registry
+local keymaps = require("config.keymaps.utilities")
+
 return {
   "mbbill/undotree",
   cmd = "UndotreeToggle",
-  keys = {
-    { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Undo Tree" },
-  },
+  keys = keymaps, -- All utility keymaps managed in lua/config/keymaps/utilities.lua
 }

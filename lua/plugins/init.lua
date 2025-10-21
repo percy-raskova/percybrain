@@ -15,7 +15,6 @@ return {
   { import = "plugins.prose-writing.grammar" },
   { import = "plugins.academic" },
   { import = "plugins.publishing" },
-  { import = "plugins.org-mode" },
   { import = "plugins.lsp" },
   { import = "plugins.completion" },
   { import = "plugins.ui" },

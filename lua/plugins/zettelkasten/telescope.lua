@@ -20,8 +20,6 @@
 --   - hidden = true: Shows hidden files for complete note discovery
 --   - C-j/C-k navigation: Consistent with vim motion muscle memory
 
-local mapkey = require("utils.keymapper").mapkey
-
 local config = function()
   local telescope = require("telescope")
   telescope.setup({
@@ -51,17 +49,14 @@ local config = function()
   })
 end
 
+-- Import keymaps from central registry
+local keymaps = require("config.keymaps.tools.telescope")
+
 return {
   "nvim-telescope/telescope.nvim",
   tag = "0.1.3",
   lazy = false,
   dependencies = { "nvim-lua/plenary.nvim" },
   config = config,
-  keys = {
-    mapkey("<leader>fk", "Telescope keymaps", "n"),
-    mapkey("<leader>fh", "Telescope help_tags", "n"),
-    mapkey("<leader>ff", "Telescope find_files", "n"),
-    mapkey("<leader>fg", "Telescope live_grep", "n"),
-    mapkey("<leader>fb", "Telescope buffers", "n"),
-  },
+  keys = keymaps, -- All telescope keymaps managed in lua/config/keymaps/telescope.lua
 }

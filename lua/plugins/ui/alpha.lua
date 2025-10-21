@@ -53,7 +53,7 @@ return {
     -- luacheck: push ignore 631
     dashboard.section.buttons.val = {
       dashboard.button("z", "📝 " .. " New zettelkasten note",    "<cmd> lua require('config.zettelkasten').new_note() <cr>"),
-      dashboard.button("w", "📚 " .. " Wiki explorer",            "<cmd> NvimTreeOpen <cr>"),
+      dashboard.button("w", "📚 " .. " Wiki explorer",            "<cmd> lua require('config.zettelkasten').wiki_browser() <cr>"),
       dashboard.button("d", "📊 " .. " Dashboards",               "<cmd> lua require('percybrain.dashboard').toggle() <cr>"),
       dashboard.button("m", "🛍️ " .. " MCP Hub",                  "<cmd> MCPHub <cr>"),
       dashboard.button("t", "💻 " .. " Terminal",                 "<cmd> ToggleTerm <cr>"),
