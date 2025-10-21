@@ -36,6 +36,21 @@ files["tests/capability/write-quit/pipeline_workflow_spec.lua"] = {
   max_line_length = false, -- Disable line length check for this file
 }
 
+files["tests/health/health-validation.test.lua"] = {
+  -- Plenary BDD-style test framework globals (describe, it, before_each, etc.)
+  globals = { "describe", "it", "before_each", "after_each", "pending", "assert" },
+}
+
+files["tests/unit/treesitter_python_parser_spec.lua"] = {
+  -- Unused variable in legacy test (tree is for future debugging)
+  ignore = { "211/tree" },
+}
+
+files["tests/capability/ai/model_selection_workflow_spec.lua"] = {
+  -- Unused variables reserved for future test expansion
+  ignore = { "211/original_model", "231/has_model_picker_key" },
+}
+
 -- Exclude directories
 exclude_files = {
   ".git",

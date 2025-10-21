@@ -12,14 +12,7 @@ PercyBrain's testing framework has been completely redesigned following Kent Bec
 
 ### From → To
 
-| Aspect           | Old Approach                    | New Approach                                  |
-| ---------------- | ------------------------------- | --------------------------------------------- |
-| **Philosophy**   | Test configuration values       | Test user capabilities                        |
-| **Organization** | By file type (unit/integration) | By test type (contract/capability/regression) |
-| **Execution**    | Bash scripts                    | Mise tasks with caching                       |
-| **Speed**        | 10+ seconds every run           | \<1 second cached runs                        |
-| **Isolation**    | Minimal                         | Full StateManager system                      |
-| **Failures**     | "Test failed"                   | Actionable messages with fix instructions     |
+| Aspect | Old Approach | New Approach | | ---------------- | ------------------------------- | --------------------------------------------- | | **Philosophy** | Test configuration values | Test user capabilities | | **Organization** | By file type (unit/integration) | By test type (contract/capability/regression) | | **Execution** | Bash scripts | Mise tasks with caching | | **Speed** | 10+ seconds every run | \<1 second cached runs | | **Isolation** | Minimal | Full StateManager system | | **Failures** | "Test failed" | Actionable messages with fix instructions |
 
 ## New Test Architecture
 
@@ -235,13 +228,7 @@ mise test:watch
 
 ## Performance Improvements
 
-| Metric             | Old System | New System | Improvement |
-| ------------------ | ---------- | ---------- | ----------- |
-| **Full Suite**     | 15-20s     | 10s        | 40% faster  |
-| **Cached Run**     | 15-20s     | \<1s       | 95% faster  |
-| **Single Test**    | 2-3s       | 100ms      | 95% faster  |
-| **Watch Response** | N/A        | 200ms      | New feature |
-| **Feedback Loop**  | 20s+       | \<1s       | 20x faster  |
+| Metric | Old System | New System | Improvement | | ------------------ | ---------- | ---------- | ----------- | | **Full Suite** | 15-20s | 10s | 40% faster | | **Cached Run** | 15-20s | \<1s | 95% faster | | **Single Test** | 2-3s | 100ms | 95% faster | | **Watch Response** | N/A | 200ms | New feature | | **Feedback Loop** | 20s+ | \<1s | 20x faster |
 
 ## Developer Experience
 

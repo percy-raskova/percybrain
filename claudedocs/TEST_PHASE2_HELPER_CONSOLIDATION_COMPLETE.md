@@ -152,13 +152,7 @@ nvim --headless -u tests/minimal_init.lua -c "lua ..."
 
 ### Code Quality Improvements
 
-| Metric                      | Before  | After     | Improvement  |
-| --------------------------- | ------- | --------- | ------------ |
-| wait_for implementations    | 2       | 1         | -1 duplicate |
-| mock_notify implementations | 2       | 1         | -1 duplicate |
-| Lines of duplicated code    | ~30     | 0         | -30 lines    |
-| Helper documentation        | 0 lines | 412 lines | +412 lines   |
-| Test helper clarity         | Low     | High      | +++          |
+| Metric | Before | After | Improvement | | --------------------------- | ------- | --------- | ------------ | | wait_for implementations | 2 | 1 | -1 duplicate | | mock_notify implementations | 2 | 1 | -1 duplicate | | Lines of duplicated code | ~30 | 0 | -30 lines | | Helper documentation | 0 lines | 412 lines | +412 lines | | Test helper clarity | Low | High | +++ |
 
 ### Maintainability Gains
 

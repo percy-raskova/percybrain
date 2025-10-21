@@ -1,6 +1,8 @@
 -- Utilities Keymaps
 -- Namespace: various utility tools (undotree, mcp-marketplace)
 
+local registry = require("config.keymaps")
+
 local keymaps = {
   -- Undotree (visual undo history)
   { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "🌳 Undo tree" },
@@ -13,4 +15,4 @@ local keymaps = {
   { "<leader>mu", "<cmd>MCPHubUpdate<cr>", desc = "🔄 MCP Update" },
 }
 
-return keymaps
+return registry.register_module("utilities", keymaps)

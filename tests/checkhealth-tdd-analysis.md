@@ -415,7 +415,7 @@ return {
     -- Add parser version pinning
     opts.parser_install_info = {
       python = {
-        revision = "4e66e6fa7dc0e9ce91de89414a0f0aa27c8b9df0", -- Known good version
+        revision = "4e66e6fa7dc0e9ce91de89414a0f0aa27c8b9df0", -- pragma: allowlist secret (git revision, not a secret)
       }
     }
 

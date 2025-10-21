@@ -1,8 +1,16 @@
 # PercyBrain Keybindings Reference
 
-**Category**: Reference (Information-Oriented) **Last Updated**: 2025-10-19
+**Category**: Reference (Information-Oriented) **Last Updated**: 2025-10-21 **Major Refactor**: Writer-first keybinding consolidation (Phase 1 & 2 complete) **Migration Guide**: See `claudedocs/KEYBINDING_MIGRATION_2025-10-21.md`
 
 Complete reference of all keybindings in PercyBrain organized by workflow and functionality.
+
+⚠️ **BREAKING CHANGES**: Many keybindings changed in 2025-10-21 refactor (Phase 1 & 2). See migration guide.
+
+**Phase 2 Highlights**:
+
+- ✅ Mode-switching added (`<leader>m*`) - Context-aware workspace configurations
+- ✅ Frequency optimization - Most common actions get shortest keys
+- ✅ `<leader>f` finds notes (not files), `<leader>n` creates notes, `<leader>i` quick capture
 
 ______________________________________________________________________
 
@@ -21,223 +29,250 @@ ______________________________________________________________________
 
 Essential keybindings for basic Neovim operations and file management.
 
-| Keymap       | Mode | Command/Action    | Description                      |
-| ------------ | ---- | ----------------- | -------------------------------- |
-| `<leader>e`  | n    | `:NvimTreeToggle` | Toggle file explorer             |
-| `<leader>x`  | n    | `:NvimTreeFocus`  | Focus file explorer              |
-| `<leader>q`  | n    | `:q!`             | Quit without saving              |
-| `<leader>s`  | n    | `:w!`             | Save file                        |
-| `<leader>c`  | n    | `:close`          | Close current window             |
-| `<leader>v`  | n    | `:vsplit`         | Vertical split                   |
-| `<leader>W`  | n    | `:WhichKey`       | Show which-key help              |
-| `<leader>a`  | n    | `:Alpha`          | Show Alpha dashboard             |
-| `<leader>n`  | n    | Set numbers       | Enable line numbers & cursorline |
-| `<leader>rn` | n    | Unset numbers     | Disable line numbers             |
-| `<leader>nw` | n    | `:NewWriterFile`  | Create new writing file          |
+**Phase 2 Changes**: `<leader>n` now creates new note (frequency optimization). Line numbers moved to `<leader>vn`.
+
+| Keymap       | Mode | Command/Action    | Description                   |
+| ------------ | ---- | ----------------- | ----------------------------- |
+| `<leader>e`  | n    | `:NvimTreeToggle` | Toggle file explorer          |
+| `<leader>x`  | n    | `:NvimTreeFocus`  | Focus file explorer           |
+| `<leader>q`  | n    | `:q!`             | Quit without saving           |
+| `<leader>s`  | n    | `:w!`             | Save file                     |
+| `<leader>c`  | n    | `:close`          | Close current window          |
+| `<leader>v`  | n    | `:vsplit`         | Vertical split                |
+| `<leader>vn` | n    | Toggle numbers    | Toggle line numbers (Phase 2) |
+| `<leader>W`  | n    | `:WhichKey`       | Show which-key help           |
+| `<leader>a`  | n    | `:Alpha`          | Show Alpha dashboard          |
+| `<leader>nw` | n    | `:NewWriterFile`  | Create new writing file       |
+
+______________________________________________________________________
+
+## Frequency-Optimized Shortcuts (Phase 2)
+
+**Design Philosophy**: Most frequent writer actions get the shortest possible keys (1-2 keystrokes total).
+
+| Keymap      | Mode | Description               | Frequency    | Replaces     |
+| ----------- | ---- | ------------------------- | ------------ | ------------ |
+| `<leader>f` | n    | Find notes (Zettelkasten) | 50+ /session | `<leader>ff` |
+| `<leader>n` | n    | New note (quick)          | 50+ /session | `<leader>zn` |
+| `<leader>i` | n    | Inbox capture (quick)     | 20+ /session | `<leader>zq` |
+
+**Displaced keybindings** (moved to longer combos):
+
+- `<leader>ff` - Find files (filesystem) - was `<leader>f`
+- `<leader>vn` - Toggle line numbers - was `<leader>n`
+- `<leader>zq` - Quick capture (still available for discoverability)
+
+**Justification**:
+
+- Writers create/find notes 50+ times per session
+- Toggling line numbers: 1-2 times per session
+- Finding filesystem files: 5-10 times per session
+- Quick capture: 20+ times per session
 
 ______________________________________________________________________
 
 ## Zettelkasten Workflow
 
-Core keybindings for the Zettelkasten knowledge management system. All Zettelkasten commands use the `z` prefix.
+**Writer-First Philosophy**: ALL Zettelkasten operations consolidated under `<leader>z*` namespace for speed of thought access.
 
-### Note Creation & Management
+**Phase 2 Optimization**: Most frequent operations also available as single-key shortcuts (see Frequency-Optimized Shortcuts above).
 
-| Keymap       | Mode | Command                     | Description               | Plugin     |
-| ------------ | ---- | --------------------------- | ------------------------- | ---------- |
-| `<leader>zn` | n    | `:Telekasten new_note`      | Create new permanent note | Telekasten |
-| `<leader>zd` | n    | `:Telekasten goto_today`    | Open today's daily note   | Telekasten |
-| `<leader>zw` | n    | `:Telekasten goto_thisweek` | Open this week's note     | Telekasten |
-| `<leader>zr` | n    | `:Telekasten rename_note`   | Rename current note       | Telekasten |
+### Core Note Operations
 
-### Search & Navigation
+| Keymap       | Mode | Description                              | Plugin       |
+| ------------ | ---- | ---------------------------------------- | ------------ |
+| `<leader>n`  | n    | **New note (quick)** - OPTIMIZED         | Zettelkasten |
+| `<leader>zn` | n    | Create new permanent note (with options) | Zettelkasten |
+| `<leader>zd` | n    | Open today's daily note                  | Telekasten   |
+| `<leader>zi` | n    | Create inbox note                        | Zettelkasten |
+| `<leader>i`  | n    | **Quick capture (quick)** - OPTIMIZED    | QuickCapture |
+| `<leader>zq` | n    | Quick capture (floating window)          | QuickCapture |
+| `<leader>zf` | n    | Fuzzy find notes                         | Telekasten   |
+| `<leader>zg` | n    | Search note content (grep)               | Telekasten   |
+| `<leader>zb` | n    | Show backlinks to current note           | Telekasten   |
+| `<leader>zo` | n    | Find orphan notes                        | PercyOrphans |
+| `<leader>zh` | n    | Find hub notes                           | PercyHubs    |
+| `<leader>zp` | n    | Publish to Hugo                          | Hugo         |
+| `<leader>zt` | n    | Show tags                                | Telekasten   |
+| `<leader>zc` | n    | Show visual calendar                     | Telekasten   |
+| `<leader>zl` | n    | Follow link                              | Telekasten   |
+| `<leader>zk` | n    | Insert link to note                      | Telekasten   |
 
-| Keymap       | Mode | Command                      | Description                | Plugin     |
-| ------------ | ---- | ---------------------------- | -------------------------- | ---------- |
-| `<leader>zf` | n    | `:Telekasten find_notes`     | Fuzzy find notes           | Telekasten |
-| `<leader>zg` | n    | `:Telekasten search_notes`   | Search note content (grep) | Telekasten |
-| `<leader>zb` | n    | `:Telekasten show_backlinks` | Show notes linking here    | Telekasten |
-| `<leader>zt` | n    | `:Telekasten show_tags`      | Browse all tags            | Telekasten |
-| `<leader>z[` | n    | `:Telekasten goto_prev_note` | Go to previous note        | Telekasten |
-| `<leader>z]` | n    | `:Telekasten goto_next_note` | Go to next note            | Telekasten |
+### IWE Navigation (Consolidated under `<leader>z*`)
 
-### Linking & Organization
+**Note**: These were previously under `g*` prefix - now consolidated to Zettelkasten namespace.
 
-| Keymap       | Mode | Command                     | Description         | Plugin     |
-| ------------ | ---- | --------------------------- | ------------------- | ---------- |
-| `<leader>zl` | n    | `:Telekasten insert_link`   | Insert link to note | Telekasten |
-| `<leader>zy` | n    | `:Telekasten yank_notelink` | Copy note link      | Telekasten |
+| Keymap       | Mode | Description                     | Plugin |
+| ------------ | ---- | ------------------------------- | ------ |
+| `<leader>zF` | n    | IWE: Find files                 | IWE    |
+| `<leader>zS` | n    | IWE: Workspace symbols          | IWE    |
+| `<leader>zA` | n    | IWE: Namespace symbols          | IWE    |
+| `<leader>z/` | n    | IWE: Live grep search           | IWE    |
+| `<leader>zB` | n    | IWE: Backlinks (LSP references) | IWE    |
+| `<leader>zO` | n    | IWE: Document outline (symbols) | IWE    |
 
-### Visual Features
+### IWE Refactoring (Consolidated under `<leader>zr*`)
 
-| Keymap       | Mode | Command                       | Description          | Plugin     |
-| ------------ | ---- | ----------------------------- | -------------------- | ---------- |
-| `<leader>zi` | n    | `:Telekasten insert_img_link` | Insert image link    | Telekasten |
-| `<leader>zp` | n    | `:Telekasten preview_img`     | Preview image        | Telekasten |
-| `<leader>zm` | n    | `:Telekasten browse_media`    | Browse media files   | Telekasten |
-| `<leader>zc` | n    | `:Telekasten show_calendar`   | Show visual calendar | Telekasten |
+**Note**: These were previously under `<leader>i*` prefix - now in refactor sub-namespace.
 
-### Formatting (SemBr)
+| Keymap        | Mode | Description            | Plugin |
+| ------------- | ---- | ---------------------- | ------ |
+| `<leader>zrh` | n    | Rewrite list → heading | IWE    |
+| `<leader>zrl` | n    | Rewrite heading → list | IWE    |
 
-Semantic line breaks for better diffs and version control.
+______________________________________________________________________
 
-| Keymap       | Mode | Command                 | Description                           | Plugin |
-| ------------ | ---- | ----------------------- | ------------------------------------- | ------ |
-| `<leader>zs` | n    | `:SemBrFormat`          | Format buffer with semantic breaks    | SemBr  |
-| `<leader>zs` | v    | `:SemBrFormatSelection` | Format selection with semantic breaks | SemBr  |
-| `<leader>zt` | n    | `:SemBrToggle`          | Toggle auto-format on save            | SemBr  |
+## IWE (Integrated Writing Environment)
 
-**Note**: There's a keymap conflict - `<leader>zt` is used for both tags (Telekasten) and SemBr toggle. The SemBr toggle overwrites the tags command.
+### Preview Generation (`<leader>ip*` prefix)
+
+Generate various preview formats for export and visualization. Publishing-related operations kept separate from core Zettelkasten workflow.
+
+| Keymap        | Mode | Command                | Description                               | Plugin |
+| ------------- | ---- | ---------------------- | ----------------------------------------- | ------ |
+| `<leader>ips` | n    | `:IWEPreviewSquash`    | IWE: Generate squash preview              | IWE    |
+| `<leader>ipe` | n    | `:IWEPreviewExport`    | IWE: Generate export graph preview        | IWE    |
+| `<leader>iph` | n    | `:IWEPreviewHeaders`   | IWE: Generate export with headers preview | IWE    |
+| `<leader>ipw` | n    | `:IWEPreviewWorkspace` | IWE: Generate workspace preview           | IWE    |
+
+### Markdown Editing (built-in)
+
+IWE also provides markdown-specific editing keybindings (managed directly by plugin):
+
+| Keymap  | Mode | Command                   | Description                    | Plugin |
+| ------- | ---- | ------------------------- | ------------------------------ | ------ |
+| `-`     | n    | Format checklist item     | Format line as checklist       | IWE    |
+| `<C-n>` | n    | Navigate to next link     | Jump to next markdown link     | IWE    |
+| `<C-p>` | n    | Navigate to previous link | Jump to previous markdown link | IWE    |
+| `/d`    | i    | Insert current date       | Insert today's date            | IWE    |
+| `/w`    | i    | Insert current week       | Insert current week            | IWE    |
+
+**Note**: IWE keybindings use the `<leader>i*` namespace to avoid conflicts with Lynx browser (`<leader>l*`) and Prose workflow (`<leader>p*`).
 
 ______________________________________________________________________
 
 ## AI Commands (Ollama Integration)
 
-Local AI assistance for writing and knowledge management. All AI commands use the `a` prefix under leader.
+Local AI assistance for writing and knowledge management. All AI commands use the `<leader>a*` prefix.
 
-### AI Command Menu
-
-| Keymap       | Mode | Command    | Description          | Plugin |
-| ------------ | ---- | ---------- | -------------------- | ------ |
-| `<leader>aa` | n    | `:PercyAI` | Show AI command menu | Ollama |
-
-### Individual AI Commands
-
-| Keymap       | Mode | Command           | Description                    | Plugin |
-| ------------ | ---- | ----------------- | ------------------------------ | ------ |
-| `<leader>ae` | n, v | `:PercyExplain`   | AI: Explain text/selection     | Ollama |
-| `<leader>as` | n, v | `:PercySummarize` | AI: Summarize note/selection   | Ollama |
-| `<leader>al` | n    | `:PercyLinks`     | AI: Suggest related links      | Ollama |
-| `<leader>aw` | n, v | `:PercyImprove`   | AI: Improve writing quality    | Ollama |
-| `<leader>aq` | n    | `:PercyAsk`       | AI: Answer question about note | Ollama |
-| `<leader>ax` | n    | `:PercyIdeas`     | AI: Generate ideas (eXplore)   | Ollama |
-
-**Note**: `<leader>al` conflicts with ALE linting toggle from base keymaps. The AI suggest links command overwrites ALE toggle.
-
-______________________________________________________________________
-
-## Publishing & Hugo Integration
-
-Static site generation and publishing workflow.
-
-| Keymap       | Mode | Command        | Description                   | Plugin |
-| ------------ | ---- | -------------- | ----------------------------- | ------ |
-| `<leader>zp` | n    | `:HugoPublish` | Build, commit, and push site  | Hugo   |
-| `<leader>zv` | n    | `:HugoServer`  | Start Hugo development server | Hugo   |
-| `<leader>zb` | n    | `:HugoBuild`   | Build Hugo site               | Hugo   |
-
-**Note**: `<leader>zp` is used for both preview image (Telekasten) and Hugo publish. Hugo command overwrites Telekasten preview.
-
-**Note**: `<leader>zb` is used for both backlinks (Telekasten) and Hugo build. Hugo command overwrites Telekasten backlinks.
+| Keymap       | Mode | Description                    | Plugin |
+| ------------ | ---- | ------------------------------ | ------ |
+| `<leader>a`  | n    | **(Group)** AI commands prefix | Ollama |
+| `<leader>aa` | n    | Show AI command menu           | Ollama |
+| `<leader>ac` | n    | AI chat                        | Ollama |
+| `<leader>ad` | n    | AI draft                       | Ollama |
+| `<leader>ae` | n, v | AI: Explain text/selection     | Ollama |
+| `<leader>am` | n    | AI model select                | Ollama |
+| `<leader>ar` | n    | AI rewrite                     | Ollama |
+| `<leader>as` | n, v | AI: Summarize note/selection   | Ollama |
 
 ______________________________________________________________________
 
 ## Telescope Fuzzy Finder
 
-Fast fuzzy finding for files, content, and metadata.
+Fast fuzzy finding for files, content, and metadata using the `<leader>f*` prefix.
 
-| Keymap       | Mode | Command                 | Description       |
-| ------------ | ---- | ----------------------- | ----------------- |
-| `<leader>ff` | n    | `:Telescope find_files` | Find files        |
-| `<leader>fg` | n    | `:Telescope live_grep`  | Live grep content |
-| `<leader>fb` | n    | `:Telescope buffers`    | List open buffers |
-| `<leader>fk` | n    | `:Telescope keymaps`    | Search keymaps    |
-| `<leader>fh` | n    | `:Telescope help_tags`  | Search help tags  |
+**Phase 2 Optimization**: `<leader>f` now finds NOTES (most frequent operation for writers), not generic files.
 
-### FzfLua Alternative
-
-| Keymap        | Mode | Command             | Description       |
-| ------------- | ---- | ------------------- | ----------------- |
-| `<leader>fzl` | n    | `:FzfLua files`     | FzfLua find files |
-| `<leader>fzg` | n    | `:FzfLua live_grep` | FzfLua grep       |
-| `<leader>fzm` | n    | `:FzfLua marks`     | FzfLua marks      |
-
-### Telescope Internal Keymaps (Insert Mode)
-
-When inside a Telescope picker:
-
-| Keymap  | Mode | Action                     |
-| ------- | ---- | -------------------------- |
-| `<C-j>` | i    | Move to next selection     |
-| `<C-k>` | i    | Move to previous selection |
+| Keymap        | Mode | Description                               |
+| ------------- | ---- | ----------------------------------------- |
+| `<leader>f`   | n    | **Find notes (Zettelkasten)** - OPTIMIZED |
+| `<leader>ff`  | n    | Telescope: Find files (filesystem)        |
+| `<leader>fg`  | n    | Telescope: Live grep content              |
+| `<leader>fb`  | n    | Telescope: List open buffers              |
+| `<leader>fc`  | n    | Telescope: Commands                       |
+| `<leader>fh`  | n    | Telescope: Search help tags               |
+| `<leader>fk`  | n    | Telescope: Search keymaps                 |
+| `<leader>fr`  | n    | Telescope: Recent files                   |
+| `<leader>ft`  | n    | Telescope: Tags                           |
+| `<leader>fzg` | n    | FzfLua: Live grep (alternative interface) |
+| `<leader>fzl` | n    | FzfLua: Find files (alternative)          |
+| `<leader>fzm` | n    | FzfLua: Marks (alternative)               |
 
 ______________________________________________________________________
 
-## Git Integration (Fugitive)
+## Prose Writing
 
-Comprehensive Git operations within Neovim.
+**Writer-First Philosophy**: Expanded prose tools for focused writing, time tracking, and document management.
 
-### Status & Viewing
+| Keymap        | Mode | Description                | Plugin     |
+| ------------- | ---- | -------------------------- | ---------- |
+| `<leader>pp`  | n    | Prose mode toggle          | Prose      |
+| `<leader>pf`  | n    | Focus mode (Goyo)          | Goyo       |
+| `<leader>pr`  | n    | Reading mode (hide UI)     | Built-in   |
+| `<leader>pm`  | n    | Toggle StyledDoc preview   | StyledDoc  |
+| `<leader>pP`  | n    | Paste image (capital P)    | PasteImage |
+| `<leader>pw`  | n    | Word count stats           | Built-in   |
+| `<leader>ps`  | n    | Toggle spell check         | Built-in   |
+| `<leader>pg`  | n    | Start grammar check (ltex) | ltex-ls    |
+| `<leader>pts` | n    | Timer start                | Pendulum   |
+| `<leader>pte` | n    | Timer stop                 | Pendulum   |
+| `<leader>ptt` | n    | Timer status               | Pendulum   |
+| `<leader>ptr` | n    | Timer report               | Pendulum   |
 
-| Keymap       | Mode | Command       | Description             |
-| ------------ | ---- | ------------- | ----------------------- |
-| `<leader>gs` | n    | `:Git`        | Git status              |
-| `<leader>gd` | n    | `:Gdiffsplit` | Git diff split          |
-| `<leader>gb` | n    | `:Git blame`  | Git blame               |
-| `<leader>gl` | n    | `:Gclog`      | Git log (quickfix)      |
-| `<leader>gL` | n    | `:Glog`       | Git log (location list) |
-
-### Commits
-
-| Keymap       | Mode | Command               | Description      |
-| ------------ | ---- | --------------------- | ---------------- |
-| `<leader>gc` | n    | `:Git commit`         | Git commit       |
-| `<leader>gC` | n    | `:Git commit --amend` | Git commit amend |
-
-### Push/Pull/Fetch
-
-| Keymap       | Mode | Command      | Description |
-| ------------ | ---- | ------------ | ----------- |
-| `<leader>gp` | n    | `:Git push`  | Git push    |
-| `<leader>gP` | n    | `:Git pull`  | Git pull    |
-| `<leader>gf` | n    | `:Git fetch` | Git fetch   |
-
-### Stage/Unstage
-
-| Keymap       | Mode | Command   | Description                  |
-| ------------ | ---- | --------- | ---------------------------- |
-| `<leader>ga` | n    | `:Gwrite` | Git add (stage) current file |
-| `<leader>gr` | n    | `:Gread`  | Git checkout (reset) file    |
-
-### Branches
-
-| Keymap       | Mode | Command         | Description     |
-| ------------ | ---- | --------------- | --------------- |
-| `<leader>gB` | n    | `:Git branch`   | Git branch list |
-| `<leader>go` | n    | `:Git checkout` | Git checkout    |
-
-### Merge/Rebase
-
-| Keymap       | Mode | Command       | Description |
-| ------------ | ---- | ------------- | ----------- |
-| `<leader>gm` | n    | `:Git merge`  | Git merge   |
-| `<leader>gR` | n    | `:Git rebase` | Git rebase  |
-
-### Browse
-
-| Keymap       | Mode | Command    | Description                          |
-| ------------ | ---- | ---------- | ------------------------------------ |
-| `<leader>gO` | n, v | `:GBrowse` | Open file in browser (GitHub/GitLab) |
-
-### LazyGit Integration
-
-| Keymap      | Mode | Command    | Description      |
-| ----------- | ---- | ---------- | ---------------- |
-| `<leader>g` | n    | `:LazyGit` | Open LazyGit TUI |
-
-**Note**: `<leader>g` conflicts with the Git fugitive prefix. LazyGit overwrites the fugitive keymaps.
+**Note**: Time tracking moved from `<leader>op*` to `<leader>pt*` for better integration with writing workflow.
 
 ______________________________________________________________________
 
-## Writing & Distraction-Free Modes
+## Mode Switching (Phase 2)
 
-Focus modes and writing-specific features.
+Context-aware workspace configurations for different writing workflows. Each mode optimizes vim settings and plugin states for specific contexts.
 
-| Keymap       | Mode | Command       | Description               |
-| ------------ | ---- | ------------- | ------------------------- |
-| `<leader>z`  | n    | `:ZenMode`    | Toggle Zen mode           |
-| `<leader>o`  | n    | `:Goyo`       | Toggle Goyo focus mode    |
-| `<leader>sp` | n    | `:SoftPencil` | Enable soft line wrapping |
+| Keymap       | Mode | Description                             | Features Enabled                                     |
+| ------------ | ---- | --------------------------------------- | ---------------------------------------------------- |
+| `<leader>m`  | n    | **(Group)** Mode switching prefix       | —                                                    |
+| `<leader>mw` | n    | Writing mode (focus, spell, prose)      | Goyo, spell check, SemBr, soft wrap, no line numbers |
+| `<leader>mr` | n    | Research mode (splits, backlinks, tree) | Splits, NvimTree, line numbers, spell check          |
+| `<leader>me` | n    | Editing mode (diagnostics, LSP, errors) | Trouble panel, diagnostics, LSP, line numbers        |
+| `<leader>mp` | n    | Publishing mode (Hugo, preview, build)  | Hugo server, markdown preview, spell check           |
+| `<leader>mn` | n    | Normal mode (reset to defaults)         | Baseline PercyBrain configuration                    |
+
+**Use Cases**:
+
+- **Writing Mode** (`<leader>mw`): Deep focus prose creation with minimal distractions
+- **Research Mode** (`<leader>mr`): Multi-window note exploration and cross-referencing
+- **Editing Mode** (`<leader>me`): Technical editing with full diagnostic support
+- **Publishing Mode** (`<leader>mp`): Content preparation with live preview
+- **Normal Mode** (`<leader>mn`): Reset after mode switching
+
+**Design Philosophy**: Writers work in distinct contexts requiring different tool configurations. One-key mode switching removes friction from context transitions.
+
+______________________________________________________________________
+
+## Git Integration
+
+**Writer-First Philosophy**: Simplified to essential operations. Use LazyGit GUI (`<leader>gg`) for complex operations.
+
+### Primary Interface
+
+| Keymap       | Mode | Description                         | Plugin  |
+| ------------ | ---- | ----------------------------------- | ------- |
+| `<leader>gg` | n    | **LazyGit GUI (primary interface)** | LazyGit |
+
+### Essential Operations
+
+| Keymap       | Mode | Description | Plugin   |
+| ------------ | ---- | ----------- | -------- |
+| `<leader>gs` | n    | Git status  | Fugitive |
+| `<leader>gc` | n    | Git commit  | Fugitive |
+| `<leader>gp` | n    | Git push    | Fugitive |
+| `<leader>gb` | n    | Git blame   | Fugitive |
+| `<leader>gl` | n    | Git log     | Fugitive |
+
+### Hunk Operations (Review Writing Changes)
+
+| Keymap        | Mode | Description       | Plugin   |
+| ------------- | ---- | ----------------- | -------- |
+| `<leader>ghp` | n    | Preview hunk      | Gitsigns |
+| `<leader>ghs` | n    | Stage hunk        | Gitsigns |
+| `<leader>ghu` | n    | Undo stage hunk   | Gitsigns |
+| `]c`          | n    | Next git hunk     | Gitsigns |
+| `[c`          | n    | Previous git hunk | Gitsigns |
+
+**Removed Operations** (use LazyGit GUI instead):
+
+- Diffview operations (`<leader>gd*`) - Use LazyGit diff view
+- Advanced hunk operations (`<leader>ghr`, `<leader>ghb`) - Use LazyGit
 
 ______________________________________________________________________
 
@@ -265,174 +300,77 @@ Multi-language translation support.
 
 ______________________________________________________________________
 
-## Plugin Management & Development
+## Plugin Management
 
-Lazy.nvim plugin manager and development tools.
+Lazy.nvim plugin manager.
 
-| Keymap      | Mode | Command          | Description                 |
-| ----------- | ---- | ---------------- | --------------------------- |
-| `<leader>l` | n    | `:Lazy load all` | Load all lazy plugins       |
-| `<leader>L` | n    | `:Lazy`          | Open Lazy plugin manager UI |
-
-______________________________________________________________________
-
-## Linting & Diagnostics
-
-Code quality and error checking.
-
-| Keymap       | Mode | Command      | Description        |
-| ------------ | ---- | ------------ | ------------------ |
-| `<leader>al` | n    | `:ALEToggle` | Toggle ALE linting |
-
-**Note**: This conflicts with `<leader>al` for AI suggest links. The AI command overwrites this.
+| Keymap      | Mode | Description                 |
+| ----------- | ---- | --------------------------- |
+| `<leader>L` | n    | Open Lazy plugin manager UI |
 
 ______________________________________________________________________
 
-## Default Neovim Keybindings
+## Diagnostics & Lists
 
-Important default Vim/Neovim keybindings used in PercyBrain workflows.
+Code quality, error checking, and quickfix navigation.
 
-### Motion & Navigation
-
-| Keymap  | Mode | Description           |
-| ------- | ---- | --------------------- |
-| `h`     | n    | Move left             |
-| `j`     | n    | Move down             |
-| `k`     | n    | Move up               |
-| `l`     | n    | Move right            |
-| `w`     | n    | Word forward          |
-| `b`     | n    | Word backward         |
-| `gg`    | n    | Go to first line      |
-| `G`     | n    | Go to last line       |
-| `0`     | n    | Go to line start      |
-| `$`     | n    | Go to line end        |
-| `{`     | n    | Previous paragraph    |
-| `}`     | n    | Next paragraph        |
-| `<C-d>` | n    | Scroll half page down |
-| `<C-u>` | n    | Scroll half page up   |
-
-### Editing
-
-| Keymap  | Mode | Description          |
-| ------- | ---- | -------------------- |
-| `i`     | n    | Insert before cursor |
-| `a`     | n    | Insert after cursor  |
-| `I`     | n    | Insert at line start |
-| `A`     | n    | Insert at line end   |
-| `o`     | n    | New line below       |
-| `O`     | n    | New line above       |
-| `x`     | n    | Delete character     |
-| `dd`    | n    | Delete line          |
-| `yy`    | n    | Yank (copy) line     |
-| `p`     | n    | Paste after          |
-| `P`     | n    | Paste before         |
-| `u`     | n    | Undo                 |
-| `<C-r>` | n    | Redo                 |
-
-### Visual Mode
-
-| Keymap  | Mode | Description             |
-| ------- | ---- | ----------------------- |
-| `v`     | n    | Enter visual mode       |
-| `V`     | n    | Enter visual line mode  |
-| `<C-v>` | n    | Enter visual block mode |
-
-### Search
-
-| Keymap | Mode | Description              |
-| ------ | ---- | ------------------------ |
-| `/`    | n    | Search forward           |
-| `?`    | n    | Search backward          |
-| `n`    | n    | Next search result       |
-| `N`    | n    | Previous search result   |
-| `*`    | n    | Search word under cursor |
+| Keymap       | Mode | Description                    |
+| ------------ | ---- | ------------------------------ |
+| `<leader>x`  | n    | **(Group)** Diagnostics prefix |
+| `<leader>xd` | n    | Trouble: Diagnostics           |
+| `<leader>xl` | n    | Trouble: Location list         |
+| `<leader>xL` | n    | Trouble: LSP definitions       |
+| `<leader>xQ` | n    | Trouble: Quickfix list         |
+| `<leader>xs` | n    | Trouble: Document symbols      |
+| `<leader>xx` | n    | Trouble: Toggle                |
 
 ______________________________________________________________________
 
 ## Keymap Conflicts & Resolutions
 
-The following keymaps have conflicts where later definitions overwrite earlier ones:
+**After 2025-10-21 Refactor**: Most conflicts resolved through namespace consolidation.
 
-### Major Conflicts
+| Keymap       | Primary Command      | Notes                               |
+| ------------ | -------------------- | ----------------------------------- |
+| `<leader>zi` | Create inbox note    | Quick capture moved to `<leader>zq` |
+| `<leader>zt` | Telekasten show tags | Kept for tag browsing               |
+| `<leader>zp` | Hugo publish         | Publishing workflow                 |
 
-| Keymap       | Primary Command             | Conflicting Command       | Resolution   |
-| ------------ | --------------------------- | ------------------------- | ------------ |
-| `<leader>zt` | Show tags (Telekasten)      | SemBr toggle auto-format  | SemBr wins   |
-| `<leader>al` | Toggle ALE linting          | AI suggest links (Ollama) | AI wins      |
-| `<leader>zp` | Preview image (Telekasten)  | Hugo publish              | Hugo wins    |
-| `<leader>zb` | Show backlinks (Telekasten) | Hugo build                | Hugo wins    |
-| `<leader>g`  | LazyGit TUI                 | Git fugitive prefix       | LazyGit wins |
+**Resolved Conflicts** (2025-10-21):
 
-### Recommendations
-
-1. **Zettelkasten users**: Use `:Telekasten show_tags` command directly for tags
-2. **AI users**: Access AI suggest links via `<leader>aa` menu if needed
-3. **Publishing**: Use Hugo commands, access Telekasten preview via command palette
-4. **Git workflow**: Choose either LazyGit TUI (`<leader>g`) or Fugitive (`<leader>g*` commands)
+- IWE navigation (`g*`) → Consolidated to `<leader>z*` (no more Vim built-in conflicts)
+- IWE refactoring (`<leader>i*`) → Consolidated to `<leader>zr*`
+- Quick capture (`<leader>qc`) → Consolidated to `<leader>zq`
+- Time tracking (`<leader>op*`) → Consolidated to `<leader>pt*`
 
 ______________________________________________________________________
 
-## Which-Key Groups
+## Which-Key Group Prefixes
 
-Organized prefix groups shown by Which-Key plugin:
+Organized prefix groups shown by Which-Key plugin. These are NOT executable keybindings themselves, but rather organizational prefixes that show a submenu of related commands.
 
-| Prefix      | Group Name         | Description                |
-| ----------- | ------------------ | -------------------------- |
-| `<leader>f` | Find/File          | File finding and search    |
-| `<leader>t` | Translate/Terminal | Translation and terminal   |
-| `<leader>w` | Window Management  | Window operations          |
-| `<leader>z` | Zettelkasten       | Knowledge management       |
-| `<leader>a` | AI/Assistant       | AI commands and assistance |
-| `<leader>g` | Git                | Git operations             |
+| Prefix       | Group Name                            | Description                       |
+| ------------ | ------------------------------------- | --------------------------------- |
+| `<leader>a`  | **(Group)** AI                        | AI commands and assistance        |
+| `<leader>f`  | **(Group)** Find                      | File finding and search           |
+| `<leader>g`  | **(Group)** Git                       | Git operations (simplified)       |
+| `<leader>ip` | **(Group)** IWE Preview               | IWE publishing previews           |
+| `<leader>l`  | **(Group)** Lynx                      | Lynx browser integration          |
+| `<leader>m`  | **(Group)** MCP                       | MCP Hub operations                |
+| `<leader>o`  | **(Group)** Org                       | Organization tools                |
+| `<leader>p`  | **(Group)** Prose                     | Prose writing features (expanded) |
+| `<leader>pt` | **(Sub-Group)** Prose Timer           | Time tracking for writing         |
+| `<leader>t`  | **(Group)** Terminal                  | Terminal and translation          |
+| `<leader>w`  | **(Group)** Window                    | Window management                 |
+| `<leader>x`  | **(Group)** Diagnostics               | Code diagnostics and lists        |
+| `<leader>z`  | **(Group)** Zettelkasten              | All knowledge management          |
+| `<leader>zr` | **(Sub-Group)** Zettelkasten Refactor | Note refactoring                  |
 
-______________________________________________________________________
+**Removed Groups** (2025-10-21):
 
-## Custom User Commands
-
-User commands that complement keybindings:
-
-### Zettelkasten Commands
-
-| Command      | Description                           |
-| ------------ | ------------------------------------- |
-| `:QuickNote` | Create note with auto-focus (ZenMode) |
-
-### AI Commands
-
-| Command           | Description                |
-| ----------------- | -------------------------- |
-| `:PercyExplain`   | Explain text with AI       |
-| `:PercySummarize` | Summarize note with AI     |
-| `:PercyLinks`     | Suggest related links      |
-| `:PercyImprove`   | Improve writing quality    |
-| `:PercyAsk`       | Answer question about note |
-| `:PercyIdeas`     | Generate new ideas         |
-| `:PercyAI`        | Show AI command menu       |
-
-### SemBr Commands
-
-| Command                 | Description                           |
-| ----------------------- | ------------------------------------- |
-| `:SemBrFormat`          | Format buffer with semantic breaks    |
-| `:SemBrFormatSelection` | Format selection with semantic breaks |
-| `:SemBrToggle`          | Toggle auto-format on save            |
-
-### Hugo Commands
-
-| Command        | Description                   |
-| -------------- | ----------------------------- |
-| `:HugoNew`     | Create new Hugo post          |
-| `:HugoServer`  | Start Hugo development server |
-| `:HugoBuild`   | Build Hugo site               |
-| `:HugoPublish` | Build, commit, and push       |
-
-### Git Commands
-
-| Command       | Description                            |
-| ------------- | -------------------------------------- |
-| `:Gac`        | Git add current file and commit        |
-| `:Gacp`       | Git add current file, commit, and push |
-| `:GSemBrDiff` | Show diff with semantic line breaks    |
+- `<leader>i` (IWE general) → Consolidated to `<leader>z*` and `<leader>ip*`
+- `<leader>q` (Quick capture) → Consolidated to `<leader>zq`
+- `<leader>op` (Time tracking) → Consolidated to `<leader>pt*`
 
 ______________________________________________________________________
 
@@ -450,11 +388,12 @@ ______________________________________________________________________
 
 - **Leader Key**: All `<leader>` references mean the space key (`<space>`)
 - **Mode Abbreviations**: `n` = normal, `v` = visual, `i` = insert
+- **Group Prefixes**: Entries marked **(Group)** are not executable keybindings, they show a submenu
 - **Conflicts**: Some keymaps override others. Check the Conflicts section for details.
 - **Plugin Dependencies**: Some keymaps require specific plugins to be loaded
-- **Custom Commands**: Many keymaps have corresponding `:Command` versions
 - **Which-Key**: Press `<leader>W` to see available keybindings interactively
+- **Scope**: This reference contains ONLY custom PercyBrain keybindings, not standard Vim commands
 
 ______________________________________________________________________
 
-**Last Review**: 2025-10-19 **Plugin Count**: 68 plugins across 14 workflows **Total Keybindings**: 100+ custom keybindings
+**Last Review**: 2025-10-21 **Major Refactor**: Writer-first keybinding consolidation (Phase 1 complete) **Total Custom Keybindings**: 138+ PercyBrain-specific keybindings **Breaking Changes**: See `claudedocs/KEYBINDING_MIGRATION_2025-10-21.md` for migration guide **Philosophy**: Speed of thought knowledge management for writers

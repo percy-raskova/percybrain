@@ -120,10 +120,7 @@ def handle_multiple_errors():
 
     -- Assert (currently expecting failure - will pass after fix)
     if not success then
-      assert.is_true(
-        error_msg:match("except%*") ~= nil,
-        "Known issue: except* not supported in current parser version"
-      )
+      assert.is_true(error_msg:match("except%*") ~= nil, "Known issue: except* not supported in current parser version")
       print("EXPECTED FAILURE: Python 3.11+ except* syntax not yet supported")
     else
       assert.is_true(success, "Parser SHOULD handle or gracefully skip except* syntax")
@@ -160,11 +157,7 @@ if __name__ == "__main__":
     vim.api.nvim_buf_set_lines(test_buffer, 0, -1, false, vim.split(supported_code, "\n"))
 
     -- Get highlights query
-    local highlight_query_success, highlight_query = pcall(
-      vim.treesitter.query.get,
-      "python",
-      "highlights"
-    )
+    local highlight_query_success, highlight_query = pcall(vim.treesitter.query.get, "python", "highlights")
 
     -- Assert
     if highlight_query_success then

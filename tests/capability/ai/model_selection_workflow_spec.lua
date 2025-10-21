@@ -123,7 +123,7 @@ describe("AI Model Selection Workflow Capabilities", function()
         "code_generation",
         "summarization",
         "explanation",
-        "creative_writing"
+        "creative_writing",
       }
 
       -- Act: Get suggestions for each task
@@ -201,7 +201,7 @@ describe("AI Model Selection Workflow Capabilities", function()
             model = "llama3.2:latest",
             temperature = 0.7,
             timeout = 30000,
-          }
+          },
         }
       end
 
@@ -226,7 +226,7 @@ describe("AI Model Selection Workflow Capabilities", function()
             model = "llama3.2:latest",
             temperature = 0.7,
             timeout = 30000,
-          }
+          },
         }
       end
 
@@ -310,10 +310,7 @@ describe("AI Model Selection Workflow Capabilities", function()
 
       -- Assert: Keybinding exists (will be <leader>am for AI Model)
       -- (This test validates keybinding registration, actual key may differ)
-      assert.is_true(
-        type(ai.show_model_picker) == "function",
-        "Model picker function should exist for keybinding"
-      )
+      assert.is_true(type(ai.show_model_picker) == "function", "Model picker function should exist for keybinding")
     end)
   end)
 

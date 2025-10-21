@@ -26,12 +26,13 @@ require("percybrain.error-logger") -- Error logging system
 require("config.keymaps.system.core")
 require("config.keymaps.system.dashboard")
 
--- Workflow keymaps (Zettelkasten, AI, prose, quick-capture, GTD)
+-- Workflow keymaps (Zettelkasten, AI, prose, quick-capture, GTD, modes)
 require("config.keymaps.workflows.zettelkasten")
 require("config.keymaps.workflows.ai")
 require("config.keymaps.workflows.prose")
 require("config.keymaps.workflows.quick-capture")
 require("config.keymaps.workflows.gtd")
+require("config.keymaps.workflows.modes") -- Phase 2: Mode-switching for writer contexts
 
 -- Tool keymaps (telescope, navigation, git, diagnostics, window, lynx)
 require("config.keymaps.tools.telescope")

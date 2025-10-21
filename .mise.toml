@@ -426,6 +426,17 @@ description = "Check stylua formatting without making changes"
 run = "stylua --check ."
 sources = ["lua/**/*.lua", "tests/**/*.lua", "hooks/**/*.lua"]
 
+[tasks."format:md"]
+description = "Auto-format all Markdown files with mdformat"
+alias = "fmd"
+run = "uvx mdformat --wrap no ."
+sources = ["**/*.md"]
+
+[tasks."format:md:check"]
+description = "Check Markdown formatting without making changes"
+run = "uvx mdformat --check --wrap no ."
+sources = ["**/*.md"]
+
 # ----------------------------------------------------------------------------
 # PRE-COMMIT TASKS (Existing)
 # ----------------------------------------------------------------------------

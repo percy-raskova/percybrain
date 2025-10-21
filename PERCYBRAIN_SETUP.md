@@ -111,39 +111,19 @@ ______________________________________________________________________
 
 ### Zettelkasten Operations
 
-| Key          | Command         | Description                |
-| ------------ | --------------- | -------------------------- |
-| `<leader>zn` | `:PercyNew`     | Create new permanent note  |
-| `<leader>zd` | `:PercyDaily`   | Open today's daily note    |
-| `<leader>zi` | `:PercyInbox`   | Quick capture to inbox     |
-| `<leader>zf` | Find notes      | Fuzzy find by filename     |
-| `<leader>zg` | Search notes    | Live grep through content  |
-| `<leader>zb` | Backlinks       | Find links to current note |
-| `<leader>zw` | Zen mode        | Distraction-free writing   |
-| `<leader>zp` | `:PercyPublish` | Export to static site      |
+| Key | Command | Description | | ------------ | --------------- | -------------------------- | | `<leader>zn` | `:PercyNew` | Create new permanent note | | `<leader>zd` | `:PercyDaily` | Open today's daily note | | `<leader>zi` | `:PercyInbox` | Quick capture to inbox | | `<leader>zf` | Find notes | Fuzzy find by filename | | `<leader>zg` | Search notes | Live grep through content | | `<leader>zb` | Backlinks | Find links to current note | | `<leader>zw` | Zen mode | Distraction-free writing | | `<leader>zp` | `:PercyPublish` | Export to static site |
 
 ### Writing Tools (Inherited from OVIWrite)
 
-| Key          | Command     | Description        |
-| ------------ | ----------- | ------------------ |
-| `<leader>z`  | Zen mode    | Centered writing   |
-| `<leader>o`  | Goyo        | Minimalist mode    |
-| `<leader>sp` | Soft pencil | Soft line wrapping |
+| Key | Command | Description | | ------------ | ----------- | ------------------ | | `<leader>z` | Zen mode | Centered writing | | `<leader>o` | Goyo | Minimalist mode | | `<leader>sp` | Soft pencil | Soft line wrapping |
 
 ### Navigation (Telescope)
 
-| Key          | Command    | Description             |
-| ------------ | ---------- | ----------------------- |
-| `<leader>ff` | Find files | Project-wide fuzzy find |
-| `<leader>fg` | Live grep  | Search all files        |
-| `<leader>fb` | Buffers    | Switch open files       |
+| Key | Command | Description | | ------------ | ---------- | ----------------------- | | `<leader>ff` | Find files | Project-wide fuzzy find | | `<leader>fg` | Live grep | Search all files | | `<leader>fb` | Buffers | Switch open files |
 
 ### Terminal (Built-in)
 
-| Key          | Command        | Description              |
-| ------------ | -------------- | ------------------------ |
-| `<leader>t`  | Terminal       | Open integrated terminal |
-| `<leader>ft` | Float terminal | Floating terminal window |
+| Key | Command | Description | | ------------ | -------------- | ------------------------ | | `<leader>t` | Terminal | Open integrated terminal | | `<leader>ft` | Float terminal | Floating terminal window |
 
 ______________________________________________________________________
 

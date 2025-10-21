@@ -149,7 +149,7 @@ NAME                   ID              SIZE      MODIFIED
             model = "llama3.2:latest",
             temperature = 0.7,
             timeout = 30000,
-          }
+          },
         }
       end
 
@@ -173,7 +173,7 @@ NAME                   ID              SIZE      MODIFIED
             model = "llama3.2:latest",
             temperature = 0.7,
             timeout = 30000,
-          }
+          },
         }
       end
 

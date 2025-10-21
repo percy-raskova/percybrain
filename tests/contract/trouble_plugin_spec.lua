@@ -55,19 +55,14 @@ describe("Trouble Plugin Contract", function()
     it("MUST NOT auto-close when diagnostics are present", function()
       -- Arrange: Create diagnostic and open Trouble
       local bufnr = vim.api.nvim_create_buf(false, true)
-      vim.diagnostic.set(
-        vim.api.nvim_create_namespace("test"),
-        bufnr,
+      vim.diagnostic.set(vim.api.nvim_create_namespace("test"), bufnr, {
         {
-          {
-            lnum = 0,
-            col = 0,
-            severity = vim.diagnostic.severity.ERROR,
-            message = "Test error",
-          },
+          lnum = 0,
+          col = 0,
+          severity = vim.diagnostic.severity.ERROR,
+          message = "Test error",
         },
-        {}
-      )
+      }, {})
       vim.cmd("TroubleToggle workspace_diagnostics")
       local initial_winnr = vim.api.nvim_get_current_win()
 
@@ -89,16 +84,11 @@ describe("Trouble Plugin Contract", function()
     it("MUST allow j/k navigation through error list", function()
       -- Arrange: Open Trouble with multiple diagnostics
       local bufnr = vim.api.nvim_create_buf(false, true)
-      vim.diagnostic.set(
-        vim.api.nvim_create_namespace("test"),
-        bufnr,
-        {
-          { lnum = 0, col = 0, severity = vim.diagnostic.severity.ERROR, message = "Error 1" },
-          { lnum = 1, col = 0, severity = vim.diagnostic.severity.ERROR, message = "Error 2" },
-          { lnum = 2, col = 0, severity = vim.diagnostic.severity.ERROR, message = "Error 3" },
-        },
-        {}
-      )
+      vim.diagnostic.set(vim.api.nvim_create_namespace("test"), bufnr, {
+        { lnum = 0, col = 0, severity = vim.diagnostic.severity.ERROR, message = "Error 1" },
+        { lnum = 1, col = 0, severity = vim.diagnostic.severity.ERROR, message = "Error 2" },
+        { lnum = 2, col = 0, severity = vim.diagnostic.severity.ERROR, message = "Error 3" },
+      }, {})
       vim.cmd("TroubleToggle workspace_diagnostics")
 
       -- Act: Navigate down with j key

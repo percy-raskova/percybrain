@@ -29,10 +29,7 @@ describe("PercyBrain Health Validation", function()
         local highlight_success = pcall(function()
           vim.treesitter.query.get("python", "highlights")
         end)
-        assert.is_true(
-          highlight_success,
-          "Python highlights should work after fix"
-        )
+        assert.is_true(highlight_success, "Python highlights should work after fix")
       else
         -- If fix failed, it should be a known issue
         pending("Python Treesitter fix requires parser update or manual intervention")
@@ -49,10 +46,7 @@ describe("PercyBrain Health Validation", function()
       session_fix.fix_sessionoptions()
 
       -- Assert
-      assert.is_true(
-        vim.o.sessionoptions:match("localoptions") ~= nil,
-        "sessionoptions MUST contain 'localoptions'"
-      )
+      assert.is_true(vim.o.sessionoptions:match("localoptions") ~= nil, "sessionoptions MUST contain 'localoptions'")
 
       -- Verify all required options are present
       local required = {
@@ -89,14 +83,8 @@ describe("PercyBrain Health Validation", function()
       assert.is_table(config.signs.text, "Sign text MUST be a table")
 
       -- Verify sign text is configured for all severities
-      assert.is_not_nil(
-        config.signs.text[vim.diagnostic.severity.ERROR],
-        "ERROR sign MUST be configured"
-      )
-      assert.is_not_nil(
-        config.signs.text[vim.diagnostic.severity.WARN],
-        "WARN sign MUST be configured"
-      )
+      assert.is_not_nil(config.signs.text[vim.diagnostic.severity.ERROR], "ERROR sign MUST be configured")
+      assert.is_not_nil(config.signs.text[vim.diagnostic.severity.WARN], "WARN sign MUST be configured")
     end)
   end)
 
@@ -106,10 +94,7 @@ describe("PercyBrain Health Validation", function()
       local success = health_fixes.apply_all_fixes()
 
       -- Assert
-      assert.is_true(
-        success or #health_fixes.status.failed <= 1,
-        "Most health fixes should apply successfully"
-      )
+      assert.is_true(success or #health_fixes.status.failed <= 1, "Most health fixes should apply successfully")
 
       -- Report any failures for debugging
       if #health_fixes.status.failed > 0 then
@@ -152,10 +137,7 @@ describe("PercyBrain Health Validation", function()
       vim.wait(1000) -- Wait for async fixes
 
       local post_fix_results = health_fixes.check_health()
-      assert.is_true(
-        #post_fix_results.critical <= 1,
-        "Critical issues should be mostly resolved after fixes"
-      )
+      assert.is_true(#post_fix_results.critical <= 1, "Critical issues should be mostly resolved after fixes")
     end)
   end)
 
@@ -192,11 +174,7 @@ describe("PercyBrain Health Validation", function()
       vim.cmd("SessionRestore test_health_validation")
 
       -- Assert
-      assert.equals(
-        "python",
-        vim.bo.filetype,
-        "Python filetype MUST be restored with session"
-      )
+      assert.equals("python", vim.bo.filetype, "Python filetype MUST be restored with session")
 
       -- Clean up
       vim.cmd("SessionDelete test_health_validation")
@@ -228,11 +206,7 @@ describe("PercyBrain Health Validation", function()
       vim.fn.sign_define = original_sign_define
 
       -- Assert
-      assert.equals(
-        0,
-        #deprecated_calls,
-        "Should not use deprecated sign_define for diagnostics"
-      )
+      assert.equals(0, #deprecated_calls, "Should not use deprecated sign_define for diagnostics")
     end)
 
     it("should configure diagnostic signs through vim.diagnostic.config", function()
@@ -259,11 +233,7 @@ describe("PercyBrain Health Validation", function()
       }
 
       assert.has_no.errors(function()
-        vim.diagnostic.set(
-          vim.api.nvim_create_namespace("test"),
-          test_buf,
-          test_diagnostics
-        )
+        vim.diagnostic.set(vim.api.nvim_create_namespace("test"), test_buf, test_diagnostics)
       end, "Should be able to set diagnostics without errors")
 
       -- Clean up

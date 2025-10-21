@@ -5,8 +5,8 @@
 local registry = require("config.keymaps")
 
 local keymaps = {
-	{ "<leader>tz", "<cmd>ZenMode<CR>", desc = "🧘 Zen mode" },
-	{ "<leader>sp", "<cmd>SoftPencil<CR>", desc = "✍️  Soft pencil mode" },
+  { "<leader>tz", "<cmd>ZenMode<CR>", desc = "🧘 Zen mode" },
+  { "<leader>sp", "<cmd>SoftPencil<CR>", desc = "✍️  Soft pencil mode" },
 }
 
 return registry.register_module("environment.focus", keymaps)
