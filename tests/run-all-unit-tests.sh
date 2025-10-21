@@ -25,40 +25,6 @@ echo -e "${CYAN}         PercyBrain Complete Unit Test Suite${NC}"
 echo -e "${CYAN}              Coverage Analysis Enabled${NC}"
 echo -e "${CYAN}════════════════════════════════════════════════════════${NC}"
 
-# Create minimal test configuration
-cat > /tmp/minimal_test_init.lua << 'EOF'
--- Minimal test configuration
-vim.opt.rtp:append('.')
-vim.opt.packpath:append('.')
-
--- Bootstrap lazy.nvim
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git", "clone", "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
-
--- Load Plenary
-local plenary_path = vim.fn.expand("~/.local/share/nvim/lazy/plenary.nvim")
-if vim.fn.isdirectory(plenary_path) == 1 then
-  vim.opt.rtp:append(plenary_path)
-end
-
--- Set basic options
-vim.g.mapleader = " "
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.writebackup = false
-vim.opt.undofile = false
-
--- Mock window manager to prevent loading issues
-_G.percybrain_window_manager_loaded = true
-EOF
-
 # Function to run a test file
 run_test() {
     local test_file=$1
@@ -69,7 +35,7 @@ run_test() {
     echo "────────────────────────────────────────────────"
 
     # Run test and capture output
-    local output=$(nvim --headless -u /tmp/minimal_test_init.lua \
+    local output=$(nvim --headless -u tests/minimal_init.lua \
         -c "lua require('plenary.busted').run('$test_file')" \
         -c "qall!" 2>&1 || true)
 
@@ -301,8 +267,5 @@ else
     exit_code=1
 fi
 echo -e "${CYAN}════════════════════════════════════════════════════════${NC}"
-
-# Clean up
-rm -f /tmp/minimal_test_init.lua
 
 exit $exit_code

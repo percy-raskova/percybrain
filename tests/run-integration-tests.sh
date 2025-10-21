@@ -131,24 +131,9 @@ run_integration_tests() {
         return 0
     fi
 
-    # Create minimal init file for integration tests
-    local INIT_FILE="$SCRIPT_DIR/integration_minimal_init.lua"
-    cat > "$INIT_FILE" << 'EOF'
--- Minimal init for integration tests
-vim.opt.rtp:append(".")
-vim.opt.rtp:append("~/.local/share/nvim/site/pack/vendor/start/plenary.nvim")
-
--- Set test environment
-vim.env.PERCYBRAIN_TEST = "true"
-vim.g.percybrain_test_mode = "integration"
-
--- Disable plugins not needed for tests
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
--- Load only what's needed for integration tests
-vim.cmd([[runtime! lua/percybrain/*.lua]])
-EOF
+    # Use standard minimal_init.lua for integration tests
+    # This ensures consistent test environment across all test types
+    local INIT_FILE="$SCRIPT_DIR/minimal_init.lua"
 
     # Run workflow tests
     if [ -d "$INTEGRATION_DIR/workflows" ]; then
@@ -184,9 +169,6 @@ EOF
     if [ $DURATION -gt $MAX_TOTAL_TIME ]; then
         log_warning "Tests took ${DURATION}s (target: <${MAX_TOTAL_TIME}s)"
     fi
-
-    # Clean up init file
-    rm -f "$INIT_FILE"
 
     return $EXIT_CODE
 }

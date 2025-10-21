@@ -17,41 +17,12 @@ echo -e "${CYAN}     Ollama Integration Test Suite${NC}"
 echo -e "${CYAN}     Coverage Analysis Enabled${NC}"
 echo -e "${CYAN}═══════════════════════════════════════════════${NC}"
 
-# Create a minimal test init without helper requirements
-cat > /tmp/test_init.lua << 'EOF'
--- Minimal test configuration
-vim.opt.rtp:append('.')
-vim.opt.packpath:append('.')
-
--- Bootstrap lazy.nvim
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git", "clone", "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
-
--- Load Plenary
-local plenary_path = vim.fn.expand("~/.local/share/nvim/lazy/plenary.nvim")
-if vim.fn.isdirectory(plenary_path) == 1 then
-  vim.opt.rtp:append(plenary_path)
-end
-
--- Set basic options
-vim.g.mapleader = " "
-vim.opt.swapfile = false
-vim.opt.backup = false
-EOF
-
 # Run the Ollama tests
 echo -e "\n${BLUE}Running Ollama Integration Tests...${NC}"
 echo "────────────────────────────────────────────────"
 
 # Execute tests with verbose output for coverage analysis
-TEST_OUTPUT=$(nvim --headless -u /tmp/test_init.lua \
+TEST_OUTPUT=$(nvim --headless -u tests/minimal_init.lua \
     -c "lua require('plenary.busted').run('tests/unit/ai/ollama_spec.lua')" \
     -c "qall!" 2>&1 || true)
 
@@ -137,8 +108,5 @@ echo "1. ✅ High-priority tests complete (Telescope, Commands, Error handling)"
 echo "2. 🔄 Medium priority: Add streaming response tests"
 echo "3. 📝 Low priority: Add ai-draft.lua plugin tests"
 echo "4. 🔧 Fix test environment helper loading for full execution"
-
-# Clean up
-rm -f /tmp/test_init.lua
 
 exit 0
