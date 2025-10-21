@@ -31,18 +31,14 @@ function M.cleanup_temp_dir(dir)
   end
 end
 
--- Wait for condition with timeout
-function M.wait_for(condition, timeout)
-  timeout = timeout or 1000 -- 1 second default
-  local start = vim.loop.now()
-
-  while not condition() do
-    if vim.loop.now() - start > timeout then
-      error("Timeout waiting for condition")
-    end
-    vim.wait(10)
-  end
-end
+-- Re-export robust wait_for from async_helpers
+-- The async_helpers version is more robust with:
+--   - Configurable polling interval
+--   - Error capture instead of throwing
+--   - Better timeout handling
+-- Use: local async = require('tests.helpers.async_helpers'); async.wait_for(...)
+local async_helpers = require("tests.helpers.async_helpers")
+M.wait_for = async_helpers.wait_for
 
 -- Async test helper
 function M.async_test(fn)
@@ -58,25 +54,14 @@ function M.async_test(fn)
   end
 end
 
--- Mock vim.notify for testing
-function M.mock_notify()
-  local notifications = {}
-  local original = vim.notify
-
-  vim.notify = function(msg, level)
-    table.insert(notifications, {
-      message = msg,
-      level = level,
-    })
-  end
-
-  return {
-    notifications = notifications,
-    restore = function()
-      vim.notify = original
-    end,
-  }
-end
+-- Re-export robust notification mocking from mocks.lua
+-- The mocks.lua version is more comprehensive with:
+--   - Capture, restore, clear methods
+--   - Pattern matching with has()
+--   - Count tracking
+-- Use: local mocks = require('tests.helpers.mocks'); mocks.notifications()
+local mocks = require("tests.helpers.mocks")
+M.mock_notify = mocks.notifications
 
 -- Ensure plugin is loaded
 function M.ensure_plugin(name)
