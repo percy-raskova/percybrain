@@ -80,11 +80,79 @@ local keymaps = {
     desc = "🚀 Publish to Hugo",
   },
 
-  -- Telekasten integration (if using)
-  { "<leader>zt", "<cmd>Telekasten show_tags<cr>", desc = "🏷️  Show tags" },
-  { "<leader>zc", "<cmd>Telekasten show_calendar<cr>", desc = "📅 Show calendar" },
-  { "<leader>zl", "<cmd>Telekasten follow_link<cr>", desc = "🔗 Follow link" },
-  { "<leader>zk", "<cmd>Telekasten insert_link<cr>", desc = "➕ Insert link" },
+  -- IWE-powered workflows
+  {
+    "<leader>zt",
+    function()
+      require("config.zettelkasten").show_tags()
+    end,
+    desc = "🏷️  Browse tags",
+  },
+  {
+    "<leader>zc",
+    function()
+      require("config.zettelkasten").show_calendar()
+    end,
+    desc = "📅 Calendar picker",
+  },
+  {
+    "<leader>zl",
+    function()
+      require("config.zettelkasten").follow_link()
+    end,
+    desc = "🔗 Follow link (LSP)",
+  },
+  {
+    "<leader>zk",
+    function()
+      require("config.zettelkasten").insert_link()
+    end,
+    desc = "➕ Insert link (LSP)",
+  },
+
+  -- IWE Advanced Refactoring (zr* namespace)
+  {
+    "<leader>zre",
+    function()
+      require("config.zettelkasten").extract_section()
+    end,
+    desc = "📤 Extract section to new note (LSP)",
+  },
+  {
+    "<leader>zri",
+    function()
+      require("config.zettelkasten").inline_section()
+    end,
+    desc = "📥 Inline section from link (LSP)",
+  },
+  {
+    "<leader>zrn",
+    function()
+      require("config.zettelkasten").normalize_links()
+    end,
+    desc = "🔧 Normalize links (CLI)",
+  },
+  {
+    "<leader>zrp",
+    function()
+      require("config.zettelkasten").show_pathways()
+    end,
+    desc = "🛤️  Show pathways (CLI)",
+  },
+  {
+    "<leader>zrc",
+    function()
+      require("config.zettelkasten").show_contents()
+    end,
+    desc = "📚 Show table of contents (CLI)",
+  },
+  {
+    "<leader>zrs",
+    function()
+      require("config.zettelkasten").squash_notes()
+    end,
+    desc = "🔨 Squash notes (CLI)",
+  },
 }
 
 return registry.register_module("zettelkasten", keymaps)
