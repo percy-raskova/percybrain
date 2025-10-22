@@ -1,12 +1,12 @@
--- IWE + Telekasten Integration Contract Tests
+-- IWE Zettelkasten Integration Contract Tests
 -- Tests that the integration meets its specification
 
-describe("IWE + Telekasten Integration Contract", function()
+describe("IWE Zettelkasten Integration Contract", function()
   local contract
 
   before_each(function()
     -- Arrange: Load contract specification
-    contract = require("specs.iwe_telekasten_contract")
+    contract = require("specs.iwe_zettelkasten_contract")
   end)
 
   after_each(function()
@@ -35,19 +35,35 @@ describe("IWE + Telekasten Integration Contract", function()
   end)
 
   describe("Link Format Compatibility", function()
-    it("uses WikiLink notation in Telekasten", function()
-      -- Arrange: Read Telekasten config file directly
-      local config_path = vim.fn.expand("~/.config/nvim/lua/plugins/zettelkasten/telekasten.lua")
+    it("uses markdown link notation in IWE LSP config", function()
+      -- Arrange: Read IWE LSP config file directly
+      local config_path = vim.fn.expand("~/.config/nvim/lua/plugins/lsp/iwe.lua")
       local content = table.concat(vim.fn.readfile(config_path), "\n")
 
-      -- Act: Check if link_notation is set to "wiki"
-      local has_wiki_notation = content:match('link_notation%s*=%s*"wiki"') ~= nil
+      -- Act: Check if link_type is set to "markdown"
+      local has_markdown_links = content:match('link_type%s*=%s*"markdown"') ~= nil
 
-      -- Assert: Must use "wiki" notation for IWE compatibility
+      -- Assert: Must use "markdown" notation for IWE LSP
       assert.is_true(
-        has_wiki_notation,
-        "Telekasten must use WikiLink notation for IWE LSP compatibility\n"
-          .. "How to fix: Set link_notation = 'wiki' in telekasten.lua (line ~48)"
+        has_markdown_links,
+        "IWE LSP must use markdown link notation [note](note.md)\n"
+          .. "How to fix: Set link_type = 'markdown' in lua/plugins/lsp/iwe.lua (line ~24)"
+      )
+    end)
+
+    it("does NOT use WikiLink notation", function()
+      -- Arrange: Read IWE LSP config file
+      local config_path = vim.fn.expand("~/.config/nvim/lua/plugins/lsp/iwe.lua")
+      local content = table.concat(vim.fn.readfile(config_path), "\n")
+
+      -- Act: Check that WikiLink is NOT configured
+      local has_wikilink = content:match('link_type%s*=%s*"WikiLink"') ~= nil
+
+      -- Assert: Must NOT use WikiLink notation (old Telekasten format)
+      assert.is_false(
+        has_wikilink,
+        "IWE LSP must NOT use WikiLink notation [[note]]\n"
+          .. "How to fix: Change link_type from 'WikiLink' to 'markdown' in lua/plugins/lsp/iwe.lua"
       )
     end)
   end)
@@ -89,13 +105,51 @@ describe("IWE + Telekasten Integration Contract", function()
   end)
 
   describe("Critical Settings Protection", function()
-    it("maintains Telekasten link notation", function()
-      -- This is a regression protection - link notation must stay "wiki"
-      local expected = contract.protected_settings.telekasten_link_notation
+    it("maintains IWE link type as markdown", function()
+      -- This is a regression protection - link type must stay "markdown"
+      local expected = contract.protected_settings.iwe_link_type
 
-      -- We'll verify this when Telekasten is loaded
-      -- For now, verify the contract specifies it
-      assert.equals("wiki", expected)
+      -- Verify the contract specifies markdown links
+      assert.equals("markdown", expected, "IWE must use markdown link format [note](note.md)")
+    end)
+
+    it("specifies correct LSP server name", function()
+      local expected = contract.protected_settings.lsp_server_name
+
+      -- Verify LSP server name
+      assert.equals("iwes", expected, "IWE LSP server must be named 'iwes'")
+    end)
+
+    it("specifies correct CLI command name", function()
+      local expected = contract.protected_settings.cli_command_name
+
+      -- Verify CLI command name
+      assert.equals("iwe", expected, "IWE CLI command must be named 'iwe'")
+    end)
+  end)
+
+  describe("Required Tools", function()
+    it("IWE LSP server (iwes) is installed", function()
+      -- Act: Check if iwes command exists
+      local has_iwes = vim.fn.executable("iwes") == 1
+
+      -- Assert: iwes must be available
+      assert.is_true(
+        has_iwes,
+        "IWE LSP server 'iwes' must be installed\n"
+          .. "How to fix: cargo install iwe (installs both iwe and iwes binaries)"
+      )
+    end)
+
+    it("IWE CLI (iwe) is installed", function()
+      -- Act: Check if iwe command exists
+      local has_iwe = vim.fn.executable("iwe") == 1
+
+      -- Assert: iwe must be available
+      assert.is_true(
+        has_iwe,
+        "IWE CLI 'iwe' must be installed\n" .. "How to fix: cargo install iwe (installs both iwe and iwes binaries)"
+      )
     end)
   end)
 end)

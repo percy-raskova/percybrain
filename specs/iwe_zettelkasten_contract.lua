@@ -1,5 +1,5 @@
--- IWE + Telekasten Integration Contract Specification
--- Defines what the integration MUST provide to users
+-- IWE Zettelkasten Integration Contract Specification
+-- Defines what the IWE-based Zettelkasten MUST provide to users
 
 return {
   -- Directory Structure Requirements
@@ -16,29 +16,28 @@ return {
 
   -- Link Format Compatibility
   link_format = {
-    notation = "wiki", -- [[note]] format
+    notation = "markdown", -- [note](note.md) format
     compatible_with_iwe = true,
     supports_subdirs = true,
   },
 
   -- Core Capabilities (what users CAN DO)
   capabilities = {
-    -- Telekasten capabilities
-    "create_note_with_template",
-    "navigate_with_calendar",
-    "insert_wikilink",
-    "show_backlinks",
-    "rename_note_updates_links",
-
-    -- IWE capabilities
+    -- IWE LSP capabilities
     "extract_section_to_note",
     "inline_note_content",
     "navigate_to_definition",
     "workspace_symbols_search",
     "safe_rename_with_links",
+    "markdown_link_navigation",
+
+    -- IWE CLI capabilities
+    "create_note_with_cli",
+    "search_notes_with_cli",
+    "validate_links_with_cli",
 
     -- Integration capabilities
-    "extract_creates_wikilink",
+    "extract_creates_markdown_link",
     "inline_preserves_formatting",
     "symbols_show_all_notes",
   },
@@ -54,8 +53,15 @@ return {
 
   -- Critical Settings (must never change without explicit intent)
   protected_settings = {
-    telekasten_link_notation = "wiki",
-    iwe_link_type = "WikiLink",
+    iwe_link_type = "markdown", -- IWE uses markdown links [](note.md)
+    lsp_server_name = "iwes",
+    cli_command_name = "iwe",
     template_variables_enabled = true,
+  },
+
+  -- Required Tools
+  required_tools = {
+    lsp_server = "iwes", -- IWE LSP server binary
+    cli = "iwe", -- IWE CLI binary
   },
 }

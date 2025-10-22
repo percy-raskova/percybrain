@@ -1,7 +1,7 @@
--- IWE + Telekasten Integration Capability Tests
--- Tests what users CAN DO with the integrated system
+-- IWE Zettelkasten Integration Capability Tests
+-- Tests what users CAN DO with the IWE-based system
 
-describe("IWE + Telekasten Integration Capabilities", function()
+describe("IWE Zettelkasten Integration Capabilities", function()
   local test_dir = "/tmp/test-zettelkasten"
 
   before_each(function()
@@ -15,11 +15,22 @@ describe("IWE + Telekasten Integration Capabilities", function()
   end)
 
   -- ========================================================================
-  -- WORKFLOW 1: Create and Organize Notes
+  -- WORKFLOW 1: Create and Organize Notes (IWE CLI + Templates)
   -- ========================================================================
 
-  describe("User CAN create notes with templates", function()
-    it("CAN create new zettel with template variables", function()
+  describe("User CAN create notes with IWE CLI", function()
+    it("CAN create new zettel using IWE CLI", function()
+      -- Arrange: Verify IWE CLI is available
+      local has_iwe = vim.fn.executable("iwe") == 1
+
+      -- Assert: IWE CLI must be installed
+      assert.is_true(
+        has_iwe,
+        "IWE CLI must be installed for note creation workflow\n" .. "How to fix: cargo install iwe"
+      )
+    end)
+
+    it("CAN create notes with template variables", function()
       -- Arrange: Verify template exists
       local template = vim.fn.expand("~/Zettelkasten/templates/note.md")
       local has_template = vim.fn.filereadable(template) == 1
@@ -98,22 +109,51 @@ describe("IWE + Telekasten Integration Capabilities", function()
   end)
 
   -- ========================================================================
-  -- WORKFLOW 2: WikiLink Navigation (Telekasten + IWE)
+  -- WORKFLOW 2: Markdown Link Navigation (IWE LSP)
   -- ========================================================================
 
-  describe("User CAN navigate with WikiLinks", function()
-    it("WORKS with wiki notation [[note]]", function()
-      -- This test verifies link format compatibility
-      -- When IWE is fully configured, we'll test actual navigation
-
+  describe("User CAN navigate with markdown links", function()
+    it("WORKS with markdown notation [note](note.md)", function()
       -- Arrange: Check contract specification
-      local contract = require("specs.iwe_telekasten_contract")
+      local contract = require("specs.iwe_zettelkasten_contract")
 
-      -- Assert: Link format must be wiki
+      -- Assert: Link format must be markdown
       assert.equals(
-        "wiki",
+        "markdown",
         contract.link_format.notation,
-        "System must use WikiLink [[note]] format for IWE compatibility"
+        "System must use markdown link [note](note.md) format for IWE LSP compatibility"
+      )
+    end)
+
+    it("IWE LSP server is configured for markdown links", function()
+      -- Arrange: Read IWE LSP config
+      local config_path = vim.fn.expand("~/.config/nvim/lua/plugins/lsp/iwe.lua")
+      local content = table.concat(vim.fn.readfile(config_path), "\n")
+
+      -- Act: Check link_type configuration
+      local has_markdown = content:match('link_type%s*=%s*"markdown"') ~= nil
+
+      -- Assert: Must be configured for markdown links
+      assert.is_true(
+        has_markdown,
+        "IWE LSP must be configured with link_type = 'markdown'\n"
+          .. "How to fix: Update lua/plugins/lsp/iwe.lua line ~24"
+      )
+    end)
+
+    it("does NOT use WikiLink notation (Telekasten legacy)", function()
+      -- Arrange: Read IWE LSP config
+      local config_path = vim.fn.expand("~/.config/nvim/lua/plugins/lsp/iwe.lua")
+      local content = table.concat(vim.fn.readfile(config_path), "\n")
+
+      -- Act: Verify WikiLink is NOT used
+      local has_wikilink = content:match('link_type%s*=%s*"WikiLink"') ~= nil
+
+      -- Assert: Must NOT use old WikiLink format
+      assert.is_false(
+        has_wikilink,
+        "IWE LSP must NOT use WikiLink [[note]] format\n"
+          .. "How to fix: Change link_type from 'WikiLink' to 'markdown' in lua/plugins/lsp/iwe.lua"
       )
     end)
   end)
@@ -123,10 +163,19 @@ describe("IWE + Telekasten Integration Capabilities", function()
   -- ========================================================================
 
   describe("User CAN extract sections to new notes", function()
-    it("PREPARES for IWE extract workflow", function()
-      -- This test will validate IWE extract once configured
-      -- For now, verify the workflow directory structure exists
+    it("IWE LSP server is available for extract operations", function()
+      -- Arrange: Check for iwes binary
+      local has_iwes = vim.fn.executable("iwes") == 1
 
+      -- Assert: LSP server must be installed
+      assert.is_true(
+        has_iwes,
+        "IWE LSP server must be installed for extract workflow\n"
+          .. "How to fix: cargo install iwe (installs both iwe and iwes)"
+      )
+    end)
+
+    it("PREPARES extract destination directory", function()
       -- Arrange: Check zettel directory
       local zettel_dir = vim.fn.expand("~/Zettelkasten/zettel")
       local exists = vim.fn.isdirectory(zettel_dir) == 1
@@ -138,13 +187,33 @@ describe("IWE + Telekasten Integration Capabilities", function()
           .. "How to fix: Directory should be at ~/Zettelkasten/zettel/"
       )
     end)
+
+    it("extract creates markdown links (not WikiLinks)", function()
+      -- Arrange: Check contract specification
+      local contract = require("specs.iwe_zettelkasten_contract")
+
+      -- Assert: Extract must create markdown links
+      assert.has_match(
+        "markdown_link",
+        contract.capabilities[6], -- "markdown_link_navigation"
+        "Extract operation must create markdown links [note](note.md)"
+      )
+    end)
   end)
 
   describe("User CAN inline notes for synthesis", function()
-    it("PREPARES for IWE inline workflow", function()
-      -- This test will validate IWE inline once configured
-      -- For now, verify drafts directory exists for synthesis work
+    it("IWE LSP server supports inline operations", function()
+      -- Arrange: Verify LSP server is available
+      local has_iwes = vim.fn.executable("iwes") == 1
 
+      -- Assert: LSP server required for inline
+      assert.is_true(
+        has_iwes,
+        "IWE LSP server must be installed for inline workflow\n" .. "How to fix: cargo install iwe"
+      )
+    end)
+
+    it("PREPARES synthesis workspace (drafts directory)", function()
       -- Arrange: Check drafts directory
       local drafts_dir = vim.fn.expand("~/Zettelkasten/drafts")
       local exists = vim.fn.isdirectory(drafts_dir) == 1
@@ -174,7 +243,7 @@ describe("IWE + Telekasten Integration Capabilities", function()
       local content = table.concat(vim.fn.readfile(template), "\n")
 
       -- Assert: Template uses title variable correctly
-      assert.is_true(content:match("{{title}}") ~= nil, "Template must use {{title}} for Telekasten substitution")
+      assert.is_true(content:match("{{title}}") ~= nil, "Template must use {{title}} for variable substitution")
     end)
 
     it("WORKS with {{date}} variable", function()
@@ -188,7 +257,49 @@ describe("IWE + Telekasten Integration Capabilities", function()
       local content = table.concat(vim.fn.readfile(template), "\n")
 
       -- Assert: Template uses date variable correctly
-      assert.is_true(content:match("{{date}}") ~= nil, "Template must use {{date}} for Telekasten substitution")
+      assert.is_true(content:match("{{date}}") ~= nil, "Template must use {{date}} for variable substitution")
+    end)
+  end)
+
+  -- ========================================================================
+  -- WORKFLOW 5: LSP Navigation and Workspace Symbols
+  -- ========================================================================
+
+  describe("User CAN use LSP navigation features", function()
+    it("IWE LSP provides go-to-definition support", function()
+      -- Arrange: Check contract capabilities
+      local contract = require("specs.iwe_zettelkasten_contract")
+
+      -- Assert: Must support navigate_to_definition
+      assert.has_match(
+        "navigate_to_definition",
+        table.concat(contract.capabilities, ","),
+        "IWE LSP must provide go-to-definition for markdown links"
+      )
+    end)
+
+    it("IWE LSP provides workspace symbols search", function()
+      -- Arrange: Check contract capabilities
+      local contract = require("specs.iwe_zettelkasten_contract")
+
+      -- Assert: Must support workspace_symbols_search
+      assert.has_match(
+        "workspace_symbols_search",
+        table.concat(contract.capabilities, ","),
+        "IWE LSP must provide workspace symbols for finding notes"
+      )
+    end)
+
+    it("IWE LSP provides safe rename with link updates", function()
+      -- Arrange: Check contract capabilities
+      local contract = require("specs.iwe_zettelkasten_contract")
+
+      -- Assert: Must support safe_rename_with_links
+      assert.has_match(
+        "safe_rename_with_links",
+        table.concat(contract.capabilities, ","),
+        "IWE LSP must provide safe rename that updates all links"
+      )
     end)
   end)
 end)
