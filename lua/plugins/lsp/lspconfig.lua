@@ -241,36 +241,13 @@ return {
       },
     })
 
-    -- configure IWE markdown server (PercyBrain Zettelkasten)
-    -- IWE is installed via cargo: cargo install iwe
-    -- IWE LSP for Zettelkasten markdown files
-    lspconfig["iwe"].setup({
-      capabilities = capabilities,
-      on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-
-        -- IWE-specific keymaps for Zettelkasten workflow
-        local iwe_opts = { noremap = true, silent = true, buffer = bufnr }
-
-        -- Navigate links with gd (already mapped in on_attach)
-        -- Find backlinks with <leader>zr (references)
-        iwe_opts.desc = "Find backlinks (references)"
-        keymap.set("n", "<leader>zr", vim.lsp.buf.references, iwe_opts)
-
-        -- Extract/inline sections with code actions
-        iwe_opts.desc = "Extract/Inline section"
-        keymap.set({ "n", "v" }, "<leader>za", vim.lsp.buf.code_action, iwe_opts)
-
-        -- Document symbols (table of contents)
-        iwe_opts.desc = "Document outline (TOC)"
-        keymap.set("n", "<leader>zo", vim.lsp.buf.document_symbol, iwe_opts)
-
-        -- Workspace symbols (global search)
-        iwe_opts.desc = "Global note search"
-        keymap.set("n", "<leader>zf", vim.lsp.buf.workspace_symbol, iwe_opts)
-      end,
-      filetypes = { "markdown" },
-      root_dir = lspconfig.util.root_pattern(".git", ".iwe"),
-    })
+    -- IWE LSP Configuration
+    -- NOTE: IWE LSP server (iwes) is configured via lua/plugins/lsp/iwe.lua
+    -- The iwe.nvim plugin automatically starts and manages the iwes server.
+    -- No separate lspconfig setup needed - iwe.nvim handles it internally.
+    --
+    -- See: lua/plugins/lsp/iwe.lua for full IWE configuration
+    -- Commands: :IWE lsp start/stop/restart/status
+    -- Health check: :checkhealth iwe
   end,
 }
