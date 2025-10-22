@@ -2,9 +2,9 @@
 -- Purpose: LSP for knowledge management with graph-based refactoring
 -- Repository: https://github.com/iwe-org/iwe
 --
--- Integration with Telekasten:
--- - Telekasten: Navigation, creation, calendar, templates
--- - IWE: Refactoring (extract/inline), LSP navigation, link maintenance
+-- Integration Strategy:
+-- - IWE: Primary LSP for navigation, refactoring, link maintenance
+-- - Custom implementations: Calendar, tags (Telescope + ripgrep)
 
 return {
   "iwe-org/iwe.nvim",
@@ -17,11 +17,11 @@ return {
     local home = vim.fn.expand("~/Zettelkasten")
 
     require("iwe").setup({
-      -- Directory configuration (matches Telekasten)
+      -- Directory configuration
       library_path = home,
 
-      -- Link format (MUST match Telekasten's link_notation = "wiki")
-      link_type = "WikiLink", -- [[note]] syntax
+      -- Link format: Traditional markdown for compatibility
+      link_type = "markdown", -- [text](key) syntax
 
       -- LSP server configuration
       lsp = {
