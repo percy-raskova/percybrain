@@ -1,6 +1,6 @@
 # CLAUDE.md - PercyBrain AI Context Index
 
-**Project**: Neovim Zettelkasten + AI Writing Environment | **Testing**: 44/44 passing, 6/6 standards | **Arch**: 68 plugins/14 workflows (17 imports)
+**Project**: Neovim Zettelkasten + AI Writing Environment | **Testing**: 44/44 passing, 6/6 standards | **Arch**: 67 plugins/14 workflows (17 imports)
 
 ## Documentation Map
 
@@ -60,10 +60,10 @@ Documentation follows [Diataxis framework](https://diataxis.fr/) (tutorial/how-t
 
 **Bootstrap**: `init.lua` → `require('config')` → `lua/config/init.lua` → lazy.nvim → `lua/plugins/init.lua` → 14 workflow imports
 
-**Plugin Structure** (68 total):
+**Plugin Structure** (67 total):
 
 ```
-lua/plugins/{zettelkasten(6)|ai-sembr(3)|prose-writing(14)|academic(4)|
+lua/plugins/{zettelkasten(5)|ai-sembr(3)|prose-writing(14)|academic(4)|
 publishing(3)|org-mode(3)|lsp(3)|completion(5)|ui(7)|navigation(8)|
 utilities(15)|treesitter(2)|lisp(2)|experimental(4)}
 ```
@@ -193,13 +193,13 @@ return {
 - Quality: `mise lint`, `mise format`, `mise check`
 - Setup: `mise setup` (first-time development environment)
 
-**PercyBrain**: IWE LSP (`cargo install iwe`) ✅, SemBr (`uv tool install sembr`) ✅, Ollama (`ollama pull llama3.2`) ✅, Hugo (optional)
+**PercyBrain**: IWE CLI + LSP (`cargo build --release` from source) ✅, SemBr (`uv tool install sembr`) ✅, Ollama (`ollama pull llama3.2`) ✅, Hugo (optional)
 
 **Dev**: ripgrep, Node.js, Pandoc, LaTeX, pre-commit (`uvx --from pre-commit-uv`)
 
 ## Troubleshooting
 
-**Blank screen** → Check `lua/plugins/init.lua` explicit imports **IWE LSP** → `:LspInfo`, verify `cargo install iwe` **AI fail** → `ollama list`, check llama3.2 **Tests fail** → `mise test:quick` for fast feedback, `mise test:debug` for verbose output **Plugin detection** → `nvim --headless -c "lua print(#require('lazy').plugins())" -c "qall"` (should show 68+)
+**Blank screen** → Check `lua/plugins/init.lua` explicit imports **IWE LSP** → `:LspInfo`, verify `iwes` in PATH (build from source) **AI fail** → `ollama list`, check llama3.2 **Tests fail** → `mise test:quick` for fast feedback, `mise test:debug` for verbose output **Plugin detection** → `nvim --headless -c "lua print(#require('lazy').plugins())" -c "qall"` (should show 67+)
 
 **Reload**: `:source ~/.config/nvim/init.lua` | `:Lazy reload [plugin]` **Health**: `:checkhealth` | `:Lazy health` | `:Lazy restore` **Quality**: `mise check` (lint + format + test:quick + hooks)
 
@@ -207,7 +207,7 @@ return {
 
 **Active Dev**: Zettelkasten-first knowledge mgmt + AI writing **Testing**: 44/44 passing, 6/6 standards enforced **Platforms**: ✅ Linux/macOS/Android | ❌ Limited: Windows/iPad **Maintenance**: Seeking maintainers (original author → Emacs)
 
-**Philosophy Shift** (Oct 2025): "Writing environment" → "Zettelkasten-first knowledge mgmt" **Changes**: 68 plugins/14 workflows, +8 plugins (IWE LSP, AI Draft, Hugo, ltex-ls), -7 redundant
+**Philosophy Shift** (Oct 2025): "Writing environment" → "Zettelkasten-first knowledge mgmt" **Changes**: 67 plugins/14 workflows, IWE-only (removed Telekasten 2025-10-22), custom calendar/tags/navigation via LSP and Telescope
 
 ______________________________________________________________________
 

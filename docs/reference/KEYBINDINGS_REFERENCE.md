@@ -79,24 +79,24 @@ ______________________________________________________________________
 
 ### Core Note Operations
 
-| Keymap       | Mode | Description                              | Plugin       |
-| ------------ | ---- | ---------------------------------------- | ------------ |
-| `<leader>n`  | n    | **New note (quick)** - OPTIMIZED         | Zettelkasten |
-| `<leader>zn` | n    | Create new permanent note (with options) | Zettelkasten |
-| `<leader>zd` | n    | Open today's daily note                  | Telekasten   |
-| `<leader>zi` | n    | Create inbox note                        | Zettelkasten |
-| `<leader>i`  | n    | **Quick capture (quick)** - OPTIMIZED    | QuickCapture |
-| `<leader>zq` | n    | Quick capture (floating window)          | QuickCapture |
-| `<leader>zf` | n    | Fuzzy find notes                         | Telekasten   |
-| `<leader>zg` | n    | Search note content (grep)               | Telekasten   |
-| `<leader>zb` | n    | Show backlinks to current note           | Telekasten   |
-| `<leader>zo` | n    | Find orphan notes                        | PercyOrphans |
-| `<leader>zh` | n    | Find hub notes                           | PercyHubs    |
-| `<leader>zp` | n    | Publish to Hugo                          | Hugo         |
-| `<leader>zt` | n    | Show tags                                | Telekasten   |
-| `<leader>zc` | n    | Show visual calendar                     | Telekasten   |
-| `<leader>zl` | n    | Follow link                              | Telekasten   |
-| `<leader>zk` | n    | Insert link to note                      | Telekasten   |
+| Keymap       | Mode | Description                              | Plugin             |
+| ------------ | ---- | ---------------------------------------- | ------------------ |
+| `<leader>n`  | n    | **New note (quick)** - OPTIMIZED         | Zettelkasten       |
+| `<leader>zn` | n    | Create new permanent note (with options) | Zettelkasten       |
+| `<leader>zd` | n    | Open today's daily note                  | Zettelkasten (IWE) |
+| `<leader>zi` | n    | Create inbox note                        | Zettelkasten       |
+| `<leader>i`  | n    | **Quick capture (quick)** - OPTIMIZED    | QuickCapture       |
+| `<leader>zq` | n    | Quick capture (floating window)          | QuickCapture       |
+| `<leader>zf` | n    | Fuzzy find notes                         | Telescope          |
+| `<leader>zg` | n    | Search note content (grep)               | Telescope          |
+| `<leader>zb` | n    | Show backlinks to current note           | Zettelkasten       |
+| `<leader>zo` | n    | Find orphan notes                        | PercyOrphans       |
+| `<leader>zh` | n    | Find hub notes                           | PercyHubs          |
+| `<leader>zp` | n    | Publish to Hugo                          | Hugo               |
+| `<leader>zt` | n    | Browse tags (custom Telescope picker)    | Zettelkasten (IWE) |
+| `<leader>zc` | n    | Calendar picker (custom Telescope)       | Zettelkasten (IWE) |
+| `<leader>zl` | n    | Follow link (LSP definition jump)        | IWE LSP            |
+| `<leader>zk` | n    | Insert link (LSP code action)            | IWE LSP            |
 
 ### IWE Navigation (Consolidated under `<leader>z*`)
 
@@ -396,4 +396,4 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-**Last Review**: 2025-10-21 **Major Refactor**: Writer-first keybinding consolidation (Phase 1 complete) **Total Custom Keybindings**: 138+ PercyBrain-specific keybindings **Breaking Changes**: See `claudedocs/KEYBINDING_MIGRATION_2025-10-21.md` for migration guide **Philosophy**: Speed of thought knowledge management for writers
+**Last Review**: 2025-10-22 **Major Refactor**: Writer-first keybinding consolidation (Phase 1 & 2 complete) + Telekasten → IWE migration **Total Custom Keybindings**: 138+ PercyBrain-specific keybindings **Breaking Changes**: See `claudedocs/KEYBINDING_MIGRATION_2025-10-21.md` and `claudedocs/TELEKASTEN_IWE_MIGRATION_STATUS.md` **Philosophy**: Speed of thought knowledge management for writers

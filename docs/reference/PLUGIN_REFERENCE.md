@@ -4,6 +4,8 @@
 
 Complete catalog of all 67 plugins in PercyBrain organized by workflow category and purpose.
 
+**2025-10-22 Update**: Telekasten removed, IWE-only implementation with custom Telescope-based calendar/tags and LSP-based link navigation.
+
 ______________________________________________________________________
 
 ## Overview
@@ -15,7 +17,7 @@ PercyBrain uses **lazy.nvim** for plugin management with a carefully curated sel
 ```
 lua/plugins/
 ├── init.lua                 # Plugin loader with explicit imports
-├── zettelkasten/            # 5 plugins - Core knowledge management
+├── zettelkasten/            # 4 plugins - Core knowledge management (IWE-only)
 ├── ai-sembr/                # 3 plugins - AI and semantic formatting
 ├── prose-writing/           # 11 plugins - Writing tools (4 subcategories)
 │   ├── editing/             # 5 plugins
@@ -68,25 +70,31 @@ ______________________________________________________________________
 
 ## Core Workflows
 
-### 1. Zettelkasten (5 plugins)
+### 1. Zettelkasten (4 plugins)
 
-The primary knowledge management workflow. These plugins form the foundation of PercyBrain's note-taking system.
+The primary knowledge management workflow using IWE LSP with custom Telescope integrations.
 
-| Plugin                | Repository                        | Purpose                                                                              | Key Commands                                 | Status       |
-| --------------------- | --------------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------- | ------------ |
-| **Telekasten**        | `nvim-telekasten/telekasten.nvim` | Main Zettelkasten engine with ADHD-optimized UI, visual previews, calendar structure | `:Telekasten`, `<leader>zn/zf/zg/zb/zd`      | Core, loaded |
-| **Telescope**         | `nvim-telescope/telescope.nvim`   | Fuzzy finder for notes, files, buffers. Powers Telekasten search                     | `<leader>ff/fg/fb/fh/fk`                     | Core, loaded |
-| **IWE LSP**           | `Feel-ix-343/markdown-oxide`      | Intelligent Writing Environment LSP. Provides markdown intelligence, link completion | Configured via lspconfig                     | ft:markdown  |
-| **Img-Clip**          | `HakonHarnes/img-clip.nvim`       | Clipboard image pasting with auto-naming and path management                         | `:PasteImage`, `<leader>p`                   | Core, loaded |
-| **SemBr Integration** | Local plugin                      | Semantic line breaks for better diffs. Extends fugitive/gitsigns                     | `<leader>zs` (format), `<leader>zt` (toggle) | Core, loaded |
+| Plugin                | Repository                      | Purpose                                                                               | Key Commands                                      | Status       |
+| --------------------- | ------------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------ |
+| **Telescope**         | `nvim-telescope/telescope.nvim` | Fuzzy finder for notes, files, buffers. Powers custom calendar/tag pickers            | `<leader>f/ff/fg/fb/fh/fk`                        | Core, loaded |
+| **IWE LSP**           | `iwe-org/iwe`                   | Intelligent Writing Environment LSP. Markdown intelligence, link navigation/insertion | `<leader>zl/zk` (links), configured via lspconfig | ft:markdown  |
+| **Img-Clip**          | `HakonHarnes/img-clip.nvim`     | Clipboard image pasting with auto-naming and path management                          | `:PasteImage`, `<leader>pP`                       | Core, loaded |
+| **SemBr Integration** | Local plugin                    | Semantic line breaks for better diffs. Extends fugitive/gitsigns                      | `<leader>zs` (format), `<leader>zt` (toggle)      | Core, loaded |
 
-**Dependencies**: plenary.nvim (required by Telescope, Telekasten)
+**Dependencies**: plenary.nvim (required by Telescope)
 
 **Configuration**:
 
-- Telekasten: `lua/plugins/zettelkasten/telekasten.lua` (comprehensive config with ADHD features)
-- IWE LSP: `lua/plugins/lsp/lspconfig.lua` (LSP setup)
+- IWE LSP: `lua/plugins/lsp/iwe.lua` (LSP + CLI configuration)
+- Zettelkasten module: `lua/config/zettelkasten.lua` (custom calendar/tag/link implementations)
 - SemBr: Requires external `sembr` binary (`uv tool install sembr`)
+
+**Custom Implementations** (2025-10-22 migration):
+
+- **Calendar Picker** (`show_calendar()`): Telescope-based date picker with -30/+30 day range, preview, TODAY marker
+- **Tag Browser** (`show_tags()`): Ripgrep-based tag extraction with frequency counts and Telescope display
+- **Link Navigation** (`follow_link()`): LSP-based definition jumps via `vim.lsp.buf.definition()`
+- **Link Insertion** (`insert_link()`): LSP code actions filtered for link insertion
 
 **Integration**: Works with AI-SemBr workflow for enhanced note management.
 
@@ -622,24 +630,24 @@ ______________________________________________________________________
 
 ## Plugin Categories Summary
 
-| Category          | Count  | Primary Purpose                           | Core Plugins                       |
-| ----------------- | ------ | ----------------------------------------- | ---------------------------------- |
-| **Zettelkasten**  | 5      | Knowledge management foundation           | Telekasten, Telescope, IWE LSP     |
-| **AI-SemBr**      | 3      | Local AI assistance and formatting        | Ollama, AI Draft, SemBr            |
-| **Prose-Writing** | 11     | Professional writing tools                | Vim-Pencil, ltex-ls, Zen Mode      |
-| **Academic**      | 4      | LaTeX and academic publishing             | VimTeX, Vim-Pandoc                 |
-| **Publishing**    | 3      | Export and web publishing                 | Hugo, Markdown-Preview             |
-| **Org-Mode**      | 3      | Emacs org-mode compatibility              | Nvim-Orgmode                       |
-| **LSP**           | 4      | Language server intelligence              | Lspconfig, Mason, IWE LSP          |
-| **Completion**    | 1      | Autocompletion                            | Nvim-Cmp                           |
-| **UI**            | 9      | Themes and interface                      | PercyBrain-Theme, Which-Key, Alpha |
-| **Navigation**    | 3      | File system navigation                    | Nvim-Tree, Yazi                    |
-| **Utilities**     | 14     | Development and productivity              | Fugitive, Gitsigns, Auto-Session   |
-| **Treesitter**    | 1      | Syntax highlighting                       | Nvim-Treesitter                    |
-| **Lisp**          | 2      | Common Lisp support                       | Quicklisp, CL-Neovim               |
-| **Experimental**  | 3      | Experimental features                     | Pendulum, Lynx-Wiki, StyledDoc     |
-| **Diagnostics**   | 1      | Error aggregation                         | Trouble                            |
-| **Total**         | **67** | Complete knowledge management environment | 15 categories                      |
+| Category          | Count  | Primary Purpose                                       | Core Plugins                       |
+| ----------------- | ------ | ----------------------------------------------------- | ---------------------------------- |
+| **Zettelkasten**  | 5      | Knowledge management foundation                       | Telekasten, Telescope, IWE LSP     |
+| **AI-SemBr**      | 3      | Local AI assistance and formatting                    | Ollama, AI Draft, SemBr            |
+| **Prose-Writing** | 11     | Professional writing tools                            | Vim-Pencil, ltex-ls, Zen Mode      |
+| **Academic**      | 4      | LaTeX and academic publishing                         | VimTeX, Vim-Pandoc                 |
+| **Publishing**    | 3      | Export and web publishing                             | Hugo, Markdown-Preview             |
+| **Org-Mode**      | 3      | Emacs org-mode compatibility                          | Nvim-Orgmode                       |
+| **LSP**           | 4      | Language server intelligence                          | Lspconfig, Mason, IWE LSP          |
+| **Completion**    | 1      | Autocompletion                                        | Nvim-Cmp                           |
+| **UI**            | 9      | Themes and interface                                  | PercyBrain-Theme, Which-Key, Alpha |
+| **Navigation**    | 3      | File system navigation                                | Nvim-Tree, Yazi                    |
+| **Utilities**     | 14     | Development and productivity                          | Fugitive, Gitsigns, Auto-Session   |
+| **Treesitter**    | 1      | Syntax highlighting                                   | Nvim-Treesitter                    |
+| **Lisp**          | 2      | Common Lisp support                                   | Quicklisp, CL-Neovim               |
+| **Experimental**  | 3      | Experimental features                                 | Pendulum, Lynx-Wiki, StyledDoc     |
+| **Diagnostics**   | 1      | Error aggregation                                     | Trouble                            |
+| **Total**         | **67** | Complete knowledge management environment (IWE-based) | 15 categories                      |
 
 ______________________________________________________________________
 
@@ -661,9 +669,8 @@ For detailed documentation, visit the official plugin repositories:
 
 ### Zettelkasten
 
-- Telekasten: <https://github.com/nvim-telekasten/telekasten.nvim>
 - Telescope: <https://github.com/nvim-telescope/telescope.nvim>
-- IWE LSP: <https://github.com/Feel-ix-343/markdown-oxide>
+- IWE LSP: <https://github.com/iwe-org/iwe> (CLI + LSP server)
 - Img-Clip: <https://github.com/HakonHarnes/img-clip.nvim>
 
 ### AI & Writing
@@ -692,4 +699,4 @@ For detailed documentation, visit the official plugin repositories:
 
 ______________________________________________________________________
 
-**Last Updated**: 2025-10-19 **Plugin Count**: 67 plugins across 15 categories **Neovim Version**: ≥0.8.0 required
+**Last Updated**: 2025-10-22 **Plugin Count**: 67 plugins across 15 categories **Neovim Version**: ≥0.8.0 required **Migration**: Telekasten → IWE-only (custom Telescope/LSP implementations)

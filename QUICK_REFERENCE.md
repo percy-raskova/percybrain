@@ -54,7 +54,7 @@ ______________________________________________________________________
 
 **All note operations under `<leader>z*` namespace (Phase 1 consolidation)**
 
-| Key | Action | | ------------ | ----------------------------- | | `<leader>n` | **New note (quick)** ⚡ | | `<leader>zn` | New note (with options) | | `<leader>zd` | Daily note | | `<leader>zi` | Inbox note (file) | | `<leader>i` | **Inbox capture (quick)** ⚡ | | `<leader>zq` | Inbox capture (floating) | | `<leader>f` | **Find notes** ⚡ | | `<leader>zf` | Find notes (alternate) | | `<leader>zg` | Search content (grep) | | `<leader>zb` | Show backlinks | | `<leader>zo` | Find orphan notes | | `<leader>zh` | Find hub notes | | `<leader>ad` | AI Draft |
+| Key | Action | | ------------ | ----------------------------- | | `<leader>n` | **New note (quick)** ⚡ | | `<leader>zn` | New note (with options) | | `<leader>zd` | Daily note | | `<leader>zi` | Inbox note (file) | | `<leader>i` | **Inbox capture (quick)** ⚡ | | `<leader>zq` | Inbox capture (floating) | | `<leader>f` | **Find notes** ⚡ | | `<leader>zf` | Find notes (alternate) | | `<leader>zg` | Search content (grep) | | `<leader>zb` | Show backlinks | | `<leader>zo` | Find orphan notes | | `<leader>zh` | Find hub notes | | `<leader>zt` | Browse tags (IWE) | | `<leader>zc` | Calendar picker (IWE) | | `<leader>zl` | Follow link (IWE LSP) | | `<leader>zk` | Insert link (IWE LSP) | | `<leader>ad` | AI Draft |
 
 ### Mode Switching (Phase 2 - NEW!)
 
@@ -189,10 +189,10 @@ ______________________________________________________________________
 
 ## 📊 Quick Stats
 
-- **Plugins**: 83 total (68 organized + 15 deps)
+- **Plugins**: 82 total (67 organized + 15 deps)
 - **Workflows**: 14 directories
 - **Tests**: 5 categories
-- **Config Lines**: ~3,000+ Lua
+- **Config Lines**: ~3,200+ Lua (IWE migration complete)
 - **Docs**: 20+ markdown files
 
 ______________________________________________________________________
@@ -230,7 +230,7 @@ ______________________________________________________________________
 
 ### IWE LSP Issues
 
-→ `cargo install iwe` + check `:LspInfo`
+→ Build from source (iwes binary) + check `:LspInfo`
 
 ### AI Features Broken
 
@@ -238,4 +238,4 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-**Last Updated**: 2025-10-19 **For Full Details**: See [PROJECT_INDEX.json](PROJECT_INDEX.json)
+**Last Updated**: 2025-10-22 (IWE Migration Complete) **For Full Details**: See [PROJECT_INDEX.json](PROJECT_INDEX.json)
