@@ -39,6 +39,12 @@ local keymaps = {
   -- Consolidated from previous <leader>i* prefix
   -- All note refactoring operations in zettelkasten namespace
 
+  -- Extract/Inline (Core IWE Workflow)
+  { "<leader>zrx", "<cmd>IweExtract<CR>", desc = "✂️  Extract section to new note" },
+  { "<leader>zri", "<cmd>IweInline<CR>", desc = "📥 Inline note content here" },
+  { "<leader>zrf", "<cmd>IweFormat<CR>", desc = "📐 Format document structure" },
+
+  -- List/Heading Rewriting
   {
     "<leader>zrh",
     function()

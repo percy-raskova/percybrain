@@ -44,14 +44,20 @@ return {
     require("telekasten").setup({
       home = home,
 
-      -- Use standard markdown (your preference!)
-      link_notation = "markdown",
+      -- Use WikiLink notation for IWE LSP compatibility
+      link_notation = "wiki", -- [[note]] format works with IWE
 
-      -- Subdirectories for organization (autism structure needs)
+      -- Workflow-based directory organization
       dailies = home .. "/daily",
       weeklies = home .. "/weekly",
       templates = home .. "/templates",
       image_subdir = "assets",
+
+      -- Additional directories (created separately):
+      -- zettel/ - permanent atomic notes
+      -- sources/ - literature notes with citations
+      -- mocs/ - Maps of Content for navigation
+      -- drafts/ - long-form work in progress
 
       -- File naming with YOUR timestamp format
       new_note_filename = "uuid-title",

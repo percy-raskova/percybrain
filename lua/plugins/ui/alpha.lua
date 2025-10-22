@@ -1,25 +1,22 @@
 -- Plugin: Alpha Dashboard
--- Purpose: PercyBrain startup screen with Blood Moon aesthetic and quick-access menu
+-- Purpose: PercyBrain startup screen - minimal, calm, writer-focused
 -- Workflow: ui
--- Why: Provides immediate context and orientation on startup - critical for ADHD users who need
---      clear entry points. ASCII logo establishes identity, menu offers predictable navigation
---      to common workflows (new note, wiki, AI, terminal). Startup stats provide performance
---      feedback without intrusion. Reduces decision paralysis by presenting curated options.
--- Config: full - custom ASCII logo, themed buttons, startup metrics
+-- Why: Provides immediate entry points on startup - critical for ADHD users who need
+--      clear, calm navigation. Reduces visual noise and decision paralysis by presenting
+--      curated workflows in frequency order. Emphasizes "get to writing fast" philosophy.
+-- Config: full - custom ASCII logo, condensed menu, minimal styling
 --
 -- Usage:
 --   Opens automatically on nvim startup (VimEnter event)
---   Single-key shortcuts: z/w/d/m/t/a/n/D/b/l/g/q
---   Displays plugin load count and startup time in footer
+--   Single-key shortcuts organized by workflow frequency
 --
 -- Dependencies: none (pure Neovim plugin)
 --
 -- Configuration Notes:
---   - Custom PercyBrain ASCII logo with tagline
---   - Blood Moon theme integration (AlphaHeader, AlphaButtons, AlphaShortcut, AlphaFooter highlight groups)
---   - 12 curated menu options covering all major workflows
---   - Auto-closes Lazy.nvim when dashboard ready (clean startup experience)
---   - Performance stats calculated from lazy.nvim plugin loader
+--   - Condensed layout with NO blank lines between menu items
+--   - Toned down: no emoji, minimal colors, subtle hierarchy
+--   - Workflow-grouped: Start Writing > Workflows > Tools
+--   - ADHD-optimized: calm, scannable, predictable
 
 return {
   "goolord/alpha-nvim",
@@ -29,7 +26,7 @@ return {
   opts = function()
     local dashboard = require("alpha.themes.dashboard")
 
-    -- PercyBrain ASCII logo
+    -- PercyBrain ASCII logo (simplified tagline)
     local logo = [[
 
     ██████╗ ███████╗██████╗  ██████╗██╗   ██╗██████╗ ██████╗  █████╗ ██╗███╗   ██╗
@@ -39,46 +36,54 @@ return {
     ██║     ███████╗██║  ██║╚██████╗   ██║   ██████╔╝██║  ██║██║  ██║██║██║ ╚████║
     ╚═╝     ╚══════╝╚═╝  ╚═╝ ╚═════╝   ╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝
 
-       ┌──────────────────────────────────────────────────────────┐
-       │     Your Second Brain, As Fast As Your First 🧠          │
-       └──────────────────────────────────────────────────────────┘
-              thoughts --> connections --> insights --> publish
+              Zettelkasten Writing Environment
 
     ]]
 
     dashboard.section.header.val = vim.split(logo, "\n")
 
-    -- Custom menu buttons with exact user requirements
+    -- Condensed menu: grouped by frequency, no emoji, minimal spacing
     -- stylua: ignore
     -- luacheck: push ignore 631
     dashboard.section.buttons.val = {
-      dashboard.button("z", "📝 " .. " New zettelkasten note",    "<cmd> lua require('config.zettelkasten').new_note() <cr>"),
-      dashboard.button("w", "📚 " .. " Wiki explorer",            "<cmd> lua require('config.zettelkasten').wiki_browser() <cr>"),
-      dashboard.button("d", "📊 " .. " Dashboards",               "<cmd> lua require('percybrain.dashboard').toggle() <cr>"),
-      dashboard.button("m", "🛍️ " .. " MCP Hub",                  "<cmd> MCPHub <cr>"),
-      dashboard.button("t", "💻 " .. " Terminal",                 "<cmd> ToggleTerm <cr>"),
-      dashboard.button("a", "🤖 " .. " AI assistant",             "<cmd> lua require('config.zettelkasten').ai_menu() <cr>"),
-      dashboard.button("n", "🆕 " .. " New note (choose type)",   "<cmd> lua require('percybrain.quick-capture').prompt_new_note() <cr>"),
-      dashboard.button("D", "✍️ " .. " Distraction free writing", "<cmd> lua require('percybrain.quick-capture').distraction_free_start() <cr>"),
-      dashboard.button("b", "🌐 " .. " Lynx browser",             "<cmd> LynxOpen <cr>"),
-      dashboard.button("l", "📖 " .. " BibTeX citation library",  "<cmd> lua require('percybrain.bibtex').browse() <cr>"),
-      dashboard.button("g", "🕸️ " .. " Network graph of notes",   "<cmd> lua require('percybrain.network-graph').show_borg() <cr>"),
-      dashboard.button("q", "🚪 " .. " Quit",                     "<cmd> qa <cr>"),
+      -- Section: Start Writing (most frequent)
+      { type = "text", val = "Start Writing:", opts = { hl = "Comment", position = "center" } },
+      dashboard.button("n", "  n  New note",           "<cmd> lua require('config.zettelkasten').new_note() <cr>"),
+      dashboard.button("d", "  d  Daily note",         "<cmd> lua require('config.zettelkasten').daily_note() <cr>"),
+      dashboard.button("r", "  r  Recent files",       "<cmd> Telescope oldfiles <cr>"),
+      dashboard.button("f", "  f  Find notes",         "<cmd> Telescope find_files cwd=~/Zettelkasten <cr>"),
+
+      -- Section: Workflows (regular use)
+      { type = "text", val = "Workflows:", opts = { hl = "Comment", position = "center" } },
+      dashboard.button("a", "  a  AI assistant",       "<cmd> lua require('config.zettelkasten').ai_menu() <cr>"),
+      dashboard.button("v", "  v  Dashboard",          "<cmd> lua require('percybrain.dashboard').toggle() <cr>"),
+      dashboard.button("w", "  w  Wiki browser",       "<cmd> lua require('config.zettelkasten').wiki_browser() <cr>"),
+      dashboard.button("p", "  p  Publish",            "<cmd> lua require('percybrain.publish').start() <cr>"),
+
+      -- Section: Tools (occasional use)
+      { type = "text", val = "Tools:", opts = { hl = "Comment", position = "center" } },
+      dashboard.button("l", "  l  Lynx research",      "<cmd> LynxOpen <cr>"),
+      dashboard.button("m", "  m  MCP hub",            "<cmd> MCPHub <cr>"),
+      dashboard.button("s", "  s  Settings",           "<cmd> e ~/.config/nvim/init.lua <cr>"),
+      dashboard.button("?", "  ?  Help",               "<cmd> help percybrain <cr>"),
+      dashboard.button("q", "  q  Quit",               "<cmd> qa <cr>"),
     }
     -- luacheck: pop
 
-    -- Apply Blood Moon styling
+    -- Minimal styling: subtle shortcut highlighting only
     for _, button in ipairs(dashboard.section.buttons.val) do
-      button.opts.hl = "AlphaButtons"
-      button.opts.hl_shortcut = "AlphaShortcut"
+      if button.type ~= "text" then
+        button.opts.hl = "Normal"
+        button.opts.hl_shortcut = "Number" -- Subtle blue/green for keys
+      end
     end
 
     dashboard.section.header.opts.hl = "AlphaHeader"
-    dashboard.section.buttons.opts.hl = "AlphaButtons"
-    dashboard.section.footer.opts.hl = "AlphaFooter"
+    dashboard.section.buttons.opts.hl = "Normal"
+    dashboard.section.footer.opts.hl = "Comment"
 
-    -- Spacing
-    dashboard.opts.layout[1].val = 8
+    -- Tighter spacing
+    dashboard.opts.layout[1].val = 4
 
     return dashboard
   end,

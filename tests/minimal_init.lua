@@ -84,6 +84,28 @@ else
   })
 end
 
+-- Load Trouble plugin for capability tests
+-- Trouble must be loaded eagerly in test environment
+local trouble_path = vim.fn.expand("~/.local/share/nvim/lazy/trouble.nvim")
+if vim.fn.isdirectory(trouble_path) == 1 then
+  vim.opt.rtp:append(trouble_path)
+
+  -- Add Trouble to Lua package path so require() works
+  package.path = package.path .. ";" .. trouble_path .. "/lua/?.lua"
+  package.path = package.path .. ";" .. trouble_path .. "/lua/?/init.lua"
+
+  -- Load Trouble plugin eagerly for tests
+  pcall(function()
+    require("trouble").setup({
+      position = "bottom",
+      height = 10,
+      auto_close = false,
+      auto_open = false,
+      focus = true,
+    })
+  end)
+end
+
 -- Add test helpers to runtime path and Lua package path
 vim.opt.rtp:append("tests")
 
