@@ -5,27 +5,37 @@
 local M = {}
 local Job = require("plenary.job")
 
---- Call Ollama API with a prompt
+--- Call Ollama API with a prompt using OpenAI-compatible endpoint
 --- @param prompt string The prompt to send to Ollama
 --- @param callback function Callback function to handle the response
 function M.call_ollama(prompt, callback)
-  -- Build request body
+  -- Get model from ollama-manager or use default
+  local model = vim.g.ollama_model or "llama3.2"
+
+  -- Build OpenAI-compatible chat completion request
   local body = vim.fn.json_encode({
-    model = "llama3.2",
-    prompt = prompt,
+    model = model,
+    messages = {
+      {
+        role = "user",
+        content = prompt,
+      },
+    },
     stream = false,
   })
 
-  -- Make HTTP request using plenary.job
+  -- Make HTTP request to OpenAI-compatible endpoint
   Job:new({
     command = "curl",
     args = {
       "-s", -- Silent mode
       "-X",
       "POST",
-      "http://localhost:11434/api/generate",
+      "http://localhost:11434/v1/chat/completions", -- OpenAI-compatible endpoint
       "-H",
       "Content-Type: application/json",
+      "-H",
+      "Authorization: Bearer ollama", -- Required but ignored
       "-d",
       body,
     },
@@ -42,15 +52,19 @@ function M.call_ollama(prompt, callback)
         -- Parse response
         local result = table.concat(j:result(), "")
 
-        -- Decode JSON response
+        -- Decode JSON response (OpenAI format)
         local ok, decoded = pcall(vim.fn.json_decode, result)
 
-        if ok and decoded and decoded.response then
-          callback(decoded.response)
-        else
-          vim.notify("⚠️  Invalid response from Ollama", vim.log.levels.WARN)
-          callback(nil)
+        if ok and decoded and decoded.choices and decoded.choices[1] then
+          local message = decoded.choices[1].message
+          if message and message.content then
+            callback(message.content)
+            return
+          end
         end
+
+        vim.notify("⚠️  Invalid response from Ollama", vim.log.levels.WARN)
+        callback(nil)
       end)
     end,
   }):start()

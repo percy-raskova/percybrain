@@ -76,6 +76,57 @@ return {
         desc = "Toggle SemBr auto-format on save",
       })
 
+      -- ========================================================================
+      -- IWE INTEGRATION HOOKS
+      -- ========================================================================
+      -- Auto-format with SemBr after IWE extract/inline operations
+
+      -- Post-IWE-extract hook: Format newly extracted note
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "IWEExtractComplete",
+        callback = function(args)
+          local bufnr = args.buf or vim.api.nvim_get_current_buf()
+
+          vim.defer_fn(function()
+            -- Format buffer with SemBr
+            local buf_valid = vim.api.nvim_buf_is_valid(bufnr)
+            if buf_valid then
+              local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+              local content = table.concat(lines, "\n")
+
+              -- Format with sembr
+              local handle = io.popen("sembr", "w")
+              if handle then
+                handle:write(content)
+                handle:close()
+              end
+
+              -- Check if extracted content contains tasks
+              if content:match("%- %[.%]") then
+                vim.notify("📋 Task detected in extracted note. Use <leader>zrd to decompose.", vim.log.levels.INFO)
+              end
+            end
+          end, 100)
+        end,
+        desc = "SemBr: Auto-format after IWE extract + detect tasks",
+      })
+
+      -- Post-IWE-inline hook: Preserve semantic formatting after inline
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "IWEInlineComplete",
+        callback = function(args)
+          local bufnr = args.buf or vim.api.nvim_get_current_buf()
+
+          vim.defer_fn(function()
+            local buf_valid = vim.api.nvim_buf_is_valid(bufnr)
+            if buf_valid then
+              vim.cmd("silent %!sembr")
+            end
+          end, 100)
+        end,
+        desc = "SemBr: Re-format after IWE inline to preserve semantic breaks",
+      })
+
       -- Keymaps for SemBr formatting
       vim.keymap.set({ "n", "v" }, "<leader>zs", "<cmd>SemBrFormat<cr>", { desc = "Format with semantic line breaks" })
       vim.keymap.set("n", "<leader>zt", "<cmd>SemBrToggle<cr>", { desc = "Toggle SemBr auto-format" })

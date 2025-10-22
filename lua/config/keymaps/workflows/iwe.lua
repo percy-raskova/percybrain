@@ -70,6 +70,115 @@ local keymaps = {
   },
 
   -- ========================================================================
+  -- AI TRANSFORMATIONS (<leader>za* prefix)
+  -- ========================================================================
+  -- Ollama-powered text transformations using IWE LSP + local AI
+  -- Synergizes with GTD AI through shared Ollama OpenAI-compatible backend
+
+  {
+    "<leader>zae",
+    function()
+      vim.lsp.buf.code_action({
+        filter = function(a)
+          return a.title:match("Expand") or a.title:match("expand")
+        end,
+        apply = true,
+      })
+    end,
+    desc = "🤖 AI: Expand text",
+  },
+
+  {
+    "<leader>zaw",
+    function()
+      vim.lsp.buf.code_action({
+        filter = function(a)
+          return a.title:match("Rewrite") or a.title:match("rewrite")
+        end,
+        apply = true,
+      })
+    end,
+    desc = "🤖 AI: Rewrite for clarity",
+  },
+
+  {
+    "<leader>zak",
+    function()
+      vim.lsp.buf.code_action({
+        filter = function(a)
+          return a.title:match("Keywords") or a.title:match("keywords")
+        end,
+        apply = true,
+      })
+    end,
+    desc = "🤖 AI: Bold keywords",
+  },
+
+  {
+    "<leader>zam",
+    function()
+      vim.lsp.buf.code_action({
+        filter = function(a)
+          return a.title:match("Emojify") or a.title:match("emoji")
+        end,
+        apply = true,
+      })
+    end,
+    desc = "🤖 AI: Add emojis",
+  },
+
+  -- ========================================================================
+  -- GTD AI OPERATIONS (<leader>zr* prefix extended)
+  -- ========================================================================
+  -- Extends existing IWE refactoring namespace with GTD AI task operations
+  -- Task decomposition IS note refactoring - semantically coherent namespace
+
+  {
+    "<leader>zrd",
+    function()
+      require("percybrain.gtd.ai").decompose_task()
+    end,
+    desc = "🧠 GTD AI: Decompose task into subtasks",
+  },
+
+  {
+    "<leader>zrc",
+    function()
+      require("percybrain.gtd.ai").suggest_context()
+    end,
+    desc = "🧠 GTD AI: Suggest context tag",
+  },
+
+  {
+    "<leader>zrp",
+    function()
+      require("percybrain.gtd.ai").infer_priority()
+    end,
+    desc = "🧠 GTD AI: Infer priority level",
+  },
+
+  {
+    "<leader>zra",
+    function()
+      -- Auto-enhance requires enhanced GTD AI function
+      local gtd_ai = require("percybrain.gtd.ai")
+      if gtd_ai.enhance_task then
+        gtd_ai.enhance_task()
+      else
+        -- Fallback: sequential enhancement
+        gtd_ai.decompose_task()
+        vim.defer_fn(function()
+          gtd_ai.suggest_context()
+        end, 1000)
+        vim.defer_fn(function()
+          gtd_ai.infer_priority()
+        end, 2000)
+      end
+    end,
+    desc = "🧠 GTD AI: Auto-enhance (decompose + context + priority)",
+  },
+
+  -- ========================================================================
   -- PREVIEW GENERATION (<leader>ip* prefix)
   -- ========================================================================
   -- Generate various preview formats for export and visualization

@@ -21,6 +21,21 @@ require("config.window-manager") -- Window management system (keymaps centralize
 require("percybrain.dashboard").setup() -- AI metrics auto-analysis
 require("percybrain.error-logger") -- Error logging system
 
+-- ========================================================================
+-- Ollama Integration (Auto-start local AI server)
+-- ========================================================================
+require("percybrain.ollama-manager").setup({
+  enabled = true, -- Enable auto-start (disable with vim.g.ollama_config = { enabled = false })
+  model = "llama3.2", -- Default model
+  auto_pull = false, -- Don't auto-download models
+  timeout = 30, -- Startup timeout in seconds
+})
+
+-- GTD AI + IWE Bridge (Task detection and decomposition)
+require("percybrain.gtd.iwe-bridge").setup({
+  auto_decompose = false, -- Prompt user before decomposing (set true for automatic)
+})
+
 -- Load centralized keymaps (Phase 3 - Hierarchical Reorganization)
 -- System keymaps (core Vim, dashboard)
 require("config.keymaps.system.core")
