@@ -107,33 +107,49 @@ return {
       vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
     end
 
+    -- Helper function to safely configure LSP servers
+    -- Only configures if the server is available in lspconfig
+    local function safe_setup(server_name, config)
+      local ok, server = pcall(function()
+        return lspconfig[server_name]
+      end)
+      if ok and server then
+        server.setup(config)
+      else
+        vim.notify(
+          string.format("LSP server '%s' not available - install via Mason or manually", server_name),
+          vim.log.levels.WARN
+        )
+      end
+    end
+
     -- configure html server
-    lspconfig["html"].setup({
+    safe_setup("html", {
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
     -- configure typescript server with plugin
     -- FIXED: Use ts_ls instead of deprecated tsserver
-    lspconfig["ts_ls"].setup({
+    safe_setup("ts_ls", {
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
     -- configure css server
-    lspconfig["cssls"].setup({
+    safe_setup("cssls", {
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
     -- configure tailwindcss server
-    lspconfig["tailwindcss"].setup({
+    safe_setup("tailwindcss", {
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
     -- configure svelte server
-    lspconfig["svelte"].setup({
+    safe_setup("svelte", {
       capabilities = capabilities,
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
@@ -157,7 +173,7 @@ return {
       ltex_capabilities.window = ltex_capabilities.window or {}
       ltex_capabilities.window.workDoneProgress = false -- Disable progress popups
 
-      lspconfig["ltex"].setup({
+      safe_setup("ltex", {
         capabilities = ltex_capabilities,
         on_attach = on_attach,
         filetypes = { "markdown", "text", "tex", "org" },
@@ -179,7 +195,7 @@ return {
     end
     --
     -- configure texlab server
-    lspconfig["texlab"].setup({
+    safe_setup("texlab", {
       capabilities = capabilities,
       on_attach = on_attach,
     })
@@ -188,40 +204,40 @@ return {
     -- FIXED: Use 'grammarly' not 'grammarly-languageserver'
     -- Only configure if grammarly is available
     if vim.fn.executable("grammarly-languageserver") == 1 then
-      lspconfig["grammarly"].setup({
+      safe_setup("grammarly", {
         capabilities = capabilities,
         on_attach = on_attach,
       })
     end
 
     -- configure prisma orm server
-    lspconfig["prismals"].setup({
+    safe_setup("prismals", {
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
     -- configure graphql language server
-    lspconfig["graphql"].setup({
+    safe_setup("graphql", {
       capabilities = capabilities,
       on_attach = on_attach,
       filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
     })
 
     -- configure emmet language server
-    lspconfig["emmet_ls"].setup({
+    safe_setup("emmet_ls", {
       capabilities = capabilities,
       on_attach = on_attach,
       filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
     })
 
     -- configure python server
-    lspconfig["pyright"].setup({
+    safe_setup("pyright", {
       capabilities = capabilities,
       on_attach = on_attach,
     })
 
     -- configure lua server (with special settings)
-    lspconfig["lua_ls"].setup({
+    safe_setup("lua_ls", {
       capabilities = capabilities,
       on_attach = on_attach,
       settings = { -- custom settings for lua
