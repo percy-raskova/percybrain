@@ -40,11 +40,15 @@ return {
 
     -- Show helpful labels for your leader key groups
     wk.add({
-      { "<leader>f", group = "Find/File" },
-      { "<leader>t", group = "Translate/Terminal" },
-      { "<leader>w", group = "Window Management" }, -- Updated: Now for window management
-      { "<leader>z", group = "Zettelkasten" }, -- Added: For Zettelkasten/PercyBrain
-      { "<leader>a", group = "AI/Assistant" }, -- Added: For AI features
+      { "<leader>f", group = "🔍 Find/File" },
+      { "<leader>t", group = "🌐 Translate/Terminal" },
+      { "<leader>w", group = "🪟 Windows" },
+      { "<leader>z", group = "📓 Zettelkasten" },
+      { "<leader>zr", group = "🔧 Refactor" }, -- Zettelkasten refactoring subgroup
+      { "<leader>a", group = "🤖 AI" },
+      { "<leader>p", group = "✏️ Prose" },
+      { "<leader>g", group = "📦 Git" },
+      { "<leader>i", group = "📥 Inbox" },
     })
   end,
 }

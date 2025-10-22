@@ -18,26 +18,27 @@ describe("Zettelkasten Template Workflow Capabilities", function()
     end
   end)
 
-  describe("Fleeting Note Creation Capabilities", function()
-    it("CAN create fleeting note with minimal friction", function()
-      -- Arrange: User wants to capture quick idea
-      local title = "Quick idea about AI"
-      local template_name = "fleeting"
+  describe("Daily Note Creation Capabilities", function()
+    it("CAN create daily note with minimal friction", function()
+      -- Arrange: User wants to capture daily note
+      local title = "Daily Note"
+      local template_name = "daily"
 
       -- Act: Load template and apply
       local template_content = zettel.load_template(template_name)
-      assert.is_not_nil(template_content, "Fleeting template must load")
+      assert.is_not_nil(template_content, "Daily template must load")
 
       local content = zettel.apply_template(template_content, title)
 
-      -- Assert: Note created with simple frontmatter
-      assert.matches("title: " .. title, content)
-      assert.matches("created:", content)
+      -- Assert: Note created with daily-specific frontmatter
+      assert.matches("title: Daily Note", content)
+      assert.matches("date:", content)
+      assert.matches("tags: %[daily%]", content)
       assert.not_matches("draft:", content)
       assert.not_matches("bibliography:", content)
     end)
 
-    it("CAN create fleeting note without selecting template", function()
+    it("CAN create daily note without selecting template", function()
       -- Arrange: User just wants to start writing immediately
       -- This tests fallback behavior
 
@@ -48,60 +49,57 @@ describe("Zettelkasten Template Workflow Capabilities", function()
       assert.is_true(true, "System provides fallback for fast capture")
     end)
 
-    it("CAN save fleeting note to inbox directory", function()
-      -- Arrange: Fleeting notes go to inbox
+    it("CAN save daily note to inbox directory", function()
+      -- Arrange: Daily notes go to inbox for transient capture
       local inbox_path = vim.fn.expand("~/Zettelkasten/inbox")
 
       -- Act: Verify inbox exists or can be created
       local inbox_exists = vim.fn.isdirectory(inbox_path) == 1
 
       -- Assert: Inbox directory available
-      assert.is_true(inbox_exists, "Inbox directory must exist for fleeting notes")
+      assert.is_true(inbox_exists, "Inbox directory must exist for daily notes")
     end)
   end)
 
-  describe("Wiki Page Creation Capabilities", function()
-    it("CAN create wiki page with Hugo-compatible frontmatter", function()
-      -- Arrange: User creating permanent wiki page
+  describe("Source Note Creation Capabilities", function()
+    it("CAN create source note with citation-focused frontmatter", function()
+      -- Arrange: User creating literature note with citations
       local title = "Distributed Cognition"
-      local template_name = "wiki"
+      local template_name = "source"
 
       -- Act: Load template and apply
       local template_content = zettel.load_template(template_name)
-      assert.is_not_nil(template_content, "Wiki template must load")
+      assert.is_not_nil(template_content, "Source template must load")
 
       local content = zettel.apply_template(template_content, title)
 
-      -- Assert: Hugo frontmatter present
-      assert.matches('title: "' .. title .. '"', content)
-      assert.matches("date:", content)
-      assert.matches("draft: false", content)
+      -- Assert: Citation-focused frontmatter present
+      assert.matches("title: " .. title, content)
+      assert.matches("created:", content)
       assert.matches("tags:", content)
-      assert.matches("categories:", content)
-      assert.matches("description:", content)
     end)
 
-    it("CAN use BibTeX citations in wiki pages", function()
-      -- Arrange: User writing wiki page with citations
-      local template_name = "wiki"
+    it("CAN use citation support in source notes", function()
+      -- Arrange: User writing source note with citations
+      local template_name = "source"
 
-      -- Act: Load wiki template
+      -- Act: Load source template
       local template_content = zettel.load_template(template_name)
-      local content = zettel.apply_template(template_content, "Test Page")
+      local content = zettel.apply_template(template_content, "Test Source")
 
-      -- Assert: BibTeX support configured
-      assert.matches("bibliography: references.bib", content)
-      assert.matches("cite%-method: biblatex", content)
-      assert.matches("%[%@", content) -- Citation example present
+      -- Assert: Citation sections present
+      assert.matches("## Citation", content)
+      assert.matches("## Summary", content)
+      assert.matches("## Key Ideas", content)
     end)
 
-    it("CAN save wiki page to root Zettelkasten (not inbox)", function()
-      -- Arrange: Wiki pages go to root, not inbox
+    it("CAN save source note to root Zettelkasten (not inbox)", function()
+      -- Arrange: Source notes go to root, not inbox (permanent literature notes)
       local zettel_root = vim.fn.expand("~/Zettelkasten")
 
       -- Act: Generate expected filename
       local timestamp = os.date("%Y%m%d")
-      local filename = timestamp .. "-test-wiki.md"
+      local filename = timestamp .. "-test-source.md"
       local expected_path = zettel_root .. "/" .. filename
 
       -- Assert: Path is in root, not inbox
@@ -119,8 +117,8 @@ describe("Zettelkasten Template Workflow Capabilities", function()
       -- Act: Count available templates
       local template_count = #templates
 
-      -- Assert: Both fleeting and wiki templates available
-      assert.is_true(template_count >= 2, "Must have at least fleeting and wiki templates")
+      -- Assert: Exactly 5 core templates (note, daily, weekly, source, moc)
+      assert.equals(5, template_count, "Must have exactly 5 core templates (decision fatigue reduction)")
     end)
 
     it("CAN see template picker UI", function()
@@ -148,17 +146,17 @@ describe("Zettelkasten Template Workflow Capabilities", function()
       -- Note: Actual filename generation tested in new_note integration
     end)
 
-    it("CAN have consistent naming between fleeting and wiki", function()
+    it("CAN have consistent naming between daily and source notes", function()
       -- Arrange: Both note types use same naming scheme
       local expected_pattern = "^%d%d%d%d%d%d%d%d%-.*%.md$"
 
       -- Act: Test pattern
-      local fleeting_name = "20251019-fleeting-idea.md"
-      local wiki_name = "20251019-wiki-page.md"
+      local daily_name = "20251019-daily-note.md"
+      local source_name = "20251019-source-note.md"
 
       -- Assert: Both match pattern
-      assert.matches(expected_pattern, fleeting_name)
-      assert.matches(expected_pattern, wiki_name)
+      assert.matches(expected_pattern, daily_name)
+      assert.matches(expected_pattern, source_name)
     end)
   end)
 end)

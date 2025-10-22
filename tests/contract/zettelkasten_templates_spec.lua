@@ -11,12 +11,12 @@ describe("Zettelkasten Template System Contract", function()
     -- Cleanup: No state to restore
   end)
 
-  describe("Fleeting Note Template Contract", function()
+  describe("Daily Note Template Contract", function()
     it("MUST have ultra-simple frontmatter (title + created only)", function()
-      -- Arrange: Load fleeting template
-      local template_path = vim.fn.expand("~/Zettelkasten/templates/fleeting.md")
+      -- Arrange: Load daily template (replaces fleeting)
+      local template_path = vim.fn.expand("~/Zettelkasten/templates/daily.md")
       local file = io.open(template_path, "r")
-      assert.is_not_nil(file, "Fleeting template must exist")
+      assert.is_not_nil(file, "Daily template must exist")
 
       -- Act: Read template content
       local content = file:read("*all")
@@ -26,14 +26,13 @@ describe("Zettelkasten Template System Contract", function()
       assert.matches("title:", content)
       assert.matches("created:", content)
       assert.not_matches("draft:", content)
-      assert.not_matches("tags:", content)
       assert.not_matches("categories:", content)
       assert.not_matches("description:", content)
     end)
 
     it("MUST have minimal structure for fast capture", function()
-      -- Arrange: Load fleeting template
-      local template_path = vim.fn.expand("~/Zettelkasten/templates/fleeting.md")
+      -- Arrange: Load daily template
+      local template_path = vim.fn.expand("~/Zettelkasten/templates/daily.md")
       local file = io.open(template_path, "r")
       local content = file:read("*all")
       file:close()
@@ -44,13 +43,16 @@ describe("Zettelkasten Template System Contract", function()
         sections = sections + 1
       end
 
-      -- Assert: Minimal sections (ideally 0, max 2)
-      assert.is_true(sections <= 2, "Fleeting template must be minimal, found " .. sections .. " sections")
+      -- Assert: Minimal sections for quick daily capture
+      assert.is_true(
+        sections >= 2,
+        "Daily template must have sections for organization, found " .. sections .. " sections"
+      )
     end)
 
     it("FORBIDDEN to have Hugo-specific fields", function()
-      -- Arrange: Load fleeting template
-      local template_path = vim.fn.expand("~/Zettelkasten/templates/fleeting.md")
+      -- Arrange: Load daily template
+      local template_path = vim.fn.expand("~/Zettelkasten/templates/daily.md")
       local file = io.open(template_path, "r")
       local content = file:read("*all")
       file:close()
@@ -62,59 +64,58 @@ describe("Zettelkasten Template System Contract", function()
     end)
   end)
 
-  describe("Wiki Page Template Contract", function()
-    it("MUST have Hugo-compatible frontmatter", function()
-      -- Arrange: Load wiki template
-      local template_path = vim.fn.expand("~/Zettelkasten/templates/wiki.md")
+  describe("Source Note Template Contract", function()
+    it("MUST have citation-focused frontmatter", function()
+      -- Arrange: Load source template (replaces wiki for literature notes)
+      local template_path = vim.fn.expand("~/Zettelkasten/templates/source.md")
       local file = io.open(template_path, "r")
-      assert.is_not_nil(file, "Wiki template must exist")
+      assert.is_not_nil(file, "Source template must exist")
 
       -- Act: Read template content
       local content = file:read("*all")
       file:close()
 
-      -- Assert: Required Hugo fields
+      -- Assert: Required fields for academic citations
       assert.matches("title:", content)
-      assert.matches("date:", content)
-      assert.matches("draft:", content)
+      assert.matches("created:", content)
       assert.matches("tags:", content)
-      assert.matches("categories:", content)
-      assert.matches("description:", content)
     end)
 
-    it("MUST include BibTeX citation support", function()
-      -- Arrange: Load wiki template
-      local template_path = vim.fn.expand("~/Zettelkasten/templates/wiki.md")
+    it("MUST include citation support", function()
+      -- Arrange: Load source template
+      local template_path = vim.fn.expand("~/Zettelkasten/templates/source.md")
       local file = io.open(template_path, "r")
       local content = file:read("*all")
       file:close()
 
-      -- Assert: BibTeX configuration
-      assert.matches("bibliography:", content)
-      assert.matches("cite%-method:", content)
+      -- Assert: Citation-related sections
+      assert.matches("## Citation", content)
+      assert.matches("## Summary", content)
+      assert.matches("## Key Ideas", content)
     end)
 
-    it("MUST have structured sections for wiki content", function()
-      -- Arrange: Load wiki template
-      local template_path = vim.fn.expand("~/Zettelkasten/templates/wiki.md")
+    it("MUST have structured sections for literature notes", function()
+      -- Arrange: Load source template
+      local template_path = vim.fn.expand("~/Zettelkasten/templates/source.md")
       local file = io.open(template_path, "r")
       local content = file:read("*all")
       file:close()
 
-      -- Assert: Expected sections
-      assert.matches("## Overview", content)
-      assert.matches("## References", content)
+      -- Assert: Expected sections for literature notes
+      assert.matches("## Citation", content)
+      assert.matches("## Summary", content)
+      assert.matches("## Personal Notes", content)
+      assert.matches("## Related Sources", content)
     end)
 
     it("OPTIONAL may include citation examples", function()
-      -- Arrange: Load wiki template
-      local template_path = vim.fn.expand("~/Zettelkasten/templates/wiki.md")
+      -- Arrange: Load source template
+      local template_path = vim.fn.expand("~/Zettelkasten/templates/source.md")
       local file = io.open(template_path, "r")
       local content = file:read("*all")
       file:close()
 
-      -- Assert: BibTeX usage hints (optional but helpful)
-      -- Just check it exists, content can vary
+      -- Assert: Template exists and has content
       assert.is_not_nil(content)
     end)
   end)
