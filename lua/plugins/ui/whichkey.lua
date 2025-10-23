@@ -39,16 +39,58 @@ return {
     })
 
     -- Show helpful labels for your leader key groups
+    -- NORMAL MODE groups
     wk.add({
+      -- Core workflows (high-frequency operations)
+      { "<leader>n", group = "📝 Notes" }, -- Note creation/templates
       { "<leader>f", group = "🔍 Find/File" },
-      { "<leader>t", group = "🌐 Translate/Terminal" },
-      { "<leader>w", group = "🪟 Windows" },
-      { "<leader>z", group = "📓 Zettelkasten" },
+      { "<leader>z", group = "📓 Zettelkasten (IWE)" }, -- IWE LSP navigation
       { "<leader>zr", group = "🔧 Refactor" }, -- Zettelkasten refactoring subgroup
+      { "<leader>za", group = "🤖 AI Transform" }, -- AI text transformations
+      { "<leader>i", group = "📥 Inbox" },
+      { "<leader>o", group = "🎯 Organize/GTD" }, -- Getting Things Done workflow
+      { "<leader>h", group = "🚀 Publish" }, -- Hugo/mkdocs publishing
+
+      -- AI and writing
       { "<leader>a", group = "🤖 AI" },
       { "<leader>p", group = "✏️ Prose" },
+
+      -- Navigation and file management
+      { "<leader>e", group = "🌳 Explorer" }, -- File tree (NvimTree)
+      { "<leader>x", group = "📂 eXplore" }, -- File operations/focus
+      { "<leader>y", group = "📁 Yazi" }, -- Yazi file manager
+
+      -- Git and version control
       { "<leader>g", group = "📦 Git" },
-      { "<leader>i", group = "📥 Inbox" },
+
+      -- Tools and utilities
+      { "<leader>t", group = "🌐 Terminal/Translate" },
+      { "<leader>l", group = "🔗 Lynx" }, -- Browser
+      { "<leader>m", group = "🔌 MCP" }, -- Model Context Protocol
+      { "<leader>d", group = "🏠 Dashboard" },
+
+      -- Window management
+      { "<leader>w", group = "🪟 Windows" },
+      { "<leader>v", group = "⚡ View/Split" },
+      { "<leader>c", group = "❌ Close" },
+
+      -- System operations
+      { "<leader>s", group = "💾 Save/SemBr" }, -- Save and semantic line breaks
+      { "<leader>q", group = "🚪 Quit" },
+      { "<leader>u", group = "🕰️ Undo Tree" },
+    })
+
+    -- VISUAL MODE groups (text selection operations)
+    -- Transform selected text into knowledge management primitives
+    wk.add({
+      -- Zettelkasten: Selection → Links/Notes/Quotes
+      { "<leader>z", group = "📓 Zettelkasten Selection", mode = "v" },
+
+      -- AI: Transform selected text with AI
+      { "<leader>a", group = "🤖 AI Selection", mode = "v" },
+
+      -- LSP: Code actions on selection
+      { "<leader>c", group = "⚡ Code Actions", mode = "v" },
     })
   end,
 }

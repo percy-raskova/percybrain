@@ -15,7 +15,6 @@ require("config.quiet-startup").setup() -- Suppress verbose plugin notifications
 require("config.globals")
 require("config.options")
 require("config.privacy") -- Privacy protection (clear registers, etc.)
-require("config.health-fixes").setup() -- Apply checkhealth fixes (TDD implementation)
 require("config.zettelkasten").setup() -- Zettelkasten system
 require("config.window-manager") -- Window management system (keymaps centralized)
 require("percybrain.dashboard").setup() -- AI metrics auto-analysis
@@ -41,13 +40,16 @@ require("percybrain.gtd.iwe-bridge").setup({
 require("config.keymaps.system.core")
 require("config.keymaps.system.dashboard")
 
--- Workflow keymaps (Zettelkasten, AI, prose, quick-capture, GTD, modes)
-require("config.keymaps.workflows.zettelkasten")
+-- Workflow keymaps (Notes, IWE, AI, prose, quick-capture, GTD, modes, publishing, sembr)
+require("config.keymaps.workflows.notes") -- Note creation/templates (<leader>n*)
+require("config.keymaps.workflows.iwe") -- IWE LSP navigation (<leader>z*)
+require("config.keymaps.workflows.hugo") -- Publishing/mkdocs (<leader>h*)
 require("config.keymaps.workflows.ai")
 require("config.keymaps.workflows.prose")
 require("config.keymaps.workflows.quick-capture")
 require("config.keymaps.workflows.gtd")
 require("config.keymaps.workflows.modes") -- Phase 2: Mode-switching for writer contexts
+require("config.keymaps.workflows.sembr") -- SemBr semantic line breaks (<leader>s*)
 
 -- Tool keymaps (telescope, navigation, git, diagnostics, window, lynx)
 require("config.keymaps.tools.telescope")

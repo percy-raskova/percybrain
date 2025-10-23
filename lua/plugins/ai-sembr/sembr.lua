@@ -111,24 +111,9 @@ return {
       desc = "Toggle auto-format on save",
     })
 
-    -- Keymaps for PercyBrain
-    local opts = { noremap = true, silent = true }
-
-    vim.keymap.set("n", "<leader>zs", M.format_buffer, vim.tbl_extend("force", opts, { desc = "SemBr: Format buffer" }))
-
-    vim.keymap.set(
-      "v",
-      "<leader>zs",
-      M.format_selection,
-      vim.tbl_extend("force", opts, { desc = "SemBr: Format selection" })
-    )
-
-    vim.keymap.set(
-      "n",
-      "<leader>zt",
-      M.toggle_auto_format,
-      vim.tbl_extend("force", opts, { desc = "SemBr: Toggle auto-format" })
-    )
+    -- NOTE: Keybindings removed - now managed in lua/config/keymaps/workflows/sembr.lua
+    -- Old bindings were <leader>zs (normal/visual), <leader>zt
+    -- New bindings are <leader>sb (normal), <leader>ss (visual), <leader>st (toggle)
 
     -- Auto-format on save (if enabled)
     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -140,6 +125,6 @@ return {
       end,
     })
 
-    vim.notify("🧠 SemBr loaded - <leader>zs to format", vim.log.levels.INFO)
+    vim.notify("🧠 SemBr loaded - <leader>sb to format", vim.log.levels.INFO)
   end,
 }
