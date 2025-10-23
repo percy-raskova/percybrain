@@ -238,19 +238,65 @@ function M.backlinks()
   })
 end
 
--- Publish to static site
+-- Publish to static site (mkdocs)
 function M.publish()
-  print("📤 Publishing to static site...")
+  vim.notify("📤 Publishing to static site (mkdocs)...", vim.log.levels.INFO)
 
   -- Copy notes to export path
-  local cmd = string.format('rsync -av --exclude="inbox" %s/ %s/', M.config.home, M.config.export_path)
-  vim.fn.system(cmd)
+  local cmd =
+    string.format('rsync -av --exclude="inbox" --exclude="daily" %s/ %s/', M.config.home, M.config.export_path)
+  local rsync_output = vim.fn.system(cmd)
 
-  -- Build static site (adjust for your generator)
+  if vim.v.shell_error ~= 0 then
+    vim.notify("❌ rsync failed: " .. rsync_output, vim.log.levels.ERROR)
+    return
+  end
+
+  -- Build static site with mkdocs
   local blog_dir = vim.fn.fnamemodify(M.config.export_path, ":h:h")
-  vim.fn.system("cd " .. blog_dir .. " && hugo")
+  local build_cmd = "cd " .. blog_dir .. " && mkdocs build"
+  local build_output = vim.fn.system(build_cmd)
 
-  print("✅ Published successfully!")
+  if vim.v.shell_error == 0 then
+    vim.notify("✅ Published successfully with mkdocs!", vim.log.levels.INFO)
+  else
+    vim.notify("❌ mkdocs build failed: " .. build_output, vim.log.levels.ERROR)
+  end
+end
+
+-- Preview site with mkdocs serve
+function M.preview_site()
+  local blog_dir = vim.fn.fnamemodify(M.config.export_path, ":h:h")
+  vim.notify("🌐 Starting mkdocs preview server...", vim.log.levels.INFO)
+
+  -- Run in background
+  vim.fn.jobstart("cd " .. blog_dir .. " && mkdocs serve", {
+    detach = true,
+    on_exit = function(_, code)
+      if code == 0 then
+        vim.notify("✅ mkdocs server stopped", vim.log.levels.INFO)
+      else
+        vim.notify("❌ mkdocs server exited with code: " .. code, vim.log.levels.ERROR)
+      end
+    end,
+  })
+
+  vim.notify("🌐 Preview server started at http://localhost:8000", vim.log.levels.INFO)
+end
+
+-- Build only (no serve)
+function M.build_site()
+  local blog_dir = vim.fn.fnamemodify(M.config.export_path, ":h:h")
+  vim.notify("🔨 Building site with mkdocs...", vim.log.levels.INFO)
+
+  local build_cmd = "cd " .. blog_dir .. " && mkdocs build"
+  local output = vim.fn.system(build_cmd)
+
+  if vim.v.shell_error == 0 then
+    vim.notify("✅ Build complete!", vim.log.levels.INFO)
+  else
+    vim.notify("❌ Build failed: " .. output, vim.log.levels.ERROR)
+  end
 end
 
 -- Knowledge graph analysis
@@ -743,15 +789,12 @@ end
 
 -- Set up user commands
 function M.setup_commands()
-  vim.api.nvim_create_user_command("PercyNew", M.new_note, {})
-  vim.api.nvim_create_user_command("PercyDaily", M.daily_note, {})
-  vim.api.nvim_create_user_command("PercyInbox", M.inbox_note, {})
-  vim.api.nvim_create_user_command("PercyPublish", M.publish, {})
-  vim.api.nvim_create_user_command("PercyPreview", function()
-    local blog_dir = vim.fn.fnamemodify(M.config.export_path, ":h:h")
-    vim.fn.system("cd " .. blog_dir .. " && hugo server -D &")
-    print("🌐 Preview server started at http://localhost:1313")
-  end, {})
+  vim.api.nvim_create_user_command("PercyNew", M.new_note, { desc = "Create new note with template" })
+  vim.api.nvim_create_user_command("PercyDaily", M.daily_note, { desc = "Create/open daily note" })
+  vim.api.nvim_create_user_command("PercyInbox", M.inbox_note, { desc = "Quick inbox capture" })
+  vim.api.nvim_create_user_command("PercyPublish", M.publish, { desc = "Publish to static site (mkdocs)" })
+  vim.api.nvim_create_user_command("PercyPreview", M.preview_site, { desc = "Start mkdocs preview server" })
+  vim.api.nvim_create_user_command("PercyBuild", M.build_site, { desc = "Build site with mkdocs" })
   vim.api.nvim_create_user_command("PercyOrphans", M.find_orphans, { desc = "Find orphan notes (no links)" })
   vim.api.nvim_create_user_command("PercyHubs", M.find_hubs, { desc = "Find hub notes (most connected)" })
   vim.api.nvim_create_user_command("PercyWiki", M.wiki_browser, { desc = "Open wiki browser in Zettelkasten" })

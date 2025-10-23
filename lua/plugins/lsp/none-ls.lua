@@ -1,27 +1,23 @@
 -- Plugin: none-ls (null-ls successor)
--- Purpose: Bridge non-LSP tools (formatters/linters) into LSP ecosystem
+-- Purpose: Bridge non-LSP tools (formatters) into LSP ecosystem
 -- Workflow: utilities
--- Why: Unified tooling interface - makes formatters like prettier and linters like
---      eslint work through LSP protocol, providing consistent UX with language servers.
---      ADHD-optimized through automatic format-on-save (eliminates manual formatting),
---      unified diagnostic display (all issues in one place), and predictable behavior.
---      Critical for maintaining code quality without cognitive overhead of manual tool invocation.
--- Config: full
+-- Why: Provides format-on-save for Lua configuration files via stylua.
+--      Minimal setup for writing environment - only Lua formatting needed.
+-- Config: minimal (writing-focused)
 --
 -- Usage:
 --   Automatic format-on-save (configured in on_attach)
 --   :lua vim.lsp.buf.format() - Manual format current buffer
---   Diagnostics appear inline with LSP diagnostics
 --
 -- Dependencies:
 --   mason-null-ls (bridges Mason-installed tools to null-ls)
---   External: prettier, stylua, black, isort, pylint, eslint_d (Mason-installed)
+--   External: stylua (Mason-installed, for Lua formatting)
 --
 -- Configuration Notes:
---   ensure_installed: Auto-installs formatters/linters via Mason
+--   WRITING ENVIRONMENT: Minimal formatter setup
+--   - stylua: REQUIRED for Neovim Lua config formatting
+--   - All web dev formatters/linters removed (prettier, eslint, black, pylint, etc.)
 --   format_on_save: Triggered by BufWritePre autocmd (automatic)
---   root_dir detection: Uses .null-ls-root, Makefile, .git, package.json
---   Conditional linting: eslint_d only runs if .eslintrc.js/cjs exists
 --   Filter setup: Only uses null-ls for formatting (prevents conflicts with LSP servers)
 
 return {
@@ -39,43 +35,27 @@ return {
     local null_ls_utils = require("null-ls.utils")
 
     mason_null_ls.setup({
+      -- WRITING ENVIRONMENT: Only install stylua for Lua formatting
       ensure_installed = {
-        "prettier", -- prettier formatter
-        "stylua", -- lua formatter
-        "black", -- python formatter
-        "pylint", -- python linter
-        "eslint_d", -- js linter
+        "stylua", -- REQUIRED: Lua formatter for Neovim config
+        -- All web dev tools removed: prettier, eslint, black, pylint, isort
       },
     })
 
-    -- for conciseness
-    local formatting = null_ls.builtins.formatting -- to setup formatters
-    local diagnostics = null_ls.builtins.diagnostics -- to setup linters
+    -- Setup formatters (no linters needed for writing environment)
+    local formatting = null_ls.builtins.formatting
 
-    -- to setup format on save
+    -- Setup format-on-save autocmd group
     local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
-    -- configure null_ls
+    -- Configure null_ls with minimal sources
     null_ls.setup({
-      -- add package.json as identifier for root (for typescript monorepos)
-      root_dir = null_ls_utils.root_pattern(".null-ls-root", "Makefile", ".git", "package.json"),
-      -- setup formatters & linters
+      -- Root directory detection
+      root_dir = null_ls_utils.root_pattern(".null-ls-root", "Makefile", ".git"),
+      -- WRITING ENVIRONMENT: Only stylua for Lua formatting
       sources = {
-        --  to disable file types use
-        --  "formatting.prettier.with({disabled_filetypes: {}})" (see null-ls docs)
-        formatting.prettier.with({
-          extra_filetypes = { "svelte" },
-        }), -- js/ts formatter
-        formatting.stylua, -- lua formatter
-        formatting.isort,
-        formatting.black,
-        diagnostics.pylint,
-        diagnostics.eslint_d.with({ -- js/ts linter
-          condition = function(utils)
-            -- only enable if root has .eslintrc.js or .eslintrc.cjs
-            return utils.root_has_file({ ".eslintrc.js", ".eslintrc.cjs" })
-          end,
-        }),
+        formatting.stylua, -- Lua formatter for Neovim config files
+        -- All other formatters/linters removed (prettier, eslint, black, pylint, etc.)
       },
       -- configure format on save
       on_attach = function(current_client, bufnr)
