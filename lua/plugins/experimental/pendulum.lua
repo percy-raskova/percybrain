@@ -4,12 +4,11 @@
 -- Config: full
 
 -- Import keymaps from central registry (time-tracking moved to organization/)
-local keymaps = require("config.keymaps.organization.time-tracking")
 
 return {
   "ptdewey/pendulum-nvim",
   cmd = { "PendulumStart", "PendulumStop", "PendulumStatus", "PendulumReport" },
-  keys = keymaps, -- All toggle keymaps managed in lua/config/keymaps/toggle.lua
+  -- keys = {}, -- TODO: Add keybindings here -- All toggle keymaps managed in lua/config/keymaps/toggle.lua
   config = function()
     require("pendulum").setup({
       -- Time tracking log location

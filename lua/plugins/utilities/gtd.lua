@@ -29,5 +29,6 @@ return {
   dir = vim.fn.stdpath("config") .. "/lua/percybrain/gtd",
   name = "percybrain-gtd",
   lazy = false, -- Load immediately to register keybindings
-  keys = require("config.keymaps.workflows.gtd"), -- GTD keymaps from workflows/gtd.lua
+  -- TODO: Add GTD keybindings here using keys = {} spec
+  -- keys = {},
 }

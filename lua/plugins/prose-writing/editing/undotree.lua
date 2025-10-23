@@ -22,10 +22,9 @@
 --   rewritten, providing complete session history.
 
 -- Import keymaps from central registry
-local keymaps = require("config.keymaps.utilities")
 
 return {
   "mbbill/undotree",
   cmd = "UndotreeToggle",
-  keys = keymaps, -- All utility keymaps managed in lua/config/keymaps/utilities.lua
+  -- keys = {}, -- TODO: Add keybindings here -- All utility keymaps managed in lua/config/keymaps/utilities.lua
 }

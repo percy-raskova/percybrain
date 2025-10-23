@@ -98,7 +98,7 @@ return {
       template = '{{local="$FILE_PATH}"}',
     },
   },
-  -- Import keymaps from central registry
-  -- All prose keymaps managed in lua/config/keymaps/workflows/prose.lua
-  keys = require("config.keymaps.workflows.prose"),
+  keys = {
+    { "<leader>pP", "<cmd>PasteImage<CR>", desc = "📋 Paste image from clipboard" },
+  },
 }

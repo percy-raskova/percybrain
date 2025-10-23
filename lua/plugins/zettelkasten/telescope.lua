@@ -50,7 +50,6 @@ local config = function()
 end
 
 -- Import keymaps from central registry
-local keymaps = require("config.keymaps.tools.telescope")
 
 return {
   "nvim-telescope/telescope.nvim",
@@ -58,5 +57,5 @@ return {
   lazy = false,
   dependencies = { "nvim-lua/plenary.nvim" },
   config = config,
-  keys = keymaps, -- All telescope keymaps managed in lua/config/keymaps/telescope.lua
+  -- keys = {}, -- TODO: Add keybindings here -- All telescope keymaps managed in lua/config/keymaps/telescope.lua
 }

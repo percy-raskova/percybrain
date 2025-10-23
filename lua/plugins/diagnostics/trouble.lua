@@ -4,13 +4,12 @@
 -- Version: v3.7.1 (API updated for Trouble v3)
 
 -- Import keymaps from central registry
-local keymaps = require("config.keymaps.tools.diagnostics")
 
 return {
   "folke/trouble.nvim",
   dependencies = { "nvim-tree/nvim-web-devicons" },
   cmd = "Trouble",
-  keys = keymaps, -- All trouble keymaps managed in lua/config/keymaps/diagnostics.lua
+  -- keys = {}, -- TODO: Add keybindings here -- All trouble keymaps managed in lua/config/keymaps/diagnostics.lua
 
   opts = {
     -- V3 API: Simplified configuration
