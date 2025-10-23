@@ -29,68 +29,42 @@
 return {
   "folke/which-key.nvim",
   event = "VeryLazy",
-  config = function()
-    local wk = require("which-key")
-    wk.setup({
-      delay = 500, -- Time in ms to wait before showing the popup (500ms = half second)
-      icons = {
-        separator = "→", -- symbol between key and command
-      },
-    })
-
-    -- Show helpful labels for your leader key groups
-    -- NORMAL MODE groups
-    wk.add({
-      -- Core workflows (high-frequency operations)
-      { "<leader>n", group = "📝 Notes" }, -- Note creation/templates
+  opts = {
+    delay = 500, -- Time in ms to wait before showing the popup (500ms = half second)
+    icons = {
+      separator = "→", -- symbol between key and command
+    },
+    spec = {
+      -- NORMAL MODE namespace labels
+      { "<leader>n", group = "📝 Notes" },
       { "<leader>f", group = "🔍 Find/File" },
-      { "<leader>z", group = "📓 Zettelkasten (IWE)" }, -- IWE LSP navigation
-      { "<leader>zr", group = "🔧 Refactor" }, -- Zettelkasten refactoring subgroup
-      { "<leader>za", group = "🤖 AI Transform" }, -- AI text transformations
+      { "<leader>z", group = "📓 Zettelkasten (IWE)" },
+      { "<leader>zr", group = "🔧 Refactor" },
+      { "<leader>za", group = "🤖 AI Transform" },
       { "<leader>i", group = "📥 Inbox" },
-      { "<leader>o", group = "🎯 Organize/GTD" }, -- Getting Things Done workflow
-      { "<leader>h", group = "🚀 Publish" }, -- Hugo/mkdocs publishing
-
-      -- AI and writing
+      { "<leader>o", group = "🎯 Organize/GTD" },
+      { "<leader>h", group = "🚀 Publish" },
       { "<leader>a", group = "🤖 AI" },
       { "<leader>p", group = "✏️ Prose" },
-
-      -- Navigation and file management
-      { "<leader>e", group = "🌳 Explorer" }, -- File tree (NvimTree)
-      { "<leader>x", group = "📂 eXplore" }, -- File operations/focus
-      { "<leader>y", group = "📁 Yazi" }, -- Yazi file manager
-
-      -- Git and version control
+      { "<leader>e", group = "🌳 Explorer" },
+      { "<leader>x", group = "📂 eXplore" },
+      { "<leader>y", group = "📁 Yazi" },
       { "<leader>g", group = "📦 Git" },
-
-      -- Tools and utilities
       { "<leader>t", group = "🌐 Terminal/Translate" },
-      { "<leader>l", group = "🔗 Lynx" }, -- Browser
-      { "<leader>m", group = "🔌 MCP" }, -- Model Context Protocol
+      { "<leader>l", group = "🔗 Lynx" },
+      { "<leader>m", group = "🔌 MCP" },
       { "<leader>d", group = "🏠 Dashboard" },
-
-      -- Window management
       { "<leader>w", group = "🪟 Windows" },
       { "<leader>v", group = "⚡ View/Split" },
       { "<leader>c", group = "❌ Close" },
-
-      -- System operations
-      { "<leader>s", group = "💾 Save/SemBr" }, -- Save and semantic line breaks
+      { "<leader>s", group = "💾 Save/SemBr" },
       { "<leader>q", group = "🚪 Quit" },
       { "<leader>u", group = "🕰️ Undo Tree" },
-    })
 
-    -- VISUAL MODE groups (text selection operations)
-    -- Transform selected text into knowledge management primitives
-    wk.add({
-      -- Zettelkasten: Selection → Links/Notes/Quotes
+      -- VISUAL MODE namespace labels
       { "<leader>z", group = "📓 Zettelkasten Selection", mode = "v" },
-
-      -- AI: Transform selected text with AI
       { "<leader>a", group = "🤖 AI Selection", mode = "v" },
-
-      -- LSP: Code actions on selection
       { "<leader>c", group = "⚡ Code Actions", mode = "v" },
-    })
-  end,
+    },
+  },
 }

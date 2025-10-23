@@ -35,43 +35,33 @@ require("percybrain.gtd.iwe-bridge").setup({
   auto_decompose = false, -- Prompt user before decomposing (set true for automatic)
 })
 
--- Load centralized keymaps (Phase 3 - Hierarchical Reorganization)
--- System keymaps (core Vim, dashboard)
-require("config.keymaps.system.core")
-require("config.keymaps.system.dashboard")
+-- ========================================================================
+-- Core Keybindings (Basic Vim Operations)
+-- ========================================================================
+-- Note: Plugin-specific keybindings are defined in each plugin's keys = {}
+-- This keeps keybindings colocated with their functionality
 
--- Workflow keymaps (Notes, IWE, AI, prose, quick-capture, GTD, modes, publishing, sembr)
-require("config.keymaps.workflows.notes") -- Note creation/templates (<leader>n*)
-require("config.keymaps.workflows.iwe") -- IWE LSP navigation (<leader>z*)
-require("config.keymaps.workflows.hugo") -- Publishing/mkdocs (<leader>h*)
-require("config.keymaps.workflows.ai")
-require("config.keymaps.workflows.prose")
-require("config.keymaps.workflows.quick-capture")
-require("config.keymaps.workflows.gtd")
-require("config.keymaps.workflows.modes") -- Phase 2: Mode-switching for writer contexts
-require("config.keymaps.workflows.sembr") -- SemBr semantic line breaks (<leader>s*)
+-- Set leader key
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
--- Tool keymaps (telescope, navigation, git, diagnostics, window, lynx)
-require("config.keymaps.tools.telescope")
-require("config.keymaps.tools.navigation")
-require("config.keymaps.tools.git")
-require("config.keymaps.tools.diagnostics")
-require("config.keymaps.tools.window")
-require("config.keymaps.tools.lynx")
+-- Basic file operations
+vim.keymap.set("n", "<leader>s", "<cmd>w!<CR>", { desc = "💾 Save file" })
+vim.keymap.set("n", "<leader>q", "<cmd>q!<CR>", { desc = "🚪 Quit" })
+vim.keymap.set("n", "<leader>c", "<cmd>close<CR>", { desc = "❌ Close window" })
 
--- Environment keymaps (terminal, focus, translation)
-require("config.keymaps.environment.terminal")
-require("config.keymaps.environment.focus")
-require("config.keymaps.environment.translation")
+-- Splits
+vim.keymap.set("n", "<leader>v", "<cmd>vsplit<CR>", { desc = "⚡ Vertical split" })
 
--- Organization keymaps (time-tracking)
-require("config.keymaps.organization.time-tracking")
+-- View toggles
+vim.keymap.set("n", "<leader>vn", function()
+  vim.opt.number = not vim.opt.number:get()
+  vim.opt.relativenumber = not vim.opt.relativenumber:get()
+end, { desc = "🔢 Toggle line numbers" })
 
--- Utilities (standalone)
-require("config.keymaps.utilities")
-
--- This is for an experimental plugin
---
+-- Plugin management
+vim.keymap.set("n", "<leader>L", "<cmd>Lazy<CR>", { desc = "🔌 Lazy plugin manager" })
+vim.keymap.set("n", "<leader>W", "<cmd>WhichKey<CR>", { desc = "❓ WhichKey help" })
 
 local opts = {
   defaults = {

@@ -3,7 +3,11 @@
 
 return {
   "nvim-lua/plenary.nvim", -- Required for async operations
-  lazy = false, -- Load immediately for user commands
+  keys = {
+    { "<leader>sb", "<cmd>SemBrFormat<CR>", desc = "🧠 SemBr: Format buffer" },
+    { "<leader>ss", "<cmd>SemBrFormatSelection<CR>", mode = "v", desc = "🧠 SemBr: Format selection" },
+    { "<leader>st", "<cmd>SemBrToggle<CR>", desc = "🔄 SemBr: Toggle auto-format" },
+  },
   config = function()
     local M = {}
 
@@ -111,9 +115,8 @@ return {
       desc = "Toggle auto-format on save",
     })
 
-    -- NOTE: Keybindings removed - now managed in lua/config/keymaps/workflows/sembr.lua
-    -- Old bindings were <leader>zs (normal/visual), <leader>zt
-    -- New bindings are <leader>sb (normal), <leader>ss (visual), <leader>st (toggle)
+    -- NOTE: Keybindings defined in keys = {} spec above (lazy.nvim native)
+    -- <leader>sb (format buffer), <leader>ss (format selection), <leader>st (toggle)
 
     -- Auto-format on save (if enabled)
     vim.api.nvim_create_autocmd("BufWritePre", {
