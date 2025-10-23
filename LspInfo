@@ -1,0 +1,67 @@
+
+==============================================================================
+vim.lsp:                                                                    ✅
+
+- LSP log level : WARN
+- Log path: /home/percy/.local/state/nvim/lsp.log
+- Log size: 920 KB
+
+vim.lsp: Active Clients ~
+- iwes (id: 1)
+  - Version: ? (no serverInfo.version response)
+  - Root directory: ~/Zettelkasten
+  - Command: { "iwes" }
+  - Settings: {}
+  - Attached buffers: 27
+- marksman:/home/percy/Zettelkasten (id: 2)
+  - Version: ? (no serverInfo.version response)
+  - Root directory: ~/Zettelkasten
+  - Command: { "/usr/bin/zsh", "-c", "'marksman' server" }
+  - Settings: {}
+  - Attached buffers: 27
+- efm (id: 3)
+  - Version: ? (no serverInfo.version response)
+  - Root directory: ~/Zettelkasten
+  - Command: { "efm-langserver" }
+  - Settings: {}
+  - Attached buffers: 27
+
+vim.lsp: Enabled Configurations ~
+- efm:
+  - cmd: { "efm-langserver" }
+  - root_markers: { ".git" }
+
+- jsonls:
+  - cmd: { "vscode-json-language-server", "--stdio" }
+  - filetypes: json, jsonc
+  - init_options: {
+      provideFormatter = true
+    }
+  - root_markers: { ".git" }
+
+- lua_ls:
+  - cmd: { "lua-language-server" }
+  - filetypes: lua
+  - root_markers: { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml", ".git" }
+
+- pyright:
+  - cmd: { "pyright-langserver", "--stdio" }
+  - filetypes: python
+  - on_attach: <function @/home/percy/.local/share/nvim/lazy/nvim-lspconfig/lsp/pyright.lua:45>
+  - root_markers: { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "Pipfile", "pyrightconfig.json", ".git" }
+  - settings: {
+      python = {
+        analysis = {
+          autoSearchPaths = true,
+          diagnosticMode = "openFilesOnly",
+          useLibraryCodeForTypes = true
+        }
+      }
+    }
+
+
+vim.lsp: File Watcher ~
+- file watching "(workspace/didChangeWatchedFiles)" disabled on all clients
+
+vim.lsp: Position Encodings ~
+- No buffers contain mixed position encodings
