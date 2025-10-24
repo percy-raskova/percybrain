@@ -12,7 +12,8 @@ return {
     "nvim-telescope/telescope.nvim",
     "nvim-lua/plenary.nvim",
   },
-  ft = "markdown", -- Load for markdown files
+  cmd = "IWE", -- Load when :IWE command is used
+  ft = "markdown", -- Also load for markdown files
   config = function()
     local home = vim.fn.expand("~/Zettelkasten")
 
