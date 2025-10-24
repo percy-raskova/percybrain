@@ -105,10 +105,17 @@ return {
     -- Change the Diagnostic symbols in the sign column (gutter)
     -- (not in youtube nvim video)
     local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-    for type, icon in pairs(signs) do
-      local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-    end
+    -- Modern API (replaces deprecated sign_define)
+    vim.diagnostic.config({
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = signs.Error,
+          [vim.diagnostic.severity.WARN] = signs.Warn,
+          [vim.diagnostic.severity.HINT] = signs.Hint,
+          [vim.diagnostic.severity.INFO] = signs.Info,
+        },
+      },
+    })
 
     -- Helper function to safely configure LSP servers
     -- Only configures if the server is available in lspconfig
@@ -160,17 +167,18 @@ return {
     })
 
     -- ========================================================================
-    -- PROSE WRITING: ltex-plus grammar checker
+    -- PROSE WRITING: ltex grammar checker
     -- ========================================================================
-    -- NOTE: ltex-plus is registered via mason-lspconfig (see mason-lspconfig.lua)
+    -- NOTE: ltex-ls is installed via Mason (mason-lspconfig handles it)
     -- This manual setup configures filetypes and settings for prose writing
+    -- Server name in lspconfig is "ltex" (not "ltex_plus")
     -- ========================================================================
 
     local ltex_capabilities = vim.deepcopy(capabilities)
     ltex_capabilities.window = ltex_capabilities.window or {}
     ltex_capabilities.window.workDoneProgress = false -- Disable progress popups
 
-    safe_setup("ltex_plus", {
+    safe_setup("ltex", {
       capabilities = ltex_capabilities,
       on_attach = on_attach,
       filetypes = { "markdown", "text", "tex", "org" }, -- All prose filetypes

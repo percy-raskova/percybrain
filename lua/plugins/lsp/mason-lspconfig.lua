@@ -25,7 +25,7 @@
 local opts = {
   ensure_installed = {
     "lua_ls", -- REQUIRED: Neovim configuration editing
-    "ltex_plus", -- PROSE: Grammar/spelling checker for writing
+    "ltex", -- PROSE: Grammar/spelling checker for writing (lspconfig name: "ltex")
     -- Optional: Install manually if needed
     -- "texlab",     -- LaTeX support (academic writing)
   },

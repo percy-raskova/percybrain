@@ -17,80 +17,69 @@ return {
     local home = vim.fn.expand("~/Zettelkasten")
 
     require("iwe").setup({
-      -- Directory configuration
-      library_path = home,
-
-      -- Link format: Traditional markdown for compatibility
-      link_type = "markdown", -- [text](key) syntax
-
-      -- LSP server configuration
+      -- LSP server configuration (official docs)
       lsp = {
         cmd = { "iwes" },
         name = "iwes",
         debounce_text_changes = 500,
         auto_format_on_save = true,
+        enable_inlay_hints = true, -- Added from official docs
       },
 
-      -- Link actions for different note types
-      link_actions = {
-        -- Default: Permanent zettels
-        {
-          name = "default",
-          key_template = "{{slug}}",
-          path_template = "zettel/{{slug}}.md",
-        },
-
-        -- Literature notes
-        {
-          name = "source",
-          key_template = "{{author}}-{{year}}-{{slug}}",
-          path_template = "sources/{{key}}.md",
-        },
-
-        -- Maps of Content
-        {
-          name = "moc",
-          key_template = "MOC-{{slug}}",
-          path_template = "mocs/{{key}}.md",
-        },
-
-        -- Daily notes (Telekasten handles creation)
-        {
-          name = "daily",
-          key_template = "{{date}}",
-          path_template = "daily/{{key}}.md",
-        },
-
-        -- Drafts for synthesis
-        {
-          name = "draft",
-          key_template = "Draft-{{slug}}",
-          path_template = "drafts/{{key}}.md",
-        },
-      },
-
-      -- Extract configuration (section → new note)
-      extract = {
-        key_template = "{{slug}}",
-        path_template = "zettel/{{key}}.md",
-      },
-
-      -- Keybindings (managed by registry)
+      -- Keybindings (IWE-first approach - 2025-10-23)
+      -- IWE is central to navigation workflow, use built-in keybindings
       mappings = {
         enable_markdown_mappings = true, -- -, <C-n>, <C-p>, /d, /w
-        enable_telescope_keybindings = false, -- Registry: <leader>z*
-        enable_lsp_keybindings = false, -- Registry: <leader>zr*
-        enable_preview_keybindings = false, -- Registry: <leader>ip*
+        enable_telescope_keybindings = true, -- gf, gs, ga, g/, gb, go (IWE navigation)
+        enable_lsp_keybindings = true, -- <leader>h, <leader>l (IWE refactoring)
+        enable_preview_keybindings = true, -- IWE preview operations
         leader = "<leader>",
         localleader = "<localleader>",
       },
 
-      -- Telescope integration
+      -- Telescope integration (official docs)
       telescope = {
         enabled = true,
         setup_config = true,
         load_extensions = { "ui-select", "emoji" },
       },
+
+      -- Preview settings (official docs)
+      preview = {
+        output_dir = vim.fn.expand("~/Zettelkasten/preview"),
+        temp_dir = "/tmp",
+        auto_open = false,
+      },
+    })
+
+    -- Auto-insert frontmatter template for new notes created via gd
+    vim.api.nvim_create_autocmd("BufNewFile", {
+      pattern = home .. "/**/*.md",
+      callback = function()
+        local filename = vim.fn.expand("%:t:r") -- Get filename without extension
+        local title = filename:gsub("-", " "):gsub("^%l", string.upper) -- Convert to Title Case
+        local date = os.date("%Y-%m-%d")
+
+        -- Insert frontmatter template
+        local lines = {
+          "---",
+          "title: " .. title,
+          "date: " .. date,
+          "tags:",
+          "  - ",
+          "---",
+          "",
+          "# " .. title,
+          "",
+          "",
+        }
+
+        vim.api.nvim_buf_set_lines(0, 0, 0, false, lines)
+
+        -- Position cursor after "tags:" for immediate input
+        vim.api.nvim_win_set_cursor(0, { 4, 4 })
+        vim.cmd("startinsert!")
+      end,
     })
 
     vim.notify("🔗 IWE LSP configured for ~/Zettelkasten", vim.log.levels.INFO)

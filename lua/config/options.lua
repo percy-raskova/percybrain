@@ -41,6 +41,7 @@ opt.clipboard:append("unnamedplus")
 opt.modifiable = true
 opt.encoding = "UTF-8"
 opt.mouse = "a" -- Enable mouse in all modes
+opt.mousemoveevent = true -- Enable mouse move events (for bufferline hover)
 
 -- File Handling
 opt.swapfile = false -- No swap files (we have undo)
