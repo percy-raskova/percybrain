@@ -92,6 +92,15 @@ return {
       end,
       desc = "AI: Format as MOC",
     },
+    {
+      "<leader>ac",
+      function()
+        if _G.percy_ai then
+          _G.percy_ai.chat()
+        end
+      end,
+      desc = "AI: Chat",
+    },
   },
   config = function()
     local M = {}
@@ -378,6 +387,208 @@ MOC Format:
       end)
     end
 
+    -- AI Chat Interface - Interactive conversation with LLM
+    function M.chat()
+      -- Create floating window for chat
+      local buf = vim.api.nvim_create_buf(false, true)
+      local width = math.floor(vim.o.columns * 0.8)
+      local height = math.floor(vim.o.lines * 0.8)
+
+      local opts = {
+        relative = "editor",
+        width = width,
+        height = height,
+        col = math.floor((vim.o.columns - width) / 2),
+        row = math.floor((vim.o.lines - height) / 2),
+        style = "minimal",
+        border = "rounded",
+        title = " AI Chat (" .. M.config.model .. ") ",
+        title_pos = "center",
+      }
+
+      local win = vim.api.nvim_open_win(buf, true, opts)
+
+      -- Buffer settings
+      vim.api.nvim_buf_set_option(buf, "modifiable", true)
+      vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
+
+      -- Welcome message
+      local welcome = {
+        "Welcome to AI Chat!",
+        "",
+        "Commands:",
+        "  • Type your message and press Enter",
+        "  • Press Esc or cancel input to end conversation",
+        "  • Press 'q' to close this window",
+        "  • Press '<leader>s' or :w to save transcript",
+        "  • Use yy, y$, etc. to yank text",
+        "",
+        "───────────────────────────────────────────────",
+        "",
+      }
+      vim.api.nvim_buf_set_lines(buf, 0, -1, false, welcome)
+
+      -- Conversation metadata
+      local chat_start_time = os.date("%Y-%m-%d %H:%M")
+      local conversation = {}
+
+      -- Append text to chat buffer
+      local function append_to_chat(text)
+        local lines = vim.split(text, "\n", { plain = true })
+        local current_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+
+        for _, line in ipairs(lines) do
+          table.insert(current_lines, line)
+        end
+
+        vim.api.nvim_buf_set_lines(buf, 0, -1, false, current_lines)
+
+        -- Auto-scroll to bottom
+        local line_count = #current_lines
+        vim.api.nvim_win_set_cursor(win, { line_count, 0 })
+      end
+
+      -- Save transcript function
+      local function save_transcript()
+        -- Create chat directory if needed
+        local chat_dir = vim.fn.expand("~/Zettelkasten/ai/chat")
+        if vim.fn.isdirectory(chat_dir) == 0 then
+          vim.fn.mkdir(chat_dir, "p")
+        end
+
+        -- Generate filename with timestamp
+        local timestamp = os.date("%Y%m%d-%H%M")
+        local filename = string.format("chat-%s.md", timestamp)
+        local filepath = chat_dir .. "/" .. filename
+
+        -- Build Markdown content
+        local lines = {
+          "---",
+          'title: "AI Chat Transcript - ' .. os.date("%Y-%m-%d") .. '"',
+          "date: " .. os.date("%Y-%m-%d"),
+          "tags: [ai-chat, conversation, transcript]",
+          "model: " .. M.config.model,
+          "---",
+          "",
+          "# AI Chat Transcript",
+          "",
+          "**Date**: " .. chat_start_time,
+          "**Model**: " .. M.config.model,
+          "**Exchanges**: " .. math.floor(#conversation / 2),
+          "",
+          "---",
+          "",
+          "## Conversation",
+          "",
+        }
+
+        -- Format conversation exchanges
+        local exchange_num = 0
+        for i = 1, #conversation, 2 do
+          exchange_num = exchange_num + 1
+
+          -- User message
+          if conversation[i] then
+            table.insert(lines, "### Exchange " .. exchange_num)
+            table.insert(lines, "")
+            table.insert(lines, "**You**: " .. conversation[i].content)
+            table.insert(lines, "")
+          end
+
+          -- AI response
+          if conversation[i + 1] then
+            table.insert(lines, "**AI**: " .. conversation[i + 1].content)
+            table.insert(lines, "")
+            table.insert(lines, "---")
+            table.insert(lines, "")
+          end
+        end
+
+        -- Write to file
+        local file = io.open(filepath, "w")
+        if file then
+          file:write(table.concat(lines, "\n"))
+          file:close()
+          vim.notify("💾 Chat transcript saved to: " .. filename, vim.log.levels.INFO)
+        else
+          vim.notify("❌ Failed to save transcript", vim.log.levels.ERROR)
+        end
+      end
+
+      -- Chat loop function
+      local function next_message()
+        vim.ui.input({ prompt = "You: " }, function(user_msg)
+          -- User cancelled or empty input → end chat
+          if not user_msg or user_msg == "" then
+            append_to_chat("\n[Chat ended - press 'q' to close, '<leader>s' to save]")
+            return
+          end
+
+          -- Add user message to conversation and display
+          table.insert(conversation, { role = "user", content = user_msg })
+          append_to_chat("You: " .. user_msg .. "\n")
+
+          -- Build conversation context for Ollama
+          local context = ""
+          for _, msg in ipairs(conversation) do
+            context = context .. msg.role .. ": " .. msg.content .. "\n"
+          end
+
+          -- Add AI prompt
+          local prompt = context .. "assistant: "
+
+          -- Show thinking indicator
+          append_to_chat("AI: [thinking...]\n")
+
+          -- Call Ollama
+          M.call_ollama(prompt, function(response)
+            -- Remove thinking indicator
+            local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+            for i = #lines, 1, -1 do
+              if lines[i]:match("%[thinking%.%.%.%]") then
+                table.remove(lines, i)
+                break
+              end
+            end
+            vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+            -- Add AI response to conversation and display
+            table.insert(conversation, { role = "assistant", content = response })
+            append_to_chat("AI: " .. response .. "\n\n")
+
+            -- Continue conversation
+            next_message()
+          end)
+        end)
+      end
+
+      -- Keybinding: q to close
+      vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>close<cr>", {
+        noremap = true,
+        silent = true,
+      })
+
+      -- Keybinding: <leader>s to save transcript
+      vim.api.nvim_buf_set_keymap(buf, "n", "<leader>s", "", {
+        noremap = true,
+        silent = true,
+        callback = save_transcript,
+        desc = "Save chat transcript",
+      })
+
+      -- Support :w command
+      vim.api.nvim_create_autocmd("BufWriteCmd", {
+        buffer = buf,
+        callback = function()
+          save_transcript()
+        end,
+      })
+
+      -- Start chat loop
+      vim.notify("💬 AI Chat started - type your message", vim.log.levels.INFO)
+      next_message()
+    end
+
     -- Extract and insert tags from note content
     function M.extract_tags()
       local bufnr = vim.api.nvim_get_current_buf()
@@ -482,6 +693,7 @@ Tags:]],
         { name = "💭 Generate Ideas", func = M.generate_ideas, desc = "Brainstorm new angles" },
         { name = "🏷️  Extract Tags", func = M.extract_tags, desc = "Auto-generate tags from content" },
         { name = "🗺️  Format as MOC", func = M.format_moc, desc = "Transform into Map of Content structure" },
+        { name = "💬 Chat", func = M.chat, desc = "Interactive conversation with AI" },
       }
 
       pickers
@@ -544,6 +756,10 @@ Tags:]],
 
     vim.api.nvim_create_user_command("PercyMOC", M.format_moc, {
       desc = "AI: Format note as Map of Content (MOC)",
+    })
+
+    vim.api.nvim_create_user_command("PercyChat", M.chat, {
+      desc = "AI: Interactive chat with LLM",
     })
 
     vim.api.nvim_create_user_command("PercyAI", M.ai_menu, {
