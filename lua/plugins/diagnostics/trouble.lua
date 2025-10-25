@@ -9,7 +9,38 @@ return {
   "folke/trouble.nvim",
   dependencies = { "nvim-tree/nvim-web-devicons" },
   cmd = "Trouble",
-  -- keys = {}, -- TODO: Add keybindings here -- All trouble keymaps managed in lua/config/keymaps/diagnostics.lua
+  keys = {
+    {
+      "<leader>xx",
+      "<cmd>Trouble diagnostics toggle<cr>",
+      desc = "Trouble: Toggle diagnostics",
+    },
+    {
+      "<leader>xw",
+      "<cmd>Trouble diagnostics toggle<cr>",
+      desc = "Trouble: Workspace diagnostics",
+    },
+    {
+      "<leader>xd",
+      "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+      desc = "Trouble: Document diagnostics",
+    },
+    {
+      "<leader>xq",
+      "<cmd>Trouble qflist toggle<cr>",
+      desc = "Trouble: Quickfix list",
+    },
+    {
+      "<leader>xl",
+      "<cmd>Trouble loclist toggle<cr>",
+      desc = "Trouble: Location list",
+    },
+    {
+      "<leader>xr",
+      "<cmd>Trouble lsp toggle focus=false<cr>",
+      desc = "Trouble: LSP references",
+    },
+  },
 
   opts = {
     -- V3 API: Simplified configuration

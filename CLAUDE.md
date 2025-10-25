@@ -82,8 +82,8 @@ Without imports → blank screen (lazy.nvim stops auto-scan when table returned)
 
 **Config Files**:
 
+- `lua/config/init.lua`: Leader key (`<space>`) + core keybindings (save/quit/split/plugin-mgmt)
 - `lua/config/options.lua`: spell=true, wrap=true (prose-optimized)
-- `lua/config/keymaps.lua`: `<space>` = leader
 - `lua/config/globals.lua`: Theme/globals
 - `lua/config/zettelkasten.lua`: Core Zettelkasten module
 

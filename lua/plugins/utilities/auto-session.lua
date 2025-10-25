@@ -5,6 +5,12 @@
 return {
   "rmagatti/auto-session",
   lazy = false, -- Load immediately for session restoration
+  keys = {
+    { "<leader>ss", "<cmd>SessionSave<CR>", desc = "💾 Save session" },
+    { "<leader>sr", "<cmd>SessionRestore<CR>", desc = "📂 Restore session" },
+    { "<leader>sd", "<cmd>SessionDelete<CR>", desc = "🗑️ Delete session" },
+    { "<leader>sf", "<cmd>Autosession search<CR>", desc = "🔍 Find session" },
+  },
   config = function()
     -- Only auto-restore if files were passed as arguments
     -- This lets alpha dashboard show when opening nvim without args
@@ -70,12 +76,6 @@ return {
         previewer = false, -- No preview (simpler)
       },
     })
-
-    -- Keybindings for manual control
-    vim.keymap.set("n", "<leader>ss", "<cmd>SessionSave<CR>", { desc = "💾 Save session" })
-    vim.keymap.set("n", "<leader>sr", "<cmd>SessionRestore<CR>", { desc = "📂 Restore session" })
-    vim.keymap.set("n", "<leader>sd", "<cmd>SessionDelete<CR>", { desc = "🗑️ Delete session" })
-    vim.keymap.set("n", "<leader>sf", "<cmd>Autosession search<CR>", { desc = "🔍 Find session" })
 
     -- Auto-save notification (subtle)
     vim.api.nvim_create_autocmd("VimLeavePre", {

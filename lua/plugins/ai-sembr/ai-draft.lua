@@ -1,5 +1,18 @@
 return {
   "nvim-lua/plenary.nvim", -- Dependency
+  keys = {
+    {
+      "<leader>ad",
+      function()
+        if _G.ai_draft then
+          _G.ai_draft.generate_draft()
+        else
+          vim.notify("❌ AI Draft not loaded yet", vim.log.levels.ERROR)
+        end
+      end,
+      desc = "AI: Generate Draft from Notes",
+    },
+  },
   config = function()
     local M = {}
 
@@ -88,7 +101,8 @@ Generate a rough draft outline and opening sections:
 
         -- Call Ollama API
         local curl_cmd = string.format(
-          'curl -s -X POST %s/api/generate -d \'{"model": "%s", "prompt": %s, "stream": false, "options": {"temperature": %.1f, "num_predict": %d}}\'',
+          'curl -s -X POST %s/api/generate -d \'{"model": "%s", "prompt": %s, '
+            .. '"stream": false, "options": {"temperature": %.1f, "num_predict": %d}}\'',
           M.config.ollama_url,
           M.config.model,
           vim.fn.json_encode(prompt),
@@ -132,12 +146,8 @@ Generate a rough draft outline and opening sections:
       desc = "Generate prose draft from notes",
     })
 
-    -- Keymap
-    vim.keymap.set("n", "<leader>ad", M.generate_draft, {
-      noremap = true,
-      silent = true,
-      desc = "AI: Generate Draft from Notes",
-    })
+    -- Expose module for keybinding
+    _G.ai_draft = M
 
     vim.notify("📝 PercyBrain Draft Generator loaded - <leader>ad to create drafts", vim.log.levels.INFO)
   end,

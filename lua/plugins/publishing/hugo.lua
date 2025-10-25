@@ -7,8 +7,7 @@
 --      Supports neurodiversity advocacy through accessible knowledge sharing.
 -- Config: full - custom commands for Hugo workflow
 --
--- NOTE: Keybindings moved to lua/config/keymaps/workflows/hugo.lua (<leader>h* namespace)
---       This plugin only provides user commands now. Hugo is being replaced with mkdocs.
+-- NOTE: Hugo is being replaced with Quartz for static site generation.
 --
 -- Usage:
 --   :HugoNew [title] - Create new post in content/posts/
@@ -30,7 +29,7 @@ return {
   "phelipetls/jsonpath.nvim", -- Dependency for Hugo
   ft = { "markdown", "md" },
   config = function()
-    -- Hugo commands (keybindings in lua/config/keymaps/workflows/hugo.lua)
+    -- Hugo commands
     vim.api.nvim_create_user_command("HugoNew", function(opts)
       local title = opts.args
       if title == "" then
@@ -55,9 +54,5 @@ return {
     vim.api.nvim_create_user_command("HugoPublish", function()
       vim.cmd("!hugo && git add . && git commit -m 'Publish' && git push")
     end, {})
-
-    -- NOTE: Keybindings removed - now managed in lua/config/keymaps/workflows/hugo.lua
-    -- Old bindings were <leader>zp, <leader>zv, <leader>zb
-    -- New bindings are <leader>hp, <leader>hv, <leader>hb
   end,
 }

@@ -5,6 +5,9 @@
 return {
   "pocco81/auto-save.nvim",
   event = { "InsertLeave", "TextChanged" }, -- Save on meaningful changes
+  keys = {
+    { "<leader>as", "<cmd>ASToggle<CR>", desc = "💾 Toggle auto-save" },
+  },
   config = function()
     require("auto-save").setup({
       enabled = true, -- Start enabled
@@ -64,9 +67,6 @@ return {
         after_saving = nil,
       },
     })
-
-    -- Keybindings for manual control
-    vim.keymap.set("n", "<leader>as", ":ASToggle<CR>", { desc = "💾 Toggle auto-save", silent = true })
 
     -- Visual indicator in statusline
     vim.api.nvim_create_autocmd("User", {

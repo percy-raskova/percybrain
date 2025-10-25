@@ -1,12 +1,20 @@
 # PercyBrain Keybindings Reference
 
-**Category**: Reference (Information-Oriented) **Last Updated**: 2025-10-21 **Major Refactor**: Writer-first keybinding consolidation (Phase 1 & 2 complete) **Migration Guide**: See `claudedocs/KEYBINDING_MIGRATION_2025-10-21.md`
+**Category**: Reference (Information-Oriented) **Last Updated**: 2025-10-24 **Major Refactor**: Keybinding architecture migration (Phases 1, 2, 3 complete) **Migration Guide**: See `gh-issues/issue-16-keybinding-phase3-completion.md`
 
 Complete reference of all keybindings in PercyBrain organized by workflow and functionality.
 
-⚠️ **BREAKING CHANGES**: Many keybindings changed in 2025-10-21 refactor (Phase 1 & 2). See migration guide.
+⚠️ **BREAKING CHANGES**: Many keybindings changed in 2025-10-21 refactor (Phase 1 & 2). Phase 3 completed 2025-10-24.
 
-**Phase 2 Highlights**:
+**Phase 3 Highlights** (2025-10-24):
+
+- ✅ Window navigation with Kitty integration (Ctrl+h/j/k/l)
+- ✅ Quartz publishing workflow (`<leader>pq*`)
+- ✅ Terminal enhancements with toggleterm (`<leader>t*`)
+- ✅ Inline image preview with hologram (`<leader>ti`)
+- ✅ Trouble v3 diagnostics (toggle-based API)
+
+**Phase 2 Highlights** (2025-10-21):
 
 - ✅ Mode-switching added (`<leader>m*`) - Context-aware workspace configurations
 - ✅ Frequency optimization - Most common actions get shortest keys

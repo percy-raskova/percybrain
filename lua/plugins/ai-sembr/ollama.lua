@@ -7,6 +7,74 @@ return {
   dependencies = {
     "nvim-telescope/telescope.nvim", -- For AI command picker
   },
+  keys = {
+    {
+      "<leader>aa",
+      function()
+        if _G.percy_ai then
+          _G.percy_ai.ai_menu()
+        end
+      end,
+      desc = "AI: Command Menu",
+    },
+    {
+      "<leader>ae",
+      function()
+        if _G.percy_ai then
+          _G.percy_ai.explain()
+        end
+      end,
+      desc = "AI: Explain",
+      mode = { "n", "v" },
+    },
+    {
+      "<leader>as",
+      function()
+        if _G.percy_ai then
+          _G.percy_ai.summarize()
+        end
+      end,
+      desc = "AI: Summarize",
+      mode = { "n", "v" },
+    },
+    {
+      "<leader>al",
+      function()
+        if _G.percy_ai then
+          _G.percy_ai.suggest_links()
+        end
+      end,
+      desc = "AI: Suggest Links",
+    },
+    {
+      "<leader>aw",
+      function()
+        if _G.percy_ai then
+          _G.percy_ai.improve()
+        end
+      end,
+      desc = "AI: Improve Writing",
+      mode = { "n", "v" },
+    },
+    {
+      "<leader>aq",
+      function()
+        if _G.percy_ai then
+          _G.percy_ai.answer_question()
+        end
+      end,
+      desc = "AI: Ask Question",
+    },
+    {
+      "<leader>ax",
+      function()
+        if _G.percy_ai then
+          _G.percy_ai.generate_ideas()
+        end
+      end,
+      desc = "AI: Generate Ideas (eXplore)",
+    },
+  },
   config = function()
     local M = {}
 
@@ -46,7 +114,8 @@ return {
       M.start_ollama() -- Ensure Ollama is running
 
       local curl_cmd = string.format(
-        'curl -s -X POST %s/api/generate -d \'{"model": "%s", "prompt": "%s", "stream": false, "options": {"temperature": %.1f}}\'',
+        'curl -s -X POST %s/api/generate -d \'{"model": "%s", "prompt": "%s", '
+          .. '"stream": false, "options": {"temperature": %.1f}}\'',
         M.config.ollama_url,
         M.config.model,
         prompt:gsub('"', '\\"'):gsub("\n", "\\n"),
@@ -173,7 +242,8 @@ return {
       vim.notify("🔗 Finding related concepts...", vim.log.levels.INFO)
 
       local prompt = string.format(
-        [[Based on the following text, suggest 5-7 related concepts or topics that would be valuable to link to in a Zettelkasten knowledge base. Format as a bulleted list with brief explanations:
+        [[Based on the following text, suggest 5-7 related concepts or topics that would be valuable to link to
+in a Zettelkasten knowledge base. Format as a bulleted list with brief explanations:
 
 %s]],
         text
@@ -237,7 +307,8 @@ Context:
       vim.notify("💭 Generating ideas...", vim.log.levels.INFO)
 
       local prompt = string.format(
-        [[Based on the following note, generate 5 new ideas, questions, or angles to explore. Be creative and thought-provoking:
+        [[Based on the following note, generate 5 new ideas, questions, or angles to explore.
+Be creative and thought-provoking:
 
 %s]],
         text
@@ -323,38 +394,9 @@ Context:
       desc = "AI: Show command menu",
     })
 
-    -- Keymaps for PercyBrain AI (all under <leader>a* prefix)
-    local opts = { noremap = true, silent = true }
-
-    -- AI menu
-    vim.keymap.set("n", "<leader>aa", M.ai_menu, vim.tbl_extend("force", opts, { desc = "AI: Command Menu" }))
-
-    -- Individual AI commands
-    vim.keymap.set({ "n", "v" }, "<leader>ae", M.explain, vim.tbl_extend("force", opts, { desc = "AI: Explain" }))
-
-    vim.keymap.set({ "n", "v" }, "<leader>as", M.summarize, vim.tbl_extend("force", opts, { desc = "AI: Summarize" }))
-
-    vim.keymap.set("n", "<leader>al", M.suggest_links, vim.tbl_extend("force", opts, { desc = "AI: Suggest Links" }))
-
-    vim.keymap.set(
-      { "n", "v" },
-      "<leader>aw",
-      M.improve,
-      vim.tbl_extend("force", opts, { desc = "AI: Improve Writing" })
-    )
-
-    vim.keymap.set("n", "<leader>aq", M.answer_question, vim.tbl_extend("force", opts, { desc = "AI: Ask Question" }))
-
-    vim.keymap.set(
-      "n",
-      "<leader>ax",
-      M.generate_ideas,
-      vim.tbl_extend("force", opts, { desc = "AI: Generate Ideas (eXplore)" })
-    )
-
     vim.notify("🧠 PercyBrain AI loaded - <leader>aa for AI menu", vim.log.levels.INFO)
 
-    -- Export module globally for testing
-    _G.M = M
+    -- Export module globally for keybindings
+    _G.percy_ai = M
   end,
 }

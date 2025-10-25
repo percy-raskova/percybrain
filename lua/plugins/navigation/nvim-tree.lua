@@ -23,7 +23,7 @@
 -- Configuration Notes:
 --   - lazy = false: Loads on startup for immediate availability
 --   - opts = {}: Uses nvim-tree's default configuration
---   - Keybindings typically defined in lua/config/keymaps.lua
+--   - Keybindings: <leader>e defined in lua/config/init.lua (core keybinding)
 --   - Respects .gitignore by default (can be toggled)
 --   - Supports file operations (create, delete, rename, copy, move)
 

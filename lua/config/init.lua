@@ -16,7 +16,6 @@ require("config.globals")
 require("config.options")
 require("config.privacy") -- Privacy protection (clear registers, etc.)
 require("config.zettelkasten").setup() -- Zettelkasten system
-require("config.window-manager") -- Window management system (keymaps centralized)
 require("lib.dashboard").setup() -- AI metrics auto-analysis
 require("lib.error-logger") -- Error logging system
 

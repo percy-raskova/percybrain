@@ -26,9 +26,32 @@
 return {
   -- Virtual plugin for GTD keybindings
   -- No actual plugin to load, just keybindings for percybrain.gtd modules
-  dir = vim.fn.stdpath("config") .. "/lua/percybrain/gtd",
+  dir = vim.fn.stdpath("config") .. "/lua/lib/gtd",
   name = "percybrain-gtd",
   lazy = false, -- Load immediately to register keybindings
-  -- TODO: Add GTD keybindings here using keys = {} spec
-  -- keys = {},
+  keys = {
+    {
+      "<leader>oc",
+      function()
+        require("lib.gtd.capture").quick_capture()
+      end,
+      desc = "GTD: Quick capture to inbox",
+    },
+    {
+      "<leader>op",
+      function()
+        require("lib.gtd.clarify_ui").start_clarify_session()
+      end,
+      desc = "GTD: Process inbox (clarify)",
+    },
+    {
+      "<leader>oi",
+      function()
+        local inbox_path = vim.fn.expand("~/Zettelkasten/gtd/inbox/")
+        local count = vim.fn.glob(inbox_path .. "*.md", false, true)
+        vim.notify(string.format("📥 Inbox: %d items", #count), vim.log.levels.INFO)
+      end,
+      desc = "GTD: View inbox count",
+    },
+  },
 }

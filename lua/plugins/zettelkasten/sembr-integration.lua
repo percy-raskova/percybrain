@@ -20,6 +20,10 @@ return {
     "GSemBrWordDiff",
     "GSemBrParaDiff",
   },
+  keys = {
+    { "<leader>zs", "<cmd>SemBrFormat<cr>", desc = "Format with semantic line breaks", mode = { "n", "v" } },
+    { "<leader>zt", "<cmd>SemBrToggle<cr>", desc = "Toggle SemBr auto-format" },
+  },
   config = function()
     -- Load our SemBr Git integration layer
     require("lib.sembr-git").setup({
@@ -126,10 +130,6 @@ return {
         end,
         desc = "SemBr: Re-format after IWE inline to preserve semantic breaks",
       })
-
-      -- Keymaps for SemBr formatting
-      vim.keymap.set({ "n", "v" }, "<leader>zs", "<cmd>SemBrFormat<cr>", { desc = "Format with semantic line breaks" })
-      vim.keymap.set("n", "<leader>zt", "<cmd>SemBrToggle<cr>", { desc = "Toggle SemBr auto-format" })
 
       vim.notify("📐 SemBr binary found - formatting commands available", vim.log.levels.INFO)
     else

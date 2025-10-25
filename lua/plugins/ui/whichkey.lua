@@ -57,7 +57,7 @@ return {
       { "<leader>w", group = "🪟 Windows" },
       { "<leader>v", group = "⚡ View/Split" },
       { "<leader>c", group = "❌ Close" },
-      { "<leader>s", group = "💾 Save/SemBr" },
+      { "<leader>s", group = "💾 Session" },
       { "<leader>q", group = "🚪 Quit" },
       { "<leader>u", group = "🕰️ Undo Tree" },
 
