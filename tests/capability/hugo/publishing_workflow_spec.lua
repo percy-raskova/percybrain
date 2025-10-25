@@ -8,7 +8,7 @@ describe("Hugo Publishing Workflow Capabilities", function()
 
   before_each(function()
     -- Arrange: Load Hugo module and clean test state
-    hugo = require("percybrain.hugo-menu")
+    hugo = require("lib.hugo-menu")
     test_note_path = nil
   end)
 

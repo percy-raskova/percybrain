@@ -19,7 +19,7 @@
 --- 4. Visual feedback: Show progress and completion status
 --- 5. Batch processing: Option to continue with next item immediately
 ---
---- @module percybrain.gtd.clarify_ui
+--- @module lib.gtd.clarify_ui
 --- @author PercyBrain
 --- @license MIT
 
@@ -89,7 +89,7 @@ end
 --- @return string|nil Next inbox item (full format with checkbox and timestamp) or nil if empty
 --- @private
 function M._get_next_item()
-  local clarify = require("percybrain.gtd.clarify")
+  local clarify = require("lib.gtd.clarify")
   local items = clarify.get_inbox_items()
 
   if #items == 0 then
@@ -151,11 +151,11 @@ end
 ---
 --- @usage
 --- -- From command line:
---- :lua require("percybrain.gtd.clarify_ui").process_next()
+--- :lua require("lib.gtd.clarify_ui").process_next()
 ---
 --- -- From keymap:
 --- vim.keymap.set("n", "<leader>gp", function()
----   require("percybrain.gtd.clarify_ui").process_next()
+---   require("lib.gtd.clarify_ui").process_next()
 --- end, { desc = "GTD process inbox" })
 function M.process_next()
   -- Get next item
@@ -223,7 +223,7 @@ function M.process_next()
 
   -- Build decision and process
   local decision = M._build_decision_from_prompts(prompts)
-  local clarify = require("percybrain.gtd.clarify")
+  local clarify = require("lib.gtd.clarify")
   clarify.clarify_item(text, decision)
 
   -- Show completion

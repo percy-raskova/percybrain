@@ -180,7 +180,7 @@ M.preview_entry = function(entry)
     title_pos = "center",
   }
 
-  local win = vim.api.nvim_open_win(buf, true, win_opts)
+  local _ = vim.api.nvim_open_win(buf, true, win_opts)
 
   -- Keymaps
   vim.api.nvim_buf_set_keymap(buf, "n", "q", "<cmd>close<cr>", { noremap = true, silent = true })

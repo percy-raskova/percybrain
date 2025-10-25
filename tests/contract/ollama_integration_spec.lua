@@ -11,8 +11,8 @@ describe("Ollama Manager Contract", function()
 
   before_each(function()
     -- Arrange: Load fresh manager instance
-    package.loaded["percybrain.ollama-manager"] = nil
-    manager = require("percybrain.ollama-manager")
+    package.loaded["lib.ollama-manager"] = nil
+    manager = require("lib.ollama-manager")
 
     -- Reset to default config
     manager.config = {
@@ -339,8 +339,8 @@ describe("GTD AI OpenAI Compatibility Contract", function()
 
   before_each(function()
     -- Arrange: Load fresh AI module
-    package.loaded["percybrain.gtd.ai"] = nil
-    ai = require("percybrain.gtd.ai")
+    package.loaded["lib.gtd.ai"] = nil
+    ai = require("lib.gtd.ai")
 
     -- Reset mock state
     mock_job_called = false
@@ -349,7 +349,16 @@ describe("GTD AI OpenAI Compatibility Contract", function()
     -- Mock plenary Job to capture API calls
     local Job = require("plenary.job")
     original_job_new = Job.new
-    Job.new = function(opts)
+    Job.new = function(self, opts)
+      -- Handle both Job.new({...}) and Job:new({...}) calling conventions
+      -- When called with colon syntax, self is Job table and opts is actual options
+      -- When called with dot syntax, self is the options table and opts is nil
+      if type(self) == "table" and self.command then
+        -- Dot syntax: Job.new({command="curl", ...})
+        opts = self
+      end
+      -- Now opts contains the correct options table
+
       mock_job_called = true
       mock_job_args = opts.args
 

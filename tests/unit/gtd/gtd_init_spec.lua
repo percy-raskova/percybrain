@@ -24,7 +24,7 @@ describe("GTD Initialization", function()
       assert.is_false(helpers.dir_exists(gtd_root), "GTD root should not exist before setup")
 
       -- Act
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
       gtd.setup()
 
       -- Assert
@@ -36,7 +36,7 @@ describe("GTD Initialization", function()
       local expected_dirs = helpers.get_gtd_directories()
 
       -- Act
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
       gtd.setup()
 
       -- Assert
@@ -51,7 +51,7 @@ describe("GTD Initialization", function()
       vim.fn.mkdir(helpers.gtd_root(), "p")
 
       -- Act & Assert: Should not error on re-setup
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
       assert.has_no.errors(function()
         gtd.setup()
       end)
@@ -64,7 +64,7 @@ describe("GTD Initialization", function()
       local expected_files = helpers.get_base_files()
 
       -- Act
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
       gtd.setup()
 
       -- Assert
@@ -84,7 +84,7 @@ describe("GTD Initialization", function()
       local inbox_path = helpers.gtd_path("inbox.md")
 
       -- Act
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
       gtd.setup()
 
       -- Assert
@@ -97,7 +97,7 @@ describe("GTD Initialization", function()
       local next_actions_path = helpers.gtd_path("next-actions.md")
 
       -- Act
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
       gtd.setup()
 
       -- Assert
@@ -110,7 +110,7 @@ describe("GTD Initialization", function()
 
     it("should not overwrite existing base files", function()
       -- Arrange: Create GTD structure and add custom content
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
       gtd.setup()
 
       local inbox_path = helpers.gtd_path("inbox.md")
@@ -133,7 +133,7 @@ describe("GTD Initialization", function()
       local expected_contexts = helpers.get_context_files()
 
       -- Act
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
       gtd.setup()
 
       -- Assert
@@ -151,7 +151,7 @@ describe("GTD Initialization", function()
       local home_context_path = helpers.gtd_path("contexts/home.md")
 
       -- Act
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
       gtd.setup()
 
       -- Assert
@@ -166,7 +166,7 @@ describe("GTD Initialization", function()
   describe("GTD Module API", function()
     it("should expose setup function", function()
       -- Arrange & Act
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
 
       -- Assert
       assert.is_function(gtd.setup, "GTD module should expose setup function")
@@ -174,7 +174,7 @@ describe("GTD Initialization", function()
 
     it("should expose get_inbox_path function", function()
       -- Arrange & Act
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
 
       -- Assert
       assert.is_function(gtd.get_inbox_path, "GTD module should expose get_inbox_path function")
@@ -182,7 +182,7 @@ describe("GTD Initialization", function()
 
     it("should return correct inbox path", function()
       -- Arrange
-      local gtd = require("percybrain.gtd")
+      local gtd = require("lib.gtd")
       local expected_path = helpers.gtd_path("inbox.md")
 
       -- Act

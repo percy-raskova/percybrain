@@ -17,11 +17,11 @@ describe("GTD AI Module", function()
     helpers.clear_gtd_cache()
 
     -- Setup GTD structure for AI tests
-    local gtd = require("percybrain.gtd")
+    local gtd = require("lib.gtd")
     gtd.setup()
 
     -- Load AI module
-    ai = require("percybrain.gtd.ai")
+    ai = require("lib.gtd.ai")
 
     -- Use mock Ollama for fast, deterministic tests (unless explicitly disabled)
     if not USE_REAL_OLLAMA then

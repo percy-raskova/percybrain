@@ -11,7 +11,7 @@ describe("GTD Clarify Module", function()
     helpers.clear_gtd_cache()
 
     -- Setup GTD structure for clarify tests
-    local gtd = require("percybrain.gtd")
+    local gtd = require("lib.gtd")
     gtd.setup()
   end)
 
@@ -24,7 +24,7 @@ describe("GTD Clarify Module", function()
   describe("Next Actions", function()
     it("should route actionable item to next-actions.md without context", function()
       -- Arrange
-      local clarify = require("percybrain.gtd.clarify")
+      local clarify = require("lib.gtd.clarify")
       helpers.add_inbox_item("Buy groceries")
 
       local decision = {
@@ -52,7 +52,7 @@ describe("GTD Clarify Module", function()
 
     it("should route actionable item with context to contexts/home.md", function()
       -- Arrange
-      local clarify = require("percybrain.gtd.clarify")
+      local clarify = require("lib.gtd.clarify")
       helpers.add_inbox_item("Fix leaky faucet")
 
       local decision = {
@@ -80,7 +80,7 @@ describe("GTD Clarify Module", function()
 
     it("should remove item from inbox after routing to next-actions", function()
       -- Arrange
-      local clarify = require("percybrain.gtd.clarify")
+      local clarify = require("lib.gtd.clarify")
       helpers.add_inbox_item("Call dentist")
 
       local decision = {
@@ -101,7 +101,7 @@ describe("GTD Clarify Module", function()
   describe("Projects", function()
     it("should route multi-step item to projects.md with outcome", function()
       -- Arrange
-      local clarify = require("percybrain.gtd.clarify")
+      local clarify = require("lib.gtd.clarify")
       helpers.add_inbox_item("Website redesign")
 
       local decision = {
@@ -135,7 +135,7 @@ describe("GTD Clarify Module", function()
   describe("Waiting For", function()
     it("should route delegated item to waiting-for.md with person", function()
       -- Arrange
-      local clarify = require("percybrain.gtd.clarify")
+      local clarify = require("lib.gtd.clarify")
       helpers.add_inbox_item("Feedback on proposal")
 
       local decision = {
@@ -166,7 +166,7 @@ describe("GTD Clarify Module", function()
   describe("Non-Actionable Items", function()
     it("should route reference material to reference.md", function()
       -- Arrange
-      local clarify = require("percybrain.gtd.clarify")
+      local clarify = require("lib.gtd.clarify")
       helpers.add_inbox_item("Interesting article on productivity")
 
       local decision = {
@@ -193,7 +193,7 @@ describe("GTD Clarify Module", function()
 
     it("should route future idea to someday-maybe.md", function()
       -- Arrange
-      local clarify = require("percybrain.gtd.clarify")
+      local clarify = require("lib.gtd.clarify")
       helpers.add_inbox_item("Learn Spanish")
 
       local decision = {
@@ -220,7 +220,7 @@ describe("GTD Clarify Module", function()
 
     it("should delete trash items without routing to any file", function()
       -- Arrange
-      local clarify = require("percybrain.gtd.clarify")
+      local clarify = require("lib.gtd.clarify")
       helpers.add_inbox_item("Spam email")
 
       local decision = {
@@ -258,7 +258,7 @@ describe("GTD Clarify Module", function()
   describe("Inbox Management", function()
     it("should get all inbox items as array", function()
       -- Arrange
-      local clarify = require("percybrain.gtd.clarify")
+      local clarify = require("lib.gtd.clarify")
       helpers.add_inbox_item("First task")
       helpers.add_inbox_item("Second task")
       helpers.add_inbox_item("Third task")
@@ -283,7 +283,7 @@ describe("GTD Clarify Module", function()
 
     it("should remove specific item from inbox", function()
       -- Arrange
-      local clarify = require("percybrain.gtd.clarify")
+      local clarify = require("lib.gtd.clarify")
       helpers.add_inbox_item("Keep this")
       helpers.add_inbox_item("Remove this")
       helpers.add_inbox_item("Keep that")
@@ -301,7 +301,7 @@ describe("GTD Clarify Module", function()
 
     it("should count remaining inbox items", function()
       -- Arrange
-      local clarify = require("percybrain.gtd.clarify")
+      local clarify = require("lib.gtd.clarify")
       helpers.add_inbox_item("First task")
       helpers.add_inbox_item("Second task")
 

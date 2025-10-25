@@ -22,7 +22,7 @@ return {
   },
   config = function()
     -- Load our SemBr Git integration layer
-    require("percybrain.sembr-git").setup({
+    require("lib.sembr-git").setup({
       -- Configuration options
       auto_format = true,
       git_integration = true,

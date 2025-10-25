@@ -5,8 +5,8 @@
 local M = {}
 
 -- Import dashboard and network graph modules
-local dashboard = require("percybrain.dashboard")
-local network = require("percybrain.network-graph")
+local dashboard = require("lib.dashboard")
+local network = require("lib.network-graph")
 
 -- Toggle dashboard
 local function toggle_dashboard()

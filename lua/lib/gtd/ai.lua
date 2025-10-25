@@ -1,6 +1,6 @@
 --- GTD AI Integration
 --- AI-powered task decomposition, context suggestion, and priority inference
---- @module percybrain.gtd.ai
+--- @module lib.gtd.ai
 
 local M = {}
 local Job = require("plenary.job")

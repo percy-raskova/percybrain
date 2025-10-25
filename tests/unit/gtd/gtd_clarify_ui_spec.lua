@@ -11,7 +11,7 @@ describe("GTD Clarify UI Module", function()
     helpers.clear_gtd_cache()
 
     -- Setup GTD structure for UI tests
-    local gtd = require("percybrain.gtd")
+    local gtd = require("lib.gtd")
     gtd.setup()
   end)
 
@@ -24,7 +24,7 @@ describe("GTD Clarify UI Module", function()
   describe("Decision Building", function()
     it("should build next action decision without context", function()
       -- Arrange
-      local clarify_ui = require("percybrain.gtd.clarify_ui")
+      local clarify_ui = require("lib.gtd.clarify_ui")
       local prompts = {
         actionable = "y",
         action_type = "1", -- next_action
@@ -42,7 +42,7 @@ describe("GTD Clarify UI Module", function()
 
     it("should build next action decision with context", function()
       -- Arrange
-      local clarify_ui = require("percybrain.gtd.clarify_ui")
+      local clarify_ui = require("lib.gtd.clarify_ui")
       local prompts = {
         actionable = "y",
         action_type = "1", -- next_action
@@ -60,7 +60,7 @@ describe("GTD Clarify UI Module", function()
 
     it("should build project decision with outcome", function()
       -- Arrange
-      local clarify_ui = require("percybrain.gtd.clarify_ui")
+      local clarify_ui = require("lib.gtd.clarify_ui")
       local prompts = {
         actionable = "y",
         action_type = "2", -- project
@@ -78,7 +78,7 @@ describe("GTD Clarify UI Module", function()
 
     it("should build waiting-for decision with person", function()
       -- Arrange
-      local clarify_ui = require("percybrain.gtd.clarify_ui")
+      local clarify_ui = require("lib.gtd.clarify_ui")
       local prompts = {
         actionable = "y",
         action_type = "3", -- waiting_for
@@ -96,7 +96,7 @@ describe("GTD Clarify UI Module", function()
 
     it("should build reference decision for non-actionable", function()
       -- Arrange
-      local clarify_ui = require("percybrain.gtd.clarify_ui")
+      local clarify_ui = require("lib.gtd.clarify_ui")
       local prompts = {
         actionable = "n",
         route = "1", -- reference
@@ -112,7 +112,7 @@ describe("GTD Clarify UI Module", function()
 
     it("should build someday/maybe decision for non-actionable", function()
       -- Arrange
-      local clarify_ui = require("percybrain.gtd.clarify_ui")
+      local clarify_ui = require("lib.gtd.clarify_ui")
       local prompts = {
         actionable = "n",
         route = "2", -- someday_maybe
@@ -128,7 +128,7 @@ describe("GTD Clarify UI Module", function()
 
     it("should build trash decision for non-actionable", function()
       -- Arrange
-      local clarify_ui = require("percybrain.gtd.clarify_ui")
+      local clarify_ui = require("lib.gtd.clarify_ui")
       local prompts = {
         actionable = "n",
         route = "3", -- trash
@@ -146,7 +146,7 @@ describe("GTD Clarify UI Module", function()
   describe("Inbox Processing", function()
     it("should get next unprocessed item from inbox", function()
       -- Arrange
-      local clarify_ui = require("percybrain.gtd.clarify_ui")
+      local clarify_ui = require("lib.gtd.clarify_ui")
       helpers.add_inbox_item("First task")
       helpers.add_inbox_item("Second task")
 
@@ -160,7 +160,7 @@ describe("GTD Clarify UI Module", function()
 
     it("should return nil when inbox is empty", function()
       -- Arrange
-      local clarify_ui = require("percybrain.gtd.clarify_ui")
+      local clarify_ui = require("lib.gtd.clarify_ui")
 
       -- Act
       local item = clarify_ui._get_next_item()
@@ -171,7 +171,7 @@ describe("GTD Clarify UI Module", function()
 
     it("should extract clean text from inbox item", function()
       -- Arrange
-      local clarify_ui = require("percybrain.gtd.clarify_ui")
+      local clarify_ui = require("lib.gtd.clarify_ui")
       local raw_item = "- [ ] Buy groceries (captured: 2025-10-21 14:30)"
 
       -- Act

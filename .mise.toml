@@ -34,6 +34,10 @@ NPM_CONFIG_AUDIT = "false"
 NPM_CONFIG_FUND = "false"
 NODE_ENV = "development"
 
+# AI/ML Privacy - Force offline mode for transformers (SemBr)
+TRANSFORMERS_OFFLINE = "1"  # Prevents Hugging Face API calls, uses local models only
+SEMBR_MODEL_PATH = "~/.local/share/sembr/models/sembr2023-bert-small"  # Local SemBr model path
+
 # ============================================================================
 # SETTINGS
 # ============================================================================

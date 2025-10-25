@@ -16,7 +16,7 @@
 --- 3. Trust the System: Everything gets reviewed later in Clarify workflow
 --- 4. No Evaluation: Capture now, decide later
 ---
---- @module percybrain.gtd.capture
+--- @module lib.gtd.capture
 --- @author PercyBrain
 --- @license MIT
 
@@ -32,7 +32,7 @@ local M = {}
 --- and helps identify aging items during weekly reviews.
 ---
 --- @return string Timestamp in "YYYY-MM-DD HH:MM" format
---- @usage local timestamp = require("percybrain.gtd.capture").get_timestamp()
+--- @usage local timestamp = require("lib.gtd.capture").get_timestamp()
 function M.get_timestamp()
   return os.date("%Y-%m-%d %H:%M")
 end
@@ -59,7 +59,7 @@ end
 --- @return string Absolute path to inbox.md
 --- @private
 local function _get_inbox_path()
-  local gtd = require("percybrain.gtd")
+  local gtd = require("lib.gtd")
   return gtd.get_inbox_path()
 end
 
@@ -112,12 +112,12 @@ end
 --- @param text string|nil The text to capture (empty/nil input is ignored)
 --- @usage
 --- -- From command line
---- :lua require("percybrain.gtd.capture").quick_capture("Call dentist")
+--- :lua require("lib.gtd.capture").quick_capture("Call dentist")
 ---
 --- -- From keybinding
 --- vim.keymap.set("n", "<leader>gc", function()
 ---   local text = vim.fn.input("Quick capture: ")
----   require("percybrain.gtd.capture").quick_capture(text)
+---   require("lib.gtd.capture").quick_capture(text)
 --- end)
 function M.quick_capture(text)
   -- Validate input: empty captures are ignored (fail silently)
@@ -148,7 +148,7 @@ end
 ---
 --- @return number Buffer number of the created scratch buffer
 --- @usage
---- local capture = require("percybrain.gtd.capture")
+--- local capture = require("lib.gtd.capture")
 --- local bufnr = capture.create_capture_buffer()
 ---
 --- -- Display in floating window
@@ -184,7 +184,7 @@ end
 ---
 --- @param bufnr number Buffer number to commit (from create_capture_buffer)
 --- @usage
---- local capture = require("percybrain.gtd.capture")
+--- local capture = require("lib.gtd.capture")
 --- local bufnr = capture.create_capture_buffer()
 --- -- ... user writes content ...
 --- capture.commit_capture_buffer(bufnr)  -- Saves and closes

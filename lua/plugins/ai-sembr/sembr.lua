@@ -13,7 +13,13 @@ return {
 
     -- Configuration
     M.config = {
-      model = "bert-small", -- Options: bert-small, bert-base, bert-large
+      -- Local model path from mise environment variable (maximum privacy - no network calls)
+      model = vim.fn.expand(vim.env.SEMBR_MODEL_PATH or "~/.local/share/sembr/models/sembr2023-bert-small"),
+      -- Change model: Set SEMBR_MODEL_PATH in ~/.config/nvim/.mise.toml
+      -- Other available models in ~/.local/share/sembr/models/:
+      -- - sembr2023-bert-tiny (fastest, smallest)
+      -- - sembr2023-bert-mini
+      -- - sembr2023-distilbert-base-uncased (larger, more accurate)
       auto_format = false, -- Auto-format on save (disabled by default)
       enable_mcp = false, -- Use MCP server mode (future enhancement)
     }
@@ -27,8 +33,8 @@ return {
       local tmpfile = vim.fn.tempname()
       vim.fn.writefile(lines, tmpfile)
 
-      -- Run SemBr
-      local cmd = string.format("sembr --model %s %s", M.config.model, tmpfile)
+      -- Run SemBr (redirect stderr to /dev/null to avoid capturing progress bars/warnings)
+      local cmd = string.format("sembr -m %s -i %s 2>/dev/null", M.config.model, tmpfile)
 
       vim.notify("🔄 Running SemBr semantic line break analysis...", vim.log.levels.INFO)
 
@@ -66,8 +72,8 @@ return {
       local tmpfile = vim.fn.tempname()
       vim.fn.writefile(lines, tmpfile)
 
-      -- Run SemBr
-      local cmd = string.format("sembr --model %s %s", M.config.model, tmpfile)
+      -- Run SemBr (redirect stderr to /dev/null to avoid capturing progress bars/warnings)
+      local cmd = string.format("sembr -m %s -i %s 2>/dev/null", M.config.model, tmpfile)
 
       vim.notify("🔄 Running SemBr on selection...", vim.log.levels.INFO)
 

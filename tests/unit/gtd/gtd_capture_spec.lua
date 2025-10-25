@@ -11,7 +11,7 @@ describe("GTD Capture Module", function()
     helpers.clear_gtd_cache()
 
     -- Setup GTD structure for capture tests
-    local gtd = require("percybrain.gtd")
+    local gtd = require("lib.gtd")
     gtd.setup()
   end)
 
@@ -24,7 +24,7 @@ describe("GTD Capture Module", function()
   describe("Quick Capture", function()
     it("should append item to inbox with checkbox format", function()
       -- Arrange
-      local capture = require("percybrain.gtd.capture")
+      local capture = require("lib.gtd.capture")
       local inbox_path = helpers.gtd_path("inbox.md")
       local test_item = "Buy groceries"
 
@@ -41,7 +41,7 @@ describe("GTD Capture Module", function()
 
     it("should add timestamp to captured items", function()
       -- Arrange
-      local capture = require("percybrain.gtd.capture")
+      local capture = require("lib.gtd.capture")
       local inbox_path = helpers.gtd_path("inbox.md")
       local test_item = "Call dentist"
 
@@ -55,7 +55,7 @@ describe("GTD Capture Module", function()
 
     it("should handle empty input gracefully", function()
       -- Arrange
-      local capture = require("percybrain.gtd.capture")
+      local capture = require("lib.gtd.capture")
       local inbox_path = helpers.gtd_path("inbox.md")
       local original_content = helpers.read_file_content(inbox_path)
 
@@ -70,7 +70,7 @@ describe("GTD Capture Module", function()
 
     it("should append multiple captures sequentially", function()
       -- Arrange
-      local capture = require("percybrain.gtd.capture")
+      local capture = require("lib.gtd.capture")
       local inbox_path = helpers.gtd_path("inbox.md")
 
       -- Act
@@ -89,7 +89,7 @@ describe("GTD Capture Module", function()
   describe("Capture Buffer", function()
     it("should create capture buffer with correct filetype", function()
       -- Arrange
-      local capture = require("percybrain.gtd.capture")
+      local capture = require("lib.gtd.capture")
 
       -- Act
       local bufnr = capture.create_capture_buffer()
@@ -101,7 +101,7 @@ describe("GTD Capture Module", function()
 
     it("should save buffer content to inbox when committed", function()
       -- Arrange
-      local capture = require("percybrain.gtd.capture")
+      local capture = require("lib.gtd.capture")
       local inbox_path = helpers.gtd_path("inbox.md")
       local bufnr = capture.create_capture_buffer()
 
@@ -122,7 +122,7 @@ describe("GTD Capture Module", function()
 
     it("should delete capture buffer after commit", function()
       -- Arrange
-      local capture = require("percybrain.gtd.capture")
+      local capture = require("lib.gtd.capture")
       local bufnr = capture.create_capture_buffer()
 
       vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "Test content" })
@@ -138,7 +138,7 @@ describe("GTD Capture Module", function()
   describe("Timestamp Formatting", function()
     it("should generate timestamp in correct format", function()
       -- Arrange
-      local capture = require("percybrain.gtd.capture")
+      local capture = require("lib.gtd.capture")
 
       -- Act
       local timestamp = capture.get_timestamp()
@@ -149,7 +149,7 @@ describe("GTD Capture Module", function()
 
     it("should format task items with timestamp", function()
       -- Arrange
-      local capture = require("percybrain.gtd.capture")
+      local capture = require("lib.gtd.capture")
       local test_item = "Review pull request"
 
       -- Act

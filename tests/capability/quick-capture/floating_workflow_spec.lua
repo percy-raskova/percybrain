@@ -18,7 +18,7 @@ describe("Floating Quick Capture Workflow Capabilities", function()
     vim.fn.mkdir(test_inbox_dir, "p")
 
     -- Load module with test configuration
-    capture = require("percybrain.floating-quick-capture")
+    capture = require("lib.floating-quick-capture")
     capture.setup({
       inbox_dir = test_inbox_dir,
       auto_notify = false, -- Disable notifications in tests

@@ -17,13 +17,13 @@ require("config.options")
 require("config.privacy") -- Privacy protection (clear registers, etc.)
 require("config.zettelkasten").setup() -- Zettelkasten system
 require("config.window-manager") -- Window management system (keymaps centralized)
-require("percybrain.dashboard").setup() -- AI metrics auto-analysis
-require("percybrain.error-logger") -- Error logging system
+require("lib.dashboard").setup() -- AI metrics auto-analysis
+require("lib.error-logger") -- Error logging system
 
 -- ========================================================================
 -- Ollama Integration (Auto-start local AI server)
 -- ========================================================================
-require("percybrain.ollama-manager").setup({
+require("lib.ollama-manager").setup({
   enabled = true, -- Enable auto-start (disable with vim.g.ollama_config = { enabled = false })
   model = "llama3.2", -- Default model
   auto_pull = false, -- Don't auto-download models
@@ -31,7 +31,7 @@ require("percybrain.ollama-manager").setup({
 })
 
 -- GTD AI + IWE Bridge (Task detection and decomposition)
-require("percybrain.gtd.iwe-bridge").setup({
+require("lib.gtd.iwe-bridge").setup({
   auto_decompose = false, -- Prompt user before decomposing (set true for automatic)
 })
 

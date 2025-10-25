@@ -105,10 +105,10 @@ end
 -- Load component with test configuration
 function M.load_component(name, config)
   -- Clear any existing module
-  package.loaded["percybrain." .. name] = nil
+  package.loaded["lib." .. name] = nil
 
   -- Load with config
-  local component = require("percybrain." .. name)
+  local component = require("lib." .. name)
   if component.setup then
     component.setup(config or {})
   end

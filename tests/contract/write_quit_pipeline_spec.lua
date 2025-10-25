@@ -7,7 +7,7 @@ describe("Write-Quit AI Pipeline Contract", function()
 
   before_each(function()
     -- Arrange: Load pipeline module
-    pipeline = require("percybrain.write-quit-pipeline")
+    pipeline = require("lib.write-quit-pipeline")
   end)
 
   after_each(function()
@@ -139,7 +139,7 @@ describe("Write-Quit AI Pipeline Contract", function()
 
     it("MUST use current AI model from ai-model-selector", function()
       -- Arrange: Mock ai-model-selector
-      local ai_selector = require("percybrain.ai-model-selector")
+      local ai_selector = require("lib.ai-model-selector")
       local selected_model = ai_selector.get_current_model()
 
       -- Act: Get model for processing
@@ -271,7 +271,7 @@ Quick thought
 
     it("MUST use ai-model-selector for model selection", function()
       -- Arrange: AI model selector loaded
-      local ai_selector = require("percybrain.ai-model-selector")
+      local ai_selector = require("lib.ai-model-selector")
 
       -- Act: Get processing model
       local model = pipeline.get_processing_model()

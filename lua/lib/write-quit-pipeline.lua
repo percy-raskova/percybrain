@@ -245,7 +245,7 @@ end
 
 -- Get processing model from ai-model-selector
 function M.get_processing_model()
-  local ai_selector = require("percybrain.ai-model-selector")
+  local ai_selector = require("lib.ai-model-selector")
   return ai_selector.get_current_model()
 end
 
@@ -339,7 +339,7 @@ end
 
 -- Validate Hugo frontmatter (optional feature, delegates to hugo-menu)
 function M.validate_hugo_frontmatter(filepath)
-  local hugo = require("percybrain.hugo-menu")
+  local hugo = require("lib.hugo-menu")
   return hugo.validate_file_for_publishing(filepath)
 end
 

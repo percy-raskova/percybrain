@@ -25,8 +25,8 @@ describe("SemBr Git Integration", function()
 
   before_each(function()
     -- Arrange: Load module and save original vim state
-    package.loaded["percybrain.sembr-git"] = nil
-    sembr_git = require("percybrain.sembr-git")
+    package.loaded["lib.sembr-git"] = nil
+    sembr_git = require("lib.sembr-git")
 
     original_vim = {
       system = vim.fn.system,
@@ -424,8 +424,8 @@ describe("SemBr Git Integration", function()
       local start_time = os.clock()
 
       -- Act: Load the module fresh
-      package.loaded["percybrain.sembr-git"] = nil
-      require("percybrain.sembr-git")
+      package.loaded["lib.sembr-git"] = nil
+      require("lib.sembr-git")
 
       local elapsed = os.clock() - start_time
 

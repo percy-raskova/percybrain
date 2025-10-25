@@ -22,7 +22,7 @@ describe("Floating Quick Capture Contract", function()
     describe("Floating Window Contract", function()
       it("MUST provide floating window popup API", function()
         -- Arrange: Load floating capture module
-        local capture_ok, capture = pcall(require, "percybrain.floating-quick-capture")
+        local capture_ok, capture = pcall(require, "lib.floating-quick-capture")
 
         -- Act: Check for floating window function
         local has_open_function = capture_ok and type(capture.open_capture_window) == "function"
@@ -33,7 +33,7 @@ describe("Floating Quick Capture Contract", function()
 
       it("MUST create centered floating window", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Call window creation function
         local window_config = capture.get_window_config()
@@ -50,7 +50,7 @@ describe("Floating Quick Capture Contract", function()
 
       it("MUST have minimal UI without distractions", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Get window configuration
         local window_config = capture.get_window_config()
@@ -67,7 +67,7 @@ describe("Floating Quick Capture Contract", function()
     describe("Input Capture Contract", function()
       it("MUST capture input without switching buffers", function()
         -- Arrange: Load module and get current buffer
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
         local original_buffer = vim.api.nvim_get_current_buf()
 
         -- Act: Open capture window
@@ -81,7 +81,7 @@ describe("Floating Quick Capture Contract", function()
 
       it("MUST provide buffer for text input", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Create capture buffer
         local buffer = capture.create_capture_buffer()
@@ -98,7 +98,7 @@ describe("Floating Quick Capture Contract", function()
     describe("Auto-Save Contract", function()
       it("MUST save to inbox directory automatically", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Get save destination
         local save_path = capture.get_save_path()
@@ -110,7 +110,7 @@ describe("Floating Quick Capture Contract", function()
 
       it("MUST generate timestamp-based filename", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Generate filename
         local filename = capture.generate_filename()
@@ -122,7 +122,7 @@ describe("Floating Quick Capture Contract", function()
 
       it("MUST add simple frontmatter (title + timestamp)", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
         local test_content = "Test fleeting thought"
 
         -- Act: Generate content with frontmatter
@@ -138,7 +138,7 @@ describe("Floating Quick Capture Contract", function()
 
       it("MUST save file without user interaction", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Check for auto-save function
         local has_save_function = type(capture.save_and_close) == "function"
@@ -151,7 +151,7 @@ describe("Floating Quick Capture Contract", function()
     describe("Keybinding Contract", function()
       it("MUST have single keybinding trigger", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Get default keybinding
         local default_key = capture.get_default_keybinding()
@@ -163,7 +163,7 @@ describe("Floating Quick Capture Contract", function()
 
       it("MUST register open keybinding", function()
         -- Arrange: Load module and setup
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Setup with default config
         capture.setup({})
@@ -175,7 +175,7 @@ describe("Floating Quick Capture Contract", function()
 
       it("MUST register save keybinding within capture window", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Get buffer keymaps configuration
         local buffer_keymaps = capture.get_buffer_keymaps()
@@ -189,7 +189,7 @@ describe("Floating Quick Capture Contract", function()
     describe("Non-Blocking Contract", function()
       it("MUST return to previous buffer after save", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Check for buffer restoration function
         local has_restore = type(capture.restore_previous_buffer) == "function"
@@ -200,7 +200,7 @@ describe("Floating Quick Capture Contract", function()
 
       it("MUST use async file operations", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Check save operation implementation
         local save_function = capture.save_and_close
@@ -213,7 +213,7 @@ describe("Floating Quick Capture Contract", function()
     describe("Rapid Capture Contract", function()
       it("MUST handle consecutive captures without conflicts", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Generate two consecutive filenames
         local filename1 = capture.generate_filename()
@@ -226,7 +226,7 @@ describe("Floating Quick Capture Contract", function()
 
       it("MUST queue save operations if needed", function()
         -- Arrange: Load module
-        local capture = require("percybrain.floating-quick-capture")
+        local capture = require("lib.floating-quick-capture")
 
         -- Act: Check for save queue management
         local has_queue = type(capture.is_save_in_progress) == "function"
@@ -240,7 +240,7 @@ describe("Floating Quick Capture Contract", function()
   describe("Forbidden Contract 🚫", function()
     it("MUST NOT require file path selection", function()
       -- Arrange: Load module
-      local capture = require("percybrain.floating-quick-capture")
+      local capture = require("lib.floating-quick-capture")
 
       -- Act: Check for automatic path generation
       local save_path = capture.get_save_path()
@@ -252,7 +252,7 @@ describe("Floating Quick Capture Contract", function()
 
     it("MUST NOT add Hugo frontmatter to fleeting notes", function()
       -- Arrange: Load module
-      local capture = require("percybrain.floating-quick-capture")
+      local capture = require("lib.floating-quick-capture")
       local test_content = "Fleeting thought"
 
       -- Act: Format content
@@ -266,7 +266,7 @@ describe("Floating Quick Capture Contract", function()
 
     it("MUST NOT lose content on save error", function()
       -- Arrange: Load module
-      local capture = require("percybrain.floating-quick-capture")
+      local capture = require("lib.floating-quick-capture")
 
       -- Act: Check for error recovery function
       local has_recovery = type(capture.on_save_error) == "function"
@@ -279,7 +279,7 @@ describe("Floating Quick Capture Contract", function()
   describe("Optional Contract 🎁", function()
     it("MAY provide visual feedback on save", function()
       -- Arrange: Load module
-      local capture_ok, capture = pcall(require, "percybrain.floating-quick-capture")
+      local capture_ok, capture = pcall(require, "lib.floating-quick-capture")
 
       -- Act: Check for notification function
       local has_notify = capture_ok and type(capture.notify_save_success) == "function"
@@ -290,7 +290,7 @@ describe("Floating Quick Capture Contract", function()
 
     it("MAY allow custom keybinding configuration", function()
       -- Arrange: Load module
-      local capture_ok, capture = pcall(require, "percybrain.floating-quick-capture")
+      local capture_ok, capture = pcall(require, "lib.floating-quick-capture")
 
       -- Act: Check for custom keybinding support
       local supports_custom = capture_ok and capture.get_default_keybinding ~= nil

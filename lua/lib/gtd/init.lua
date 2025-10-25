@@ -6,7 +6,7 @@
 ---   3. Organize - Put it where it belongs
 ---   4. Reflect - Review frequently
 ---   5. Engage - Simply do
---- @module percybrain.gtd
+--- @module lib.gtd
 
 local M = {}
 

@@ -1,5 +1,5 @@
 --- GTD AI + IWE LSP Bridge
---- @module percybrain.gtd.iwe-bridge
+--- @module lib.gtd.iwe-bridge
 ---
 --- Provides automatic task detection and AI decomposition for IWE extracted content.
 --- Synergizes GTD AI task management with IWE note refactoring workflows.
@@ -34,7 +34,7 @@ function M.auto_decompose_buffer(bufnr)
       vim.api.nvim_win_set_cursor(0, { i, 0 })
 
       -- Call GTD AI decompose_task
-      require("percybrain.gtd.ai").decompose_task()
+      require("lib.gtd.ai").decompose_task()
       break
     end
   end

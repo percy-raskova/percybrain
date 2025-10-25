@@ -14,7 +14,7 @@ describe("AI Model Selection Contract", function()
   describe("Model Discovery Contract", function()
     it("MUST detect available Ollama models from system", function()
       -- Arrange: System has ollama installed with models
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
 
       -- Act: List available models
       local models = ai.list_available_models()
@@ -32,7 +32,7 @@ NAME                   ID              SIZE      MODIFIED
 nous-hermes2:latest    d50977d0b36a    6.1 GB    2 days ago
 llama3.2:latest        a80c4f17acd5    2.0 GB    3 days ago
 ]]
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
 
       -- Act: Parse models from output
       local models = ai.parse_ollama_list(sample_output)
@@ -49,7 +49,7 @@ llama3.2:latest        a80c4f17acd5    2.0 GB    3 days ago
       local empty_output = [[
 NAME                   ID              SIZE      MODIFIED
 ]]
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
 
       -- Act: Parse empty output
       local models = ai.parse_ollama_list(empty_output)
@@ -64,7 +64,7 @@ NAME                   ID              SIZE      MODIFIED
   describe("Model Selection Contract", function()
     it("MUST store selected model for session", function()
       -- Arrange: User selects a model
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
       local selected_model = "llama3.2:latest"
 
       -- Act: Set current model
@@ -77,7 +77,7 @@ NAME                   ID              SIZE      MODIFIED
 
     it("MUST validate selected model exists in available models", function()
       -- Arrange: User attempts to select invalid model
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
       local invalid_model = "nonexistent-model:latest"
 
       -- Act: Attempt to set invalid model
@@ -91,7 +91,7 @@ NAME                   ID              SIZE      MODIFIED
 
     it("MUST have default model fallback", function()
       -- Arrange: New session with no model selected
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
 
       -- Act: Get current model without setting one
       local current = ai.get_current_model()
@@ -106,7 +106,7 @@ NAME                   ID              SIZE      MODIFIED
   describe("Model Metadata Contract", function()
     it("MUST provide model descriptions for user guidance", function()
       -- Arrange: System has model metadata
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
 
       -- Act: Get model with metadata
       local models_with_info = ai.get_models_with_metadata()
@@ -123,7 +123,7 @@ NAME                   ID              SIZE      MODIFIED
 
     it("MAY provide model size and performance hints", function()
       -- Arrange: Model metadata includes optional info
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
       local models_with_info = ai.get_models_with_metadata()
 
       -- Act: Check for optional metadata
@@ -153,7 +153,7 @@ NAME                   ID              SIZE      MODIFIED
         }
       end
 
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
       local ollama = _G.M
 
       -- Act: Update Ollama config with selected model
@@ -181,7 +181,7 @@ NAME                   ID              SIZE      MODIFIED
       local original_temp = ollama.config.temperature
       local original_timeout = ollama.config.timeout
 
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
 
       -- Act: Change model
       local available = ai.list_available_models()
@@ -201,7 +201,7 @@ NAME                   ID              SIZE      MODIFIED
   describe("Task-Specific Model Selection Contract", function()
     it("MAY suggest optimal models for different tasks", function()
       -- Arrange: System knows task categories
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
 
       -- Act: Get suggested model for task
       local suggested = ai.suggest_model_for_task("code_generation")
@@ -224,7 +224,7 @@ NAME                   ID              SIZE      MODIFIED
 
     it("MUST handle missing task category gracefully", function()
       -- Arrange: User requests unknown task category
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
 
       -- Act: Request model for unknown task
       local suggested = ai.suggest_model_for_task("unknown_task_type")
@@ -238,7 +238,7 @@ NAME                   ID              SIZE      MODIFIED
   describe("Model Picker UI Contract", function()
     it("MUST provide interactive model selection UI", function()
       -- Arrange: User wants to change model
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
 
       -- Act: Check if show_model_picker function exists
       local has_picker = type(ai.show_model_picker) == "function"
@@ -249,7 +249,7 @@ NAME                   ID              SIZE      MODIFIED
 
     it("MUST display current model in picker UI", function()
       -- Arrange: User has selected a model
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
       ai.set_current_model("llama3.2:latest")
 
       -- Act: Get picker display info
@@ -265,7 +265,7 @@ NAME                   ID              SIZE      MODIFIED
   describe("Error Handling Contract", function()
     it("MUST detect when Ollama is not installed", function()
       -- Arrange: Simulate missing ollama command
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
 
       -- Act: Check Ollama availability
       local is_available, error_msg = ai.check_ollama_installed()
@@ -281,7 +281,7 @@ NAME                   ID              SIZE      MODIFIED
 
     it("MUST provide helpful error when no models available", function()
       -- Arrange: User has Ollama but no models pulled
-      local ai = require("percybrain.ai-model-selector")
+      local ai = require("lib.ai-model-selector")
 
       -- Act: Attempt to list models when none exist
       -- (This test validates error messaging, not actual state)

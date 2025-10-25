@@ -18,7 +18,7 @@
 --- 4. Not actionable? → Reference, someday/maybe, or trash
 --- 5. Less than 2 minutes? → Do it now (not implemented here)
 ---
---- @module percybrain.gtd.clarify
+--- @module lib.gtd.clarify
 --- @author PercyBrain
 --- @license MIT
 
@@ -33,7 +33,7 @@ local M = {}
 --- @return string Absolute path to inbox.md
 --- @private
 local function _get_inbox_path()
-  local gtd = require("percybrain.gtd")
+  local gtd = require("lib.gtd")
   return gtd.get_inbox_path()
 end
 
@@ -43,7 +43,7 @@ end
 --- @return string Absolute path to the file
 --- @private
 local function _get_gtd_file_path(filename)
-  local gtd = require("percybrain.gtd")
+  local gtd = require("lib.gtd")
   local gtd_root = gtd.get_gtd_root()
   return gtd_root .. "/" .. filename
 end
@@ -153,7 +153,7 @@ end
 ---
 --- @return table Array of inbox item strings (includes full checkbox format)
 --- @usage
---- local clarify = require("percybrain.gtd.clarify")
+--- local clarify = require("lib.gtd.clarify")
 --- local items = clarify.get_inbox_items()
 --- for _, item in ipairs(items) do
 ---   print(item)  -- "- [ ] Task name (captured: YYYY-MM-DD HH:MM)"
@@ -183,7 +183,7 @@ end
 ---
 --- @param text string The text to search for and remove (case-sensitive substring match)
 --- @usage
---- local clarify = require("percybrain.gtd.clarify")
+--- local clarify = require("lib.gtd.clarify")
 --- clarify.remove_inbox_item("Buy groceries")  -- Removes item with this text
 function M.remove_inbox_item(text)
   local inbox_path = _get_inbox_path()
@@ -217,7 +217,7 @@ end
 ---
 --- @return number Count of checkbox items in inbox
 --- @usage
---- local clarify = require("percybrain.gtd.clarify")
+--- local clarify = require("lib.gtd.clarify")
 --- local count = clarify.inbox_count()
 --- print("Items remaining: " .. count)
 function M.inbox_count()
@@ -249,7 +249,7 @@ end
 --- @param text string The item text to clarify (will be matched in inbox for removal)
 --- @param decision table Decision structure with routing information (see above)
 --- @usage
---- local clarify = require("percybrain.gtd.clarify")
+--- local clarify = require("lib.gtd.clarify")
 ---
 --- -- Example 1: Next action with context
 --- clarify.clarify_item("Fix leaky faucet", {

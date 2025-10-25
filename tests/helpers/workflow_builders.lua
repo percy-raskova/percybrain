@@ -99,7 +99,7 @@ function M.wiki_creation_builder()
     })
 
     -- Create note from template
-    local template_sys = require("percybrain.template-system")
+    local template_sys = require("lib.template-system")
     local file_path = template_sys.create_from_template(self.template, self.title)
 
     -- Add content if provided
@@ -162,7 +162,7 @@ function M.quick_capture_builder()
       auto_notify = false,
     })
 
-    local capture = require("percybrain.floating-quick-capture")
+    local capture = require("lib.floating-quick-capture")
 
     -- Open capture window
     local buffer = capture.open_capture_window()
@@ -280,7 +280,7 @@ function M.publishing_builder()
     return {
       vault = self.vault,
       files = created_files,
-      hugo = require("percybrain.hugo-menu"),
+      hugo = require("lib.hugo-menu"),
       cleanup = function()
         env_setup.cleanup_test_vault(self.vault)
       end,

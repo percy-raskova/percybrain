@@ -326,14 +326,14 @@ M.toggle = function()
     buf,
     "n",
     "r",
-    "<cmd>close | lua require('percybrain.dashboard').toggle()<cr>",
+    "<cmd>close | lua require('lib.dashboard').toggle()<cr>",
     { noremap = true, silent = true }
   )
   vim.api.nvim_buf_set_keymap(
     buf,
     "n",
     "g",
-    "<cmd>close | lua require('percybrain.network-graph').show_borg()<cr>",
+    "<cmd>close | lua require('lib.network-graph').show_borg()<cr>",
     { noremap = true, silent = true }
   )
 

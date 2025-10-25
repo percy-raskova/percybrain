@@ -56,9 +56,9 @@ return {
       -- Section: Workflows (regular use)
       { type = "text", val = "Workflows:", opts = { hl = "Comment", position = "center" } },
       dashboard.button("a", "  a  AI assistant",       "<cmd> lua require('config.zettelkasten').ai_menu() <cr>"),
-      dashboard.button("v", "  v  Dashboard",          "<cmd> lua require('percybrain.dashboard').toggle() <cr>"),
+      dashboard.button("v", "  v  Dashboard",          "<cmd> lua require('lib.dashboard').toggle() <cr>"),
       dashboard.button("w", "  w  Wiki browser",       "<cmd> lua require('config.zettelkasten').wiki_browser() <cr>"),
-      dashboard.button("p", "  p  Publish",            "<cmd> lua require('percybrain.publish').start() <cr>"),
+      dashboard.button("p", "  p  Publish",            "<cmd> lua require('lib.publish').start() <cr>"),
 
       -- Section: Tools (occasional use)
       { type = "text", val = "Tools:", opts = { hl = "Comment", position = "center" } },

@@ -7,7 +7,7 @@ describe("Write-Quit AI Pipeline Workflow Capabilities", function()
 
   before_each(function()
     -- Arrange: Load write-quit pipeline module
-    pipeline = require("percybrain.write-quit-pipeline")
+    pipeline = require("lib.write-quit-pipeline")
     pipeline.setup()
   end)
 
@@ -136,7 +136,7 @@ Content
   describe("AI Model Integration Capabilities", function()
     it("CAN use selected AI model for processing", function()
       -- Arrange: User has selected specific model
-      local ai_selector = require("percybrain.ai-model-selector")
+      local ai_selector = require("lib.ai-model-selector")
       local available = ai_selector.list_available_models()
 
       if #available > 0 then
@@ -154,7 +154,7 @@ Content
 
     it("CAN change AI model and use new model for next save", function()
       -- Arrange: User changes model mid-session
-      local ai_selector = require("percybrain.ai-model-selector")
+      local ai_selector = require("lib.ai-model-selector")
       local available = ai_selector.list_available_models()
 
       if #available >= 2 then

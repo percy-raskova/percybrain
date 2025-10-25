@@ -8,8 +8,6 @@
 -- 4. Hugo validation confirms publishability
 -- 5. User receives completion notification
 
-local helpers = require("tests.helpers.environment_setup")
-
 describe("Wiki Note Creation Workflow [INTEGRATION]", function()
   -- Load test helpers
   local env_setup = require("tests.helpers.environment_setup")
@@ -107,7 +105,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
       -- =====================================================================
 
       -- Arrange
-      local template_system = require("percybrain.template-system")
+      local template_system = require("lib.template-system")
       local note_title = "Integration Test Wiki Note"
 
       -- Act: Create note from wiki template
@@ -154,7 +152,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
       -- =====================================================================
 
       -- Arrange: Track pipeline state
-      local pipeline = require("percybrain.write-quit-pipeline")
+      local pipeline = require("lib.write-quit-pipeline")
       local processing_started = false
       local processing_completed = false
       local processing_result = nil
@@ -214,7 +212,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
       -- =====================================================================
 
       -- Arrange
-      local hugo_menu = require("percybrain.hugo-menu")
+      local hugo_menu = require("lib.hugo-menu")
 
       -- Act: Validate the note for publishing
       local is_valid, validation_errors = hugo_menu.validate_file_for_publishing(file_path)
@@ -250,8 +248,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
     it("handles multiple wiki notes in sequence", function()
       -- Test that creating multiple notes doesn't cause conflicts
 
-      local template_system = require("percybrain.template-system")
-      local pipeline = require("percybrain.write-quit-pipeline")
+      local template_system = require("lib.template-system")
 
       -- Create first note
       local file1 = template_system.create_from_template("wiki", "First Note")
@@ -281,7 +278,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
       services.ollama.fail_rate = 1.0
 
       -- Create and save wiki note
-      local template_system = require("percybrain.template-system")
+      local template_system = require("lib.template-system")
       local file_path = template_system.create_from_template("wiki", "Error Test")
 
       vim.cmd("edit " .. file_path)
@@ -291,7 +288,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
       vim.wait(200)
 
       -- Check pipeline status
-      local pipeline = require("percybrain.write-quit-pipeline")
+      local pipeline = require("lib.write-quit-pipeline")
       local status = pipeline.get_processing_status()
 
       -- Should handle error gracefully
@@ -320,7 +317,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
       }, invalid_file)
 
       -- Try to validate
-      local hugo_menu = require("percybrain.hugo-menu")
+      local hugo_menu = require("lib.hugo-menu")
       local is_valid, errors = hugo_menu.validate_file_for_publishing(invalid_file)
 
       -- Should fail validation
@@ -348,7 +345,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
       }, draft_file)
 
       -- Check publishing status
-      local hugo_menu = require("percybrain.hugo-menu")
+      local hugo_menu = require("lib.hugo-menu")
       local should_publish, reason = hugo_menu.should_publish_file(draft_file)
 
       -- Should not publish drafts
@@ -360,8 +357,8 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
 
   describe("Component Integration Points", function()
     it("correctly distinguishes wiki from fleeting notes", function()
-      local template_system = require("percybrain.template-system")
-      local pipeline = require("percybrain.write-quit-pipeline")
+      local template_system = require("lib.template-system")
+      local pipeline = require("lib.write-quit-pipeline")
 
       -- Create wiki note
       local wiki_file = template_system.create_from_template("wiki", "Wiki Test")
@@ -378,11 +375,11 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
 
     it("respects AI model selection", function()
       -- Select different model
-      local model_selector = require("percybrain.ai-model-selector")
+      local model_selector = require("lib.ai-model-selector")
       model_selector.set_model("codellama")
 
       -- Create and process note
-      local template_system = require("percybrain.template-system")
+      local template_system = require("lib.template-system")
       local file_path = template_system.create_from_template("wiki", "Model Test")
 
       vim.cmd("edit " .. file_path)
@@ -392,7 +389,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
       vim.wait(200)
 
       -- Check that selected model was used
-      local pipeline = require("percybrain.write-quit-pipeline")
+      local pipeline = require("lib.write-quit-pipeline")
       local status = pipeline.get_processing_status()
 
       assert.equals("codellama", status.model_used, "Should use selected model")
@@ -400,11 +397,11 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
 
     it("excludes inbox notes from Hugo publishing", function()
       -- Create fleeting note in inbox
-      local template_system = require("percybrain.template-system")
+      local template_system = require("lib.template-system")
       local inbox_file = template_system.create_from_template("fleeting", "Inbox Note")
 
       -- Check publishing status
-      local hugo_menu = require("percybrain.hugo-menu")
+      local hugo_menu = require("lib.hugo-menu")
       local should_publish, reason = hugo_menu.should_publish_file(inbox_file)
 
       -- Should not publish inbox notes
@@ -449,7 +446,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
       assert.is_not_nil(context.file_path)
 
       -- Assert: User notified about AI unavailability
-      local pipeline = require("percybrain.write-quit-pipeline")
+      local pipeline = require("lib.write-quit-pipeline")
       local status = pipeline.get_processing_status()
       assert.equals("skipped", status.state)
 
@@ -472,14 +469,14 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
 
       -- Assert: Processing eventually completes
       local success = workflow_builders.wait_for_condition(function()
-        local pipeline = require("percybrain.write-quit-pipeline")
+        local pipeline = require("lib.write-quit-pipeline")
         return pipeline.get_processing_status().state == "completed"
       end, 5000, "AI processing with slow response")
 
       assert.is_true(success, "Should complete even with slow AI")
 
       -- Assert: Performance warning issued
-      local pipeline = require("percybrain.write-quit-pipeline")
+      local pipeline = require("lib.write-quit-pipeline")
       local notifications = pipeline.get_notifications()
       local has_warning = false
       for _, notif in ipairs(notifications) do
@@ -504,7 +501,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
         :execute()
 
       -- Act: Request Hugo validation
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local is_valid, errors = hugo.validate_file_for_publishing(context.file_path)
 
       -- Assert: Validation fails with clear errors
@@ -535,7 +532,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
       vim.wait(1000)
 
       -- Assert: All notes processed without errors
-      local pipeline = require("percybrain.write-quit-pipeline")
+      local pipeline = require("lib.write-quit-pipeline")
       local queue_status = pipeline.get_queue_status()
 
       assert.equals(0, queue_status.pending, "Should have no pending operations")
@@ -562,7 +559,7 @@ describe("Wiki Note Creation Workflow [INTEGRATION]", function()
       vim.wait(6000) -- Wait longer than 5s timeout
 
       -- Assert: Error handled gracefully
-      local pipeline = require("percybrain.write-quit-pipeline")
+      local pipeline = require("lib.write-quit-pipeline")
       local status = pipeline.get_processing_status()
 
       assert.equals("error", status.state)

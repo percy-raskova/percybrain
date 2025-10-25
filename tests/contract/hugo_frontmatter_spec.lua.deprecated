@@ -26,7 +26,7 @@ description: "Test"
 ]]
 
       -- Act: Parse frontmatter
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local frontmatter = hugo.parse_frontmatter(valid_frontmatter)
 
       -- Assert: draft is boolean
@@ -45,7 +45,7 @@ draft: false
 ]]
 
       -- Act: Parse frontmatter
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local frontmatter = hugo.parse_frontmatter(valid_frontmatter)
 
       -- Assert: date matches YYYY-MM-DD pattern
@@ -65,7 +65,7 @@ tags: [test, hugo]
 ]]
 
       -- Act: Parse frontmatter
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local frontmatter = hugo.parse_frontmatter(valid_frontmatter)
 
       -- Assert: tags is table (array)
@@ -85,7 +85,7 @@ categories: [zettelkasten]
 ]]
 
       -- Act: Parse frontmatter
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local frontmatter = hugo.parse_frontmatter(valid_frontmatter)
 
       -- Assert: categories is table (array)
@@ -104,7 +104,7 @@ draft: false
 ]]
 
       -- Act: Parse frontmatter
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local frontmatter = hugo.parse_frontmatter(valid_frontmatter)
 
       -- Assert: title is string
@@ -126,7 +126,7 @@ draft: "false"
 ]]
 
       -- Act: Validate frontmatter
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local is_valid, errors = hugo.validate_frontmatter(invalid_frontmatter)
 
       -- Assert: Validation fails with draft error
@@ -146,7 +146,7 @@ draft: false
 ]]
 
       -- Act: Validate frontmatter
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local is_valid, errors = hugo.validate_frontmatter(invalid_frontmatter)
 
       -- Assert: Validation fails with date error
@@ -164,7 +164,7 @@ title: "Test Note"
 ]]
 
       -- Act: Validate frontmatter
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local is_valid, errors = hugo.validate_frontmatter(incomplete_frontmatter)
 
       -- Assert: Validation fails with missing field error
@@ -189,7 +189,7 @@ cite-method: biblatex
 ]]
 
       -- Act: Validate frontmatter
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local is_valid, errors = hugo.validate_frontmatter(valid_frontmatter)
 
       -- Assert: Validation passes
@@ -217,7 +217,7 @@ draft: "false"
       file:close()
 
       -- Act: Attempt to validate for publishing
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local is_valid, errors = hugo.validate_file_for_publishing(test_note)
 
       -- Assert: Validation blocks publishing
@@ -233,7 +233,7 @@ draft: "false"
       local inbox_note = vim.fn.expand("~/Zettelkasten/inbox/fleeting-note.md")
 
       -- Act: Check if should be published
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local should_publish = hugo.should_publish_file(inbox_note)
 
       -- Assert: Inbox notes not published
@@ -245,7 +245,7 @@ draft: "false"
       local wiki_note = vim.fn.expand("~/Zettelkasten/distributed-cognition.md")
 
       -- Act: Check if should be published
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local should_publish = hugo.should_publish_file(wiki_note)
 
       -- Assert: Wiki notes are published
@@ -269,7 +269,7 @@ Content here
 ]]
 
       -- Act: Extract frontmatter
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local frontmatter = hugo.extract_frontmatter(note_content)
 
       -- Assert: Frontmatter extracted correctly
@@ -288,7 +288,7 @@ Content without frontmatter
 ]]
 
       -- Act: Extract frontmatter
-      local hugo = require("percybrain.hugo-menu")
+      local hugo = require("lib.hugo-menu")
       local frontmatter = hugo.extract_frontmatter(note_content)
 
       -- Assert: No frontmatter extracted

@@ -1,5 +1,5 @@
 --- Ollama Manager - Auto-start and configuration for local AI
---- @module percybrain.ollama-manager
+--- @module lib.ollama-manager
 ---
 --- Provides automatic Ollama server management for Neovim:
 --- - Auto-start Ollama server on Neovim launch

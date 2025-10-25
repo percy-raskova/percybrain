@@ -7,7 +7,7 @@ describe("AI Model Selection Workflow Capabilities", function()
 
   before_each(function()
     -- Arrange: Load AI model selector module
-    ai = require("percybrain.ai-model-selector")
+    ai = require("lib.ai-model-selector")
   end)
 
   after_each(function()

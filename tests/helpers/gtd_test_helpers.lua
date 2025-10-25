@@ -99,14 +99,14 @@ end
 --- Clear GTD module cache
 --- Useful in before_each/after_each hooks
 function M.clear_gtd_cache()
-  package.loaded["percybrain.gtd"] = nil
-  package.loaded["percybrain.gtd.init"] = nil
-  package.loaded["percybrain.gtd.capture"] = nil
-  package.loaded["percybrain.gtd.clarify"] = nil
-  package.loaded["percybrain.gtd.organize"] = nil
-  package.loaded["percybrain.gtd.reflect"] = nil
-  package.loaded["percybrain.gtd.engage"] = nil
-  package.loaded["percybrain.gtd.ai"] = nil
+  package.loaded["lib.gtd"] = nil
+  package.loaded["lib.gtd.init"] = nil
+  package.loaded["lib.gtd.capture"] = nil
+  package.loaded["lib.gtd.clarify"] = nil
+  package.loaded["lib.gtd.organize"] = nil
+  package.loaded["lib.gtd.reflect"] = nil
+  package.loaded["lib.gtd.engage"] = nil
+  package.loaded["lib.gtd.ai"] = nil
 end
 
 -- ============================================================================

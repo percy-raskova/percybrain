@@ -20,8 +20,8 @@ describe("Ollama Workflow Capabilities", function()
     mock_ollama.setup_gtd_defaults()
 
     -- Load AI module and patch it with mock
-    package.loaded["percybrain.gtd.ai"] = nil
-    ai = require("percybrain.gtd.ai")
+    package.loaded["lib.gtd.ai"] = nil
+    ai = require("lib.gtd.ai")
     mock_ollama.patch_ai_module(ai)
 
     -- Create test buffer
@@ -361,8 +361,8 @@ describe("GTD-IWE Bridge Capabilities", function()
 
   before_each(function()
     -- Arrange: Load IWE bridge module
-    package.loaded["percybrain.gtd.iwe-bridge"] = nil
-    bridge = require("percybrain.gtd.iwe-bridge")
+    package.loaded["lib.gtd.iwe-bridge"] = nil
+    bridge = require("lib.gtd.iwe-bridge")
 
     -- Enable mock Ollama
     mock_ollama.enable()
@@ -370,7 +370,7 @@ describe("GTD-IWE Bridge Capabilities", function()
     mock_ollama.setup_gtd_defaults()
 
     -- Patch AI module
-    local ai = require("percybrain.gtd.ai")
+    local ai = require("lib.gtd.ai")
     mock_ollama.patch_ai_module(ai)
 
     -- Create test buffer
@@ -383,7 +383,7 @@ describe("GTD-IWE Bridge Capabilities", function()
 
   after_each(function()
     -- Cleanup
-    local ai = require("percybrain.gtd.ai")
+    local ai = require("lib.gtd.ai")
     mock_ollama.unpatch_ai_module(ai)
     mock_ollama.disable()
 
@@ -648,13 +648,13 @@ describe("Full Ollama Workflow Integration", function()
     mock_ollama.setup_gtd_defaults()
 
     -- Load all components
-    package.loaded["percybrain.ollama-manager"] = nil
-    package.loaded["percybrain.gtd.ai"] = nil
-    package.loaded["percybrain.gtd.iwe-bridge"] = nil
+    package.loaded["lib.ollama-manager"] = nil
+    package.loaded["lib.gtd.ai"] = nil
+    package.loaded["lib.gtd.iwe-bridge"] = nil
 
-    manager = require("percybrain.ollama-manager")
-    ai = require("percybrain.gtd.ai")
-    bridge = require("percybrain.gtd.iwe-bridge")
+    manager = require("lib.ollama-manager")
+    ai = require("lib.gtd.ai")
+    bridge = require("lib.gtd.iwe-bridge")
 
     -- Patch AI with mock
     mock_ollama.patch_ai_module(ai)
