@@ -74,6 +74,24 @@ return {
       end,
       desc = "AI: Generate Ideas (eXplore)",
     },
+    {
+      "<leader>at",
+      function()
+        if _G.percy_ai then
+          _G.percy_ai.extract_tags()
+        end
+      end,
+      desc = "AI: Extract Tags",
+    },
+    {
+      "<leader>am",
+      function()
+        if _G.percy_ai then
+          _G.percy_ai.format_moc()
+        end
+      end,
+      desc = "AI: Format as MOC",
+    },
   },
   config = function()
     local M = {}
@@ -319,6 +337,134 @@ Be creative and thought-provoking:
       end)
     end
 
+    -- Transform freeform notes into IWE MOC (Map of Content) format
+    function M.format_moc()
+      local bufnr = vim.api.nvim_get_current_buf()
+      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+      local text = table.concat(lines, "\n")
+
+      vim.notify("🗺️  Formatting note into IWE MOC structure...", vim.log.levels.INFO)
+
+      local prompt = string.format(
+        [[Transform the following note into an IWE Map of Content (MOC) format.
+
+IMPORTANT INSTRUCTIONS:
+1. Preserve the YAML frontmatter exactly as-is (don't modify it)
+2. Extract the main concept and write a clear, concise Overview section
+3. Identify 3-5 key themes or subtopics and organize them under "Key Concepts"
+4. Suggest 5-10 related concepts that should be linked (use markdown link format: [Concept](concept-slug))
+5. Preserve all original content at the end under a "Notes" or "Original Content" section
+6. Use clean markdown formatting with ## for sections
+7. Make it suitable for a knowledge base (Zettelkasten)
+
+Original note:
+%s
+
+MOC Format:
+- Frontmatter (preserve exactly)
+- # [Title from frontmatter]
+- ## Overview (2-3 sentence summary)
+- ## Key Concepts (organize themes with ### subheadings)
+- ## Related Notes (suggest links in [text](slug) format)
+- ## Notes (preserve original content)]],
+        text
+      )
+
+      M.call_ollama(prompt, function(response)
+        -- Replace buffer content with MOC-formatted version
+        local formatted_lines = vim.split(response, "\n")
+        vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, formatted_lines)
+        vim.notify("✅ Note formatted into MOC structure!", vim.log.levels.INFO)
+      end)
+    end
+
+    -- Extract and insert tags from note content
+    function M.extract_tags()
+      local bufnr = vim.api.nvim_get_current_buf()
+      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+      local text = table.concat(lines, "\n")
+
+      vim.notify("🏷️  Extracting tags from content...", vim.log.levels.INFO)
+
+      local prompt = string.format(
+        [[Analyze the following text and extract 5-10 relevant tags/keywords that categorize this content.
+
+Return ONLY the tags as a simple comma-separated list, no explanations.
+Use lowercase, hyphenated format (e.g., "machine-learning", "social-theory", "productivity").
+Focus on: main topics, disciplines, concepts, methodologies, and themes.
+
+Text to analyze:
+%s
+
+Tags:]],
+        text
+      )
+
+      M.call_ollama(prompt, function(response)
+        -- Parse comma-separated tags from response
+        local tag_string = response:gsub("\n", ""):gsub("^%s*", ""):gsub("%s*$", "")
+        local tags = {}
+
+        for tag in tag_string:gmatch("([^,]+)") do
+          tag = tag:gsub("^%s*", ""):gsub("%s*$", "") -- trim whitespace
+          if tag ~= "" then
+            table.insert(tags, tag)
+          end
+        end
+
+        if #tags == 0 then
+          vim.notify("❌ No tags extracted", vim.log.levels.WARN)
+          return
+        end
+
+        -- Find YAML frontmatter tags section
+        local frontmatter_end = nil
+        local tags_line = nil
+
+        for i, line in ipairs(lines) do
+          if i > 1 and line:match("^%-%-%-") then
+            frontmatter_end = i
+            break
+          end
+          if line:match("^tags:") then
+            tags_line = i
+          end
+        end
+
+        if not frontmatter_end then
+          vim.notify("❌ No YAML frontmatter found", vim.log.levels.WARN)
+          return
+        end
+
+        -- Build tag lines (YAML list format)
+        local tag_lines = { "tags:" }
+        for _, tag in ipairs(tags) do
+          table.insert(tag_lines, "  - " .. tag)
+        end
+
+        -- Replace or insert tags
+        if tags_line then
+          -- Find end of existing tags section
+          local tags_end = tags_line
+          for i = tags_line + 1, frontmatter_end - 1 do
+            if lines[i]:match("^%s*%-") then
+              tags_end = i
+            else
+              break
+            end
+          end
+
+          -- Replace existing tags
+          vim.api.nvim_buf_set_lines(bufnr, tags_line - 1, tags_end, false, tag_lines)
+          vim.notify(string.format("✅ Updated %d tags", #tags), vim.log.levels.INFO)
+        else
+          -- Insert tags before end of frontmatter
+          vim.api.nvim_buf_set_lines(bufnr, frontmatter_end - 1, frontmatter_end - 1, false, tag_lines)
+          vim.notify(string.format("✅ Added %d tags", #tags), vim.log.levels.INFO)
+        end
+      end)
+    end
+
     -- AI command picker using Telescope
     function M.ai_menu()
       local actions = require("telescope.actions")
@@ -334,6 +480,8 @@ Be creative and thought-provoking:
         { name = "✨ Improve Writing", func = M.improve, desc = "Enhance clarity and flow" },
         { name = "💡 Answer Question", func = M.answer_question, desc = "Ask AI about this note" },
         { name = "💭 Generate Ideas", func = M.generate_ideas, desc = "Brainstorm new angles" },
+        { name = "🏷️  Extract Tags", func = M.extract_tags, desc = "Auto-generate tags from content" },
+        { name = "🗺️  Format as MOC", func = M.format_moc, desc = "Transform into Map of Content structure" },
       }
 
       pickers
@@ -388,6 +536,14 @@ Be creative and thought-provoking:
 
     vim.api.nvim_create_user_command("PercyIdeas", M.generate_ideas, {
       desc = "AI: Generate ideas",
+    })
+
+    vim.api.nvim_create_user_command("PercyTags", M.extract_tags, {
+      desc = "AI: Extract tags from note content",
+    })
+
+    vim.api.nvim_create_user_command("PercyMOC", M.format_moc, {
+      desc = "AI: Format note as Map of Content (MOC)",
     })
 
     vim.api.nvim_create_user_command("PercyAI", M.ai_menu, {

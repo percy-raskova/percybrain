@@ -49,6 +49,7 @@ opt.backup = false -- No backup files
 opt.writebackup = false -- No backup while editing
 opt.undofile = true -- Persistent undo history
 opt.undodir = { vim.fn.stdpath("state") .. "/undo" }
+opt.fixendofline = false -- Don't automatically remove trailing blank lines on save
 
 -- Performance
 opt.updatetime = 250 -- Faster completion (default 4000ms)

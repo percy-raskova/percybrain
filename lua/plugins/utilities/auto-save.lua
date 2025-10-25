@@ -21,8 +21,8 @@ return {
         cleaning_interval = 1250, -- Clear message after 1.25s
       },
 
-      -- Events that trigger save
-      trigger_events = { "InsertLeave", "TextChanged" },
+      -- Events that trigger save (removed TextChanged for less aggressive saving)
+      trigger_events = { "InsertLeave" }, -- Only save when leaving insert mode
 
       -- Conditions
       condition = function(buf)
@@ -50,7 +50,7 @@ return {
       write_all_buffers = false, -- Only save current buffer (less disruptive)
 
       -- Debouncing (prevent too frequent saves)
-      debounce_delay = 135, -- Wait 135ms after typing stops
+      debounce_delay = 5000, -- Wait 5 seconds after leaving insert mode (was 135ms)
 
       -- IMPORTANT: Don't auto-save during these
       callbacks = {
@@ -88,7 +88,32 @@ return {
       end,
     })
 
+    -- Periodic auto-save timer (every 5 minutes for modified buffers)
+    local function periodic_save()
+      for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_option(buf, "modified") then
+          local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
+          local filetype = vim.api.nvim_buf_get_option(buf, "filetype")
+
+          -- Only save normal file buffers
+          if buftype == "" and filetype ~= "TelescopePrompt" and filetype ~= "DressingInput" then
+            vim.api.nvim_buf_call(buf, function()
+              vim.cmd("silent! write")
+            end)
+          end
+        end
+      end
+    end
+
+    -- Start 5-minute timer
+    local timer = vim.loop.new_timer()
+    timer:start(
+      300000, -- Start after 5 minutes (300,000ms)
+      300000, -- Repeat every 5 minutes
+      vim.schedule_wrap(periodic_save)
+    )
+
     -- Notification
-    vim.notify("💾 Auto-save enabled! Never lose work during hyperfocus.", vim.log.levels.INFO)
+    vim.notify("💾 Auto-save enabled! Saves on InsertLeave + every 5 minutes.", vim.log.levels.INFO)
   end,
 }

@@ -27,14 +27,15 @@
 
 return {
   "edluffy/hologram.nvim",
-  enabled = true,
+  enabled = false, -- DISABLED: Unmaintained plugin with buffer ID race conditions
+  -- Error: Invalid buffer id when closing buffers before async render completes
+  -- Alternative: Use external image viewer (feh, kitty icat) or wait for image.nvim maturity
   lazy = true,
-  ft = { "markdown", "tex", "org", "norg" }, -- Load for document types with images
+  ft = { "markdown", "tex", "org", "norg" },
   cmd = { "Hologram" },
 
   config = function()
     require("hologram").setup({
-      -- Automatically display images
       auto_display = true,
     })
 
@@ -42,7 +43,6 @@ return {
   end,
 
   keys = {
-    -- Toggle image display
     { "<leader>ti", "<cmd>Hologram<cr>", desc = "Toggle inline images" },
   },
 }

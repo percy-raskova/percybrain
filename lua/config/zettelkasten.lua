@@ -100,54 +100,49 @@ end
 -- Keymaps now managed in lua/config/keymaps/zettelkasten.lua
 -- Business logic only below
 
--- Create new note with template
+-- Create new note with minimal Quartz-compatible frontmatter
+-- Writing-first workflow: just frontmatter + title + blank lines
+-- Use AI commands later to format into IWE MOC structure
 function M.new_note()
   local title = vim.fn.input("Note title: ")
   if title == "" then
     return
   end
 
-  -- Try to use template system
-  M.select_template(function(template_name)
-    local timestamp = os.date("%Y%m%d%H%M")
-    local filename = string.format("%s-%s.md", timestamp, title:gsub(" ", "-"):lower())
-    local filepath = M.config.home .. "/" .. filename
+  local timestamp = os.date("%Y%m%d%H%M")
+  local filename = string.format("%s-%s.md", timestamp, title:gsub(" ", "-"):lower())
+  local filepath = M.config.home .. "/" .. filename
 
-    local content
-    if template_name then
-      -- Load and apply template
-      local template_content = M.load_template(template_name)
-      if template_content then
-        content = M.apply_template(template_content, title)
-      end
-    end
+  -- Minimal Quartz-compatible frontmatter
+  local lines = {
+    "---",
+    'title: "' .. title .. '"',
+    "date: " .. os.date("%Y-%m-%d"),
+    "draft: false",
+    "tags: []",
+    "---",
+    "",
+    "# " .. title,
+    "",
+    "",
+  }
+  local content = table.concat(lines, "\n")
 
-    -- Fallback to default frontmatter if no template
-    if not content then
-      local lines = {
-        "---",
-        "title: " .. title,
-        "date: " .. os.date("%Y-%m-%d %H:%M"),
-        "tags: []",
-        "---",
-        "",
-        "# " .. title,
-        "",
-        "",
-      }
-      content = table.concat(lines, "\n")
-    end
+  -- Write file
+  local file = io.open(filepath, "w")
+  if file then
+    file:write(content)
+    file:close()
+    vim.cmd("edit " .. filepath)
 
-    -- Write file
-    local file = io.open(filepath, "w")
-    if file then
-      file:write(content)
-      file:close()
-      vim.cmd("edit " .. filepath)
-    else
-      vim.notify("❌ Failed to create note", vim.log.levels.ERROR)
-    end
-  end)
+    -- Position cursor after blank lines (line 10, ready to write)
+    vim.api.nvim_win_set_cursor(0, { 10, 0 })
+    vim.cmd("startinsert")
+
+    vim.notify("✨ New note created - write freely, format with AI later!", vim.log.levels.INFO)
+  else
+    vim.notify("❌ Failed to create note", vim.log.levels.ERROR)
+  end
 end
 
 -- Create/open daily note (with optional date parameter)

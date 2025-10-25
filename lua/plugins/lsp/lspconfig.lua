@@ -64,8 +64,17 @@ return {
       opts.desc = "Go to declaration"
       keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
 
-      opts.desc = "Show LSP definitions"
-      keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
+      -- Custom gd behavior for markdown (Zettelkasten navigation)
+      -- For non-markdown, use standard LSP definition lookup
+      if vim.bo[bufnr].filetype == "markdown" then
+        opts.desc = "Follow link or create new note"
+        keymap.set("n", "gd", function()
+          require("lib.zettelkasten-nav").follow_or_create()
+        end, opts)
+      else
+        opts.desc = "Show LSP definitions"
+        keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
+      end
 
       opts.desc = "Show LSP implementations"
       keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
