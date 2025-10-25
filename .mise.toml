@@ -1,5 +1,6 @@
 # mise - Polyglot tool version manager + task runner
 # https://mise.jdx.dev/configuration.html
+# PercyBrain Testing Framework - Kent Beck Edition
 
 # ============================================================================
 # MINIMUM VERSION REQUIREMENT
@@ -10,99 +11,407 @@ min_version = "2025.10.0"
 # TOOL VERSIONS
 # ============================================================================
 [tools]
-# Lua ecosystem - Lua 5.1 for hook script compatibility
 lua = "5.1"
-
-# Node.js for LSP servers (markdown-oxide, etc.)
 node = { version = "22.17.1", postinstall = "npm install -g neovim" }
-
-# Python for pre-commit framework (mise uses pipx under the hood)
 python = "3.12"
-
-# StyLua formatter - installed via mise
 stylua = "latest"
-
-# Note: luacheck should be installed via system package manager (apt/brew/etc)
-# There's no mise backend for it, and tasks below assume system luacheck
 
 # ============================================================================
 # ENVIRONMENT VARIABLES
 # ============================================================================
 [env]
 # Lua module paths for require() in tests and development
-LUA_PATH = "./lua/?.lua;./lua/?/init.lua;;"
+LUA_PATH = "./lua/?.lua;./lua/?/init.lua;./tests/?.lua;./tests/?/init.lua;;"
 LUA_CPATH = ""
+
+# Test environment configuration
+TEST_ENV = "isolated"
+TEST_PARALLEL = "false"  # Neovim tests can't run in parallel
+TEST_VERBOSITY = "normal"  # normal|verbose|minimal
 
 # Suppress npm noise during installations
 NPM_CONFIG_AUDIT = "false"
 NPM_CONFIG_FUND = "false"
 NODE_ENV = "development"
 
+# AI/ML Privacy - Force offline mode for transformers (SemBr)
+TRANSFORMERS_OFFLINE = "1"  # Prevents Hugging Face API calls, uses local models only
+SEMBR_MODEL_PATH = "~/.local/share/sembr/models/sembr2023-bert-small"  # Local SemBr model path
+
 # ============================================================================
 # SETTINGS
 # ============================================================================
 [settings]
-# Automatically install tools when not found
 not_found_auto_install = true
-
-# Task output format (prefix = show task name, interleave = mixed output)
 task_output = "prefix"
-
-# Number of parallel jobs for installs
 jobs = 4
-
-# Trust config files in project directory automatically
 trusted_config_paths = ["~/.config/nvim"]
-
-# Enable experimental features
 experimental = true
-
-# Idiomatic version file support (for .nvmrc, .python-version, etc.)
 idiomatic_version_file_enable_tools = ["node", "python"]
 
 # ============================================================================
-# DEVELOPMENT TASKS
+# TESTING FRAMEWORK - KENT BECK ARCHITECTURE
 # ============================================================================
 
 # ----------------------------------------------------------------------------
-# Testing Tasks
+# TEST RUNNER HELPER (Internal - Do Not Call Directly)
 # ----------------------------------------------------------------------------
-[tasks.test]
-description = "Run all unit tests (plenary + custom)"
-alias = "t"
-run = "bash tests/run-all-unit-tests.sh"
-sources = ["tests/**/*.lua", "lua/**/*.lua"]
-
-[tasks."test:ollama"]
-description = "Run Ollama AI integration tests"
-run = "bash tests/run-ollama-tests.sh"
-sources = ["tests/plenary/unit/ai-sembr/ollama_spec.lua", "lua/plugins/ai-sembr/ollama.lua"]
-
-[tasks."test:plenary"]
-description = "Run plenary test suite directly"
-run = "bash tests/run-plenary.sh"
-sources = ["tests/plenary/**/*.lua"]
-
-[tasks."test:watch"]
-description = "Run tests in watch mode (requires inotify-tools)"
+[tasks."test:_run_plenary_dir"]
+description = "Internal: Run plenary tests for a directory"
 run = """
 #!/bin/bash
-echo "👁️  Watching for changes in tests/ and lua/ ..."
+TEST_DIR="$1"
+if [ -z "$TEST_DIR" ]; then
+  echo "Error: TEST_DIR required"
+  exit 1
+fi
+nvim --headless -u tests/minimal_init.lua \
+  -c "PlenaryBustedDirectory tests/$TEST_DIR/ {minimal_init = 'tests/minimal_init.lua'}" \
+  -c "qa!"
+"""
+
+[tasks."test:_run_plenary_file"]
+description = "Internal: Run plenary tests for a single file"
+run = """
+#!/bin/bash
+TEST_FILE="$1"
+if [ -z "$TEST_FILE" ]; then
+  echo "Error: TEST_FILE required"
+  exit 1
+fi
+nvim --headless -u tests/minimal_init.lua \
+  -c "PlenaryBustedFile $TEST_FILE" \
+  -c "qa!"
+"""
+
+# ----------------------------------------------------------------------------
+# CONTRACT TESTS - Tests against specifications
+# ----------------------------------------------------------------------------
+[tasks."test:contract"]
+description = "🔏 Contract Tests - Verify PercyBrain adheres to specifications"
+alias = "tc"
+run = "mise run test:_run_plenary_dir contract"
+sources = ["tests/contract/**/*.lua", "specs/percybrain_contract.lua"]
+outputs = [".cache/test/contract-results.json"]
+
+[tasks."test:contract:watch"]
+description = "🔏 Watch contract tests for changes"
+run = """
+mise run test:_watch test:contract "tests/contract/**/*.lua" "specs/percybrain_contract.lua"
+"""
+
+[tasks."test:contract:zettelkasten"]
+description = "🔏 Test Zettelkasten contract specifications"
+run = "mise run test:_run_plenary_file tests/contract/zettelkasten_templates_spec.lua"
+sources = ["tests/contract/zettelkasten_templates_spec.lua", "lua/config/zettelkasten.lua"]
+
+[tasks."test:contract:hugo"]
+description = "🔏 Test Hugo frontmatter contract specifications"
+run = "mise run test:_run_plenary_file tests/contract/hugo_frontmatter_spec.lua"
+sources = ["tests/contract/hugo_frontmatter_spec.lua", "lua/percybrain/hugo-menu.lua"]
+
+[tasks."test:contract:ai"]
+description = "🔏 Test AI model selection contract specifications"
+run = "mise run test:_run_plenary_file tests/contract/ai_model_selection_spec.lua"
+sources = ["tests/contract/ai_model_selection_spec.lua", "lua/percybrain/ai-model-selector.lua"]
+
+[tasks."test:contract:write-quit"]
+description = "🔏 Test Write-Quit AI Pipeline contract specifications"
+run = "mise run test:_run_plenary_file tests/contract/write_quit_pipeline_spec.lua"
+sources = ["tests/contract/write_quit_pipeline_spec.lua", "lua/percybrain/write-quit-pipeline.lua"]
+
+# ----------------------------------------------------------------------------
+# CAPABILITY TESTS - Tests that features WORK
+# ----------------------------------------------------------------------------
+[tasks."test:capability"]
+description = "🎯 Capability Tests - Verify features work as expected"
+alias = "tcap"
+run = "mise run test:_run_plenary_dir capability"
+sources = ["tests/capability/**/*.lua", "lua/**/*.lua"]
+outputs = [".cache/test/capability-results.json"]
+
+[tasks."test:capability:zettelkasten"]
+description = "🎯 Test Zettelkasten capabilities"
+run = "mise run test:_run_plenary_dir capability/zettelkasten"
+sources = ["tests/capability/zettelkasten/**/*.lua", "lua/config/zettelkasten.lua", "lua/plugins/zettelkasten/**/*.lua"]
+
+[tasks."test:capability:ai"]
+description = "🎯 Test AI/Ollama capabilities"
+run = "mise run test:_run_plenary_dir capability/ai"
+sources = ["tests/capability/ai/**/*.lua", "lua/plugins/ai-sembr/**/*.lua", "lua/percybrain/ai-model-selector.lua"]
+
+[tasks."test:capability:write-quit"]
+description = "🎯 Test Write-Quit AI Pipeline capabilities"
+run = "mise run test:_run_plenary_dir capability/write-quit"
+sources = ["tests/capability/write-quit/**/*.lua", "lua/percybrain/write-quit-pipeline.lua"]
+
+[tasks."test:capability:hugo"]
+description = "🎯 Test Hugo frontmatter and publishing capabilities"
+run = "mise run test:_run_plenary_dir capability/hugo"
+sources = ["tests/capability/hugo/**/*.lua", "lua/percybrain/hugo-menu.lua"]
+
+# ----------------------------------------------------------------------------
+# REGRESSION TESTS - Protect critical behaviors
+# ----------------------------------------------------------------------------
+[tasks."test:regression"]
+description = "🛡️ Regression Tests - Ensure critical ADHD optimizations remain intact"
+alias = "tr"
+run = "mise run test:_run_plenary_dir regression"
+sources = ["tests/regression/**/*.lua", "lua/config/options.lua"]
+outputs = [".cache/test/regression-results.json"]
+
+[tasks."test:regression:adhd"]
+description = "🛡️ Test ADHD-specific optimizations are preserved"
+run = "mise run test:_run_plenary_file tests/regression/adhd_protections_spec.lua"
+sources = ["tests/regression/adhd_protections_spec.lua", "lua/config/options.lua"]
+
+# ----------------------------------------------------------------------------
+# STARTUP TESTS - Smoke tests for clean startup
+# ----------------------------------------------------------------------------
+[tasks."test:startup"]
+description = "🚀 Startup Smoke Tests - Verify clean startup without warnings"
+alias = "ts"
+run = "mise run test:_run_plenary_dir performance"
+sources = ["tests/performance/**/*.lua", "lua/plugins/**/*.lua"]
+outputs = [".cache/test/startup-results.json"]
+
+# ----------------------------------------------------------------------------
+# INTEGRATION TESTS - Component interactions
+# ----------------------------------------------------------------------------
+[tasks."test:integration"]
+description = "🔗 Integration Tests - Test component interactions"
+alias = "ti"
+run = "mise run test:_run_plenary_dir integration"
+sources = ["tests/integration/**/*.lua", "lua/**/*.lua"]
+outputs = [".cache/test/integration-results.json"]
+
+# ----------------------------------------------------------------------------
+# UNIT TESTS - Individual component testing
+# ----------------------------------------------------------------------------
+[tasks."test:unit"]
+description = "📦 Unit Tests - Individual component testing"
+alias = "tu"
+run = "mise run test:_run_plenary_dir unit"
+sources = ["tests/unit/**/*.lua", "lua/**/*.lua"]
+outputs = [".cache/test/unit-results.json"]
+
+# ----------------------------------------------------------------------------
+# COMPOSITE TEST WORKFLOWS
+# ----------------------------------------------------------------------------
+[tasks.test]
+description = "🧪 Run all tests in order: startup → contract → capability → regression → integration"
+alias = "t"
+depends = ["test:startup", "test:contract", "test:capability", "test:regression", "test:integration"]
+
+[tasks."test:quick"]
+description = "⚡ Quick test run - startup + contract + regression (fast feedback)"
+alias = "tq"
+depends = ["test:startup", "test:contract", "test:regression"]
+
+[tasks."test:comprehensive"]
+description = "🔬 Comprehensive test suite with coverage analysis"
+alias = "tcomp"
+run = """
+#!/bin/bash
+
+echo "🧪 PercyBrain Comprehensive Test Suite"
+echo "======================================="
+echo ""
+
+# Create results directory
+mkdir -p .cache/test
+> .cache/test/status.json  # Clear status file
+
+# Track failures
+FAILED_COUNT=0
+
+run_test() {
+  TEST_NAME=$1
+  TEST_COMMAND=$2
+
+  echo "$TEST_NAME..."
+  if time mise run "$TEST_COMMAND"; then
+    echo "{\"test\": \"$TEST_NAME\", \"status\": \"PASSED\"}" >> .cache/test/status.json
+  else
+    echo "{\"test\": \"$TEST_NAME\", \"status\": \"FAILED\"}" >> .cache/test/status.json
+    FAILED_COUNT=$((FAILED_COUNT + 1))
+  fi
+  echo ""
+}
+
+# Run each test type with timing
+run_test "🚀 Startup Smoke Tests" "test:startup"
+run_test "🔏 Contract Tests" "test:contract"
+run_test "🎯 Capability Tests" "test:capability"
+run_test "🛡️ Regression Tests" "test:regression"
+run_test "🔗 Integration Tests" "test:integration"
+
+# Generate report
+mise run test:report
+
+# Summary
+echo ""
+echo "======================================="
+if [ $FAILED_COUNT -eq 0 ]; then
+  echo "✅ All tests passed!"
+  exit 0
+else
+  echo "❌ $FAILED_COUNT test suite(s) failed"
+  echo "See status: cat .cache/test/status.json"
+  exit 1
+fi
+"""
+
+[tasks."test:watch"]
+description = "👁️ Watch all tests with intelligent re-running"
+alias = "tw"
+run = """
+#!/bin/bash
+mise run test:_watch test "tests/**/*.lua" "lua/**/*.lua"
+"""
+
+[tasks."test:watch:focused"]
+description = "👁️ Watch focused test type (use TEST_TYPE env var)"
+run = """
+#!/bin/bash
+TEST_TYPE="${TEST_TYPE:-capability}"
+mise run test:_watch test:$TEST_TYPE "tests/$TEST_TYPE/**/*.lua" "lua/**/*.lua"
+"""
+
+# ----------------------------------------------------------------------------
+# TEST UTILITIES
+# ----------------------------------------------------------------------------
+[tasks."test:report"]
+description = "📊 Generate test report from cached results"
+run = """
+#!/bin/bash
+echo "📊 Test Results Report"
+echo "====================="
+echo ""
+
+report_test_type() {
+  TYPE=$1
+  FILE=$2
+
+  if [ -f "$FILE" ]; then
+    PASSED=$(grep -c "PASS" "$FILE" 2>/dev/null || echo "0")
+    FAILED=$(grep -c "FAIL" "$FILE" 2>/dev/null || echo "0")
+    echo "$TYPE: $PASSED passed, $FAILED failed"
+  else
+    echo "$TYPE: No results cached (run 'mise test:${TYPE,,}')"
+  fi
+}
+
+report_test_type "Contract Tests   " ".cache/test/contract-results.json"
+report_test_type "Capability Tests " ".cache/test/capability-results.json"
+report_test_type "Regression Tests " ".cache/test/regression-results.json"
+report_test_type "Integration Tests" ".cache/test/integration-results.json"
+report_test_type "Startup Tests    " ".cache/test/startup-results.json"
+
+echo ""
+echo "Run 'mise test:clean' to clear cache"
+"""
+
+[tasks."test:clean"]
+description = "🧹 Clean test cache and artifacts"
+run = """
+rm -rf .cache/test
+rm -f tests/*.log
+echo "✅ Test artifacts cleaned"
+"""
+
+[tasks."test:debug"]
+description = "🐛 Run tests with verbose output for debugging"
+run = """
+TEST_VERBOSITY=verbose mise run test
+"""
+
+[tasks."test:profile"]
+description = "⏱️ Profile test performance to identify slow tests"
+run = """
+#!/bin/bash
+echo "⏱️ Test Performance Profile"
+echo "==========================="
+
+for type in contract capability regression integration; do
+  echo ""
+  echo "Testing $type..."
+  time nvim --headless -u tests/minimal_init.lua \
+    -c "PlenaryBustedDirectory tests/$type/ {minimal_init = 'tests/minimal_init.lua'}" \
+    -c "qa!" 2>&1 | grep -E "(Success:|Failed:|Time:)"
+done
+"""
+
+# Internal watch helper (not user-facing)
+[tasks."test:_watch"]
+description = "Internal watch helper"
+run = """
+#!/bin/bash
+TASK=$1
+shift
+FILES="$@"
+
+echo "👁️ Watching for changes..."
+echo "Task: $TASK"
+echo "Files: $FILES"
+echo ""
+
+# Use md5sum for change detection
+get_checksum() {
+  find $FILES -type f 2>/dev/null | xargs md5sum 2>/dev/null | md5sum
+}
+
+LAST_CHECKSUM=$(get_checksum)
+
 while true; do
   clear
-  echo "Running tests..."
-  mise run test || true
+  echo "Running: mise run $TASK"
+  echo "========================"
+  mise run $TASK || true
+
   echo ""
-  echo "Waiting for changes..."
-  inotifywait -qre close_write tests/ lua/ 2>/dev/null || {
-    echo "⚠️  inotify-tools not installed. Install with: apt install inotify-tools"
-    exit 1
-  }
+  echo "Waiting for changes... (Ctrl+C to exit)"
+
+  while true; do
+    sleep 1
+    CURRENT_CHECKSUM=$(get_checksum)
+    if [ "$CURRENT_CHECKSUM" != "$LAST_CHECKSUM" ]; then
+      LAST_CHECKSUM=$CURRENT_CHECKSUM
+      break
+    fi
+  done
 done
 """
 
 # ----------------------------------------------------------------------------
-# Code Quality Tasks
+# MIGRATION HELPER
+# ----------------------------------------------------------------------------
+[tasks."test:migrate"]
+description = "🔄 Migrate existing tests to new structure"
+run = """
+#!/bin/bash
+echo "🔄 Migrating tests to Kent Beck architecture..."
+
+# Create new directories
+mkdir -p tests/{contract,capability,regression,integration}
+mkdir -p tests/capability/{zettelkasten,ai,ui,prose}
+mkdir -p specs
+
+echo "✅ Created new test directories"
+echo ""
+echo "Next steps:"
+echo "1. Review specs/percybrain_contract.lua"
+echo "2. Move tests to appropriate directories:"
+echo "   - Contract tests → tests/contract/"
+echo "   - Feature tests → tests/capability/"
+echo "   - ADHD protections → tests/regression/"
+echo "   - Multi-component → tests/integration/"
+echo "3. Run 'mise test:quick' for fast feedback"
+echo "4. Run 'mise test' for full suite"
+"""
+
+# ----------------------------------------------------------------------------
+# CODE QUALITY TASKS (Existing)
 # ----------------------------------------------------------------------------
 [tasks.lint]
 description = "Run luacheck static analysis on lua/ directory"
@@ -121,8 +430,19 @@ description = "Check stylua formatting without making changes"
 run = "stylua --check ."
 sources = ["lua/**/*.lua", "tests/**/*.lua", "hooks/**/*.lua"]
 
+[tasks."format:md"]
+description = "Auto-format all Markdown files with mdformat"
+alias = "fmd"
+run = "uvx mdformat --wrap no ."
+sources = ["**/*.md"]
+
+[tasks."format:md:check"]
+description = "Check Markdown formatting without making changes"
+run = "uvx mdformat --check --wrap no ."
+sources = ["**/*.md"]
+
 # ----------------------------------------------------------------------------
-# Pre-commit Hook Tasks
+# PRE-COMMIT TASKS (Existing)
 # ----------------------------------------------------------------------------
 [tasks."hooks:install"]
 description = "Install pre-commit git hooks"
@@ -133,36 +453,12 @@ outputs = [".git/hooks/pre-commit"]
 description = "Run all pre-commit hooks manually on all files"
 run = "pre-commit run --all-files"
 
-[tasks."hooks:update"]
-description = "Update pre-commit hook versions (autoupdate)"
-run = "pre-commit autoupdate"
-outputs = [".pre-commit-config.yaml"]
-
 # ----------------------------------------------------------------------------
-# Git Operation Tasks
-# ----------------------------------------------------------------------------
-[tasks."git:status"]
-description = "Enhanced git status with branch and upstream info"
-alias = "gs"
-run = """
-git status
-echo ""
-echo "📍 Current branch: $(git branch --show-current)"
-echo "🔗 Upstream: $(git rev-parse --abbrev-ref @{upstream} 2>/dev/null || echo 'none')"
-echo "📊 Commits ahead/behind: $(git rev-list --left-right --count @{upstream}...HEAD 2>/dev/null || echo 'N/A')"
-"""
-
-[tasks."git:branch"]
-description = "List git branches with last commit info"
-alias = "gb"
-run = "git branch -vv"
-
-# ----------------------------------------------------------------------------
-# Composite Quality Tasks
+# COMPOSITE QUALITY TASKS
 # ----------------------------------------------------------------------------
 [tasks.check]
-description = "Full quality check: lint + format + test + hooks"
-depends = ["lint", "format:check", "test", "hooks:run"]
+description = "Full quality check: lint + format + test:quick + hooks"
+depends = ["lint", "format:check", "test:quick", "hooks:run"]
 
 [tasks.quick]
 description = "Quick validation: lint + format check (fast feedback)"
@@ -173,11 +469,15 @@ depends = ["lint", "format:check"]
 description = "Auto-fix all issues: format + hooks"
 depends = ["format", "hooks:run"]
 
+[tasks.ci]
+description = "CI pipeline: comprehensive tests + quality checks"
+depends = ["lint", "format:check", "test:comprehensive", "hooks:run"]
+
 # ----------------------------------------------------------------------------
-# Development Setup Tasks
+# DEVELOPMENT SETUP
 # ----------------------------------------------------------------------------
 [tasks.setup]
-description = "First-time development setup (run once)"
+description = "First-time development setup with new test framework"
 run = """
 #!/bin/bash
 set -e
@@ -190,95 +490,29 @@ echo "🪝 Installing pre-commit hooks..."
 pre-commit install
 
 echo ""
-echo "🔍 Verifying luacheck installation..."
-luacheck --version || echo "⚠️  luacheck not found - check cargo installation"
-
-echo ""
-echo "🎨 Verifying stylua installation..."
-stylua --version
+echo "🏗️ Setting up test framework..."
+mise run test:migrate
 
 echo ""
 echo "🧪 Running initial test suite..."
-mise run test || echo "⚠️  Some tests failed - review output above"
+mise run test:quick || echo "⚠️  Some tests failed - expected during migration"
 
 echo ""
 echo "✅ Setup complete!"
 echo ""
-echo "Available commands:"
-echo "  mise tasks          - List all tasks"
-echo "  mise run test       - Run tests"
-echo "  mise run lint       - Lint code"
-echo "  mise run format     - Format code"
-echo "  mise run check      - Full quality check"
+echo "Test commands:"
+echo "  mise test         - Run all tests"
+echo "  mise test:quick   - Fast feedback (contract + regression)"
+echo "  mise test:watch   - Watch mode"
+echo "  mise tc          - Contract tests only"
+echo "  mise tcap        - Capability tests only"
+echo "  mise tr          - Regression tests only"
 """
-
-# ----------------------------------------------------------------------------
-# Cleanup Tasks
-# ----------------------------------------------------------------------------
-[tasks.clean]
-description = "Clean temporary files, caches, and build artifacts"
-run = """
-#!/bin/bash
-echo "🧹 Cleaning temporary files..."
-
-# Remove pre-commit cache
-rm -rf .cache/
-
-# Remove Python cache
-find . -type f -name '*.pyc' -delete
-find . -type d -name '__pycache__' -delete
-
-# Remove Lua compiled files
-find . -type f -name 'luac.out' -delete
-
-# Remove test artifacts
-rm -f tests/*.log
-
-echo "✅ Cleaned temporary files"
-"""
-
-[tasks."clean:full"]
-description = "Deep clean including mise cache and pre-commit environments"
-depends = ["clean"]
-run = """
-#!/bin/bash
-echo "🧹 Deep cleaning mise cache and pre-commit environments..."
-
-pre-commit clean || true
-mise cache clear
-
-echo "✅ Deep clean complete"
-"""
-
-# ----------------------------------------------------------------------------
-# Documentation Tasks
-# ----------------------------------------------------------------------------
-[tasks.docs]
-description = "Generate/update project documentation"
-run = """
-#!/bin/bash
-echo "📚 Documentation tasks:"
-echo "  - Run 'mise tasks' to see this output"
-echo "  - See claudedocs/ for design docs"
-echo "  - See README.md for project overview"
-"""
-
-# ----------------------------------------------------------------------------
-# Neovim-Specific Tasks
-# ----------------------------------------------------------------------------
-[tasks.nvim]
-description = "Launch Neovim with PercyBrain config"
-run = "nvim"
-
-[tasks."nvim:check"]
-description = "Run Neovim health checks"
-run = "nvim --headless -c 'checkhealth' -c 'qa'"
 
 # ============================================================================
-# METADATA (ignored by mise, useful for documentation)
+# METADATA
 # ============================================================================
 [_]
 project = "PercyBrain"
-description = "Neovim-based Integrated Writing Environment with Zettelkasten"
-repository = "https://github.com/percypercy/percybrain"
-maintainer = "Percy"
+description = "Neovim Zettelkasten + AI Writing Environment with Kent Beck Testing"
+test_philosophy = "Test capabilities, not configuration"

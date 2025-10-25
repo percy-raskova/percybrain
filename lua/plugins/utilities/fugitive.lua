@@ -1,6 +1,31 @@
--- vim-fugitive: THE Git plugin for Vim/Neovim
--- Industry standard for 10+ years by Tim Pope
--- Provides :Git, :Gstatus, :Gdiff, :Gblame, etc.
+-- Plugin: vim-fugitive
+-- Purpose: Comprehensive Git integration - industry-standard Git workflow in editor
+-- Workflow: utilities
+-- Why: Complete version control without context switching - provides full Git CLI
+--      functionality inside Neovim, eliminating terminal jumping. ADHD-optimized
+--      through consistent :G prefix commands (predictable muscle memory), visual diff
+--      interfaces (side-by-side comparisons), and staging workflows (interactive hunks).
+--      Critical for Zettelkasten versioning, note evolution tracking, and collaborative
+--      knowledge management. Tim Pope's 10+ year standard for Git in Vim.
+-- Config: minimal
+--
+-- Usage:
+--   <leader>gs - Git status (interactive staging)
+--   <leader>gd - Git diff split, <leader>gb - Git blame
+--   <leader>gc - Git commit, <leader>gC - Git commit --amend
+--   <leader>gp - Git push, <leader>gP - Git pull
+--   <leader>gl - Git log (quickfix), <leader>gL - Git log (location)
+--   <leader>ga - Stage current file, <leader>gr - Reset current file
+--   :Gac - Add & commit current file, :Gacp - Add, commit, push
+--
+-- Dependencies:
+--   none
+--
+-- Configuration Notes:
+--   Diff algorithm: patience + indent-heuristic (better diff quality)
+--   SemBr integration: word-diff regex for markdown semantic line breaks
+--   Custom command: GSemBrDiff (wrap-aware diff for long lines)
+--   Works with gitsigns.nvim (complementary - fugitive for operations, gitsigns for visuals)
 
 return {
   "tpope/vim-fugitive",

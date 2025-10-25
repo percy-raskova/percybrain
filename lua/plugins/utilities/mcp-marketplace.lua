@@ -4,14 +4,13 @@
 -- Config: minimal
 -- Repository: https://github.com/ravitemer/mcphub.nvim
 
+-- Import keymaps from central registry
+
 return {
   "ravitemer/mcphub.nvim",
   lazy = true,
   cmd = { "MCPHub", "MCPHubOpen", "MCPHubInstall", "MCPHubList", "MCPHubUpdate" },
-  keys = {
-    { "<leader>mm", "<cmd>MCPHub<cr>", desc = "MCP Hub" },
-    { "<leader>ml", "<cmd>MCPHubList<cr>", desc = "List installed MCPs" },
-  },
+  -- keys = {}, -- TODO: Add keybindings here -- All utility keymaps managed in lua/config/keymaps/utilities.lua
   dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-telescope/telescope.nvim",

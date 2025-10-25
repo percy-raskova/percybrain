@@ -794,49 +794,23 @@ ______________________________________________________________________
 
 ### Zettelkasten Core (`<leader>z`)
 
-| Key          | Command      | Description                       |
-| ------------ | ------------ | --------------------------------- |
-| `<leader>zn` | New note     | Create permanent note with prompt |
-| `<leader>zd` | Daily note   | Open/create today's daily note    |
-| `<leader>zi` | Inbox note   | Quick fleeting note capture       |
-| `<leader>zf` | Find notes   | Telescope fuzzy find              |
-| `<leader>zg` | Search notes | Telescope live grep               |
-| `<leader>zb` | Backlinks    | Find notes linking here           |
-| `<leader>zw` | Zen mode     | Distraction-free writing          |
+| Key | Command | Description | | ------------ | ------------ | --------------------------------- | | `<leader>zn` | New note | Create permanent note with prompt | | `<leader>zd` | Daily note | Open/create today's daily note | | `<leader>zi` | Inbox note | Quick fleeting note capture | | `<leader>zf` | Find notes | Telescope fuzzy find | | `<leader>zg` | Search notes | Telescope live grep | | `<leader>zb` | Backlinks | Find notes linking here | | `<leader>zw` | Zen mode | Distraction-free writing |
 
 ### IWE LSP (`<leader>zl` - LSP operations)
 
-| Key          | Command      | Description                         |
-| ------------ | ------------ | ----------------------------------- |
-| `<leader>zl` | Follow link  | Jump to linked note                 |
-| `<leader>zr` | References   | Show all references (backlinks)     |
-| `<leader>zh` | Hover        | Preview note content                |
-| `<leader>za` | Code actions | LSP actions (extract, inline, etc.) |
-| `<leader>zR` | Rename       | Rename note + update all links      |
+| Key | Command | Description | | ------------ | ------------ | ----------------------------------- | | `<leader>zl` | Follow link | Jump to linked note | | `<leader>zr` | References | Show all references (backlinks) | | `<leader>zh` | Hover | Preview note content | | `<leader>za` | Code actions | LSP actions (extract, inline, etc.) | | `<leader>zR` | Rename | Rename note + update all links |
 
 ### SemBr Formatting (`<leader>zs`)
 
-| Key                   | Command          | Description                |
-| --------------------- | ---------------- | -------------------------- |
-| `<leader>zs`          | Format buffer    | Apply semantic line breaks |
-| `<leader>zs` (visual) | Format selection | Format selected text only  |
+| Key | Command | Description | | --------------------- | ---------------- | -------------------------- | | `<leader>zs` | Format buffer | Apply semantic line breaks | | `<leader>zs` (visual) | Format selection | Format selected text only |
 
 ### AI Commands (`<leader>za` - AI operations)
 
-| Key           | Command        | Description                 |
-| ------------- | -------------- | --------------------------- |
-| `<leader>zas` | AI summarize   | Generate note summary       |
-| `<leader>zac` | AI connections | Suggest related topics      |
-| `<leader>zae` | AI expand      | Expand fleeting → permanent |
-| `<leader>zat` | AI tags        | Generate tags               |
-| `<leader>zaq` | AI chat        | Interactive Q&A about note  |
+| Key | Command | Description | | ------------- | -------------- | --------------------------- | | `<leader>zas` | AI summarize | Generate note summary | | `<leader>zac` | AI connections | Suggest related topics | | `<leader>zae` | AI expand | Expand fleeting → permanent | | `<leader>zat` | AI tags | Generate tags | | `<leader>zaq` | AI chat | Interactive Q&A about note |
 
 ### Publishing (`<leader>zp`)
 
-| Key          | Command | Description                             |
-| ------------ | ------- | --------------------------------------- |
-| `<leader>zp` | Publish | Full pipeline: process → build → deploy |
-| `<leader>zP` | Preview | Start local preview server              |
+| Key | Command | Description | | ------------ | ------- | --------------------------------------- | | `<leader>zp` | Publish | Full pipeline: process → build → deploy | | `<leader>zP` | Preview | Start local preview server |
 
 ______________________________________________________________________
 

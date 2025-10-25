@@ -3,13 +3,23 @@
 
 return {
   "nvim-lua/plenary.nvim", -- Required for async operations
-  lazy = false, -- Load immediately for user commands
+  keys = {
+    { "<leader>sb", "<cmd>SemBrFormat<CR>", desc = "🧠 SemBr: Format buffer" },
+    { "<leader>ss", "<cmd>SemBrFormatSelection<CR>", mode = "v", desc = "🧠 SemBr: Format selection" },
+    { "<leader>st", "<cmd>SemBrToggle<CR>", desc = "🔄 SemBr: Toggle auto-format" },
+  },
   config = function()
     local M = {}
 
     -- Configuration
     M.config = {
-      model = "bert-small", -- Options: bert-small, bert-base, bert-large
+      -- Local model path from mise environment variable (maximum privacy - no network calls)
+      model = vim.fn.expand(vim.env.SEMBR_MODEL_PATH or "~/.local/share/sembr/models/sembr2023-bert-small"),
+      -- Change model: Set SEMBR_MODEL_PATH in ~/.config/nvim/.mise.toml
+      -- Other available models in ~/.local/share/sembr/models/:
+      -- - sembr2023-bert-tiny (fastest, smallest)
+      -- - sembr2023-bert-mini
+      -- - sembr2023-distilbert-base-uncased (larger, more accurate)
       auto_format = false, -- Auto-format on save (disabled by default)
       enable_mcp = false, -- Use MCP server mode (future enhancement)
     }
@@ -23,8 +33,8 @@ return {
       local tmpfile = vim.fn.tempname()
       vim.fn.writefile(lines, tmpfile)
 
-      -- Run SemBr
-      local cmd = string.format("sembr --model %s %s", M.config.model, tmpfile)
+      -- Run SemBr (redirect stderr to /dev/null to avoid capturing progress bars/warnings)
+      local cmd = string.format("sembr -m %s -i %s 2>/dev/null", M.config.model, tmpfile)
 
       vim.notify("🔄 Running SemBr semantic line break analysis...", vim.log.levels.INFO)
 
@@ -62,8 +72,8 @@ return {
       local tmpfile = vim.fn.tempname()
       vim.fn.writefile(lines, tmpfile)
 
-      -- Run SemBr
-      local cmd = string.format("sembr --model %s %s", M.config.model, tmpfile)
+      -- Run SemBr (redirect stderr to /dev/null to avoid capturing progress bars/warnings)
+      local cmd = string.format("sembr -m %s -i %s 2>/dev/null", M.config.model, tmpfile)
 
       vim.notify("🔄 Running SemBr on selection...", vim.log.levels.INFO)
 
@@ -111,24 +121,8 @@ return {
       desc = "Toggle auto-format on save",
     })
 
-    -- Keymaps for PercyBrain
-    local opts = { noremap = true, silent = true }
-
-    vim.keymap.set("n", "<leader>zs", M.format_buffer, vim.tbl_extend("force", opts, { desc = "SemBr: Format buffer" }))
-
-    vim.keymap.set(
-      "v",
-      "<leader>zs",
-      M.format_selection,
-      vim.tbl_extend("force", opts, { desc = "SemBr: Format selection" })
-    )
-
-    vim.keymap.set(
-      "n",
-      "<leader>zt",
-      M.toggle_auto_format,
-      vim.tbl_extend("force", opts, { desc = "SemBr: Toggle auto-format" })
-    )
+    -- NOTE: Keybindings defined in keys = {} spec above (lazy.nvim native)
+    -- <leader>sb (format buffer), <leader>ss (format selection), <leader>st (toggle)
 
     -- Auto-format on save (if enabled)
     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -140,6 +134,6 @@ return {
       end,
     })
 
-    vim.notify("🧠 SemBr loaded - <leader>zs to format", vim.log.levels.INFO)
+    vim.notify("🧠 SemBr loaded - <leader>sb to format", vim.log.levels.INFO)
   end,
 }

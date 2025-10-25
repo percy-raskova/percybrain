@@ -1,3 +1,25 @@
+-- Plugin: img-clip
+-- Purpose: Paste images from clipboard directly into notes with automatic file management
+-- Workflow: zettelkasten
+-- Why: Visual thinkers (common with ADHD/autism) benefit from easy image integration.
+--      Automatically handles file naming, storage in assets/, and correct markdown syntax.
+--      Reduces friction in capturing visual information, supporting multimodal note-taking.
+-- Config: full - supports markdown, LaTeX, HTML, org-mode, and more
+--
+-- Usage:
+--   <leader>p - Paste image from clipboard
+--   Prompts for filename, automatically saves to assets/ with timestamp
+--   Inserts proper markdown syntax: ![description](assets/filename.png)
+--
+-- Dependencies: none (uses system clipboard)
+--
+-- Configuration Notes:
+--   - dir_path: "assets" - Keeps images organized in subdirectory
+--   - file_name: "%Y-%m-%d-%H-%M-%S" - Timestamp naming prevents conflicts
+--   - prompt_for_file_name: true - Allows semantic naming for better organization
+--   - use_cursor_in_template: true - Cursor positioned for adding alt text (accessibility)
+--   - Supports multiple formats: markdown, LaTeX, HTML, Typst, RST, AsciiDoc, Org, Wiki
+
 return {
   "HakonHarnes/img-clip.nvim",
   cmd = "PasteImage",
@@ -77,7 +99,6 @@ return {
     },
   },
   keys = {
-    -- suggested keymap
-    { "<leader>p", "<cmd>PasteImage<cr>", desc = "Paste clipboard image" },
+    { "<leader>pP", "<cmd>PasteImage<CR>", desc = "📋 Paste image from clipboard" },
   },
 }

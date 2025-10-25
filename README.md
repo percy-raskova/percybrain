@@ -67,45 +67,23 @@ ______________________________________________________________________
 
 ### ⚡ Quick Capture
 
-| Keymap       | Command       | Purpose               |
-| ------------ | ------------- | --------------------- |
-| `<leader>zn` | `:PercyNew`   | Create permanent note |
-| `<leader>zd` | `:PercyDaily` | Today's daily note    |
-| `<leader>zi` | `:PercyInbox` | Quick inbox capture   |
+| Keymap | Command | Purpose | | ------------ | ------------- | --------------------- | | `<leader>zn` | `:PercyNew` | Create permanent note | | `<leader>zd` | `:PercyDaily` | Today's daily note | | `<leader>zi` | `:PercyInbox` | Quick inbox capture |
 
 ### 🔍 Search & Navigate
 
-| Keymap       | Purpose           |
-| ------------ | ----------------- |
-| `<leader>zf` | Fuzzy find notes  |
-| `<leader>zg` | Search content    |
-| `<leader>zb` | Find backlinks    |
-| `<leader>zl` | Follow link (LSP) |
-| `<leader>zr` | Show references   |
+| Keymap | Purpose | | ------------ | ----------------- | | `<leader>zf` | Fuzzy find notes | | `<leader>zg` | Search content | | `<leader>zb` | Find backlinks | | `<leader>zl` | Follow link (LSP) | | `<leader>zr` | Show references |
 
 ### 🤖 AI Commands
 
-| Keymap        | Command     | Purpose                   |
-| ------------- | ----------- | ------------------------- |
-| `<leader>zas` | Summarize   | AI-generated summary      |
-| `<leader>zac` | Connections | Suggest related topics    |
-| `<leader>zae` | Expand      | Fleeting → permanent note |
-| `<leader>zat` | Tags        | Auto-generate tags        |
-| `<leader>zaq` | Chat        | Interactive Q&A           |
+| Keymap | Command | Purpose | | ------------- | ----------- | ------------------------- | | `<leader>zas` | Summarize | AI-generated summary | | `<leader>zac` | Connections | Suggest related topics | | `<leader>zae` | Expand | Fleeting → permanent note | | `<leader>zat` | Tags | Auto-generate tags | | `<leader>zaq` | Chat | Interactive Q&A |
 
 ### ✍️ Formatting
 
-| Keymap       | Purpose              |
-| ------------ | -------------------- |
-| `<leader>zs` | Semantic line breaks |
-| `<leader>zw` | Zen mode             |
+| Keymap | Purpose | | ------------ | -------------------- | | `<leader>zs` | Semantic line breaks | | `<leader>zw` | Zen mode |
 
 ### 🌐 Publishing
 
-| Keymap       | Command         | Purpose             |
-| ------------ | --------------- | ------------------- |
-| `<leader>zp` | `:PercyPublish` | Build & deploy site |
-| `<leader>zP` | `:PercyPreview` | Local preview       |
+| Keymap | Command | Purpose | | ------------ | --------------- | ------------------- | | `<leader>zp` | `:PercyPublish` | Build & deploy site | | `<leader>zP` | `:PercyPreview` | Local preview |
 
 ______________________________________________________________________
 
@@ -248,16 +226,7 @@ ______________________________________________________________________
 
 ## Comparison
 
-| Feature              | PercyBrain     | Obsidian  | Org-mode   |
-| -------------------- | -------------- | --------- | ---------- |
-| Terminal Integration | ✅ Native      | ❌ No     | ✅ Yes     |
-| Wiki Links           | ✅ IWE LSP     | ✅ Core   | ⚠️ Limited |
-| Local AI             | ✅ Ollama      | ❌ Cloud  | ❌ No      |
-| Graph View           | ✅ IWE         | ✅ Core   | ❌ No      |
-| Publishing           | ✅ Hugo/Quartz | ⚠️ Plugin | ✅ Export  |
-| Semantic Breaks      | ✅ SemBr       | ❌ No     | ❌ No      |
-| Privacy              | ✅ Local-only  | ⚠️ Mixed  | ✅ Local   |
-| Mobile               | ⚠️ Via Termux  | ✅ Native | ⚠️ Via app |
+| Feature | PercyBrain | Obsidian | Org-mode | | -------------------- | -------------- | --------- | ---------- | | Terminal Integration | ✅ Native | ❌ No | ✅ Yes | | Wiki Links | ✅ IWE LSP | ✅ Core | ⚠️ Limited | | Local AI | ✅ Ollama | ❌ Cloud | ❌ No | | Graph View | ✅ IWE | ✅ Core | ❌ No | | Publishing | ✅ Hugo/Quartz | ⚠️ Plugin | ✅ Export | | Semantic Breaks | ✅ SemBr | ❌ No | ❌ No | | Privacy | ✅ Local-only | ⚠️ Mixed | ✅ Local | | Mobile | ⚠️ Via Termux | ✅ Native | ⚠️ Via app |
 
 ______________________________________________________________________
 

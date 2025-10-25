@@ -2,6 +2,8 @@
 
 **Essential commands, shortcuts, and patterns for daily use**
 
+**Last Updated**: 2025-10-21 (Phase 1 & 2 Refactor) **Breaking Changes**: See `claudedocs/KEYBINDING_MIGRATION_2025-10-21.md`
+
 ______________________________________________________________________
 
 ## 🚀 Essential Commands
@@ -40,41 +42,33 @@ ______________________________________________________________________
 
 ### Core Operations
 
-| Key         | Action              |
-| ----------- | ------------------- |
-| `<leader>e` | Toggle file tree    |
-| `<leader>s` | Save file           |
-| `<leader>q` | Quit                |
-| `<leader>g` | LazyGit             |
-| `<leader>L` | Lazy plugin manager |
+| Key | Action | | ------------ | ------------------- | | `<leader>e` | Toggle file tree | | `<leader>s` | Save file | | `<leader>q` | Quit | | `<leader>gg` | LazyGit (primary) | | `<leader>L` | Lazy plugin manager | | `<leader>W` | Which-Key help |
+
+### Frequency-Optimized Shortcuts (Phase 2 - MOST IMPORTANT!)
+
+**Speed of thought** - Most frequent operations get shortest keys:
+
+| Key | Action | Frequency | | ----------- | ------------------------- | ------------ | | `<leader>f` | **Find notes** | 50+ /session | | `<leader>n` | **New note (quick)** | 50+ /session | | `<leader>i` | **Inbox capture (quick)** | 20+ /session |
 
 ### Zettelkasten (PRIMARY USE CASE)
 
-| Key          | Action         |
-| ------------ | -------------- |
-| `<leader>zn` | New note       |
-| `<leader>zd` | Daily note     |
-| `<leader>zi` | Inbox capture  |
-| `<leader>zf` | Find notes     |
-| `<leader>zg` | Search content |
-| `<leader>zr` | Backlinks      |
-| `<leader>ad` | AI Draft       |
+**All note operations under `<leader>z*` namespace (Phase 1 consolidation)**
 
-### Writing Focus
+| Key | Action | | ------------ | ----------------------------- | | `<leader>n` | **New note (quick)** ⚡ | | `<leader>zn` | New note (with options) | | `<leader>zd` | Daily note | | `<leader>zi` | Inbox note (file) | | `<leader>i` | **Inbox capture (quick)** ⚡ | | `<leader>zq` | Inbox capture (floating) | | `<leader>f` | **Find notes** ⚡ | | `<leader>zf` | Find notes (alternate) | | `<leader>zg` | Search content (grep) | | `<leader>zb` | Show backlinks | | `<leader>zo` | Find orphan notes | | `<leader>zh` | Find hub notes | | `<leader>zt` | Browse tags (IWE) | | `<leader>zc` | Calendar picker (IWE) | | `<leader>zl` | Follow link (IWE LSP) | | `<leader>zk` | Insert link (IWE LSP) | | `<leader>ad` | AI Draft |
 
-| Key          | Action    |
-| ------------ | --------- |
-| `<leader>fz` | Zen mode  |
-| `<leader>o`  | Goyo mode |
-| `<leader>u`  | Undo tree |
+### Mode Switching (Phase 2 - NEW!)
+
+Context-aware workspace configurations:
+
+| Key | Mode | Use Case | | ------------ | ------------ | --------------------------------- | | `<leader>mw` | Writing | Deep focus prose creation | | `<leader>mr` | Research | Multi-window note exploration | | `<leader>me` | Editing | Technical editing with diagnostics| | `<leader>mp` | Publishing | Content preparation with preview | | `<leader>mn` | Normal | Reset to baseline configuration |
+
+### Prose Writing (Phase 1 Expansion)
+
+| Key | Action | | ------------- | ----------------------- | | `<leader>pp` | Prose mode toggle | | `<leader>pf` | Focus mode (Goyo) | | `<leader>pr` | Reading mode | | `<leader>pw` | Word count stats | | `<leader>ps` | Toggle spell check | | `<leader>pg` | Start grammar check | | `<leader>pts` | Timer start | | `<leader>pte` | Timer stop | | `<leader>ptt` | Timer status | | `<leader>ptr` | Timer report |
 
 ### Hugo Publishing
 
-| Command        | Action   |
-| -------------- | -------- |
-| `:HugoNew`     | New post |
-| `:HugoServer`  | Preview  |
-| `:HugoPublish` | Publish  |
+| Command | Action | | -------------- | -------- | | `:HugoNew` | New post | | `:HugoServer` | Preview | | `:HugoPublish` | Publish |
 
 ______________________________________________________________________
 
@@ -195,23 +189,17 @@ ______________________________________________________________________
 
 ## 📊 Quick Stats
 
-- **Plugins**: 83 total (68 organized + 15 deps)
+- **Plugins**: 82 total (67 organized + 15 deps)
 - **Workflows**: 14 directories
 - **Tests**: 5 categories
-- **Config Lines**: ~3,000+ Lua
+- **Config Lines**: ~3,200+ Lua (IWE migration complete)
 - **Docs**: 20+ markdown files
 
 ______________________________________________________________________
 
 ## 🔗 Quick Links
 
-| Document                                     | Purpose                  |
-| -------------------------------------------- | ------------------------ |
-| [PROJECT_INDEX.md](PROJECT_INDEX.md)         | Master navigation hub ⭐ |
-| [CLAUDE.md](CLAUDE.md)                       | Technical guide (23K) ⭐ |
-| [PERCYBRAIN_DESIGN.md](PERCYBRAIN_DESIGN.md) | Architecture (38K)       |
-| [PERCYBRAIN_SETUP.md](PERCYBRAIN_SETUP.md)   | Setup guide (12K)        |
-| [CONTRIBUTING.md](CONTRIBUTING.md)           | Contribution guide (13K) |
+| Document | Purpose | | -------------------------------------------- | ------------------------ | | [PROJECT_INDEX.json](PROJECT_INDEX.json) | Master navigation hub ⭐ | | [CLAUDE.md](CLAUDE.md) | Technical guide (23K) ⭐ | | [PERCYBRAIN_DESIGN.md](PERCYBRAIN_DESIGN.md) | Architecture (38K) | | [PERCYBRAIN_SETUP.md](PERCYBRAIN_SETUP.md) | Setup guide (12K) | | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guide (13K) |
 
 ______________________________________________________________________
 
@@ -222,7 +210,7 @@ ______________________________________________________________________
 3. **Run tests before commit**: `./tests/simple-test.sh`
 4. **Format automatically**: Add pre-commit hook for StyLua
 5. **Read CLAUDE.md**: It's the definitive technical guide
-6. **Check PROJECT_INDEX.md**: Master navigation for all docs
+6. **Check PROJECT_INDEX.json**: Master navigation for all docs
 
 ______________________________________________________________________
 
@@ -242,7 +230,7 @@ ______________________________________________________________________
 
 ### IWE LSP Issues
 
-→ `cargo install iwe` + check `:LspInfo`
+→ Build from source (iwes binary) + check `:LspInfo`
 
 ### AI Features Broken
 
@@ -250,4 +238,4 @@ ______________________________________________________________________
 
 ______________________________________________________________________
 
-**Last Updated**: 2025-10-17 **For Full Details**: See [PROJECT_INDEX.md](PROJECT_INDEX.md)
+**Last Updated**: 2025-10-22 (IWE Migration Complete) **For Full Details**: See [PROJECT_INDEX.json](PROJECT_INDEX.json)

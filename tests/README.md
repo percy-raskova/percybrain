@@ -26,10 +26,53 @@ Simple, pragmatic test suite for OVIWrite/PercyBrain Neovim configuration.
 
 ## Running Tests Locally
 
+### Quick Start
+
 ```bash
+# Run all tests
 cd tests/
 ./simple-test.sh
+
+# Run unit tests only
+./run-unit-tests.sh
+
+# Run keymap tests only
+./run-keymap-tests.sh
+
+# Run comprehensive test suite with coverage
+./run-all-unit-tests.sh
 ```
+
+### Auto-Discovery System
+
+**All test runners use automatic test discovery** - new test files are automatically included without manual configuration updates.
+
+**Convention**: Test files must end with `_spec.lua` to be discovered.
+
+**Location Patterns**:
+
+- `tests/unit/*_spec.lua` - Core unit tests (top-level only)
+- `tests/unit/ai/*_spec.lua` - AI integration tests
+- `tests/unit/gtd/*_spec.lua` - GTD module tests
+- `tests/unit/keymap/*_spec.lua` - Keymap centralization tests
+- `tests/unit/sembr/*_spec.lua` - SemBr integration tests
+- `tests/unit/zettelkasten/*_spec.lua` - Zettelkasten tests
+- `tests/integration/*_spec.lua` - Integration/workflow tests
+- `tests/performance/*_spec.lua` - Performance benchmarks
+
+**Adding New Tests**:
+
+1. Create file ending in `_spec.lua` in appropriate directory
+2. Run the relevant test runner - file will be auto-discovered
+3. No manual configuration needed
+4. Tests run in alphabetical order
+
+**Benefits**:
+
+- ✅ New tests automatically discovered
+- ✅ No manual test list maintenance
+- ✅ Prevents tests from being forgotten
+- ✅ Alphabetically sorted for consistency
 
 ### Expected Output
 

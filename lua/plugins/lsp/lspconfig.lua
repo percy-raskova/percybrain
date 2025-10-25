@@ -1,3 +1,42 @@
+-- Plugin: nvim-lspconfig
+-- Purpose: Language Server Protocol configuration for writing environment
+-- Workflow: lsp
+-- Why: Provides IDE-like features for Neovim configuration (lua_ls) and optional writing tools
+--      (ltex_plus for grammar, texlab for LaTeX). IWE LSP provides markdown intelligence.
+--      Minimal setup focused on writing workflow, not web development.
+-- Config: minimal (writing-focused)
+--
+-- Usage:
+--   gd - Go to definition
+--   gD - Go to declaration
+--   gR - Show references (Telescope)
+--   gi - Show implementations
+--   gt - Show type definitions
+--   K - Hover documentation
+--   <leader>ca - Code actions
+--   <leader>rn - Smart rename
+--   <leader>D - Buffer diagnostics
+--   <leader>d - Line diagnostics
+--   [d / ]d - Navigate diagnostics
+--   <leader>rs - Restart LSP
+--
+-- Dependencies:
+--   External: lua_ls (Mason), optional: ltex_plus, texlab (Mason)
+--   Internal: nvim-cmp for autocompletion integration
+--
+-- Configuration Notes:
+--   WRITING ENVIRONMENT: Minimal LSP configuration
+--   - on_attach: Sets up keybindings for every LSP server
+--   - capabilities: Enables nvim-cmp integration for autocompletion
+--   - Custom diagnostic signs in gutter (errors, warnings, hints, info)
+--   - lua_ls: REQUIRED for Neovim configuration editing
+--   - ltex_plus: OPTIONAL grammar/spelling checker (conditionally configured)
+--   - texlab: OPTIONAL LaTeX support (conditionally configured)
+--   - IWE LSP (iwes): Configured separately in lua/plugins/lsp/iwe.lua
+--
+--   ALL WEB DEV LSPs REMOVED: tsserver, html, css, tailwind, svelte, graphql,
+--   emmet, prisma, pyright, grammarly - not needed for writing environment
+
 return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
@@ -35,7 +74,8 @@ return {
       keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
 
       opts.desc = "See available code actions"
-      keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
+      -- see available code actions, in visual mode will apply to selection
+      keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
 
       opts.desc = "Smart rename"
       keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
@@ -65,117 +105,58 @@ return {
     -- Change the Diagnostic symbols in the sign column (gutter)
     -- (not in youtube nvim video)
     local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-    for type, icon in pairs(signs) do
-      local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-    end
-
-    -- configure html server
-    lspconfig["html"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- configure typescript server with plugin
-    lspconfig["tsserver"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- configure css server
-    lspconfig["cssls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- configure tailwindcss server
-    lspconfig["tailwindcss"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- configure svelte server
-    lspconfig["svelte"].setup({
-      capabilities = capabilities,
-      on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
-
-        vim.api.nvim_create_autocmd("BufWritePost", {
-          pattern = { "*.js", "*.ts" },
-          callback = function(ctx)
-            if client.name == "svelte" then
-              client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.file })
-            end
-          end,
-        })
-      end,
-    })
-    --
-    -- configure LanguageTool grammar checker (ltex-ls)
-    lspconfig["ltex"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      filetypes = { "markdown", "text", "tex", "org" },
-      settings = {
-        ltex = {
-          language = "en-US",
-          additionalRules = {
-            enablePickyRules = true,
-          },
+    -- Modern API (replaces deprecated sign_define)
+    vim.diagnostic.config({
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = signs.Error,
+          [vim.diagnostic.severity.WARN] = signs.Warn,
+          [vim.diagnostic.severity.HINT] = signs.Hint,
+          [vim.diagnostic.severity.INFO] = signs.Info,
         },
       },
     })
+
+    -- Helper function to safely configure LSP servers
+    -- Only configures if the server is available in lspconfig
+    local function safe_setup(server_name, config)
+      local ok, server = pcall(function()
+        return lspconfig[server_name]
+      end)
+      if ok and server then
+        server.setup(config)
+      else
+        vim.notify(
+          string.format("LSP server '%s' not available - install via Mason or manually", server_name),
+          vim.log.levels.WARN
+        )
+      end
+    end
+
+    -- ========================================================================
+    -- WRITING ENVIRONMENT LSP CONFIGURATION
+    -- ========================================================================
+    -- This configuration is minimal and focused on writing workflow:
+    -- - lua_ls: REQUIRED for Neovim config editing
+    -- - ltex_plus: OPTIONAL grammar/spelling checker
+    -- - texlab: OPTIONAL LaTeX support
+    -- - IWE (iwes): Managed by iwe.nvim plugin (see lua/plugins/lsp/iwe.lua)
     --
-    -- configure texlab server
-    lspconfig["texlab"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
+    -- All web development LSPs have been removed (html, css, typescript, etc.)
+    -- ========================================================================
 
-    -- configure Grammarly server
-    lspconfig["grammarly-languageserver"].setup({
+    -- Configure Lua LSP (REQUIRED for Neovim configuration)
+    safe_setup("lua_ls", {
       capabilities = capabilities,
       on_attach = on_attach,
-    })
-
-    -- configure prisma orm server
-    lspconfig["prismals"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- configure graphql language server
-    lspconfig["graphql"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
-    })
-
-    -- configure emmet language server
-    lspconfig["emmet_ls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
-    })
-
-    -- configure python server
-    lspconfig["pyright"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-    })
-
-    -- configure lua server (with special settings)
-    lspconfig["lua_ls"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = { -- custom settings for lua
+      settings = {
         Lua = {
-          -- make the language server recognize "vim" global
+          -- Make language server recognize "vim" global
           diagnostics = {
             globals = { "vim" },
           },
           workspace = {
-            -- make language server aware of runtime files
+            -- Make language server aware of runtime files
             library = {
               [vim.fn.expand("$VIMRUNTIME/lua")] = true,
               [vim.fn.stdpath("config") .. "/lua"] = true,
@@ -185,35 +166,53 @@ return {
       },
     })
 
-    -- configure IWE markdown server (PercyBrain Zettelkasten)
-    -- IWE is installed via cargo: cargo install iwe
-    lspconfig["markdown_oxide"].setup({
-      capabilities = capabilities,
-      on_attach = function(client, bufnr)
-        on_attach(client, bufnr)
+    -- ========================================================================
+    -- PROSE WRITING: ltex grammar checker
+    -- ========================================================================
+    -- NOTE: ltex-ls is installed via Mason (mason-lspconfig handles it)
+    -- This manual setup configures filetypes and settings for prose writing
+    -- Server name in lspconfig is "ltex" (not "ltex_plus")
+    -- ========================================================================
 
-        -- IWE-specific keymaps for Zettelkasten workflow
-        local iwe_opts = { noremap = true, silent = true, buffer = bufnr }
+    local ltex_capabilities = vim.deepcopy(capabilities)
+    ltex_capabilities.window = ltex_capabilities.window or {}
+    ltex_capabilities.window.workDoneProgress = false -- Disable progress popups
 
-        -- Navigate links with gd (already mapped in on_attach)
-        -- Find backlinks with <leader>zr (references)
-        iwe_opts.desc = "Find backlinks (references)"
-        keymap.set("n", "<leader>zr", vim.lsp.buf.references, iwe_opts)
-
-        -- Extract/inline sections with code actions
-        iwe_opts.desc = "Extract/Inline section"
-        keymap.set({ "n", "v" }, "<leader>za", vim.lsp.buf.code_action, iwe_opts)
-
-        -- Document symbols (table of contents)
-        iwe_opts.desc = "Document outline (TOC)"
-        keymap.set("n", "<leader>zo", vim.lsp.buf.document_symbol, iwe_opts)
-
-        -- Workspace symbols (global search)
-        iwe_opts.desc = "Global note search"
-        keymap.set("n", "<leader>zf", vim.lsp.buf.workspace_symbol, iwe_opts)
-      end,
-      filetypes = { "markdown" },
-      root_dir = lspconfig.util.root_pattern(".git", ".iwe"),
+    safe_setup("ltex", {
+      capabilities = ltex_capabilities,
+      on_attach = on_attach,
+      filetypes = { "markdown", "text", "tex", "org" }, -- All prose filetypes
+      settings = {
+        ltex = {
+          language = "en-US",
+          additionalRules = {
+            enablePickyRules = true, -- More thorough grammar checking for prose
+          },
+          statusBarItem = false, -- Disable "Checking document" status text
+          -- Technical terms dictionary (Rust crates, libraries, etc.)
+          dictionary = {
+            ["en-US"] = { "reqwest", "tokio", "serde", "async" },
+          },
+        },
+      },
     })
+
+    -- ========================================================================
+    -- DISABLE CONFLICTING MARKDOWN LSPs
+    -- ========================================================================
+    -- Explicitly disable marksman to prevent conflicts with IWE
+    -- (marksman installed system-wide via Homebrew)
+    lspconfig.marksman.setup({
+      autostart = false, -- Don't start automatically
+    })
+
+    -- IWE LSP Configuration
+    -- NOTE: IWE LSP server (iwes) is configured via lua/plugins/lsp/iwe.lua
+    -- The iwe.nvim plugin automatically starts and manages the iwes server.
+    -- No separate lspconfig setup needed - iwe.nvim handles it internally.
+    --
+    -- See: lua/plugins/lsp/iwe.lua for full IWE configuration
+    -- Commands: :IWE lsp start/stop/restart/status
+    -- Health check: :checkhealth iwe
   end,
 }

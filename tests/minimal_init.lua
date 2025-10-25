@@ -84,6 +84,28 @@ else
   })
 end
 
+-- Load Trouble plugin for capability tests
+-- Trouble must be loaded eagerly in test environment
+local trouble_path = vim.fn.expand("~/.local/share/nvim/lazy/trouble.nvim")
+if vim.fn.isdirectory(trouble_path) == 1 then
+  vim.opt.rtp:append(trouble_path)
+
+  -- Add Trouble to Lua package path so require() works
+  package.path = package.path .. ";" .. trouble_path .. "/lua/?.lua"
+  package.path = package.path .. ";" .. trouble_path .. "/lua/?/init.lua"
+
+  -- Load Trouble plugin eagerly for tests
+  pcall(function()
+    require("trouble").setup({
+      position = "bottom",
+      height = 10,
+      auto_close = false,
+      auto_open = false,
+      focus = true,
+    })
+  end)
+end
+
 -- Add test helpers to runtime path and Lua package path
 vim.opt.rtp:append("tests")
 
@@ -103,6 +125,19 @@ vim.opt.hidden = true
 -- Minimal test-specific configuration
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
+
+-- Load PercyBrain configuration for contract/regression tests
+-- This ensures tests validate against actual config, not Vim defaults
+local config_ok, config_err = pcall(require, "config.options")
+if not config_ok then
+  vim.notify("Warning: Could not load config.options for testing: " .. tostring(config_err), vim.log.levels.WARN)
+end
+
+-- Load keymaps for contract tests that validate keybinding availability
+local keymaps_ok, keymaps_err = pcall(require, "config.keymaps")
+if not keymaps_ok then
+  vim.notify("Warning: Could not load config.keymaps for testing: " .. tostring(keymaps_err), vim.log.levels.WARN)
+end
 
 -- Load test helpers globally (optional, wrapped in pcall)
 local helpers_ok, helpers = pcall(require, "tests.helpers")

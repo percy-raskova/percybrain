@@ -1,0 +1,746 @@
+
+   Home (H)   Install (I)   Update (U)   Sync (S)   Clean (X)   Check (C)   Log (L)   Restore (R)   Profile (P)   Debug (D)   Help (?)
+
+  Total: 75 plugins
+
+  Failed (1)
+    ○ markdown-preview.nvim  markdown
+        You have local changes in `/home/percy/.local/share/nvim/lazy/markdown-preview.nvim`:
+          * app/yarn.lock
+        Please remove them to update.
+        You can also press `x` to remove the plugin and then `I` to install it again.
+        app/yarn.lock
+        You have local changes in `/home/percy/.local/share/nvim/lazy/markdown-preview.nvim`:
+          * app/yarn.lock
+        Please remove them to update.
+        You can also press `x` to remove the plugin and then `I` to install it again.
+        a923f5f fix: program location in nixos (#613) (2 years ago)
+        de6c417 Change yarn to npx --yes yarn (#540) (2 years ago)
+        0b38302 fix(preview): does not disconnect with same buffer (2 years ago)
+        a79fc02 fix(preview): fix combine preview (2 years ago)
+        1add24c feat(preview): add g:mkdp_combine_preview_auto_refresh option (2 years ago)
+        60fcb62 feat(prebuild): add macos-arm64 prebuild closes #603 (2 years ago)
+        7546cdc feat(preview): add combine preview support (#611) (2 years ago)
+        b447564 Fix typos in README.md (#489) (2 years ago)
+
+
+  Breaking Changes (3)
+    ● catppuccin 0.19ms colorscheme catppuccin
+        af58927 fix: config `float` is optional in setup (#938) (2 weeks ago)
+        e79d09f fix(treesitter): keep `@property` & `@variable.member` as `lavender` (#905) (3 weeks ago)
+        c891845 docs: add `lsp_styles` to configuration section (#937) (3 weeks ago)
+        5af9374 refactor!: move special and builtin integrations out of `groups/integrations/` (#931) (4 weeks ago)
+        f19cab1 fix(integrations): update neogit url (#928) (5 weeks ago)
+        ff29b85 fix(editor): use `PmenuSel` bg for `PmenuExtraSel` (#930) (5 weeks ago)
+        30fa4d1 fix(integrations)!: rename `get()` to `get_*()` on abnormal integrations (#920) (9 weeks ago)
+        9a9a875 fix: lazy plugins are in a dictionary rather than a list (#918) (9 weeks ago)
+
+    ● nvim-treesitter 4.12ms  start
+        42fc28b docs(readme)!: announce archiving of master branch (5 months ago)
+        066fd65 feat(solidity): add doxygen injections (#7853) (5 months ago)
+        0484f88 feat(solidity): add `abstract` keyword (5 months ago)
+        28d480e fix: blade injection highlighting (#7846) (6 months ago)
+        94ea4f4 feat(haskell): injections for inline-python quasiquotes (6 months ago)
+        3b30886 fix(injections): dtd, glimmer.*, razor, tablegen, teal (6 months ago)
+        4c7509e fix(roc): use correct predicate in injections (6 months ago)
+        58dd149 fix(nu): add missing `ctrl_match` to query files (6 months ago)
+
+    ● plenary.nvim 0.83ms  start
+        b9fd522 neovim 0.11 introduced winborder: neovim/neovim#31074 (#649) (3 months ago)
+        857c5ac break!: drop v0.7.2 support as e9b1d87 introduced a breaking change (8 months ago)
+        d3bc384 fix(path): make find_upwards() search root (#506) (8 months ago)
+        f031bef fix(curl): Do not reuse URL from previous call (#602) (8 months ago)
+        e6dcd56 feat(filetypes): add cppm filetype (#581) (8 months ago)
+        b0defd5 fix(json): mark `options` argument of `json_strip_comments` optional (#606) (8 months ago)
+        e9b1d87 fix(log): Use `stdpath('log')` (#607) (8 months ago)
+        37604d9 feat: add cairo language filetype (#610) (8 months ago)
+
+
+  Log (69)
+    ○ ale  markdown  tex  text  rst
+        4217461 fix issue 5037. "/s/c/" to "/s/c" (#5043) (7 weeks ago)
+        528e259 ale: add `FindNearestFileOrDirectory` function (#5033) (9 weeks ago)
+        b415ddd Make phpactor configurable and documented (#5027) (2 months ago)
+        55acb65 Update two broken links to golang tools (#5031) (2 months ago)
+        34d1fd2 chore: remove some unused files and minor typo fix (#5029) (2 months ago)
+        84eae97 Correct typo in documented python command (#5030) (2 months ago)
+        9acafa8 Close #5019 - Mention Sponsorship page (2 months ago)
+        11cbd96 Stop oelint_adv functions possibly conflicting (2 months ago)
+
+    ● alpha-nvim 1.1ms  VimEnter
+        2b3cbcd fix: use new vim.validate syntax on neovim 0.11+ (#323) (4 months ago)
+        44e8cde mention alpha.utils.charhl_to_bytehl in docs (4 months ago)
+        dc03b89 fix: correct highlight col positions for UTF-8 multibyte chars (#324) (4 months ago)
+        a35468c Revert "fix: update vim.validate calls to the new syntax (#321)" (5 months ago)
+        0f24de9 fix: update vim.validate calls to the new syntax (#321) (5 months ago)
+        de72250 docs: spelling (#315) (11 months ago)
+        bf3c8bb fix: readme code snippet missing syntax colors (#303) (1 year, 1 month ago)
+        b6f4129 re-evaluate cwd on redraw (#297) (1 year, 2 months ago)
+
+    ● auto-save.nvim 1.09ms  TextChanged
+        979b6c8 Merge pull request #47 from nvim-zh/new (3 years ago)
+        38ff59e refactor: remove verbose code (3 years, 2 months ago)
+        419ff60 fix #46 and format (3 years, 2 months ago)
+        2c7a294 fix: #34 (3 years, 3 months ago)
+        fd65d8c docs: updated default conf (3 years, 3 months ago)
+        1d2c03c fix: use object as config handler (3 years, 3 months ago)
+        d37a766 fix: #34 - match against any pattern more than once if VimEnter and ColorScheme) (3 years, 3 months ago)
+        6cbadbd fix: #34 (needs testing) (3 years, 3 months ago)
+
+    ● auto-session 1.78ms  start
+        788ada9 Merge pull request #499 from cameronr/fix/ignore-help-error (6 hours ago)
+        c49f80c chore(docs): auto-generate docs (32 hours ago)
+        66f1f62 fix(restore): ignore help error 661 (32 hours ago)
+        517a757 Merge pull request #496 from cameronr/fix/checkhealth-no-setup (2 weeks ago)
+        13a7b25 chore(docs): auto-generate docs (2 weeks ago)
+        e1fbe60 chore(hooks): update type annotations (2 weeks ago)
+        4b56095 fix(health): Lib.logger is empty normally now (2 weeks ago)
+        0385a9a Merge pull request #494 from cameronr/feat/pre-restore-override (3 weeks ago)
+
+    ○ browser.vim  LynxExport  LynxOpen  LynxExtract  LynxSummarize  LynxCite  <leader>lc  <leader>ls  <leader>lx  <leader>lo  <leader>le
+        413bbe7 intial commit (14 years ago)
+
+    ● bufferline.nvim 4.75ms  VeryLazy
+        655133c chore(main): release 4.9.1 (#992) (9 months ago)
+        1363a05 fix(utils): correctly check for showing buffer icons (9 months ago)
+        3b57867 chore: update highlight types (9 months ago)
+        17083c8 chore: formatting (10 months ago)
+        ffd4834 refactor(icons): do not load web icons if not needed (#989) (10 months ago)
+        9f0826a chore(types): correct mismatched type definitions for sort_by and numbers options (#985) (10 months ago)
+        261a72b chore: formatting (11 months ago)
+        5726c4e chore(main): release 4.9.0 (#974) (11 months ago)
+
+    ○ cl-neovim
+        c495b65 Use non-deprecated checkhealth syntax (1 year, 10 months ago)
+        7212d30 Fix :checkhealth reporting when quicklisp can not be found (7 years ago)
+        a52ce78 Remove Scarlett Johansson from the repo... (7 years ago)
+        39f28c4 Use `nvim:out-write` in Lisp interface (7 years ago)
+        92fa1d5 Create download.png (7 years ago)
+        f38a687 Replace cl-travis with roswell (8 years ago)
+        0918a6c Load files in test asdf config serially (8 years ago)
+        38d1e3f Stop confusing :CheckHealth with string outputs (8 years ago)
+
+    ○ cmp-buffer  nvim-cmp
+        b74fab3 Revert "don't use deprecated functions" (7 months ago)
+        51f42e6 don't use deprecated functions (7 months ago)
+        3022dbc Update README.md (3 years, 2 months ago)
+        62fc67a Merge pull request #52 from tomtomjhj/reserve (3 years, 4 months ago)
+        c46b668 Reserve slots with `false` (3 years, 4 months ago)
+        12463cf Improve keyword_pattern (3 years, 6 months ago)
+        d66c4c2 Merge pull request #35 from smjonas/update_readme (3 years, 8 months ago)
+        5a8909d Improve wording on keyword_length documentation (3 years, 9 months ago)
+
+    ○ cmp-dictionary  markdown  tex  text  rst
+        fecc3ef Update cmp-dictionary.txt (#79) (7 months ago)
+        c5ffc6a Update README.md (1 year, 3 months ago)
+        bce6d29 Update README.md (1 year, 3 months ago)
+        7144ce4 fix: keyword_length may be nil (1 year, 3 months ago)
+        4286695 fix: calls by cmp.complete ignore the keyword_length option (1 year, 3 months ago)
+        e6e3ec9 Update README.md (1 year, 4 months ago)
+        3dab73d strong (1 year, 8 months ago)
+        b190378 WARNING (1 year, 8 months ago)
+
+    ○ cmp-nvim-lsp  nvim-lspconfig
+        bd5a7d6 Replace deprecated client object syntax as required by Neovim 0.11+ (#81) (2 months ago)
+        a8912b8 Revert "don't use deprecated functions" (7 months ago)
+        99c4e3e don't use deprecated functions (7 months ago)
+        99290b3 Tune LSP completions resolve capabilities to be more immediate (#77) (11 months ago)
+        39e2eda fix: replace all deprecated APIs (#68) (1 year, 5 months ago)
+        fa13fd6 fix: get rid of deprecated API use: `vim.lsp.buf_get_clients()` (#66) (1 year, 5 months ago)
+        5af77f5 Revert unneeded README.md changes (1 year, 10 months ago)
+        e6a5e75 docs: Suggest better ways to configure LSP capabilities (#64) (1 year, 10 months ago)
+
+    ○ cmp-path  nvim-cmp
+        c642487 Merge pull request #91 from UnaTried/patch-1 (3 months ago)
+        9a16c8e Revert "Revert "don't use deprecated functions"" (3 months ago)
+        e52e640 Merge pull request #90 from hrsh7th/revert-84-main (4 months ago)
+        cc527cd Revert "REMEME.md pathMappings --> path_mappings" (4 months ago)
+        f62dc28 Merge pull request #89 from hrsh7th/revert-86-main (4 months ago)
+        cde1793 Revert "upload README Make it more compliant with specifications" (4 months ago)
+        a84b676 Merge pull request #88 from hrsh7th/revert-83-main (4 months ago)
+        fe15d49 Revert "support alias" (4 months ago)
+
+    ○ cmp_luasnip  nvim-cmp
+        98d9cb5 Merge pull request #65 from aarondill/master (12 months ago)
+        7234252 feat: sort snippets by effective priority (12 months ago)
+        05a9ab2 Merge pull request #61 from woodgear/fix/expand_params (2 years ago)
+        dea7813 fix expand_params (2 years, 1 month ago)
+        1809552 Merge pull request #51 from atticus-sullivan/feat(autosnippets) (3 years ago)
+        cbf6c57 query autosnippets only if requested (3 years ago)
+        37287e5 doc on the feature/option (3 years ago)
+        6c89ea4 general option for show_autosnippets (default:false for backwards comp) (3 years ago)
+
+    ● Comment.nvim 1.36ms  start
+        e30b7f2 feat(ft): added `cue` support (#462) (1 year, 4 months ago)
+        d30371f feat(ft): added `cairo` support (#461) (1 year, 4 months ago)
+        f0cf601 chore(docs): auto-generate `:help` doc (1 year, 4 months ago)
+        3d13ab2 feat(ft): added `blueprint` support (#459) (1 year, 4 months ago)
+        8be62b5 chore(docs): fix mistake in documentation (#454) (1 year, 4 months ago)
+        d7ef9b6 feat(ft): support block comments in `ruby` (#448) (1 year, 4 months ago)
+        b689100 feat(ft): added `hyprlang` support (#441) (1 year, 4 months ago)
+        8255bdc feat(ft): support for block comments in `coq` (#465) (1 year, 4 months ago)
+
+    ○ diffview.nvim  DiffviewOpen  DiffviewLog  DiffviewFileHistory  DiffviewRefresh  DiffviewClose  DiffviewToggleFiles  DiffviewFocusFiles  <leader>gdo  <leader>gdc  <leader>gdh  <leader>gdH  <leader>gdt  <leader>gdr
+        4516612 feat(actions): added `select_{prev|next}_commit` (#512) (1 year, 4 months ago)
+        52e6cb2 feat(actions): added `select_{first|last}_entry` (#510) (1 year, 4 months ago)
+        3afa6a0 feat: use `vim.notify` for user notifications (#507) (1 year, 5 months ago)
+        1ec7b56 feat: support `disable_diagnostics` for all contexts (resolves #503) (1 year, 5 months ago)
+        0bae1a3 fix: cancel update if view becomes out of focus (#472) (1 year, 5 months ago)
+        84164f7 fix(git): special case for `--imply-local` when both sides point to head (1 year, 5 months ago)
+        f17af39 fix(git): add `--no-exclude-standard` when detecting binary (#484) (1 year, 5 months ago)
+        b2fbe09 docs: use github markdown alerts (1 year, 5 months ago)
+
+    ○ friendly-snippets  nvim-cmp
+        572f566 Merge pull request #543 from ydkulks/main (6 months ago)
+        3783832 Resolve merge conflict in react-es7 and react files (6 months ago)
+        fc8f183 fix html5 snippet to auto-select placeholders (#570) (6 months ago)
+        bedf8a0 Changed cpp include guard path symbol matching to make it work on unix and windows (#552) (6 months ago)
+        e381a9c Fix typo in cmake cxx standard snippet (#569) (6 months ago)
+        ed8d368 fix: `while` snippet in cpp should end within the logical scope (#560) (6 months ago)
+        fbf1a27 zig: add missing semicolons (#562) (6 months ago)
+        cba1b71 Add ruby benchmark (#561) (6 months ago)
+
+    ○ gitsigns.nvim  BufReadPre  BufNewFile  <leader>ht  <leader>hs (v)  <leader>hr (v)  ih (o)  ih (x)  [c  ]c  <leader>hs  <leader>hr  <leader>hS  <leader>hR  <leader>hu  <leader>hp  <leader>hb  <leader>hB  <leader>hd  <leader>hD
+        20ad441 fix(popup): don't move window when resizing (4 days ago)
+        1ee5c1f feat(show): add navigation mappings (3 weeks ago)
+        91f39eb fix(blame): close blame window on bufhidden (3 weeks ago)
+        58e3e52 fix(blame): check valid buf (3 weeks ago)
+        9dfa82c feat(show): adjust output to include tree and parent (3 weeks ago)
+        472f752 fix: do not attach to fugitive tree buffers (3 weeks ago)
+        0c68263 fix(blame): do not show stale blames popup (3 weeks ago)
+        89f7507 fix(blame): remove link highlight on whitespace (3 weeks ago)
+
+    ○ gruvbox.nvim
+        5e0a460 auto-generate vimdoc (7 weeks ago)
+        fe393fa add new instructions (7 weeks ago)
+        9ab8b12 Merge pull request #409 from saygo-png/diagnostic-deprecated-fix (9 weeks ago)
+        3cb87e3 fix: DiagnosticDeprecated follows strikethrough setting (3 months ago)
+        58a2cda auto-generate vimdoc (4 months ago)
+        7ac6439 Merge pull request #407 from ellisonleao/fix/issue-402-independent-setup-calls (4 months ago)
+        a38d3d9 Fix: Make multiple calls to setup() independent (4 months ago)
+        00e38a3 auto-generate vimdoc (5 months ago)
+
+    ○ hardtime.nvim
+        b4e4319 feat: add hint to use C instead of Da (6 weeks ago)
+        6d7664d chore: use new format for bug report template (3 months ago)
+        3541ad2 docs: auto-generate vimdoc (3 months ago)
+        4144dd0 docs: update star history chart color (3 months ago)
+        cde2e68 docs: auto-generate vimdoc (4 months ago)
+        083e5c2 docs: update link (4 months ago)
+        a706043 docs: update star history url (4 months ago)
+        843c4cf docs: auto-generate vimdoc (4 months ago)
+
+    ○ HighStr.nvim
+        1cb5e03 Merge pull request #12 from yangxingwu/remove_unused_var (3 years ago)
+        ed0223a high-str/main.lua: remove unused var (3 years, 2 months ago)
+        25ab3f0 Merge branch 'dev-doc' into dev (4 years, 2 months ago)
+        f55f242 fix #6: Defected imported selections (4 years, 2 months ago)
+        8d410f1 fix: highlight the column - 1 (4 years, 2 months ago)
+        ed76368 chore: adde feat to features list (4 years, 3 months ago)
+        6274740 fix #1 (4 years, 3 months ago)
+        48760c2 added ignore_cursor_hl (4 years, 3 months ago)
+
+    ○ iwe.nvim  markdown
+        5cd08cd chore: mappings update (12 days ago)
+        b415c7e fix: Change gr mapping to gb (8 weeks ago)
+        9d376dd Preview & go to block references (#3) (8 weeks ago)
+        ee733a8 refactor: Remove standard LSP keybindings and improve documentation (8 weeks ago)
+        cd32ec1 feat: Add inlay hints setting  (#2) (9 weeks ago)
+        b8651e4 chore: update README (9 weeks ago)
+        b485be5 Initial commit (#1) (9 weeks ago)
+        d55078c Create README.md (8 months ago)
+
+    ○ jsonpath.nvim  markdown  md
+        9e7a3c2 Merge pull request #16 from angelinuxx/fix/deprecated-treesitter-api (4 weeks ago)
+        9d79b5c refactor: migrate from deprecated treesitter ts_utils functions (5 weeks ago)
+        0ea5bd5 Merge pull request #15 from phelipetls/feat/show-on-winbar-setup (9 weeks ago)
+        c246b48 feat: add setup function with show_on_winbar setting (9 weeks ago)
+        2d889eb Merge pull request #13 from Myzel394/update-to-new-treesitter-api (1 year, 3 months ago)
+        94a7948 fix: Fix formatting (1 year, 3 months ago)
+        583ccf8 chore: Use new APIs from Neovim for treesitter stuff (1 year, 3 months ago)
+        ea7e07e Merge pull request #6 from Jobin-Nelson/fix/index-nil (2 years, 7 months ago)
+
+    ● lazy.nvim 2673.76ms  init.lua
+        db06788 chore(main): release 11.17.2 (#2064) (15 hours ago)
+        16e5271 fix(plugin): check that path is actually in root dir. Closes #2075 (20 hours ago)
+        1ea3c40 fix(stats): better support for different `time_t` sizes. See #2049 (2 weeks ago)
+        9f559d0 build: exclude stylua ignore comments from readme (2 weeks ago)
+        4ded3ff test: `--offline` for minit (2 weeks ago)
+        46e59d8 ci: update test scripts (2 weeks ago)
+        5933406 test(minit): added support for passing tests to run to mini.test (3 weeks ago)
+        a21b7bf test: LAZY_OFFLINE support for minit (3 weeks ago)
+
+    ○ lazygit.nvim
+        2305dee fix: get directory when using lazygit from term buffer (#164) (6 weeks ago)
+        0a1ec57 fix: LazyGitFilter when GIT_DIR and GIT_WORK_TREE are defined (#162) (7 weeks ago)
+        3c524eb chore: Update FUNDING.yml (3 months ago)
+        cdd3527 feat(tests): replace MINRC with init.lua for lazygit.nvim testing (3 months ago)
+        8797c0d fix(window): set correct window size for lazygit to render (#158) (3 months ago)
+        541bc0d fix(window): custom border not work (#157) (3 months ago)
+        b4229a0 fix: plenary usage crash (#156) (3 months ago)
+        ac4a400 feat: resize window on nvim resize (#117) (3 months ago)
+
+    ○ lspkind.nvim  nvim-cmp
+        3ddd1b4 Update README.md (5 weeks ago)
+        d79a1c3 Merge pull request #88 from ak1932/master (11 months ago)
+        ab5495d Merge pull request #89 from skylarmb/patch-1 (11 months ago)
+        8b0f65a Fix syntax errors in README.md (11 months ago)
+        887224c Update README.md (11 months ago)
+        a700f14 Merge pull request #86 from Tronikelis/fix/85/different_maxwidth (12 months ago)
+        11f9b0a differentiate maxwidth (1 year ago)
+        59c3f41 Merge pull request #84 from OnlyWick/limit-labelDetails-width (1 year, 1 month ago)
+
+    ○ LuaSnip  nvim-cmp
+        ccf25a5 Auto generate docs (3 days ago)
+        0161623 Auto generate docs (3 days ago)
+        c3e16ea docs: add multisnippets documentation example (3 days ago)
+        f958d98 ecma-trigEngine: return only capture-groups, not the full match. (6 days ago)
+        eec1a84 Auto generate docs (7 days ago)
+        0970f5f fix and update luarocks workflow. (7 days ago)
+        113f831 Format with stylua (7 days ago)
+        12c2ccd Auto generate docs (7 days ago)
+
+    ○ mason-lspconfig.nvim  BufReadPre  mason.nvim
+        2304ff6 chore: update generated code (#625) (6 days ago)
+        6bdb14f chore: update generated code (#624) (3 weeks ago)
+        155eac5 chore: update generated code (#623) (3 weeks ago)
+        f760507 chore: update generated code (#621) (4 weeks ago)
+        a1067cf chore: update generated code (#616) (5 weeks ago)
+        7f9a39f chore: update generated code (#613) (6 weeks ago)
+        5e085ef chore: update generated code (#610) (8 weeks ago)
+        1ec4da5 chore: update generated code (#607) (10 weeks ago)
+
+    ○ mason-null-ls.nvim  none-ls.nvim
+        de19726 chore: add `ensure_installed` error log (#105) (1 year, 7 months ago)
+        2b8433f chore(main): release 2.6.0 (#104) (1 year, 7 months ago)
+        43f54f0 fix(docs): correct typo in README (#102) (1 year, 7 months ago)
+        edd7d34 feat: add cmake_lint mapping (#101) (1 year, 7 months ago)
+        e270134 chore(main): release 2.5.1 (#99) (1 year, 8 months ago)
+        05385ea fix(docs): config requires `ignore_methods` field (#98) (1 year, 8 months ago)
+        bfaa24b chore(main): release 2.5.0 (#95) (1 year, 8 months ago)
+        d123aaa feat: add `methods` to enable or disable specific null-ls source method types (#94) (1 year, 8 months ago)
+
+    ○ mason-tool-installer.nvim  mason.nvim
+        517ef59 prevent double invocation of run_on_start within vimenter (it can happen) (4 months ago)
+        93a9ff9 Merge pull request #81 from carloscalla/udpate-go-condition-example (5 months ago)
+        9c950da doc: improve go example condition (5 months ago)
+        75d60a8 Merge pull request #76 from WhoIsSethDaniel/use-map_name-in-clean (5 months ago)
+        2952ebe use map_name in clean (5 months ago)
+        62f821a Merge pull request #75 from WhoIsSethDaniel/cache_mlsp_get_mappings (6 months ago)
+        8f89d59 cache mason-lspconfig get_mappings() (6 months ago)
+        aafae20 Merge pull request #73 from marcoSven/bug-fix/lspconfig_to_mason-a-nil-value (6 months ago)
+
+    ○ mason.nvim  mason-lspconfig.nvim
+        ad7146a chore(main): release 2.1.0 (#1996) (3 weeks ago)
+        a83eabd fix(spawn): always expand executable path on Windows (#2021) (3 weeks ago)
+        b3689a4 ci: fix shellharden download url (#2022) (4 weeks ago)
+        7dc4fac feat(compiler): make `supported_platforms` a universal source field (#2002) (3 months ago)
+        9e25c98 fix(pypi): add support for "compatible release" (~=) PEP440 expressions (#2000) (3 months ago)
+        3671ab0 fix(ui): only set border to none if `'winborder'` doesn't exist (#1984) (3 months ago)
+        a1fbecc fix(process): close check handles (#1995) (3 months ago)
+        197f635 chore(main): release 2.0.1 (#1921) (3 months ago)
+
+    ○ mcphub.nvim  MCPHubInstall  MCPHubList  MCPHubUpdate  MCPHub  MCPHubOpen
+        8ff40b5 fix(copilotchat): limit function names to 64 characters (#243) (4 weeks ago)
+        7804697 docs: Add missing newline to configuration.md (#244) (4 weeks ago)
+        716e286 fix: Include a default border if winborder is not set. (#250) (4 weeks ago)
+        f56fe0d fix(utils): add prompts for renderer filter condition (#247) (4 weeks ago)
+        5e39057 feat: respect vim.o.winborder for floating windows (fixes #238) (7 weeks ago)
+        3ef202f fix: typo duplicate index 'global_env' (#240) (7 weeks ago)
+        bd3dc1c fix: set 'nofile' buftype for multiline input windows (rel #232) (9 weeks ago)
+        2218737 feat: emit "MCPHubApprovalWindow(Opened/Closed)" events for custom integrations (rel #236) (9 weeks ago)
+
+    ○ neoconf.nvim  Neoconf
+        5581df4 chore(build): auto-generate vimdoc, schemas and annotations (2 days ago)
+        0089570 chore(build): auto-generate vimdoc, schemas and annotations (7 days ago)
+        8786f12 chore(build): auto-generate vimdoc, schemas and annotations (13 days ago)
+        d079112 chore(build): auto-generate vimdoc, schemas and annotations (2 weeks ago)
+        80da212 chore(build): auto-generate docs (2 weeks ago)
+        43be064 chore(build): auto-generated build files (2 weeks ago)
+        ba7c9da ci: update test scripts (2 weeks ago)
+        ca4179b chore(build): auto-generate vimdoc, schemas and annotations (2 weeks ago)
+
+    ○ neodev.nvim
+        46aa467 chore(build): auto-generate docs (1 year, 4 months ago)
+        3001dd4 ci: update (1 year, 4 months ago)
+        29811b5 chore(build): auto-generate vimdoc (1 year, 4 months ago)
+        9633e84 ci: update (1 year, 4 months ago)
+        02893ee chore(build): auto-generate vimdoc (1 year, 5 months ago)
+        a7237ef ci: remove ci job (1 year, 5 months ago)
+        1f4ebcc chore(main): release 3.0.0 (#155) (1 year, 5 months ago)
+        cb8cfe9 chore(build): auto-generate vimdoc (1 year, 5 months ago)
+
+    ● neoscroll.nvim 1.38ms  VeryLazy
+        f957373 fix typo in install options (11 months ago)
+        07deeae fix(typo): `NeoscrollDisablGlobalePM` to `NeoscrollDisableGlobalePM` (11 months ago)
+        fbc3a0b fix(typo): `differenciate` to `differentiate` (11 months ago)
+        5fdc76e fix(typo): `miliseconds` to `milliseconds` (11 months ago)
+        881b885 Use opts instead of config to setup plugin (11 months ago)
+        81c47f9 Add duration multiplier option (12 months ago)
+        e58ecc6 Rename Telescope scroll function (12 months ago)
+        48a3923 Fixed scrolling in non-current windows (12 months ago)
+
+    ○ nightfox.nvim
+        ba47d4b chore(fmt): resolve incorrect formatting (9 months ago)
+        6d01bae feat(group): add support for blink.cmp (#463) (9 months ago)
+        c03e3ee fix(syntax): link typescriptParens to brackets (#475) (9 months ago)
+        595ffb8 ci(vim): vim-gtk -> vim.gtk3 (10 months ago)
+        4641eaa feat(extra): add bat themes (#457) (10 months ago)
+        4463a37 feat: add support for rainbow-delimiters (#459) (10 months ago)
+        7557f26 fix markup.italic (#451) (1 year, 1 month ago)
+        d3e8b1a chore(main): release 3.10.0 (#423) (1 year, 3 months ago)
+
+    ● noice.nvim 2.08ms  VeryLazy
+        c86aea5 fix(notify): log level / urgency (#1146) (3 days ago)
+        f193e98 fix(html): rendering of nbsp characters (#1147) (3 days ago)
+        31b261b fix(markdown): fix render lines count (#1152) (3 days ago)
+        bbf6b7d chore(build): auto-generate docs (3 days ago)
+        3988250 fix(health): prevent crash in checkhealth when handler is not a function (#1153) (3 days ago)
+        7766097 fix(ui): set scrollbar window border to none (#1155) (3 days ago)
+        db24837 chore(build): auto-generate docs (5 days ago)
+        3234438 perf(lsp.signature): refactored autocmds needed for signature help. Now at most 3 in total for all buffers. Closes #1158 (5 days ago)
+
+    ○ none-ls.nvim
+        a96172f [pre-commit.ci] pre-commit autoupdate (#304) (10 days ago)
+        5cf6384 [pre-commit.ci] pre-commit autoupdate (#303) (3 weeks ago)
+        88e2508 chore: Auto generate docs (4 weeks ago)
+        91a59a9 ci: update dependency versions (4 weeks ago)
+        6617d47 chore: Auto generate docs (4 weeks ago)
+        991e15e PR Template (#301) (4 weeks ago)
+        78111a9 [pre-commit.ci] pre-commit autoupdate (#299) (5 weeks ago)
+        f0b3dc0 chore: Auto generate docs (6 weeks ago)
+
+    ● nui.nvim 0.3ms  noice.nvim
+        de74099 fix(input): set default text and prompt reliably for multiple inputs (5 months ago)
+        7cd18e7 fix(layout): set border=none for float container (5 months ago)
+        f535005 chore: release 0.4.0 (6 months ago)
+        8d5b0b5 feat(popup): support 'default' border style (6 months ago)
+        118a12f feat(popup): use 'winborder' for default border (6 months ago)
+        aa29efe fix(popup): ignore 'winborder' for complex border (6 months ago)
+        8d3bce9 fix(tree): update error message for duplicate node id (8 months ago)
+        13fbbcb ci: pin ubuntu-22.04 for github actions (8 months ago)
+
+    ○ nvim-autopairs  InsertEnter
+        7a2c97c Add keymap descriptions (#522) (11 days ago)
+        23320e7 Deploying to master from @ windwp/nvim-autopairs@2647cce4cb64fb35c212146663384e05ae126bdf 🚀 (4 months ago)
+        2647cce Fix Typst autopairs backtick rule (#512) (4 months ago)
+        327cb4c fix: avoid vim.tbl_flatten (#514) (4 months ago)
+        4d74e75 fix #506 (6 months ago)
+        2a406cd Add Elixir's heex filetype to the list of basic rule filetypes. (#510) (7 months ago)
+        e698fdf Match keyword when it's at the start of the line (#507) (7 months ago)
+        84a81a7 Deploying to master from @ windwp/nvim-autopairs@6522027785b305269fa17088395dfc0f456cedd2 🚀 (7 months ago)
+
+    ○ nvim-cmp  InsertEnter
+        a7bcf1d Format with stylua (6 days ago)
+        686c17a fix: Use winborder for window menu and fix scrollbar window (#2158) (6 days ago)
+        2c019de fix: unicode partial char completion (#2183) (6 days ago)
+        b5311ab fix missing required fields in formatting config (#2040) (6 months ago)
+        684b3cf Format with stylua (6 months ago)
+        30d2593 fix: handle winborder in neovim-0.11 (#2150) (6 months ago)
+        059e894 fix: ref-fix backward compatibility (7 months ago)
+        3fce8d9 improve backward compatibility (7 months ago)
+
+    ○ nvim-lsp-file-operations  nvim-lspconfig
+        9744b73 Merge pull request #40 from simonmclean/triptych (1 year ago)
+        e755b0e update triptych link (1 year ago)
+        3de4124 update readme to include triptych (1 year ago)
+        b91d1af delete duplicate log (1 year ago)
+        b4a3134 move debug log (1 year ago)
+        3456f77 triptych integration (1 year, 2 months ago)
+        92a673d Merge pull request #32 from mikehaertl/30-client-capabilities (1 year, 4 months ago)
+        3de296f Issue #30 Add utility to get client capabilities for LSP server config (1 year, 4 months ago)
+
+    ○ nvim-lspconfig  BufReadPre  BufNewFile
+        ececa53 docs: update configs.md skip-checks: true (11 hours ago)
+        0ad68d5 feat(opentofu): activate on 'terraform' filetype #4146 (11 hours ago)
+        4af5074 docs: update configs.md skip-checks: true (11 hours ago)
+        0d90bb9 feat: force-stop server with :LspStop! (bang) #4140 (11 hours ago)
+        52a8932 docs: update configs.md skip-checks: true (32 hours ago)
+        daeb18c fix(jdtls): swap settings.gradle, build.gradle in root markers #4142 (32 hours ago)
+        e5c61b0 docs: update configs.md skip-checks: true (3 days ago)
+        ad9f259 fix(css_variables): wrong root dir if subdir has package.json #4127 (3 days ago)
+
+    ● nvim-notify 0.19ms 󰢱 notify  noice.nvim
+        8701bec fix: use correct semver order (7 weeks ago)
+        397c7c1 fix: support nvim < 11 (3 months ago)
+        a22f5d7 fix: disable cursorline, cursorcolumncolumn and NormalNC (4 months ago)
+        ab98fec fix: update vim.validate usage (4 months ago)
+        b5825cf fix: priority type error for nvim 0.11 (6 months ago)
+        22f2909 fix: incorrect top value in get_slot_range() (9 months ago)
+        a3020c2 ci: update the testing nvim download steps (10 months ago)
+        14ea717 fix: error when attempting to call require('notify.integrations').pick() (#316) (10 months ago)
+
+    ● nvim-surround 1.08ms  VeryLazy
+        a868c25 chore(main): release 3.1.6 (#406) (8 weeks ago)
+        617fee0 fix: Compatibility issue with Neovim <v0.11. (#407) (8 weeks ago)
+        5cfaad2 fix: Incorrect TreeSitter language for queries. (#405) (8 weeks ago)
+        d56752d chore(main): release 3.1.5 (#402) (9 weeks ago)
+        84492e8 fix: `index_to_pos` on Windows machines. (#401) (9 weeks ago)
+        ad60cea chore(main): release 3.1.4 (#397) (10 weeks ago)
+        fd40caf perf: Convert between 1D and 2D indices in a non-stupid way. (#399) (10 weeks ago)
+        c271c90 fix(treesitter): simpler root node calculation (#396) (3 months ago)
+
+    ● nvim-tree.lua 21.23ms  start
+        64e2192 feat: set filter input filetype to NvimTreeFilter (#3207) (4 days ago)
+        e397756 fix: prevent NvimTree to be alternate buffer when tab open (#3205) (2 weeks ago)
+        87d096a chore(deps): bump leafo/gh-actions-luarocks from 5 to 6 (#3201) (3 weeks ago)
+        01b2e8e chore(deps): bump leafo/gh-actions-lua from 11 to 12 (#3202) (3 weeks ago)
+        e179ad2 refactor(#2942): multi instance: move utils functions to Explorer methods (#3200) (7 weeks ago)
+        f92cc3a chore(#3196): remove unused utils and refactor (#3199) (7 weeks ago)
+        fefa335 feat(#1826): add diagnostics.diagnostic_opts: vim.diagnostic.Opts will override diagnostics.severity and diagnostics.icons (#3190) (9 weeks ago)
+        b70a741 chore(deps): bump amannn/action-semantic-pull-request from 6.1.0 to 6.1.1 (#3193) (9 weeks ago)
+
+    ● nvim-web-devicons 0.19ms 󰢱 nvim-web-devicons  nvim-tree.lua
+        b8221e4 feat: add global blend option (#609) (3 weeks ago)
+        19ce5da fix: use dedicated icon for bash (#611) (3 weeks ago)
+        f6b0920 chore: update pre-commit hooks (#610) (4 weeks ago)
+        6e51ca1 fix: use correct ft for text (#607) (7 weeks ago)
+        f66cdfe feat: playwright icons (#602) (8 weeks ago)
+        cd96ec5 fix: add missing filetype mappings (#604) (8 weeks ago)
+        4ae47f4 feat: add vite and vitest icons #603 (8 weeks ago)
+        8f23743 feat: add pnpm icons (#601) (8 weeks ago)
+
+    ○ pandoc  browser.vim
+        ba64240 Typst template: fix syntax for bibliography inclusion (#11233) (15 hours ago)
+        09c9be2 Update AUTHORS.md. (4 days ago)
+        699abd7 Update changelog. (4 days ago)
+        3d5efe7 Update manual date and regenerate man pages. (4 days ago)
+        d929bbf Bump pandoc-lua-engine to 0.5.0.1 (4 days ago)
+        f7e0f5f Bump pandoc, pandoc-cli to 3.8.2.1 (4 days ago)
+        1b9b05e cabal.project - remove obsolete constraint for data-default. (4 days ago)
+        3766e39 pandoc-lua-engine: allow citeproc 0.11. (4 days ago)
+
+    ○ pendulum-nvim  PendulumReport  PendulumStart  PendulumStop  PendulumStatus
+        b884353 doc: auto-generate vimdoc (4 months ago)
+        e4d70cc fix(csv): add row validation in table to csv conversion (4 months ago)
+        bdae9eb doc: auto-generate vimdoc (7 months ago)
+        6d519ef fix: tweak formatting in hours view for empty times (7 months ago)
+        0aa64bb doc: auto-generate vimdoc (7 months ago)
+        6b58e12 chore: rename remote plugin go module (7 months ago)
+        4521d84 doc: auto-generate vimdoc (7 months ago)
+        16a0da0 doc: update README (7 months ago)
+
+    ○ pomo.nvim  TimerStop  TimerRepeat  TimerStart
+        7e06e52 chore(release): bump version to v0.7.0 for release (1 year, 3 months ago)
+        8b7984f Fix `:TimerSession` command to not duplicate timers (1 year, 3 months ago)
+        247c69c chore(docs): auto generate docs (1 year, 3 months ago)
+        a926b5e Add Timer Session Support with `:TimerSession` Command (#29) (1 year, 3 months ago)
+        ed72657 Add Windows support to system notifier  (#25) (1 year, 5 months ago)
+        e650447 chore(docs): auto generate docs (1 year, 7 months ago)
+        704430b loading dropdown theme is handled internally now (#23) (1 year, 7 months ago)
+        84cbd34 style (1 year, 7 months ago)
+
+    ○ quicklisp.nvim
+        8d3ed8c Use non-deprecated checkhealth syntax (1 year, 10 months ago)
+        b7d0fc3 Add declarations and some style improvements (7 years ago)
+        e1ddb7a Improve the string-case macro (7 years ago)
+        5adbefa Remove one unused function (7 years ago)
+        0716892 Shorten string matching with a custom macro (7 years ago)
+        1255955 Add preliminary health check (7 years ago)
+        209c497 Fix README (7 years ago)
+        28defd0 Initial commit (7 years ago)
+
+    ○ screenkey.nvim  Screenkey
+        95f2fb1 chore(docs): auto-generate vimdoc (11 days ago)
+        cee23bc chore(gitignore): ignore `doc/tags` (11 days ago)
+        d37af49 chore(docs): auto-generate vimdoc (11 days ago)
+        0f6ac94 refactor: consistently use `str:<fun>` instead of `string.<fun>(str)` (#67) (11 days ago)
+        c466198 docs(contributing): update contributing guidelines (9 weeks ago)
+        df2da49 ci(prettier): check `TODO.md` formatting (9 weeks ago)
+        4fedeff chore(docs): auto-generate vimdoc (9 weeks ago)
+        755b58c style: variable name (9 weeks ago)
+
+    ● telescope.nvim 0.56ms  plenary.nvim
+        b4da76b fix(lsp): stop using deprecated `client.supports_method` function (#3468) (6 months ago)
+        a4ed825 fix(lsp): don't return negative values from `item_to_location` (#3433) (7 months ago)
+        a17d611 fix(lsp): add default position encoding when calling `symbols_to_items()` (#3418) (7 months ago)
+        814f102 fix!(git_status): keep picker open if pwd is clean (#3415) (8 months ago)
+        5899106 fix(utils): `filter_symbols` return table consistently (#3421) (8 months ago)
+        78857db fix(previewer): check bufnr is not nil (#3410) (8 months ago)
+        415af52 chore(ci): use latest macOS instead of deprecated macos-12 (#3400) (10 months ago)
+        2eca9ba fix: offset_encoding is required now in `make_position_params` (#3368) (11 months ago)
+
+    ○ thesaurus_query.vim  markdown  text  tex
+        92be7e0 #54 fix issue caused by unescaped ` symbol (2 years, 10 months ago)
+        84ddbc7 #55 mthesaur: add truncation recommendation to README (2 years, 10 months ago)
+        2bb83fa #55 mthesaur: return all synonyms by meaning group (2 years, 10 months ago)
+        23d8aa3 resolve #51: accept wildcard in runtimepath in thesaurus_query Python package path finding (3 years, 9 months ago)
+        65e67a2 Merge pull request #49 from JRasmusBm/fix-typo-in-variable-name (4 years, 4 months ago)
+        2194fb1 Docs: Fix typo in variable name (4 years, 4 months ago)
+        830a20e Update CHANGELOG.org (6 years ago)
+        906c9fc Update ChangeLog for new release (6 years ago)
+
+    ○ toggleterm.nvim
+        50ea089 chore(main): release 2.13.1 (#625) (10 months ago)
+        344fc18 chore(build): auto-generate vimdoc (10 months ago)
+        22aefd4 fix: check for terminal win before check if is valid (#622) (10 months ago)
+        87b2d6a chore(build): auto-generate vimdoc (12 months ago)
+        022ff55 chore(main): release 2.13.0 (#600) (12 months ago)
+        5969229 chore(build): auto-generate vimdoc (12 months ago)
+        db7607c feat: add responsive capabilities for horizontal direction (#618) (12 months ago)
+        137d06f fix: set_mode may not be taken into account (#596) (1 year, 3 months ago)
+
+    ● tokyonight.nvim 4.7ms  start
+        545d72c chore(main): release 4.14.1 (#746) (5 hours ago)
+        8ed0eff chore(build): auto-generated build files (6 hours ago)
+        a773606 fix(eza): fix missing closing quote in group_other foreground color (6 hours ago)
+        f7cf298 chore(build): auto-generated build files (6 hours ago)
+        2391241 fix(eza): fix yaml theme (#745) (6 hours ago)
+        1199c0e chore(main): release 4.14.0 (#743) (15 hours ago)
+        02f7c20 style: format (15 hours ago)
+        934fc51 chore(build): auto-generate docs (15 hours ago)
+
+    ○ translate.nvim
+        1a841e5 Merge pull request #41 from alerque/update-deprecated-function (5 months ago)
+        9d474a4 fix: Update vim LSP usage to avoid deprecation warning (5 months ago)
+        e8929da Merge pull request #40 from alerque/luaificate (6 months ago)
+        9453c8d docs: Use all Lua config snippet instead of vimscript heredoc (6 months ago)
+        e89e284 update deepl api (7 months ago)
+        9f52254 Merge pull request #37 from ccjmne/main (10 months ago)
+        fb5257f doc: Fix 'defalut' typo in 6 places (10 months ago)
+        30cc9e9 Merge pull request #33 from shutils/add-zindex-to-config (2 years, 2 months ago)
+
+    ○ transparent.nvim  TransparentEnable  TransparentDisable  TransparentToggle
+        8ac5988 fix: backward-compatible usage of `vim.validate` (4 months ago)
+        d41ae9b fix: deprecated calls of vim.validate (#83) (5 months ago)
+        8a2749a docs: update readme (1 year, 2 months ago)
+        c3927f5 chore: validate opts (1 year, 2 months ago)
+        6cdb880 fix: handle nullable opts before validating it (#72) (1 year, 2 months ago)
+        2c78d94 fix: fix `vim.validate` call (#71) (1 year, 2 months ago)
+        d96b424 feat: add `on_clear` and user event `TransparentClear` (#70) (1 year, 2 months ago)
+        fd35a46 Add more default colors (1 year, 11 months ago)
+
+    ○ trouble.nvim  Trouble
+        c098362 chore(build): auto-generate docs (2 weeks ago)
+        9ce0cf0 ci: update minit.lua (2 weeks ago)
+        4bbad87 ci: update test scripts (2 weeks ago)
+        f176232 chore(build): auto-generate docs (5 weeks ago)
+        20189f0 fix(treesitter): better check for decoration provider `on_range`. Fixes #661 (5 weeks ago)
+        3fb3bd7 fix(view): adapt to the changes for "nvim_set_decoration_provider" (#656) (6 weeks ago)
+        957109d chore(build): auto-generate docs (6 weeks ago)
+        7fe0ca6 fix(lsp): deprecated warnings (6 weeks ago)
+
+    ○ undotree  UndotreeToggle
+        0f1c981 Merge pull request #205 from AshishBhattarai/master (3 weeks ago)
+        7942141 Improve disabled buftypes check (3 weeks ago)
+        340bfe8 Merge pull request #204 from AshishBhattarai/master (3 weeks ago)
+        9ebeb29 Add new option undotree_DisabledBuftypes with good defaults (3 weeks ago)
+        fe9a9d0 Merge pull request #202 from anonymousgrasshopper/master (8 weeks ago)
+        b1e3df6 feat: add undotree_StatusLine option (8 weeks ago)
+        28f2f54 Merge pull request #201 from anonymousgrasshopper/master (3 months ago)
+        c57b908 fix: ignore events in undotree.SetTargetFocus() (4 months ago)
+
+    ○ vim-floaterm
+        fd4bdd6 fix: support Vim 8.0 without default argument values (4 months ago)
+        b18b41d master adapt to health api change in 0.11.0 - https://github.com/neovim/neovim/commit/c08b03076167837cff9eb66c19440d727e6dad31 (5 months ago)
+        b02d1f4 Un-silence checktime of floaterm#window#hide (5 months ago)
+        3bc4a50 fix: respect winborder option which introduced since neovim 0.11 (5 months ago)
+        204a01a fix chdir function for nvim (6 months ago)
+        f65ad8d Update README.md (6 months ago)
+        4e28c8d Add support for HGEDITOR similar to GIT_EDITOR (1 year, 7 months ago)
+        64b1003 use exepath of progname in case progpath erroneous (1 year, 7 months ago)
+
+    ○ vim-fugitive  Gtabedit  Gpedit  Gcommit  Gpush  Gpull  Gfetch  Grebase  Gmerge  Git  G  Gstatus  Gdiff  Gvdiffsplit  Ghdiffsplit  Gblame  Glog  Gclog  Gread  Gwrite  Ggrep  GMove  Gdiffsplit  GDelete  GBrowse  GRemove  GRename  Glgrep  Gedit  Gsplit  Gvsplit  <leader>gP  <leader>gf  <leader>ga  <leader>gr  <leader>gB  <leader>go  <leader>gm  <leader>gR  <leader>gO  <leader>gO (v)  <leader>gs  <leader>gd  <leader>gb  <leader>gl  <leader>gL  <leader>gc  <leader>gC  <leader>gp
+        61b51c0 Fix race conditions generating sequencer sections (3 months ago)
+        e0715fe Fix check for revert/cherry-pick (3 months ago)
+        53d6ba9 Remove unnecessary include guard (3 months ago)
+        d3e2b58 Fix GBrowse for newer Netrw versions (3 months ago)
+        593f831 Fix interpretation of :% when % is absolute (4 months ago)
+        4a745ea Remove antiquated `a` map (8 months ago)
+        b068eaf Drop */# maps in visual mode (9 months ago)
+        d74a7cf Add cW map as commit --fixup=reword: (9 months ago)
+
+    ○ vim-latex-live-preview  tex  plaintex
+        e1906cd Fixed handling paths with spaces (#129) (2 years, 1 month ago)
+        e1a6a31 Remove output on already loaded (#126) (2 years, 7 months ago)
+        afdf3f4 Make use of TEXINPUTS from environment (#107) (5 years ago)
+        4c4678d Do not check that explicitly-set engine or previewer is executable (#109) (5 years ago)
+        32d1a91 Update biber documentation (5 years ago)
+        f173602 Merge pull request #99 from sunwukonga/master (5 years ago)
+        b3dfda5 Fixes #46 (5 years ago)
+        855c309 Merge pull request #61 from ChrisLane/patch-1 (7 years ago)
+
+    ○ vim-pencil
+        6d70438 Merge pull request #104 from openalloc/master (2 years, 7 months ago)
+        c9d7f68 Unnecessary regex modifier on my recent change (2 years, 7 months ago)
+        4ad39c5 Merge pull request #103 from openalloc/master (2 years, 7 months ago)
+        449be7a Blacklist support Jekyll front matter #92 (2 years, 7 months ago)
+        5b4110d Update links to point to preservim (3 years, 8 months ago)
+        942e02e Fix broken link to Language of Vim/NeoVim (#97) (4 years, 4 months ago)
+        2135374 Add -bar suffix to commands to allow use as first of series of commands with | (#94) (4 years, 9 months ago)
+        dad5a36 Added support for :help vim-pencil (#91) (5 years ago)
+
+    ● vim-repeat 0.13ms  VeryLazy
+        6584602 One last fix attempt before I revert everything (1 year, 4 months ago)
+        5bd4c87 Restore unfolding during undo (1 year, 4 months ago)
+        a89a4d0 Avoid stacktrace on undo in 'nomodifiable' buffer (1 year, 4 months ago)
+        4bac219 Drop FUNDING.yml in favor of account-level default (1 year, 4 months ago)
+        8b4435c Account for Vim undo double-incrementing b:changedtick (1 year, 4 months ago)
+        e0466d2 Bump minimum Vim version to 8.0 (1 year, 4 months ago)
+        24afe92 Rework error return to prevent off-by-one in Ex mode (4 years, 9 months ago)
+        c947ad2 Add sponsor button (6 years ago)
+
+    ○ vim-textobj-sentence  markdown  tex  text  org
+        c5dd562 Fix issues link (3 years, 8 months ago)
+        f9ebb2f Update links to point to preservim (3 years, 8 months ago)
+        a7b58aa Added reference to new vim-wordchipper plugin (6 years ago)
+        a145e2f Fix the textobj-user repo name (6 years ago)
+        81513f1 Merge pull request #11 from lafrenierejm/add-messieurs-ab (9 years ago)
+        034a126 Add "Messrs" as abbreviation for "messieurs" (9 years ago)
+        096f0ed Merge pull request #7 from alerque/patch-1 (10 years ago)
+        d75e6af fix prose for more natural reading (10 years ago)
+
+    ○ vim-textobj-user  vim-textobj-sentence
+        41a675d Add doc/tags to .gitignore (6 years ago)
+        9861dc6 Merge pull request #73 from kana/add-filetype-example (6 years ago)
+        e2f60c4 Add example to define text objects for a filetype (6 years ago)
+        074ce25 Merge branch 'prepare-for-0.7.6' (7 years ago)
+        b763624 Bump up version (7 years ago)
+        b69981b Update copyright notice (7 years ago)
+        bc753e0 Add release notes (7 years ago)
+        6493457 Merge branch 'keep-visual-mode-after-move-x-function' (7 years ago)
+
+    ○ vimtex  tex  bib
+        be9deac doc: minor fix (10 days ago)
+        7c7880d merge: improve docs on Skim settings (12 days ago)
+        112029b chore: minor adjustment (12 days ago)
+        ba4156f doc: Hint about using the full path to vim in Skim settings on OS X (12 days ago)
+        8a36441 merge: update docs for SumatraPDF (12 days ago)
+        229ed46 chore: minor adjustments (12 days ago)
+        3010ee1 Update SumatraPDF docs in vimtex.txt (12 days ago)
+        5c457a8 fix: minor regression (2 weeks ago)
+
+    ● which-key.nvim 1.32ms  VeryLazy
+        b4177e3 chore(build): auto-generate docs (2 weeks ago)
+        f76f78e ci: update minit.lua (2 weeks ago)
+        5e2a0b7 ci: update test scripts (2 weeks ago)
+        904308e chore(build): auto-generate docs (4 weeks ago)
+        7ea0fe4 fix(view): double footer border. Fixes #964 (#974) (4 weeks ago)
+        370ec46 chore(build): auto-generate docs (8 months ago)
+        fcbf4ee chore(main): release 3.17.0 (#950) (8 months ago)
+        5bf7a73 chore(build): auto-generate docs (8 months ago)
+
+    ○ yazi.nvim  Yazi  Yazi cwd  Yazi toggle  <leader>y
+        141c195 chore(deps): update dependency folke/lazy.nvim to v11.17.2 (#1311) (11 hours ago)
+        34dd3e9 chore: fix renovate leaving out quotes in lua regex (#1312) (11 hours ago)
+        52a84f3 chore(deps): update dependency ubi:burntsushi/ripgrep to v15.1.0 (#1310) (15 hours ago)
+        b0ebdcf chore(deps): update https://github.com/sxyazi/yazi digest to 157156b (#1309) (2 days ago)
+        a584c0f chore(deps): update https://github.com/sxyazi/yazi digest to 4b08e8d (#1306) (2 days ago)
+        14da37b chore(deps): update all non-major dependencies (#1305) (2 days ago)
+        47e83f0 chore(deps): update https://github.com/sxyazi/yazi digest to 4e32044 (#1304) (4 days ago)
+        19c0411 ci: renovate keeps the selene version up to date (#1303) (5 days ago)
+
+    ○ zen-mode.nvim
+        438a59c chore(build): auto-generate docs (2 weeks ago)
+        f0f18eb ci: update test scripts (2 weeks ago)
+        dfcb72a chore(build): auto-generate docs (5 weeks ago)
+        94271cf fix(border): set window border to none (#180) (5 weeks ago)
+        863f150 chore(build): auto-generate docs (11 months ago)
+        e7ea2cc fix(main): fix EndOfBuffer highlight as well (#156) (11 months ago)
+        29b292b chore(build): auto-generate docs (1 year, 3 months ago)
+        f259825 ci: update (1 year, 3 months ago)
+
+
+  Loaded (2)
+    ● percybrain-dashboard 0.42ms  start
+    ● percybrain-gtd 0.22ms  start

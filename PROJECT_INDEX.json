@@ -1,0 +1,608 @@
+{
+  "project": {
+    "name": "PercyBrain",
+    "description": "Neovim-based Zettelkasten and AI writing environment optimized for neurodiversity",
+    "version": "1.0.0",
+    "philosophy": "Zettelkasten-first knowledge management with local AI integration and distributed cognition architecture",
+    "target_audience": "Writers, researchers, and knowledge workers with ADHD/autism-first design principles",
+    "status": "Active - Seeking maintainers (original author moved to Emacs Nov 2024)",
+    "platforms": {
+      "supported": ["Linux", "macOS", "Android (Termux)"],
+      "limited": ["Windows", "iPad"]
+    }
+  },
+  "repository": {
+    "tracked_files": 249,
+    "total_plugins": 68,
+    "total_workflows": 14,
+    "total_workflow_imports": 17,
+    "total_config_files": 7,
+    "total_test_lines": 5656,
+    "total_documentation_files": 29
+  },
+  "architecture": {
+    "bootstrap_chain": [
+      "init.lua",
+      "lua/config/init.lua",
+      "lazy.nvim setup",
+      "lua/plugins/init.lua",
+      "17 workflow imports (14 directories, 4 prose-writing subdirs)"
+    ],
+    "core_principles": [
+      "Zettelkasten-first knowledge management",
+      "Local AI privacy (Ollama integration)",
+      "Distributed cognition system (Neovim + AI + documentation)",
+      "Quality-first development (no shortcuts)",
+      "Neurodiversity-driven design (ADHD/autism-optimized)"
+    ],
+    "plugin_manager": {
+      "name": "lazy.nvim",
+      "author": "folke",
+      "loading_strategy": "lazy by default with event triggers"
+    }
+  },
+  "system_requirements": {
+    "required": {
+      "neovim": ">=0.8.0 (LuaJIT)",
+      "git": ">=2.19.0",
+      "nerd_font": "any (for icons)"
+    },
+    "recommended": {
+      "latex": "TexLive or MikTeX",
+      "pandoc": "document conversion",
+      "languagetool": "grammar checking",
+      "nodejs": "LSP servers",
+      "ripgrep": "fast search",
+      "ollama": "local AI (llama3.2 model)",
+      "iwe": "IWE LSP (cargo install iwe)",
+      "sembr": "semantic bridge (uv tool install sembr)"
+    },
+    "current_neovim": "v0.11.4 (LuaJIT 2.1.1753364724)"
+  },
+  "configuration": {
+    "entry_point": "init.lua",
+    "core_files": [
+      {
+        "path": "lua/config/init.lua",
+        "purpose": "Bootstrap lazy.nvim and load core modules",
+        "loads": ["globals", "keymaps", "options", "zettelkasten"]
+      },
+      {
+        "path": "lua/config/globals.lua",
+        "purpose": "Global variables and theme settings"
+      },
+      {
+        "path": "lua/config/keymaps.lua",
+        "purpose": "All keyboard shortcuts (leader = space)"
+      },
+      {
+        "path": "lua/config/options.lua",
+        "purpose": "Vim options (spell=true, wrap=true, prose-optimized)"
+      },
+      {
+        "path": "lua/config/zettelkasten.lua",
+        "purpose": "Core Zettelkasten module with paths and templates"
+      },
+      {
+        "path": "lua/config/privacy.lua",
+        "purpose": "Privacy settings and register protection"
+      },
+      {
+        "path": "lua/config/window-manager.lua",
+        "purpose": "Window management and layout configurations"
+      }
+    ],
+    "zettelkasten_paths": {
+      "home": "~/Zettelkasten",
+      "inbox": "~/Zettelkasten/inbox",
+      "daily": "~/Zettelkasten/daily",
+      "templates": "~/Zettelkasten/templates",
+      "export_path": "~/blog/content/zettelkasten"
+    }
+  },
+  "workflows": {
+    "zettelkasten": {
+      "description": "PRIMARY workflow - Personal knowledge management with linking and AI",
+      "plugin_count": 5,
+      "plugins": [
+        {
+          "name": "telekasten.nvim",
+          "purpose": "Zettelkasten core functionality"
+        },
+        {
+          "name": "telescope.nvim",
+          "purpose": "Fuzzy finding for notes"
+        },
+        {
+          "name": "iwe-lsp",
+          "purpose": "Markdown LSP with link analysis"
+        },
+        {
+          "name": "sembr-integration",
+          "purpose": "Semantic bridge integration"
+        },
+        {
+          "name": "img-clip.nvim",
+          "purpose": "Paste images into notes"
+        }
+      ],
+      "keybindings": {
+        "capture": "<leader>zi (inbox), <leader>zn (new), <leader>zd (daily)",
+        "organize": "<leader>zf (find), <leader>zg (grep), <leader>zb (backlinks)",
+        "ai": "<leader>aa (menu), <leader>ae (explain), <leader>as (summarize)"
+      }
+    },
+    "ai-sembr": {
+      "description": "Local AI integration with Ollama and SemBr",
+      "plugin_count": 3,
+      "plugins": [
+        {
+          "name": "ollama.nvim",
+          "purpose": "Ollama integration for local AI"
+        },
+        {
+          "name": "sembr.nvim",
+          "purpose": "Semantic bridge for AI context"
+        },
+        {
+          "name": "ai-draft.nvim",
+          "purpose": "AI-powered draft generation"
+        }
+      ],
+      "ai_commands": 8,
+      "model": "llama3.2 (via Ollama)"
+    },
+    "prose-writing": {
+      "description": "Long-form prose editing with distraction-free modes",
+      "subcategories": {
+        "distraction-free": {
+          "plugin_count": 1,
+          "plugins": ["zen-mode.nvim"]
+        },
+        "editing": {
+          "plugin_count": 5,
+          "plugins": [
+            "vim-pencil",
+            "nvim-surround",
+            "vim-textobj-sentence",
+            "vim-repeat",
+            "undotree"
+          ]
+        },
+        "formatting": {
+          "plugin_count": 2,
+          "plugins": ["autopairs.nvim", "comment.nvim"]
+        },
+        "grammar": {
+          "plugin_count": 3,
+          "plugins": ["ltex-ls", "vale.nvim", "thesaurus_query.vim"]
+        }
+      },
+      "total_plugins": 11
+    },
+    "academic": {
+      "description": "Academic writing with LaTeX and BibTeX",
+      "plugin_count": 4,
+      "plugins": [
+        {
+          "name": "vimtex",
+          "purpose": "LaTeX support with compilation"
+        },
+        {
+          "name": "vim-pandoc",
+          "purpose": "Pandoc integration"
+        },
+        {
+          "name": "cmp-dictionary",
+          "purpose": "Dictionary completion"
+        },
+        {
+          "name": "vim-latex-preview",
+          "purpose": "LaTeX preview"
+        }
+      ]
+    },
+    "publishing": {
+      "description": "Static site generation and document conversion",
+      "plugin_count": 3,
+      "plugins": [
+        {
+          "name": "hugo.nvim",
+          "purpose": "Hugo static site integration"
+        },
+        {
+          "name": "autopandoc.nvim",
+          "purpose": "Automatic Pandoc conversion"
+        },
+        {
+          "name": "markdown-preview.nvim",
+          "purpose": "Markdown preview in browser"
+        }
+      ]
+    },
+    "org-mode": {
+      "description": "Org-mode support for task management",
+      "plugin_count": 3,
+      "plugins": ["nvim-orgmode", "org-bullets.nvim", "headlines.nvim"]
+    },
+    "lsp": {
+      "description": "Language Server Protocol support",
+      "plugin_count": 4,
+      "servers": 12,
+      "plugins": [
+        {
+          "name": "mason.nvim",
+          "purpose": "LSP installer"
+        },
+        {
+          "name": "mason-lspconfig.nvim",
+          "purpose": "Mason-LSP bridge"
+        },
+        {
+          "name": "nvim-lspconfig",
+          "purpose": "LSP configurations"
+        },
+        {
+          "name": "none-ls.nvim",
+          "purpose": "Formatters and linters"
+        }
+      ],
+      "lsp_servers": [
+        "iwe (markdown_oxide)",
+        "ltex",
+        "lua_ls",
+        "bashls",
+        "jsonls",
+        "yamlls",
+        "marksman",
+        "html",
+        "cssls",
+        "ts_ls",
+        "pyright",
+        "clangd"
+      ]
+    },
+    "completion": {
+      "description": "Autocompletion engine",
+      "plugin_count": 1,
+      "plugins": [
+        {
+          "name": "nvim-cmp",
+          "purpose": "Completion engine with sources"
+        }
+      ]
+    },
+    "ui": {
+      "description": "User interface and theming",
+      "plugin_count": 9,
+      "themes": ["catppuccin", "gruvbox", "nightfox", "percybrain-theme (Blood Moon)"],
+      "plugins": [
+        "alpha.nvim (splash screen)",
+        "whichkey.nvim (keyboard help)",
+        "noice.nvim (notifications)",
+        "nvim-web-devicons",
+        "transparent.nvim"
+      ]
+    },
+    "navigation": {
+      "description": "File and buffer navigation",
+      "plugin_count": 3,
+      "plugins": [
+        {
+          "name": "nvim-tree.lua",
+          "purpose": "File explorer"
+        },
+        {
+          "name": "yazi.nvim",
+          "purpose": "Terminal file manager integration"
+        },
+        {
+          "name": "neoscroll.nvim",
+          "purpose": "Smooth scrolling"
+        }
+      ]
+    },
+    "utilities": {
+      "description": "General utilities and productivity tools",
+      "plugin_count": 14,
+      "plugins": [
+        "lazygit.nvim (Git integration)",
+        "fugitive.vim (Git operations)",
+        "gitsigns.nvim (Git signs)",
+        "diffview.nvim (Diff viewer)",
+        "toggleterm.nvim (Terminal)",
+        "floaterm.vim (Floating terminal)",
+        "translate.nvim (Translation)",
+        "pomo.nvim (Pomodoro timer)",
+        "auto-save.nvim (Auto-save)",
+        "auto-session.nvim (Session management)",
+        "high-str.nvim (Highlighting)",
+        "hardtime.nvim (Vim habit trainer)",
+        "screenkey.nvim (Screencast keys)",
+        "mcp-marketplace.nvim (MCP integration)"
+      ]
+    },
+    "treesitter": {
+      "description": "Syntax parsing and highlighting",
+      "plugin_count": 1,
+      "plugins": [
+        {
+          "name": "nvim-treesitter",
+          "purpose": "Treesitter integration"
+        }
+      ]
+    },
+    "lisp": {
+      "description": "Common Lisp development support",
+      "plugin_count": 2,
+      "plugins": ["cl-neovim", "quicklisp.nvim"]
+    },
+    "experimental": {
+      "description": "Experimental features under development",
+      "plugin_count": 3,
+      "plugins": ["pendulum.nvim", "styledoc.nvim", "lynx-wiki.nvim"]
+    },
+    "diagnostics": {
+      "description": "Error aggregation and troubleshooting",
+      "plugin_count": 1,
+      "plugins": [
+        {
+          "name": "trouble.nvim",
+          "purpose": "Unified error aggregation"
+        }
+      ]
+    }
+  },
+  "testing": {
+    "framework": "plenary.nvim (busted)",
+    "status": "44/44 passing",
+    "standards_enforced": 6,
+    "test_structure": {
+      "unit_tests": {
+        "path": "tests/plenary/unit/",
+        "categories": [
+          "config (config_spec.lua, globals_spec.lua, options_spec.lua, keymaps_spec.lua)",
+          "zettelkasten (config_spec.lua, link_analysis_spec.lua)",
+          "ai-sembr (ollama_spec.lua)",
+          "sembr (formatter_spec.lua, integration_spec.lua)",
+          "window-manager (window-manager_spec.lua)"
+        ]
+      },
+      "workflow_tests": {
+        "path": "tests/plenary/workflows/",
+        "tests": ["zettelkasten_spec.lua"]
+      },
+      "performance_tests": {
+        "path": "tests/plenary/performance/",
+        "tests": ["startup_spec.lua"]
+      },
+      "core_tests": {
+        "path": "tests/plenary/",
+        "tests": ["core_spec.lua"]
+      }
+    },
+    "helpers": {
+      "path": "tests/helpers/",
+      "files": ["init.lua", "assertions.lua", "mocks.lua"]
+    },
+    "test_scripts": [
+      "run-all-unit-tests.sh (entry point)",
+      "run-unit-tests.sh",
+      "run-plenary.sh",
+      "run-ollama-tests.sh",
+      "integration-tests.sh",
+      "simple-test.sh"
+    ],
+    "total_test_lines": 5656
+  },
+  "quality_gates": {
+    "pre_commit_hooks": {
+      "total": 14,
+      "categories": {
+        "syntax": ["luacheck (Lua syntax)", "shellcheck (Shell syntax)"],
+        "formatting": ["stylua (Lua formatter)", "shfmt (Shell formatter)"],
+        "structure": [
+          "validate-plugin-spec.lua (plugin specs)",
+          "validate-test-standards.lua (test quality)"
+        ],
+        "security": [
+          "detect-debug-code.sh (debug removal)",
+          "opsec-scan (sensitive data)"
+        ],
+        "testing": ["run-all-unit-tests.sh (44/44 passing)"],
+        "documentation": ["mdformat (markdown formatting)"]
+      }
+    },
+    "validation_scripts": {
+      "path": "hooks/",
+      "scripts": [
+        "detect-debug-code.sh",
+        "validate-plugin-spec.lua",
+        "validate-test-standards.lua"
+      ]
+    },
+    "test_standards": [
+      "1. Helper/mock imports (when used)",
+      "2. before_each/after_each setup",
+      "3. AAA comments (Arrange/Act/Assert)",
+      "4. No _G. pollution",
+      "5. Local helper functions",
+      "6. No raw assert.contains"
+    ]
+  },
+  "documentation": {
+    "structure": "Diataxis framework (tutorial/how-to/reference/explanation)",
+    "total_files": 29,
+    "organization": {
+      "tutorials": {
+        "count": 3,
+        "files": [
+          {
+            "path": "docs/tutorials/GETTING_STARTED.md",
+            "purpose": "Zero to first linked note (30 min)",
+            "audience": "new users"
+          },
+          {
+            "path": "docs/tutorials/ZETTELKASTEN_TUTORIAL.md",
+            "purpose": "Build first 20 notes in 7 days",
+            "audience": "Zettelkasten beginners"
+          },
+          {
+            "path": "docs/tutorials/ACADEMIC_WRITING_TUTORIAL.md",
+            "purpose": "First academic paper with LaTeX/citations (60-90 min)",
+            "audience": "academic writers"
+          }
+        ]
+      },
+      "how_to_guides": {
+        "count": 6,
+        "files": [
+          "docs/how-to/ZETTELKASTEN_DAILY_PRACTICE.md (quick reference)",
+          "docs/how-to/AI_USAGE_GUIDE.md (Ollama + 8 AI commands)",
+          "docs/how-to/MISE_USAGE.md (task runner)",
+          "docs/how-to/MIGRATION_FROM_OBSIDIAN.md (Obsidian migration)",
+          "docs/development/PRECOMMIT_HOOKS.md (quality gates)",
+          "docs/how-to-use-iwe.md (IWE LSP usage)"
+        ]
+      },
+      "reference": {
+        "count": 6,
+        "files": [
+          "docs/reference/KEYBINDINGS_REFERENCE.md (100+ bindings)",
+          "docs/reference/LSP_REFERENCE.md (12 LSPs)",
+          "docs/reference/PLUGIN_REFERENCE.md (67 plugins)",
+          "QUICK_REFERENCE.md (essential commands)",
+          "docs/testing/TEST_COVERAGE_REPORT.md (44/44 passing)",
+          "docs/testing/TESTING_GUIDE.md (validation architecture)"
+        ]
+      },
+      "explanation": {
+        "count": 5,
+        "files": [
+          "docs/explanation/WHY_PERCYBRAIN.md (problems solved, philosophy)",
+          "docs/explanation/NEURODIVERSITY_DESIGN.md (ADHD/autism-first)",
+          "docs/explanation/COGNITIVE_ARCHITECTURE.md (distributed cognition)",
+          "docs/explanation/LOCAL_AI_RATIONALE.md (privacy, offline-first)",
+          "docs/explanation/MISE_RATIONALE.md (task running philosophy)"
+        ]
+      },
+      "troubleshooting": {
+        "count": 2,
+        "files": [
+          "docs/troubleshooting/TROUBLESHOOTING_GUIDE.md (8 categories, 60+ solutions)",
+          "docs/troubleshooting/ERROR_LOGGING_GUIDE.md (diagnostic procedures)"
+        ]
+      },
+      "technical": {
+        "count": 7,
+        "files": [
+          "PERCYBRAIN_DESIGN.md (system architecture)",
+          "CLAUDE.md (AI assistant context)",
+          "docs/setup/MCP_CONNECTION_GUIDE.md",
+          "docs/specs/hardware-local-ai.md",
+          "docs/PLUGIN_ANALYSIS.md",
+          "docs/REFACTORING_COMPLETE.md",
+          "docs/WORKFLOW_REFACTORING_PLAN.md"
+        ]
+      }
+    },
+    "consolidation_status": {
+      "before": "70+ scattered docs",
+      "after": "21 organized files",
+      "reduction": "70%",
+      "token_efficiency": "≥2.0x compression",
+      "diataxis_compliance": "100%"
+    }
+  },
+  "development": {
+    "git": {
+      "current_branch": "workflow/zettelkasten-wiki-ai-pipeline",
+      "main_branch": "main",
+      "recent_work": [
+        "feat(tests): automatic test discovery for all runners (d7ce0fd)",
+        "GTD Phase 3: AI-powered task decomposition complete (ef4b0f6)",
+        "Health check comprehensive issue fixes (ef4b0f6)"
+      ],
+      "working_tree": "Modified: 11 files (9 deleted assets, 1 modified keymap, 1 new IWE LSP)"
+    },
+    "workflow": {
+      "startup": "nvim",
+      "plugin_sync": ":Lazy sync",
+      "health_check": ":checkhealth",
+      "testing": "./tests/run-all-unit-tests.sh",
+      "quality_gates": "pre-commit hooks (14 total)"
+    },
+    "patterns": {
+      "quality_first": "No shortcuts, fix errors before commit",
+      "trust_based_delegation": "Progressive trust → full domain delegation",
+      "aesthetic_driven": "Form = function when therapeutic",
+      "distributed_cognition": "Neovim + AI + documentation as cognitive system"
+    }
+  },
+  "ai_integration": {
+    "serena_memories": {
+      "total": "30+",
+      "permanent": [
+        "project_overview",
+        "codebase_structure",
+        "percy_development_patterns",
+        "documentation_consolidation_token_optimization_2025-10-19"
+      ],
+      "access_commands": [
+        "list_memories",
+        "read_memory('name')"
+      ]
+    },
+    "mcp_servers": {
+      "available": [
+        "context7 (library documentation)",
+        "sequential (multi-step reasoning)",
+        "magic (UI components)",
+        "morphllm (pattern edits)",
+        "serena (project memory)",
+        "playwright (browser testing)"
+      ],
+      "configuration": ".mcp.json"
+    }
+  },
+  "key_workflows_summary": {
+    "zettelkasten": {
+      "capture": "Inbox notes, daily notes, new permanent notes",
+      "organize": "Find notes, grep content, view backlinks",
+      "publish": "Export to static site (Hugo)"
+    },
+    "ai_writing": {
+      "commands": 8,
+      "model": "llama3.2 (Ollama)",
+      "features": ["explain", "summarize", "draft", "rewrite", "expand"]
+    },
+    "academic": {
+      "latex": "VimTeX with compilation and concealment",
+      "citations": "BibTeX integration with Zettelkasten",
+      "grammar": "ltex-ls language server"
+    }
+  },
+  "cross_references": {
+    "documentation": {
+      "main_index": "CLAUDE.md",
+      "user_guide": "README.md",
+      "architecture": "PERCYBRAIN_DESIGN.md",
+      "quick_start": "docs/tutorials/GETTING_STARTED.md"
+    },
+    "navigation": {
+      "max_clicks_to_any_doc": 3,
+      "entry_points": ["CLAUDE.md", "README.md"]
+    }
+  },
+  "metadata": {
+    "generated": "2025-10-21",
+    "generator": "sc:index --update (Claude Code)",
+    "version": "1.1.0",
+    "branch": "workflow/zettelkasten-wiki-ai-pipeline",
+    "total_tracked_files": 249,
+    "total_plugins": 68,
+    "total_workflows": 14,
+    "total_workflow_imports": 17,
+    "test_status": "44/44 passing"
+  }
+}

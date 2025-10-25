@@ -149,13 +149,7 @@ iThis is a very long sentence that contains multiple clauses and should be broke
 
 ### 5. Test Keymaps
 
-| Keymap        | Command            | Expected Result                 |
-| ------------- | ------------------ | ------------------------------- |
-| `<leader>zs`  | Format with SemBr  | Text breaks into semantic lines |
-| `<leader>zt`  | Toggle auto-format | Enable/disable format on save   |
-| `<leader>gsd` | SemBr Git diff     | Diff with word wrap enabled     |
-| `<leader>gsb` | SemBr Git blame    | Blame with line wrapping        |
-| `<leader>gsc` | SemBr Git commit   | Commit with SemBr formatting    |
+| Keymap | Command | Expected Result | | ------------- | ------------------ | ------------------------------- | | `<leader>zs` | Format with SemBr | Text breaks into semantic lines | | `<leader>zt` | Toggle auto-format | Enable/disable format on save | | `<leader>gsd` | SemBr Git diff | Diff with word wrap enabled | | `<leader>gsb` | SemBr Git blame | Blame with line wrapping | | `<leader>gsc` | SemBr Git commit | Commit with SemBr formatting |
 
 ## Verification Commands
 

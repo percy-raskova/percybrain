@@ -199,83 +199,14 @@ end
 
 M.window_info = function()
   local wins = vim.api.nvim_list_wins()
-  local current = vim.api.nvim_get_current_win()
+  local _ = vim.api.nvim_get_current_win() -- Available for future use
   local info = string.format("🪟 Windows: %d total, current: %d", #wins, vim.fn.winnr())
   vim.notify(info, vim.log.levels.INFO)
 end
 
 -- ============================================================================
--- SETUP KEYBINDINGS
+-- Keymaps now managed in lua/config/keymaps/window.lua
+-- Business logic only below
 -- ============================================================================
-
-M.setup = function()
-  local keymap = vim.keymap.set
-  local opts = { noremap = true, silent = true }
-
-  -- Quick toggle between windows (ADHD optimization)
-  keymap("n", "<leader>ww", function()
-    vim.cmd("wincmd w")
-    vim.notify("🪟 Switched window", vim.log.levels.INFO)
-  end, vim.tbl_extend("force", opts, { desc = "Quick window toggle" }))
-
-  -- Navigation (lowercase hjkl)
-  keymap("n", "<leader>wh", function()
-    M.navigate("h")
-  end, vim.tbl_extend("force", opts, { desc = "Window left" }))
-  keymap("n", "<leader>wj", function()
-    M.navigate("j")
-  end, vim.tbl_extend("force", opts, { desc = "Window down" }))
-  keymap("n", "<leader>wk", function()
-    M.navigate("k")
-  end, vim.tbl_extend("force", opts, { desc = "Window up" }))
-  keymap("n", "<leader>wl", function()
-    M.navigate("l")
-  end, vim.tbl_extend("force", opts, { desc = "Window right" }))
-
-  -- Moving windows (uppercase HJKL)
-  keymap("n", "<leader>wH", function()
-    M.move_window("H")
-  end, vim.tbl_extend("force", opts, { desc = "Move window left" }))
-  keymap("n", "<leader>wJ", function()
-    M.move_window("J")
-  end, vim.tbl_extend("force", opts, { desc = "Move window down" }))
-  keymap("n", "<leader>wK", function()
-    M.move_window("K")
-  end, vim.tbl_extend("force", opts, { desc = "Move window up" }))
-  keymap("n", "<leader>wL", function()
-    M.move_window("L")
-  end, vim.tbl_extend("force", opts, { desc = "Move window right" }))
-
-  -- Splitting
-  keymap("n", "<leader>ws", M.split_horizontal, vim.tbl_extend("force", opts, { desc = "Split horizontal" }))
-  keymap("n", "<leader>wv", M.split_vertical, vim.tbl_extend("force", opts, { desc = "Split vertical" }))
-
-  -- Closing
-  keymap("n", "<leader>wc", M.close_window, vim.tbl_extend("force", opts, { desc = "Close window" }))
-  keymap("n", "<leader>wo", M.close_other_windows, vim.tbl_extend("force", opts, { desc = "Close other windows" }))
-  keymap("n", "<leader>wq", M.quit_window, vim.tbl_extend("force", opts, { desc = "Quit window" }))
-
-  -- Resizing
-  keymap("n", "<leader>w=", M.equalize_windows, vim.tbl_extend("force", opts, { desc = "Equalize windows" }))
-  keymap("n", "<leader>w<", M.maximize_width, vim.tbl_extend("force", opts, { desc = "Maximize width" }))
-  keymap("n", "<leader>w>", M.maximize_height, vim.tbl_extend("force", opts, { desc = "Maximize height" }))
-
-  -- Buffer management
-  keymap("n", "<leader>wb", M.list_buffers, vim.tbl_extend("force", opts, { desc = "List buffers" }))
-  keymap("n", "<leader>wn", M.next_buffer, vim.tbl_extend("force", opts, { desc = "Next buffer" }))
-  keymap("n", "<leader>wp", M.prev_buffer, vim.tbl_extend("force", opts, { desc = "Previous buffer" }))
-  keymap("n", "<leader>wd", M.delete_buffer, vim.tbl_extend("force", opts, { desc = "Delete buffer" }))
-
-  -- Layout presets (uppercase for layouts)
-  keymap("n", "<leader>wW", M.layout_wiki, vim.tbl_extend("force", opts, { desc = "Wiki workflow layout" }))
-  keymap("n", "<leader>wF", M.layout_focus, vim.tbl_extend("force", opts, { desc = "Focus layout" }))
-  keymap("n", "<leader>wR", M.layout_reset, vim.tbl_extend("force", opts, { desc = "Reset layout" }))
-  keymap("n", "<leader>wG", M.layout_research, vim.tbl_extend("force", opts, { desc = "Research layout" }))
-
-  -- Info
-  keymap("n", "<leader>wi", M.window_info, vim.tbl_extend("force", opts, { desc = "Window info" }))
-
-  vim.notify("🪟 PercyBrain window manager loaded", vim.log.levels.INFO)
-end
 
 return M

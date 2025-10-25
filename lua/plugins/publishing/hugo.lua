@@ -1,8 +1,36 @@
+-- Plugin: Hugo Integration
+-- Purpose: Publish Zettelkasten notes to Hugo static site (blog, digital garden, knowledge wiki)
+-- Workflow: publishing
+-- Why: Transforms private notes into public knowledge sharing. Hugo's speed and simplicity match
+--      Zettelkasten's plain-text philosophy. Commands streamline the publish workflow (new post,
+--      preview, build, deploy). Bridges personal knowledge management with audience engagement.
+--      Supports neurodiversity advocacy through accessible knowledge sharing.
+-- Config: full - custom commands for Hugo workflow
+--
+-- NOTE: Keybindings moved to lua/config/keymaps/workflows/hugo.lua (<leader>h* namespace)
+--       This plugin only provides user commands now. Hugo is being replaced with mkdocs.
+--
+-- Usage:
+--   :HugoNew [title] - Create new post in content/posts/
+--   :HugoServer - Start local preview server (http://localhost:1313)
+--   :HugoBuild - Build static site to public/
+--   :HugoPublish - Build + git commit + push (full deployment)
+--
+-- Dependencies:
+--   External: hugo (install with package manager or from gohugo.io)
+--
+-- Configuration Notes:
+--   - Assumes Hugo project structure (content/, themes/, config.toml)
+--   - Posts created in content/posts/ with kebab-case naming
+--   - HugoPublish does full CI/CD: build + commit + push (customize as needed)
+--   - Works with YAML frontmatter from Zettelkasten templates
+--   - Supports Hugo's markdown extensions and shortcodes
+
 return {
   "phelipetls/jsonpath.nvim", -- Dependency for Hugo
   ft = { "markdown", "md" },
   config = function()
-    -- Hugo commands
+    -- Hugo commands (keybindings in lua/config/keymaps/workflows/hugo.lua)
     vim.api.nvim_create_user_command("HugoNew", function(opts)
       local title = opts.args
       if title == "" then
@@ -28,10 +56,8 @@ return {
       vim.cmd("!hugo && git add . && git commit -m 'Publish' && git push")
     end, {})
 
-    -- Keymaps
-    local opts = { noremap = true, silent = true }
-    vim.keymap.set("n", "<leader>zp", ":HugoPublish<CR>", opts)
-    vim.keymap.set("n", "<leader>zv", ":HugoServer<CR>", opts)
-    vim.keymap.set("n", "<leader>zb", ":HugoBuild<CR>", opts)
+    -- NOTE: Keybindings removed - now managed in lua/config/keymaps/workflows/hugo.lua
+    -- Old bindings were <leader>zp, <leader>zv, <leader>zb
+    -- New bindings are <leader>hp, <leader>hv, <leader>hb
   end,
 }

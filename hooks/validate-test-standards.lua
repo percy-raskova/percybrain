@@ -10,8 +10,9 @@ local standards = {
     check = function(content)
       -- Only require imports if helpers/mocks are actually used
       local uses_helpers = content:match("helpers%.") or content:match("mocks%.")
-      local has_imports = content:match("require%([\"']tests%.helpers[\"']%)")
+      local has_imports = content:match("require%([\"']tests%.helpers")
         or content:match("require%([\"']tests%.helpers%.mocks[\"']%)")
+        or content:match("require%([\"']tests%.helpers%.test_framework[\"']%)")
 
       -- If not using helpers/mocks, pass automatically
       if not uses_helpers then
@@ -21,7 +22,7 @@ local standards = {
       -- If using them, must have imports
       return has_imports
     end,
-    fix = "Add: local helpers = require('tests.helpers') (only if using helpers/mocks)",
+    fix = "Add: local helpers = require('tests.helpers') or require('tests.helpers.test_framework')",
   },
   {
     name = "State Management (before_each/after_each)",
@@ -49,9 +50,9 @@ local standards = {
         return true -- No _G usage, pass
       end
 
-      -- If using _G, check if it's for testing global pollution
-      local testing_pollution = content:match("global pollution")
-        or content:match("Global Pollution")
+      -- If using _G, check if it's for testing global pollution (case-insensitive)
+      local content_lower = content:lower()
+      local testing_pollution = content_lower:match("global pollution")
         or content:match("doesn't leak global")
         or content:match("inspect _G")
 

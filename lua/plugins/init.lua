@@ -7,7 +7,7 @@ return {
   { "folke/neodev.nvim", opts = {} },
 
   -- Import all plugins from subdirectories
-  { import = "plugins.zettelkasten" },
+  -- { import = "plugins.zettelkasten" },
   { import = "plugins.ai-sembr" },
   { import = "plugins.prose-writing.distraction-free" },
   { import = "plugins.prose-writing.editing" },
@@ -15,7 +15,6 @@ return {
   { import = "plugins.prose-writing.grammar" },
   { import = "plugins.academic" },
   { import = "plugins.publishing" },
-  { import = "plugins.org-mode" },
   { import = "plugins.lsp" },
   { import = "plugins.completion" },
   { import = "plugins.ui" },

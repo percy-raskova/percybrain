@@ -119,14 +119,14 @@
 
 ### Core Configuration (lua/config/)
 
-- **init.lua**: Bootstraps lazy.nvim, loads globals/keymaps/options, sets up plugin system
+- **init.lua**: Bootstraps lazy.nvim, loads globals/keymaps/options, sets up plugin system → See `configuration_patterns` for bootstrap architecture
 - **globals.lua**: Global variables, theme settings
-- **keymaps.lua**: All keyboard shortcuts (leader = space)
+- **keymaps.lua**: All keyboard shortcuts (leader = space) → See `keymap_architecture_patterns` for organization strategy
 - **options.lua**: Vim options (spell=true, wrap=true, etc.)
 
 ### Plugin System (lua/plugins/)
 
-- **init.lua**: Loads neoconf and neodev plugins
+- **init.lua**: Loads neoconf and neodev plugins → See `configuration_patterns` for lazy.nvim integration
 - **\[plugin-name\].lua**: Individual plugin configs (one per file)
 - **lsp/**: LSP-specific configurations (mason, lspconfig, none-ls)
 
@@ -138,7 +138,7 @@
 
 ### Validation System (scripts/)
 
-**4-Layer Pyramid**:
+**4-Layer Pyramid**: → See `testing_best_practices` for validation architecture details
 
 1. **Layer 1** (~5s): Static validation (syntax, duplicates, deprecated APIs)
 2. **Layer 2** (~10s): Structural validation (plugin specs, keymaps)
@@ -147,7 +147,7 @@
 
 ### Documentation
 
-- **CLAUDE.md**: Primary documentation for Claude Code
+- **CLAUDE.md**: Primary documentation for Claude Code → See `documentation_strategy` for organization principles
 - **CONTRIBUTING.md**: Contribution guidelines and validation system docs
 - **README.md**: User-facing project README
 
@@ -161,12 +161,12 @@
 ### Plugin Loading
 
 - lazy.nvim scans `lua/plugins/*.lua` automatically
-- Each file must return `{ "author/repo", ... }` spec
+- Each file must return `{ "author/repo", ... }` spec → See `configuration_patterns` for plugin spec structure
 - Lazy loading by default (event triggers)
 
 ### Configuration Loading
 
-- `init.lua` → `config/init.lua` → loads config modules → lazy.nvim setup
+- `init.lua` → `config/init.lua` → loads config modules → lazy.nvim setup → See `configuration_patterns` for bootstrap sequence
 
 ### File Organization Rules
 
@@ -174,3 +174,66 @@
 - ✅ Only 2 allowed `init.lua`: `lua/plugins/init.lua` and `lua/config/init.lua`
 - ❌ No module structures in `lua/plugins/` (must return plugin spec)
 - ❌ No duplicate plugin files (e.g., nvim-tree.lua + nvimtree.lua)
+
+## Pattern References by Directory
+
+**lua/config/**
+
+- Bootstrap architecture → `configuration_patterns` (lazy.nvim setup)
+- Keymap organization → `keymap_architecture_patterns` (workflow-based structure)
+- Global variable patterns → `configuration_patterns` (theme setup)
+
+**lua/config/keymaps/**
+
+- Workflow-based keymap organization → `keymap_architecture_patterns`
+- Leader key patterns (<space>) → `keymap_architecture_patterns`
+- Namespace conventions (zettelkasten, prose, git, etc.) → `keymap_architecture_patterns`
+
+**lua/percybrain/gtd/**
+
+- Task management implementation → `gtd_implementation_reference`
+- AI decomposition patterns → `gtd_implementation_reference`
+- Inbox processing → `gtd_implementation_reference`
+
+**lua/plugins/**
+
+- Plugin spec structure → `configuration_patterns`
+- Lazy loading strategies (event/cmd/keys/ft) → `configuration_patterns`
+- One-plugin-per-file rule → `configuration_patterns`
+- LSP integration patterns → `configuration_patterns`
+
+**tests/**
+
+- Test architecture (contract/capability/regression/integration) → `testing_best_practices`
+- Startup tests → `testing_best_practices`
+- Helper/mock patterns → `testing_best_practices`
+- AAA comment conventions → `testing_best_practices`
+- Test standards enforcement (6/6) → `testing_best_practices`
+
+**scripts/**
+
+- 4-layer validation pyramid → `testing_best_practices`
+- Pre-commit hook integration → `testing_best_practices`
+- Static validation patterns → `testing_best_practices`
+
+**docs/**
+
+- Diataxis framework application → `documentation_strategy`
+- Tutorial/how-to/reference/explanation separation → `documentation_strategy`
+- Documentation quality patterns → `documentation_strategy`
+- YAML frontmatter best practices → `documentation_strategy`
+
+**Root Configuration Files**
+
+- .mise.toml → Task runner configuration, LUA_PATH setup
+- .mcp.json → MCP server configuration for Claude Code
+- lazy-lock.json → Plugin version lockfile (DO NOT manually edit)
+- .pre-commit-config.yaml → Quality gate definitions
+
+**Cross-Reference Summary**
+
+- Keymap changes → Check `keymap_architecture_patterns` for conventions
+- Plugin additions → Check `configuration_patterns` for spec structure
+- Test additions → Check `testing_best_practices` for standards
+- GTD features → Check `gtd_implementation_reference` for implementation patterns
+- Documentation → Check `documentation_strategy` for structure/quality

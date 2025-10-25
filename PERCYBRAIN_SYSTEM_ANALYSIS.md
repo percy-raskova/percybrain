@@ -12,14 +12,7 @@ PercyBrain is an ambitious Neovim-based Integrated Writing Environment with **70
 
 ### 🎯 Overall Health Score: 7.0/10
 
-| Dimension            | Score | Status                       |
-| -------------------- | ----- | ---------------------------- |
-| Sensory (Perception) | 8/10  | ✅ Strong monitoring         |
-| Motor (Actions)      | 7/10  | ⚠️ Some redundancy           |
-| Integration          | 5/10  | ❌ Format fragmentation      |
-| Error Detection      | 6/10  | ⚠️ Lacks aggregation         |
-| Performance          | 8/10  | ✅ Good lazy loading         |
-| AI Capabilities      | 7/10  | ✅ Innovative but fragmented |
+| Dimension | Score | Status | | -------------------- | ----- | ---------------------------- | | Sensory (Perception) | 8/10 | ✅ Strong monitoring | | Motor (Actions) | 7/10 | ⚠️ Some redundancy | | Integration | 5/10 | ❌ Format fragmentation | | Error Detection | 6/10 | ⚠️ Lacks aggregation | | Performance | 8/10 | ✅ Good lazy loading | | AI Capabilities | 7/10 | ✅ Innovative but fragmented |
 
 ______________________________________________________________________
 
@@ -278,13 +271,7 @@ ______________________________________________________________________
 
 ## 📊 Compatibility Matrix
 
-| Component        | Compatible With         | Conflicts With       | Resolution                   |
-| ---------------- | ----------------------- | -------------------- | ---------------------------- |
-| IWE LSP          | Standard markdown, Hugo | vim-wiki, obsidian   | Use IWE only                 |
-| Blood Moon theme | tokyonight base         | nightfox, gruvbox    | Disable others               |
-| telescope        | Most plugins            | fzf-lua              | Remove fzf-lua               |
-| nvim-cmp         | LSP, snippets           | ollama completion    | Integrate ollama as source   |
-| zen-mode         | All editors             | goyo, limelight, etc | Remove redundant focus modes |
+| Component | Compatible With | Conflicts With | Resolution | | ---------------- | ----------------------- | -------------------- | ---------------------------- | | IWE LSP | Standard markdown, Hugo | vim-wiki, obsidian | Use IWE only | | Blood Moon theme | tokyonight base | nightfox, gruvbox | Disable others | | telescope | Most plugins | fzf-lua | Remove fzf-lua | | nvim-cmp | LSP, snippets | ollama completion | Integrate ollama as source | | zen-mode | All editors | goyo, limelight, etc | Remove redundant focus modes |
 
 ______________________________________________________________________
 
