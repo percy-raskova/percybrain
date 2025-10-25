@@ -24,14 +24,35 @@ return {
       enable_mcp = false, -- Use MCP server mode (future enhancement)
     }
 
+    -- Preserve double-space linebreaks (Markdown hard breaks)
+    -- Convert "text  \n" to "text\n\n" (paragraph break) before SemBr
+    -- Then restore after SemBr processing
+    local function preserve_hard_breaks(lines)
+      local preserved = {}
+      for _, line in ipairs(lines) do
+        -- Check if line ends with double-space (Markdown hard break)
+        if line:match("  $") then
+          -- Remove trailing spaces and mark for paragraph break
+          table.insert(preserved, line:gsub("  $", ""))
+          table.insert(preserved, "") -- Add blank line (paragraph break)
+        else
+          table.insert(preserved, line)
+        end
+      end
+      return preserved
+    end
+
     -- Format current buffer with SemBr
     function M.format_buffer()
       local bufnr = vim.api.nvim_get_current_buf()
       local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 
+      -- Preserve double-space linebreaks by converting to paragraph breaks
+      local preserved_lines = preserve_hard_breaks(lines)
+
       -- Write buffer content to temporary file
       local tmpfile = vim.fn.tempname()
-      vim.fn.writefile(lines, tmpfile)
+      vim.fn.writefile(preserved_lines, tmpfile)
 
       -- Run SemBr (redirect stderr to /dev/null to avoid capturing progress bars/warnings)
       local cmd = string.format("sembr -m %s -i %s 2>/dev/null", M.config.model, tmpfile)
@@ -50,7 +71,7 @@ return {
         end
 
         vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, formatted)
-        vim.notify("✅ SemBr formatting complete", vim.log.levels.INFO)
+        vim.notify("✅ SemBr formatting complete (preserved hard breaks)", vim.log.levels.INFO)
       else
         vim.notify("❌ SemBr error: " .. output, vim.log.levels.ERROR)
       end
@@ -68,9 +89,12 @@ return {
       local bufnr = vim.api.nvim_get_current_buf()
       local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line, false)
 
+      -- Preserve double-space linebreaks by converting to paragraph breaks
+      local preserved_lines = preserve_hard_breaks(lines)
+
       -- Write selection to temporary file
       local tmpfile = vim.fn.tempname()
-      vim.fn.writefile(lines, tmpfile)
+      vim.fn.writefile(preserved_lines, tmpfile)
 
       -- Run SemBr (redirect stderr to /dev/null to avoid capturing progress bars/warnings)
       local cmd = string.format("sembr -m %s -i %s 2>/dev/null", M.config.model, tmpfile)
@@ -88,7 +112,7 @@ return {
         end
 
         vim.api.nvim_buf_set_lines(bufnr, start_line, end_line, false, formatted)
-        vim.notify("✅ SemBr selection formatted", vim.log.levels.INFO)
+        vim.notify("✅ SemBr selection formatted (preserved hard breaks)", vim.log.levels.INFO)
       else
         vim.notify("❌ SemBr error: " .. output, vim.log.levels.ERROR)
       end

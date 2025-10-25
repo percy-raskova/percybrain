@@ -103,7 +103,7 @@ Created: {{ date }}
 
       -- Table settings
       tables = {
-        trim_whitespace = true,
+        trim_whitespace = false, -- DISABLED: Preserve double-space linebreaks (Markdown hard breaks)
         format_on_move = true,
         auto_extend_rows = false,
         auto_extend_cols = false,

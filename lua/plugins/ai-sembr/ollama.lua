@@ -94,11 +94,7 @@ return {
     },
     {
       "<leader>ac",
-      function()
-        if _G.percy_ai then
-          _G.percy_ai.chat()
-        end
-      end,
+      "<cmd>PercyChat<CR>",
       desc = "AI: Chat",
     },
   },
