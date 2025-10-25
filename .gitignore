@@ -22,6 +22,7 @@ config/personal_settings.lua
 
 # MCP configuration (managed by chezmoi)
 .mcp.json
+.mcp.json.backup
 .claude/settings.local.json
 
 # Compiled Lua files
