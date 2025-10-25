@@ -39,5 +39,7 @@ treeOutput.txt
 lua/oviwrite/version.lua
 CHANGELOG-release.md
 INSTALL-*.md
-.playwright-mcp
-.claudedocs
+
+# misc
+.playwright-mcp/
+.claudedocs/
